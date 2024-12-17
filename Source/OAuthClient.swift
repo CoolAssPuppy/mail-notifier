@@ -13,10 +13,10 @@ struct OAuthClient {
     private init() {}
     static let shared = OAuthClient()
 
-    static let clientID = "270244963224-8viqhtgpdks3vk56ffhvnfn112u4h26k.apps.googleusercontent.com"
-    static let clientSecret = OAuthSecret.secret
-    static let redirectURL = "com.googleusercontent.apps.270244963224-8viqhtgpdks3vk56ffhvnfn112u4h26k:/oauthredirect"
-
+    static let clientID = "191228481940-3kikm89l8pgjn7rsvhbra3jqvtt5f479.apps.googleusercontent.com"
+    static let clientSecret = OAuthSecret.secret  // You'll need to add your client secret here
+    static let redirectURL = "com.googleusercontent.apps.191228481940-3kikm89l8pgjn7rsvhbra3jqvtt5f479:/oauthredirect"
+    
     static var currentAuthorizationFlow: OIDExternalUserAgentSession?
 
     func resumeAuthFlow(url: URL) {
