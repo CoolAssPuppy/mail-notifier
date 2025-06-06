@@ -100,7 +100,56 @@ extension Account {
 
 // MARK: - Allow persisting accounts to @AppStorage
 
-typealias Accounts = [Account]
+struct Accounts: RawRepresentable, Codable, RandomAccessCollection, MutableCollection, ExpressibleByArrayLiteral {
+    private var storage: [Account]
+
+    init(_ accounts: [Account] = []) {
+        self.storage = accounts
+    }
+
+    init(arrayLiteral elements: Account...) {
+        self.storage = elements
+    }
+
+    // Collection
+    typealias Index = Int
+    var startIndex: Int { storage.startIndex }
+    var endIndex: Int { storage.endIndex }
+    func index(after i: Int) -> Int { storage.index(after: i) }
+    subscript(position: Int) -> Account {
+        get { storage[position] }
+        set { storage[position] = newValue }
+    }
+
+    // RawRepresentable
+    static let storageKey = "accounts"
+
+    init?(rawValue: String) {
+        guard let data = rawValue.data(using: .utf8),
+              let result = try? JSONDecoder().decode([Account].self, from: data)
+        else {
+            return nil
+        }
+        self.storage = result
+    }
+
+    var rawValue: String {
+        guard let data = try? JSONEncoder().encode(storage),
+              let result = String(data: data, encoding: .utf8)
+        else {
+            return "[]"
+        }
+        return result
+    }
+
+    // Helpers to mimic array behaviour
+    var count: Int { storage.count }
+    var isEmpty: Bool { storage.isEmpty }
+
+    mutating func append(_ element: Account) { storage.append(element) }
+    @discardableResult mutating func remove(at index: Int) -> Account { storage.remove(at: index) }
+    mutating func move(fromOffsets source: IndexSet, toOffset destination: Int) { storage.move(fromOffsets: source, toOffset: destination) }
+}
 
 extension Notification.Name {
     static let accountAdded = Notification.Name("accountAdded")
@@ -109,26 +158,7 @@ extension Notification.Name {
     static let accountsReordered = Notification.Name("accountsReordered")
 }
 
-extension Accounts: RawRepresentable {
-    static let storageKey = "accounts"
-
-    public init?(rawValue: String) {
-        guard let data = rawValue.data(using: .utf8),
-              let result = try? JSONDecoder().decode(Accounts.self, from: data)
-        else {
-            return nil
-        }
-        self = result
-    }
-
-    public var rawValue: String {
-        guard let data = try? JSONEncoder().encode(self),
-              let result = String(data: data, encoding: .utf8)
-        else {
-            return "[]"
-        }
-        return result
-    }
+extension Accounts {
 
     static var `default`: Accounts {
         get {

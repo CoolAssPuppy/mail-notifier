@@ -98,7 +98,7 @@ struct AccountView: View {
         .padding(20)
         .background(Color("Background"))
         .toolbar {
-            ToolbarItemGroup {
+            ToolbarItemGroup(placement: .automatic) {
                 Button {
                     showingDeleteAlert = true
                 } label: {
