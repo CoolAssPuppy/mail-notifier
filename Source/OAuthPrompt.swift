@@ -10,6 +10,7 @@ import SwiftUI
 
 struct OAuthPrompt: View {
     @Environment(\.presentationMode) var presentationMode
+    static var accountType: AccountType = .gmail
 
     var body: some View {
         VStack {
@@ -28,7 +29,7 @@ struct OAuthPrompt: View {
 
                 Button {
                     dismiss()
-                    Accounts.authorize()
+                    Accounts.authorize(type: Self.accountType)
                 } label: {
                     Text("Continue")
                 }

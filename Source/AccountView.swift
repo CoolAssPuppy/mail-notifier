@@ -121,7 +121,8 @@ struct AccountView: View {
                 }
             }
         }
-        .sheet(isPresented: $showingOAuthPrompt) {
+       .sheet(isPresented: $showingOAuthPrompt) {
+            OAuthPrompt.accountType = account.type
             OAuthPrompt()
         }
     }
@@ -137,12 +138,13 @@ private extension AccountView {
     }
 
     func reauthorize() {
+        OAuthPrompt.accountType = account.type
         showingOAuthPrompt = true
     }
 }
 
 struct AccountView_Previews: PreviewProvider {
     static var previews: some View {
-        AccountView(account: Account(email: "ashchan@gmail.com"))
+        AccountView(account: Account(email: "ashchan@gmail.com", type: .gmail))
     }
 }
