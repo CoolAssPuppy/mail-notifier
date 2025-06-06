@@ -30,18 +30,22 @@ struct WelcomeView: View {
                     .foregroundColor(.blue)
             }
 
-            Button(action: addAccount) {
-                Text("Authorize and add your Google Account")
+            Button(action: { addAccount(.gmail) }) {
+                Text("Add Google Account")
             }
-            .sheet(isPresented: $showingOAuthPrompt) {
-                OAuthPrompt()
+            Button(action: { addAccount(.outlook) }) {
+                Text("Add Outlook Account")
             }
+        }
+        .sheet(isPresented: $showingOAuthPrompt) {
+            OAuthPrompt()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color("Background"))
     }
 
-    private func addAccount() {
+    private func addAccount(_ type: AccountType) {
+        OAuthPrompt.accountType = type
         showingOAuthPrompt = true
     }
 }

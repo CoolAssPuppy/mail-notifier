@@ -11,6 +11,7 @@ import Foundation
 struct Message {
     let id: String
     let email: String
+    let type: AccountType
     let from: String
     let date: String
     let subject: String
@@ -29,11 +30,16 @@ struct Message {
     }
 
     var url: URL {
-        Self.url(email: email, id: id)
+        Self.url(type: type, email: email, id: id)
     }
 
-    static func url(email: String, id: String) -> URL {
-        URL(string: "https://mail.google.com/mail/u/\(email)?account_id=\(email)&message_id=\(id)&view=conv&extsrc=atom")!
+    static func url(type: AccountType, email: String, id: String) -> URL {
+        switch type {
+        case .gmail:
+            return URL(string: "https://mail.google.com/mail/u/\(email)?account_id=\(email)&message_id=\(id)&view=conv&extsrc=atom")!
+        case .outlook:
+            return URL(string: "https://outlook.live.com/mail/0/inbox/id/\(id)")!
+        }
     }
 
     var decodedSnippet: String {

@@ -9,8 +9,10 @@
 /* Begin PBXBuildFile section */
 		1A1AB9C5267D648E00277DEA /* Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1AB9C4267D648E00277DEA /* Browser.swift */; };
 		1A1AB9C7267D6B6500277DEA /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1AB9C6267D6B6500277DEA /* Sound.swift */; };
-		1A1AE4AE267E14FF0014F314 /* OAuthSecret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1AE4AD267E14FF0014F314 /* OAuthSecret.swift */; };
-		1A4962252674C0C100331CF7 /* GoogleAPIClientForREST_Gmail in Frameworks */ = {isa = PBXBuildFile; productRef = 1A4962242674C0C100331CF7 /* GoogleAPIClientForREST_Gmail */; };
+                1A1AE4AE267E14FF0014F314 /* OAuthSecret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1AE4AD267E14FF0014F314 /* OAuthSecret.swift */; };
+                1EC4BBAC4467E2BF76E3A163 /* OutlookOAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499A5AC263BA61DEF2148504 /* OutlookOAuthClient.swift */; };
+                9C892221F96E3B6F6DB806D8 /* OutlookOAuthSecret.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69ACA7DD28854F84B3E9AF3 /* OutlookOAuthSecret.swift */; };
+                1A4962252674C0C100331CF7 /* GoogleAPIClientForREST_Gmail in Frameworks */ = {isa = PBXBuildFile; productRef = 1A4962242674C0C100331CF7 /* GoogleAPIClientForREST_Gmail */; };
 		1A4962282674CEBD00331CF7 /* GTMAppAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 1A4962272674CEBD00331CF7 /* GTMAppAuth */; };
 		1A49622B2674D54100331CF7 /* AppAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 1A49622A2674D54100331CF7 /* AppAuth */; };
 		1A51DA9D272236210069A341 /* OAuthPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A51DA9C272236210069A341 /* OAuthPrompt.swift */; };
@@ -54,8 +56,10 @@
 /* Begin PBXFileReference section */
 		1A1AB9C4267D648E00277DEA /* Browser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Browser.swift; sourceTree = "<group>"; };
 		1A1AB9C6267D6B6500277DEA /* Sound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
-		1A1AE4AD267E14FF0014F314 /* OAuthSecret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthSecret.swift; sourceTree = "<group>"; };
-		1A51DA9C272236210069A341 /* OAuthPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthPrompt.swift; sourceTree = "<group>"; };
+                1A1AE4AD267E14FF0014F314 /* OAuthSecret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthSecret.swift; sourceTree = "<group>"; };
+                499A5AC263BA61DEF2148504 /* OutlookOAuthClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlookOAuthClient.swift; sourceTree = "<group>"; };
+                B69ACA7DD28854F84B3E9AF3 /* OutlookOAuthSecret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlookOAuthSecret.swift; sourceTree = "<group>"; };
+                1A51DA9C272236210069A341 /* OAuthPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthPrompt.swift; sourceTree = "<group>"; };
 		1A76AAE52675C38A0023B130 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		1A856E68267F4C8A00376737 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1A856E69267F4C8A00376737 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -170,9 +174,11 @@
 			isa = PBXGroup;
 			children = (
 				1A8AAA3626798047006F52D7 /* Account.swift */,
-				1A8AAA3C267B1201006F52D7 /* OAuthClient.swift */,
-				1A1AE4AD267E14FF0014F314 /* OAuthSecret.swift */,
-				1A8AAA45267C35EC006F52D7 /* AppSettings.swift */,
+                                1A8AAA3C267B1201006F52D7 /* OAuthClient.swift */,
+                                1A1AE4AD267E14FF0014F314 /* OAuthSecret.swift */,
+                                499A5AC263BA61DEF2148504 /* OutlookOAuthClient.swift */,
+                                B69ACA7DD28854F84B3E9AF3 /* OutlookOAuthSecret.swift */,
+                                1A8AAA45267C35EC006F52D7 /* AppSettings.swift */,
 				1A1AB9C4267D648E00277DEA /* Browser.swift */,
 				1A1AB9C6267D6B6500277DEA /* Sound.swift */,
 				1AF46DEA26832368008A5FF2 /* Message.swift */,
@@ -317,8 +323,10 @@
 				1A8AAA3726798047006F52D7 /* Account.swift in Sources */,
 				1A8AAA3F267C1CE5006F52D7 /* SettingsView.swift in Sources */,
 				1AF46DE926832110008A5FF2 /* MessageFetcher.swift in Sources */,
-				1A1AE4AE267E14FF0014F314 /* OAuthSecret.swift in Sources */,
-				1AAFACAB267836A8002C560E /* Sidebar.swift in Sources */,
+                                1A1AE4AE267E14FF0014F314 /* OAuthSecret.swift in Sources */,
+                                1EC4BBAC4467E2BF76E3A163 /* OutlookOAuthClient.swift in Sources */,
+                                9C892221F96E3B6F6DB806D8 /* OutlookOAuthSecret.swift in Sources */,
+                                1AAFACAB267836A8002C560E /* Sidebar.swift in Sources */,
 				1A76AAE62675C38A0023B130 /* MainView.swift in Sources */,
 				1A1AB9C5267D648E00277DEA /* Browser.swift in Sources */,
 				1A8AAA3B26799391006F52D7 /* WelcomeView.swift in Sources */,

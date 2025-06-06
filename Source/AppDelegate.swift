@@ -228,7 +228,7 @@ extension AppDelegate {
             return
         }
 
-        openURL(url: Message.url(email: email, id: messageId), in: account.browser)
+        openURL(url: Message.url(type: account.type, email: email, id: messageId), in: account.browser)
     }
 
     @objc func checkAllMails() {
@@ -242,12 +242,21 @@ extension AppDelegate {
     func composeMail(_ to: String? = nil, _ subject: String? = nil) {
         let account = Accounts.default.first
         let baseURL = account?.baseUrl ?? "https://mail.google.com/"
-        var url = baseURL + "?view=cm&tf=0&fs=1"
+        var url: String
+        if account?.type == .outlook {
+            url = baseURL + "?path=/mail/action/compose"
+        } else {
+            url = baseURL + "?view=cm&tf=0&fs=1"
+        }
         if let to = to, !to.isEmpty {
             url += "&to=\(to)"
         }
         if let subject = subject, !subject.isEmpty {
-            url += "&su=\(subject)"
+            if account?.type == .outlook {
+                url += "&subject=\(subject)"
+            } else {
+                url += "&su=\(subject)"
+            }
         }
         openURL(url: URL(string: url)!, in: account?.browser)
     }
