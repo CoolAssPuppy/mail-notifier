@@ -118,6 +118,19 @@ Since Mail Notifr has been sunset due to Google API restrictions, you can still 
 - Keep your Client ID and Client Secret secure
 - Do not distribute the built app with your personal OAuth credentials
 
+### Hotmail / Outlook Setup
+To use Microsoft accounts:
+1. Create an application in the [Azure Portal](https://portal.azure.com/).
+2. Enable the Microsoft Graph **Mail.Read** permission.
+3. Add a native redirect URI that matches `OutlookOAuthClient.redirectURL` in the code.
+4. Put your client ID and secret in `OutlookOAuthClient.swift` and `OutlookOAuthSecret.swift`.
+5. Add the same URL scheme to Info.plist.
+6. Build and run then choose **Add Outlook Account**.
+
+### Token Expiration
+Refresh tokens issued while the Google app is in testing mode expire after about seven days.
+If the notifier stops working, open preferences and reauthorize the account.
+
 ### Troubleshooting
 If you get an "invalid_client" error:
 - Verify your Client ID and Client Secret are correctly copied

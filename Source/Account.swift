@@ -9,9 +9,16 @@
 import Foundation
 import GTMAppAuth
 import KeychainAccess
+import AppAuth
+
+enum AccountType: String, Codable, CaseIterable {
+    case gmail
+    case outlook
+}
 
 struct Account: Codable {
     var email: String
+    var type: AccountType = .gmail
     var enabled = true
     // interval as minutes
     var checkInterval: Double = 30 {
@@ -34,7 +41,12 @@ extension Account: Identifiable, Hashable {
     }
 
     var baseUrl: String {
-        "https://mail.google.com/mail/b/\(email)"
+        switch type {
+        case .gmail:
+            return "https://mail.google.com/mail/b/\(email)"
+        case .outlook:
+            return "https://outlook.live.com/mail/0/inbox"
+        }
     }
 
     var browser: Browser {
@@ -65,6 +77,23 @@ extension Account {
             }
             let data = try? NSKeyedArchiver.archivedData(withRootObject: newValue, requiringSecureCoding: false)
             keychain[data: id] = data
+        }
+    }
+
+    var authState: OIDAuthState? {
+        get {
+            if let data = keychain[data: "\(id)-oid"] {
+                return try? NSKeyedUnarchiver.unarchivedObject(ofClass: OIDAuthState.self, from: data)
+            }
+            return nil
+        }
+        set {
+            guard let newValue = newValue else {
+                keychain["\(id)-oid"] = nil
+                return
+            }
+            let data = try? NSKeyedArchiver.archivedData(withRootObject: newValue, requiringSecureCoding: false)
+            keychain[data: "\(id)-oid"] = data
         }
     }
 }
@@ -176,23 +205,44 @@ extension Accounts {
         NotificationCenter.default.post(name: .accountsReordered, object: nil)
     }
 
-    static func authorize() {
-        OAuthClient.shared.authorize() { state in
-            switch state {
-            case .success(let state):
-                let authorization = GTMAppAuthFetcherAuthorization(authState: state)
-                if var account = Self.default.find(email: authorization.userEmail!) {
-                    account.authorization = authorization
-                    var accounts = Self.default
-                    accounts.update(account: account)
-                } else {
-                    var account = Account(email: authorization.userEmail!)
-                    account.authorization = authorization
-                    var accounts = Self.default
-                    accounts.add(account: account)
+    static func authorize(type: AccountType) {
+        switch type {
+        case .gmail:
+            OAuthClient.shared.authorize() { state in
+                switch state {
+                case .success(let state):
+                    let authorization = GTMAppAuthFetcherAuthorization(authState: state)
+                    if var account = Self.default.find(email: authorization.userEmail!) {
+                        account.authorization = authorization
+                        var accounts = Self.default
+                        accounts.update(account: account)
+                    } else {
+                    var account = Account(email: authorization.userEmail!, type: .gmail)
+                        account.authorization = authorization
+                        var accounts = Self.default
+                        accounts.add(account: account)
+                    }
+                case .failure(let error):
+                    print(error)
                 }
-            case .failure(let error):
-                print(error)
+            }
+        case .outlook:
+            OutlookOAuthClient.shared.authorize { result in
+                switch result {
+                case .success(let state):
+                    if var account = Self.default.find(email: state.lastTokenResponse?.additionalParameters?["preferred_username"] as? String ?? "") {
+                        account.authState = state
+                        var accounts = Self.default
+                        accounts.update(account: account)
+                    } else if let email = state.lastTokenResponse?.additionalParameters?["preferred_username"] as? String {
+                        var account = Account(email: email, type: .outlook)
+                        account.authState = state
+                        var accounts = Self.default
+                        accounts.add(account: account)
+                    }
+                case .failure(let error):
+                    print(error)
+                }
             }
         }
     }
