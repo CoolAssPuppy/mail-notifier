@@ -176,7 +176,7 @@ extension Accounts {
 
 extension Accounts {
     var enabled: Accounts {
-        filter { $0.enabled }
+        Accounts(filter { $0.enabled })
     }
 
     func find(email: String) -> Account? {

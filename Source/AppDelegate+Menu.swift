@@ -94,13 +94,13 @@ private extension AppDelegate {
             }
 
             if fetcher.hasAuthError {
-                menu.addItem(
-                    NSMenuItem(
-                        title: NSLocalizedString("🚫 Auth error, please reauthroize.", comment: ""),
-                        action: #selector(reauthorize),
-                        keyEquivalent: ""
-                    )
+                let reauthorizeItem = NSMenuItem(
+                    title: NSLocalizedString("🚫 Auth error, please reauthroize.", comment: ""),
+                    action: #selector(reauthorize(_:)),
+                    keyEquivalent: ""
                 )
+                reauthorizeItem.representedObject = account
+                menu.addItem(reauthorizeItem)
             }
 
             for message in (fetcher.messages) {
@@ -153,13 +153,13 @@ private extension AppDelegate {
 
         if let fetcher = fetcher(for: account.email), account.enabled {
             if fetcher.hasAuthError {
-                items.append(
-                    NSMenuItem(
-                        title: NSLocalizedString("🚫 Auth error, please reauthroize.", comment: ""),
-                        action: #selector(reauthorize),
-                        keyEquivalent: ""
-                    )
+                let reauthorizeItem = NSMenuItem(
+                    title: NSLocalizedString("🚫 Auth error, please reauthroize.", comment: ""),
+                    action: #selector(reauthorize(_:)),
+                    keyEquivalent: ""
                 )
+                reauthorizeItem.representedObject = account
+                items.append(reauthorizeItem)
             }
 
             for message in (fetcher.messages) {

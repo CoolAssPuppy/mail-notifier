@@ -122,8 +122,10 @@ struct AccountView: View {
             }
         }
        .sheet(isPresented: $showingOAuthPrompt) {
-            OAuthPrompt.accountType = account.type
             OAuthPrompt()
+                .onAppear {
+                    OAuthPrompt.accountType = account.type
+                }
         }
     }
 }

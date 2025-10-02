@@ -291,9 +291,12 @@ extension AppDelegate {
         Accounts.default.update(account: account)
     }
 
-    @objc func reauthorize() {
+    @objc func reauthorize(_ sender: Any) {
         showPreferences()
-        Accounts.authorize()
+        guard let account = (sender as? NSMenuItem)?.representedObject as? Account else {
+            return
+        }
+        Accounts.authorize(type: account.type)
     }
 
     @objc func showAbout() {
