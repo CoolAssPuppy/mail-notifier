@@ -1,4 +1,4 @@
 struct OutlookOAuthSecret {
-    static let secret = "YOUR_OUTLOOK_CLIENT_SECRET"
+    static let secret = "5Sj8Q~ZxnxcVV6M3JQZrigVxEaLpDKcPTpDdQaas"
 }
 

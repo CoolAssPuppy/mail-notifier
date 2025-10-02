@@ -260,20 +260,72 @@ extension Accounts {
             OutlookOAuthClient.shared.authorize { result in
                 switch result {
                 case .success(let state):
-                    if var account = Self.default.find(email: state.lastTokenResponse?.additionalParameters?["preferred_username"] as? String ?? "") {
-                        account.authState = state
-                        var accounts = Self.default
-                        accounts.update(account: account)
-                    } else if let email = state.lastTokenResponse?.additionalParameters?["preferred_username"] as? String {
-                        var account = Account(email: email, type: .outlook)
-                        account.authState = state
-                        var accounts = Self.default
-                        accounts.add(account: account)
+                    print("✅ Outlook OAuth Success!")
+                    print("Auth state: \(state)")
+                    print("Last token response: \(String(describing: state.lastTokenResponse))")
+                    print("Additional params: \(String(describing: state.lastTokenResponse?.additionalParameters))")
+
+                    // Try to get email from various possible locations in the token response
+                    var email: String? = nil
+                    if let params = state.lastTokenResponse?.additionalParameters {
+                        email = params["preferred_username"] as? String
+                            ?? params["email"] as? String
+                            ?? params["upn"] as? String
+                    }
+
+                    // Also check the ID token claims
+                    if email == nil, let idToken = state.lastTokenResponse?.idToken {
+                        print("ID Token: \(idToken)")
+                        // Try to decode the ID token to get email
+                        if let claims = decodeJWT(idToken) {
+                            print("JWT Claims: \(claims)")
+                            email = claims["preferred_username"] as? String
+                                ?? claims["email"] as? String
+                                ?? claims["upn"] as? String
+                        }
+                    }
+
+                    print("Extracted email: \(String(describing: email))")
+
+                    if let email = email {
+                        if var account = Self.default.find(email: email) {
+                            print("Updating existing account: \(email)")
+                            account.authState = state
+                            var accounts = Self.default
+                            accounts.update(account: account)
+                        } else {
+                            print("Creating new account: \(email)")
+                            var account = Account(email: email, type: .outlook)
+                            account.authState = state
+                            var accounts = Self.default
+                            accounts.add(account: account)
+                        }
+                    } else {
+                        print("❌ Could not extract email from OAuth response")
                     }
                 case .failure(let error):
-                    print(error)
+                    print("❌ Outlook OAuth Error: \(error)")
                 }
             }
         }
+    }
+
+    private static func decodeJWT(_ jwt: String) -> [String: Any]? {
+        let segments = jwt.components(separatedBy: ".")
+        guard segments.count > 1 else { return nil }
+
+        var base64String = segments[1]
+        // Add padding if needed
+        let remainder = base64String.count % 4
+        if remainder > 0 {
+            base64String = base64String.padding(toLength: base64String.count + 4 - remainder, withPad: "=", startingAt: 0)
+        }
+
+        guard let data = Data(base64Encoded: base64String, options: .ignoreUnknownCharacters),
+              let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+            return nil
+        }
+
+        return json
     }
 }

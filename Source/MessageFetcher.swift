@@ -177,7 +177,7 @@ private extension MessageFetcher {
             }
         } else {
             guard let authState = authState, let accessToken = authState.lastTokenResponse?.accessToken, !hasAuthError else { return }
-            var components = URLComponents(string: "https://graph.microsoft.com/v1.0/me/messages")!
+            var components = URLComponents(string: "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages")!
             components.queryItems = [
                 URLQueryItem(name: "$filter", value: "isRead eq false"),
                 URLQueryItem(name: "$top", value: "\(maximumMessagesStored)"),
