@@ -82,18 +82,32 @@ extension Account {
 
     var authState: OIDAuthState? {
         get {
-            if let data = keychain[data: "\(id)-oid"] {
-                return try? NSKeyedUnarchiver.unarchivedObject(ofClass: OIDAuthState.self, from: data)
+            let keychainKey = "\(id)-oid"
+            print("🔑 Reading authState for \(id) with key: \(keychainKey)")
+            if let data = keychain[data: keychainKey] {
+                print("🔑 Found keychain data, size: \(data.count) bytes")
+                if let state = try? NSKeyedUnarchiver.unarchivedObject(ofClass: OIDAuthState.self, from: data) {
+                    print("🔑 Successfully unarchived authState, isAuthorized: \(state.isAuthorized)")
+                    return state
+                } else {
+                    print("❌ Failed to unarchive authState")
+                }
+            } else {
+                print("❌ No keychain data found for key: \(keychainKey)")
             }
             return nil
         }
         set {
+            let keychainKey = "\(id)-oid"
             guard let newValue = newValue else {
-                keychain["\(id)-oid"] = nil
+                print("🔑 Clearing authState for \(id)")
+                keychain[keychainKey] = nil
                 return
             }
+            print("🔑 Saving authState for \(id), isAuthorized: \(newValue.isAuthorized)")
             let data = try? NSKeyedArchiver.archivedData(withRootObject: newValue, requiringSecureCoding: false)
-            keychain[data: "\(id)-oid"] = data
+            keychain[data: keychainKey] = data
+            print("🔑 Saved authState to keychain, data size: \(data?.count ?? 0) bytes")
         }
     }
 }
@@ -291,8 +305,10 @@ extension Accounts {
                         if var account = Self.default.find(email: email) {
                             print("Updating existing account: \(email)")
                             account.authState = state
+                            print("Auth state saved to keychain")
                             var accounts = Self.default
                             accounts.update(account: account)
+                            print("Account updated and notification posted")
                         } else {
                             print("Creating new account: \(email)")
                             var account = Account(email: email, type: .outlook)
