@@ -13,63 +13,91 @@ struct Sidebar: View {
     @Binding var selection: String?
 
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             List {
-                Text("Accounts")
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.secondary)
+                Section {
+                    ForEach($accounts) { $account in
+                        NavigationLink(
+                            destination: AccountView(account: account),
+                            tag: account.email,
+                            selection: $selection
+                        ) {
+                            HStack(spacing: 10) {
+                                AvatarView(
+                                    image: account.type == .gmail ? "g.circle.fill" : "cloud.fill",
+                                    backgroundColor: account.type == .gmail ? .red : .blue
+                                )
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(verbatim: account.email)
+                                        .font(.system(size: 13))
+                                        .lineLimit(1)
+                                    Text(account.type == .gmail ? "Google" : "Outlook")
+                                        .font(.system(size: 10))
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                        }
+                        .padding(.vertical, 2)
+                    }
+                    .onMove { source, destination in
+                        let previousSelection = selection
+                        accounts.reorder(fromOffsets: source, toOffset: destination)
+                        DispatchQueue.main.async {
+                            selection = previousSelection
+                        }
+                    }
+                } header: {
+                    Text("Accounts")
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.secondary)
+                        .textCase(nil)
+                }
 
-                ForEach($accounts) { $account in
+                Section {
                     NavigationLink(
-                        destination: AccountView(account: account),
-                        tag: account.email,
+                        destination: SettingsView(),
+                        tag: "preferences",
                         selection: $selection
                     ) {
-                        AvatarView(image: "person", backgroundColor: .green)
-                        Text(verbatim: account.email)
+                        HStack(spacing: 10) {
+                            AvatarView(image: "gearshape.fill", backgroundColor: .gray)
+                            Text("Settings")
+                                .font(.system(size: 13))
+                        }
                     }
-                    .padding(2)
+                    .padding(.vertical, 2)
+                } header: {
+                    Text("Preferences")
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.secondary)
+                        .textCase(nil)
                 }
-                .onMove { source, destination in
-                    let previousSelection = selection
-                    accounts.reorder(fromOffsets: source, toOffset: destination)
-                    DispatchQueue.main.async {
-                        selection = previousSelection
-                    }
-                }
-
-                Text("Preferences")
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.secondary)
-
-                NavigationLink(
-                    destination: SettingsView(),
-                    tag: "preferences",
-                    selection: $selection
-                ) {
-                    AvatarView(image: "gearshape", backgroundColor: .blue)
-                    Text("General")
-                }
-                .padding(2)
             }
             .listStyle(.sidebar)
 
-            Spacer()
+            Divider()
 
-            HStack {
+            HStack(spacing: 8) {
                 Button(action: {
                     selection = "welcome"
                 }) {
-                    Label("Add Account", systemImage: "plus.circle")
+                    HStack(spacing: 6) {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.system(size: 14))
+                        Text("Add Account")
+                            .font(.system(size: 12, weight: .medium))
+                    }
                 }
-                .buttonStyle(.plain)
-                .foregroundColor(.primary)
-                .padding(8)
+                .buttonStyle(.borderless)
+                .foregroundColor(.accentColor)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
 
                 Spacer()
             }
+            .background(.regularMaterial)
         }
     }
 }
