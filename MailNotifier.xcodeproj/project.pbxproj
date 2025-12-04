@@ -31,15 +31,15 @@
 		1AB7FF0716B57D510040BBCE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1AB7FF0416B57D510040BBCE /* Localizable.strings */; };
 		1AC74A422673A1B4003F98E7 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 1AC74A412673A1B4003F98E7 /* LaunchAtLogin */; };
 		1ACD6FF01897FE3C00103E15 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1ACD6FEF1897FE3C00103E15 /* Images.xcassets */; };
-		AAAA00001234567800000001 /* Sounds in Resources */ = {isa = PBXBuildFile; fileRef = AAAA00001234567800000002 /* Sounds */; };
 		1AE48C082688856500906371 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 1AE48C072688856500906371 /* KeychainAccess */; };
 		1AF46DE926832110008A5FF2 /* MessageFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF46DE826832110008A5FF2 /* MessageFetcher.swift */; };
 		1AF46DEB26832368008A5FF2 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF46DEA26832368008A5FF2 /* Message.swift */; };
-		BBBB00001234567800000001 /* VIP.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBBB00001234567800000002 /* VIP.swift */; };
 		1AFB7F4C189FC0EB00B82441 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AFB7F4B189FC0EB00B82441 /* ServiceManagement.framework */; };
 		1AFCE88218D404E500487B98 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AFCE88118D404E500487B98 /* Carbon.framework */; };
 		1EC4BBAC4467E2BF76E3A163 /* OutlookOAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499A5AC263BA61DEF2148504 /* OutlookOAuthClient.swift */; };
 		9C892221F96E3B6F6DB806D8 /* OutlookOAuthSecret.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69ACA7DD28854F84B3E9AF3 /* OutlookOAuthSecret.swift */; };
+		AAAA00001234567800000001 /* Sounds in Resources */ = {isa = PBXBuildFile; fileRef = AAAA00001234567800000002 /* Sounds */; };
+		BBBB00001234567800000001 /* VIP.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBBB00001234567800000002 /* VIP.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -79,12 +79,12 @@
 		1AB7FF0016B57D280040BBCE /* Credits.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = Credits.html; path = Resources/Credits.html; sourceTree = SOURCE_ROOT; };
 		1ACD6FEE1897F56300103E15 /* MailNotifier.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MailNotifier.entitlements; sourceTree = SOURCE_ROOT; };
 		1ACD6FEF1897FE3C00103E15 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		AAAA00001234567800000002 /* Sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Sounds; path = Resources/Sounds; sourceTree = SOURCE_ROOT; };
 		1AF46DE826832110008A5FF2 /* MessageFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageFetcher.swift; sourceTree = "<group>"; };
 		1AF46DEA26832368008A5FF2 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		1AFB7F4B189FC0EB00B82441 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		1AFCE88118D404E500487B98 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		499A5AC263BA61DEF2148504 /* OutlookOAuthClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlookOAuthClient.swift; sourceTree = "<group>"; };
+		AAAA00001234567800000002 /* Sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Sounds; path = Resources/Sounds; sourceTree = SOURCE_ROOT; };
 		B69ACA7DD28854F84B3E9AF3 /* OutlookOAuthSecret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlookOAuthSecret.swift; sourceTree = "<group>"; };
 		BBBB00001234567800000002 /* VIP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VIP.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -503,7 +503,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Mail Notifier";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MARKETING_VERSION = 3.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -552,7 +552,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Mail Notifier";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MARKETING_VERSION = 3.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
