@@ -65,5 +65,13 @@
 	<string>Copyright 2025 Strategic Nerds.</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>GoogleClientID</key>
+	<string>$(GOOGLE_CLIENT_ID)</string>
+	<key>GoogleClientSecret</key>
+	<string>$(GOOGLE_CLIENT_SECRET)</string>
+	<key>OutlookClientID</key>
+	<string>$(OUTLOOK_CLIENT_ID)</string>
+	<key>OutlookClientSecret</key>
+	<string>$(OUTLOOK_CLIENT_SECRET)</string>
 </dict>
 </plist>

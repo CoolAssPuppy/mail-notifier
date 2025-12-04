@@ -13,9 +13,17 @@ struct OutlookOAuthClient {
     private init() {}
     static let shared = OutlookOAuthClient()
 
-    static let clientID = "a325ea11-cc04-4062-b65e-8418044ab444"
-    static let clientSecret = OutlookOAuthSecret.secret
-    static let redirectURL = "msala325ea11-cc04-4062-b65e-8418044ab444://auth/"
+    static var clientID: String {
+        Bundle.main.object(forInfoDictionaryKey: "OutlookClientID") as? String ?? ""
+    }
+
+    static var clientSecret: String {
+        Bundle.main.object(forInfoDictionaryKey: "OutlookClientSecret") as? String ?? ""
+    }
+
+    static var redirectURL: String {
+        "msal\(clientID)://auth/"
+    }
 
     static var currentAuthorizationFlow: OIDExternalUserAgentSession?
 

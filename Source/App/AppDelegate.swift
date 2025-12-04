@@ -83,20 +83,29 @@ extension AppDelegate {
     @objc func handleGetURLEvent(_ event: NSAppleEventDescriptor, withReplyEvent replyEvent: NSAppleEventDescriptor) {
         guard let urlString = event.paramDescriptor(forKeyword: keyDirectObject)?.stringValue,
               let url = URL(string: urlString) else {
+            Log.app.error("handleGetURLEvent: Failed to get URL from event")
             return
         }
 
+        Log.app.info("handleGetURLEvent received URL: \(urlString)")
+        Log.app.info("URL scheme: \(url.scheme ?? "nil")")
+
         switch true {
         case urlString.hasPrefix("mailnotifier://preferences"):
+            Log.app.info("Routing to preferences")
             showPreferences()
-        case urlString.hasPrefix(OAuthClient.redirectURL):
+        case url.scheme == OAuthClient.redirectURL.components(separatedBy: ":").first:
+            Log.app.info("Routing to Google OAuth")
             OAuthClient.shared.resumeAuthFlow(url: url)
-        case urlString.hasPrefix(OutlookOAuthClient.redirectURL):
+        case url.scheme == OutlookOAuthClient.redirectURL.components(separatedBy: ":").first:
+            Log.app.info("Routing to Outlook OAuth")
             OutlookOAuthClient.shared.resumeAuthFlow(url: url)
         case url.scheme == "mailto":
+            Log.app.info("Routing to mailto handler")
             let mailtoContent = urlString.replacingOccurrences(of: "mailto:", with: "")
             NotificationCenter.default.post(name: .mailToReceived, object: mailtoContent)
         default:
+            Log.app.warning("No handler for URL: \(urlString)")
             break
         }
     }

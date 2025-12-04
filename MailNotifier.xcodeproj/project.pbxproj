@@ -32,9 +32,7 @@
 		8A27383AAC6889794C9F198A /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D458FC7CEEE73405D5C42093 /* MainView.swift */; };
 		AAAA00001234567800000001 /* Sounds in Resources */ = {isa = PBXBuildFile; fileRef = AAAA00001234567800000002 /* Sounds */; };
 		B49F15C8067D1A971E915FA0 /* VIP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A76FFA6964FC29205B1BC1 /* VIP.swift */; };
-		B739C169C036123651A77BF4 /* OutlookOAuthSecret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1607969D7A0096DD95A42012 /* OutlookOAuthSecret.swift */; };
 		B86F8BC6E6E5CD8C8F6B9443 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0AE470E34CC178741CDA0AE /* Sound.swift */; };
-		BAD5434A7235D4903C373907 /* OAuthSecret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B1181D1CC21EE9948AA19F /* OAuthSecret.swift */; };
 		C23DF5470D9B611933F1AB38 /* OutlookOAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AB99D62958F994A2B4A961 /* OutlookOAuthClient.swift */; };
 		D973844977964C7017755379 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B8C2A24C1CBAC487FDF57E1 /* SettingsView.swift */; };
 		D9CE48FC094FAD6FF3521392 /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05D42DEB30F290C5890D7D3 /* Sidebar.swift */; };
@@ -61,7 +59,6 @@
 		0ED63218B9FE296BC95CEA74 /* Logger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		1382386877C91FDCCC75CC94 /* LaunchAtLoginManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LaunchAtLoginManager.swift; sourceTree = "<group>"; };
 		156556891DDAF90BE805EE08 /* CoffeeView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CoffeeView.swift; sourceTree = "<group>"; };
-		1607969D7A0096DD95A42012 /* OutlookOAuthSecret.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OutlookOAuthSecret.swift; sourceTree = "<group>"; };
 		1A856E68267F4C8A00376737 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1A856E69267F4C8A00376737 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1A856E6A267F4CC400376737 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = Resources/ja.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -74,7 +71,6 @@
 		1ACD6FEF1897FE3C00103E15 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		1AFB7F4B189FC0EB00B82441 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		1AFCE88118D404E500487B98 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
-		35B1181D1CC21EE9948AA19F /* OAuthSecret.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OAuthSecret.swift; sourceTree = "<group>"; };
 		3B8C2A24C1CBAC487FDF57E1 /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		459D6FD8750D9AFB1663CECE /* StoreKitManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
 		4B396A44D305B1741FDA2CE4 /* AccountView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
@@ -83,6 +79,7 @@
 		8F34144BE463ED34FDE3B4D9 /* AppDelegate+Menu.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Menu.swift"; sourceTree = "<group>"; };
 		90C9338A46FA937DFE901BB3 /* WelcomeView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		9375B1EF8A702D029F7524AF /* AppSettings.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		987F828CACA47DC2A169B424 /* Secrets.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		A9590F50FECC47EC6DC1FC72 /* AppDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AAAA00001234567800000002 /* Sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Sounds; path = Resources/Sounds; sourceTree = SOURCE_ROOT; };
 		B05D42DEB30F290C5890D7D3 /* Sidebar.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
@@ -125,6 +122,7 @@
 				1AB7FD7D16B578740040BBCE /* Products */,
 				C3EB51C59CB016CB3A70D7D5 /* Source */,
 				69BB13DA77BE2A8C7A0BDB54 /* Configuration.storekit */,
+				987F828CACA47DC2A169B424 /* Secrets.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -180,8 +178,6 @@
 			children = (
 				FBD12A3AC1417541E6DE39DA /* OAuthClient.swift */,
 				B9AB99D62958F994A2B4A961 /* OutlookOAuthClient.swift */,
-				35B1181D1CC21EE9948AA19F /* OAuthSecret.swift */,
-				1607969D7A0096DD95A42012 /* OutlookOAuthSecret.swift */,
 			);
 			name = OAuth;
 			path = OAuth;
@@ -365,8 +361,6 @@
 				2653B736EE4D87433EB57862 /* Logger.swift in Sources */,
 				E221656FC65F4AAA8539CE36 /* StoreKitManager.swift in Sources */,
 				226AF61FF41FAEC1DE3230AB /* CoffeeView.swift in Sources */,
-				BAD5434A7235D4903C373907 /* OAuthSecret.swift in Sources */,
-				B739C169C036123651A77BF4 /* OutlookOAuthSecret.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -396,6 +390,7 @@
 /* Begin XCBuildConfiguration section */
 		1AB7FD9816B578740040BBCE /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 987F828CACA47DC2A169B424 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -451,6 +446,7 @@
 		};
 		1AB7FD9916B578740040BBCE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 987F828CACA47DC2A169B424 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;

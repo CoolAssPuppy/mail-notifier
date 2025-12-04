@@ -2,7 +2,6 @@
 //  OAuthClient.swift
 //  Mail Notifier
 //
-
 //  Copyright (c) 2025 Strategic Nerds. All rights reserved.
 //
 
@@ -13,10 +12,18 @@ struct OAuthClient {
     private init() {}
     static let shared = OAuthClient()
 
-    static let clientID = "191228481940-3kikm89l8pgjn7rsvhbra3jqvtt5f479.apps.googleusercontent.com"
-    static let clientSecret = OAuthSecret.secret  // You'll need to add your client secret here
-    static let redirectURL = "com.googleusercontent.apps.191228481940-3kikm89l8pgjn7rsvhbra3jqvtt5f479:/oauthredirect"
-    
+    static var clientID: String {
+        Bundle.main.object(forInfoDictionaryKey: "GoogleClientID") as? String ?? ""
+    }
+
+    static var clientSecret: String {
+        Bundle.main.object(forInfoDictionaryKey: "GoogleClientSecret") as? String ?? ""
+    }
+
+    static var redirectURL: String {
+        "com.googleusercontent.apps.\(clientID.components(separatedBy: ".").first ?? ""):/oauthredirect"
+    }
+
     static var currentAuthorizationFlow: OIDExternalUserAgentSession?
 
     func resumeAuthFlow(url: URL) {
@@ -36,11 +43,11 @@ struct OAuthClient {
             additionalParameters: nil
         )
         Self.currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request) { state, error in
-           if let state = state {
-               authorized(.success(state))
-           } else {
-               authorized(.failure(error ?? AuthError(message: "Auth with Google failed.")))
-           }
+            if let state = state {
+                authorized(.success(state))
+            } else {
+                authorized(.failure(error ?? AuthError(message: "Auth with Google failed.")))
+            }
         }
     }
 
