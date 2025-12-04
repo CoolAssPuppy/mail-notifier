@@ -13,6 +13,7 @@ import KeyboardShortcuts
 struct SettingsView: View {
     @ObservedObject private var launchAtLogin = LaunchAtLogin.observable
     @AppStorage(AppSettings.showUnreadCount) var showUnreadCount = AppSettings.shared.showUnreadCount
+    @AppStorage(AppSettings.openSettingsOnStartKey) var openSettingsOnStart = false
     @AppStorage(VIPList.storageKey) var vipList = VIPList()
 
     @State private var newVIPEmail = ""
@@ -96,6 +97,16 @@ struct SettingsView: View {
                 }
                 .onChange(of: showUnreadCount) { newValue in
                     AppSettings.shared.showUnreadCountSettingChanged()
+                }
+
+                Toggle(isOn: $openSettingsOnStart) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Open Settings window on start")
+                            .font(.body)
+                        Text("Show this window when the app launches")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
                 }
             }
             .padding(12)

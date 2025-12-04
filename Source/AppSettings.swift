@@ -13,6 +13,7 @@ struct AppSettings {
     static let shared = AppSettings()
 
     static let showUnreadCount = "settings.showUnreadCount"
+    static let openSettingsOnStartKey = "settings.openSettingsOnStart"
 }
 
 extension Notification.Name {
@@ -30,6 +31,15 @@ extension AppSettings {
         set {
             UserDefaults.standard.set(newValue, forKey: Self.showUnreadCount)
             showUnreadCountSettingChanged()
+        }
+    }
+
+    var openSettingsOnStart: Bool {
+        get {
+            UserDefaults.standard.bool(forKey: Self.openSettingsOnStartKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: Self.openSettingsOnStartKey)
         }
     }
 

@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  Mail Notifier
+//  Mail Notifr
 //
 //  Created by James Chen on 2021/06/15.
 //  Copyright © 2021 ashchan.com. All rights reserved.
@@ -8,6 +8,7 @@
 
 import AppKit
 import Combine
+import SwiftUI
 import UserNotifications
 import KeyboardShortcuts
 
@@ -16,8 +17,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var menu: NSMenu!
     private var subscriptions = Set<AnyCancellable>()
     private var fetchers: [String: MessageFetcher] = [:]
+    private var preferencesWindow: NSWindow?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        NSApp.setActivationPolicy(.accessory)
+
         registerShortCuts()
         subscribe()
 
@@ -25,13 +29,39 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         updateFetchers()
         updateMenuBar()
 
-        if Accounts.hasAccounts {
-            NSApp.windows.first?.orderOut(nil)
-        } else {
-            showInDock()
+        setupUserNotification()
+        setupURLHandler()
+
+        // Show preferences window on start if no accounts or if setting enabled
+        if !Accounts.hasAccounts || AppSettings.shared.openSettingsOnStart {
+            showPreferences()
+        }
+    }
+
+    private func setupURLHandler() {
+        NSAppleEventManager.shared().setEventHandler(
+            self,
+            andSelector: #selector(handleGetURLEvent(_:withReplyEvent:)),
+            forEventClass: AEEventClass(kInternetEventClass),
+            andEventID: AEEventID(kAEGetURL)
+        )
+    }
+
+    @objc func handleGetURLEvent(_ event: NSAppleEventDescriptor, withReplyEvent replyEvent: NSAppleEventDescriptor) {
+        guard let urlString = event.paramDescriptor(forKeyword: keyDirectObject)?.stringValue,
+              let url = URL(string: urlString) else {
+            return
         }
 
-        setupUserNotification()
+        if urlString.starts(with: "mailnotifier://preferences") {
+            showPreferences()
+        } else if urlString.starts(with: OAuthClient.redirectURL) {
+            OAuthClient.shared.resumeAuthFlow(url: url)
+        } else if urlString.starts(with: OutlookOAuthClient.redirectURL) {
+            OutlookOAuthClient.shared.resumeAuthFlow(url: url)
+        } else if url.scheme == "mailto" {
+            NotificationCenter.default.post(name: .mailToReceived, object: urlString.replacingOccurrences(of: "mailto:", with: ""))
+        }
     }
 
     func openURL(url: URL, in browser: Browser?) {
@@ -305,7 +335,52 @@ extension AppDelegate {
     }
 
     @objc func showPreferences() {
-        NSWorkspace.shared.open(URL(string: "mailnotifier://preferences")!)
+        NSApp.setActivationPolicy(.regular)
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            guard let self = self else { return }
+
+            NSApp.activate(ignoringOtherApps: true)
+
+            if let existingWindow = self.preferencesWindow {
+                existingWindow.makeKeyAndOrderFront(nil)
+                return
+            }
+
+            let mainView = MainViewWrapper()
+            let newWindow = NSWindow(
+                contentRect: NSRect(x: 0, y: 0, width: 700, height: 500),
+                styleMask: [.titled, .closable, .miniaturizable, .resizable],
+                backing: .buffered,
+                defer: false
+            )
+            newWindow.contentView = NSHostingView(rootView: mainView)
+            newWindow.title = "Mail Notifier"
+            newWindow.isReleasedWhenClosed = false
+            newWindow.center()
+            newWindow.makeKeyAndOrderFront(nil)
+
+            self.preferencesWindow = newWindow
+            newWindow.delegate = self
+        }
+    }
+}
+
+/// Wrapper view that holds the selection state for MainView
+private struct MainViewWrapper: View {
+    @State private var selection: String?
+
+    var body: some View {
+        MainView(selection: $selection)
+    }
+}
+
+extension AppDelegate: NSWindowDelegate {
+    func windowWillClose(_ notification: Notification) {
+        if let window = notification.object as? NSWindow, window == preferencesWindow {
+            preferencesWindow = nil
+            NSApp.setActivationPolicy(.accessory)
+        }
     }
 }
 
