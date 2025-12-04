@@ -1,6 +1,6 @@
 //
 //  SettingsView.swift
-//  Mail Notifr
+//  Mail Notifier
 //
 //  Created by James Chen on 2021/06/18.
 //  Copyright © 2021 ashchan.com. All rights reserved.
@@ -51,7 +51,7 @@ struct SettingsView: View {
 
     private var headerBar: some View {
         HStack {
-            Text("Mail Notifr Settings")
+            Text("Mail Notifier Settings")
                 .font(.title2)
                 .fontWeight(.semibold)
 
@@ -70,7 +70,7 @@ struct SettingsView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Launch at login")
                             .font(.body)
-                        Text("Automatically start Mail Notifr when you log in")
+                        Text("Automatically start Mail Notifier when you log in")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }

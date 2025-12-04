@@ -1,6 +1,6 @@
 //
 //  Sidebar.swift
-//  Mail Notifr
+//  Mail Notifier
 //
 //  Created by James Chen on 2021/06/15.
 //  Copyright © 2021 ashchan.com. All rights reserved.

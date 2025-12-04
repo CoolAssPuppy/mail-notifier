@@ -1,6 +1,6 @@
 //
-//  MailNotifrApp.swift
-//  Mail Notifr
+//  MailNotifierApp.swift
+//  Mail Notifier
 //
 //  Created by James Chen on 2021/06/15.
 //  Copyright © 2021 ashchan.com. All rights reserved.
@@ -15,7 +15,7 @@ extension Notification.Name {
 }
 
 @main
-struct MailNotifrApp: App {
+struct MailNotifierApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @State var screen: String?
 
@@ -29,8 +29,8 @@ struct MailNotifrApp: App {
                 .handlesExternalEvents(preferring: ["*"], allowing: ["*"])
                 .onOpenURL { url in
                     print("📱 URL received: \(url.absoluteString)")
-                    if url.absoluteString.starts(with: "mailnotifr") {
-                        print("📱 Handling mailnotifr URL")
+                    if url.absoluteString.starts(with: "mailnotifier") {
+                        print("📱 Handling mailnotifier URL")
                         screen = url.host
                     } else if url.absoluteString.starts(with: OAuthClient.redirectURL) {
                         print("📱 Handling Gmail OAuth redirect")

@@ -1,6 +1,6 @@
 //
 //  Account.swift
-//  Mail Notifr
+//  Mail Notifier
 //
 //  Created by James Chen on 2021/06/16.
 //  Copyright © 2021 ashchan.com. All rights reserved.
@@ -60,7 +60,7 @@ extension Account: Identifiable, Hashable {
 
 extension Account {
     var keychain: Keychain {
-        Keychain(service: "com.ashchan.GmailNotifr")
+        Keychain(service: "com.strategicnerds.MailNotifierApp")
     }
 
     var authorization: GTMAppAuthFetcherAuthorization? {

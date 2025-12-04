@@ -15,9 +15,9 @@
                   <BuildableReference
                      BuildableIdentifier = "primary"
                      BlueprintIdentifier = "1AB7FD7B16B578740040BBCE"
-                     BuildableName = "Mail Notifr.app"
-                     BlueprintName = "MailNotifr"
-                     ReferencedContainer = "container:MailNotifr.xcodeproj">
+                     BuildableName = "Mail Notifier.app"
+                     BlueprintName = "MailNotifier"
+                     ReferencedContainer = "container:MailNotifier.xcodeproj">
                   </BuildableReference>
                </EnvironmentBuildable>
             </ActionContent>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1AB7FD7B16B578740040BBCE"
-               BuildableName = "Mail Notifr.app"
-               BlueprintName = "MailNotifr"
-               ReferencedContainer = "container:MailNotifr.xcodeproj">
+               BuildableName = "Mail Notifier.app"
+               BlueprintName = "MailNotifier"
+               ReferencedContainer = "container:MailNotifier.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -63,9 +63,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1AB7FD7B16B578740040BBCE"
-            BuildableName = "Mail Notifr.app"
-            BlueprintName = "MailNotifr"
-            ReferencedContainer = "container:MailNotifr.xcodeproj">
+            BuildableName = "Mail Notifier.app"
+            BlueprintName = "MailNotifier"
+            ReferencedContainer = "container:MailNotifier.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -80,9 +80,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1AB7FD7B16B578740040BBCE"
-            BuildableName = "Mail Notifr.app"
-            BlueprintName = "MailNotifr"
-            ReferencedContainer = "container:MailNotifr.xcodeproj">
+            BuildableName = "Mail Notifier.app"
+            BlueprintName = "MailNotifier"
+            ReferencedContainer = "container:MailNotifier.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

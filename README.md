@@ -1,8 +1,8 @@
-# Mail Notifr (formerly Gmail Notifr) #
+# Mail Notifier (formerly Gmail Notifr) #
 
 A Gmail Notifier for macOS
 
-## Mail Notifr sunset on March 8th, 2024.
+## Mail Notifier sunset on March 8th, 2024.
 
 **As this app needs to access Gmail restricted APIs, it's required to complete a CASA security assessment, which is a progress I could NOT get through.**
 
@@ -10,7 +10,7 @@ A Gmail Notifier for macOS
 
 ![screenshot](screenshot.png)
 
-[Mail Notifr](https://bit.ly/gmail-notifr-store) features:
+[Mail Notifier](https://bit.ly/gmail-notifr-store) features:
 
 * Support multiple Google Accounts (OAuth 2.0).
 * Separate check and notification setting for each account.
@@ -30,7 +30,7 @@ A Gmail Notifier for macOS
 
 ## Note ##
 
-Mail Notifr was originally written in RubyCocoa, then MacRuby, then Objective-C, and recently Swift.
+Mail Notifier was originally written in RubyCocoa, then MacRuby, then Objective-C, and recently Swift.
 
 * The [MacRuby implementation](https://github.com/ashchan/gmail-notifr) repository remains. I also created a [macruby](https://github.com/ashchan/mail-notifr/tree/macruby) branch.
 
@@ -54,7 +54,7 @@ Copyright (c) 2008 - 2021 [James Chen](https://ashchan.com/) ([@ashchan](https:/
 
 ## Personal Use Setup
 
-Since Mail Notifr has been sunset due to Google API restrictions, you can still set it up for personal use by following these steps:
+Since Mail Notifier has been sunset due to Google API restrictions, you can still set it up for personal use by following these steps:
 
 ### 1. Google Cloud Console Setup
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
@@ -67,7 +67,7 @@ Since Mail Notifr has been sunset due to Google API restrictions, you can still 
    - Go to "APIs & Services" → "Credentials"
    - Click "Create Credentials" → "OAuth Client ID"
    - Choose "Desktop Application" as the application type
-   - Give it a name (e.g., "Mail Notifr Personal")
+   - Give it a name (e.g., "Mail Notifier Personal")
    - Copy both the Client ID and Client Secret for later use
 
 ### 2. OAuth Consent Screen Setup
@@ -86,7 +86,7 @@ Since Mail Notifr has been sunset due to Google API restrictions, you can still 
 1. Update Info.plist URL Scheme:
    - Open the project in Xcode
    - Select the project in navigator
-   - Select "Mail Notifr" target
+   - Select "Mail Notifier" target
    - Go to "Info" tab
    - Under "URL Types", replace the existing URL scheme with:   ```
    com.googleusercontent.apps.YOUR_CLIENT_ID   ```

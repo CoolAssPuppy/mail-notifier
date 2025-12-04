@@ -9,13 +9,10 @@
 /* Begin PBXBuildFile section */
 		1A1AB9C5267D648E00277DEA /* Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1AB9C4267D648E00277DEA /* Browser.swift */; };
 		1A1AB9C7267D6B6500277DEA /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1AB9C6267D6B6500277DEA /* Sound.swift */; };
-                1A1AE4AE267E14FF0014F314 /* OAuthSecret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1AE4AD267E14FF0014F314 /* OAuthSecret.swift */; };
-                1EC4BBAC4467E2BF76E3A163 /* OutlookOAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499A5AC263BA61DEF2148504 /* OutlookOAuthClient.swift */; };
-                9C892221F96E3B6F6DB806D8 /* OutlookOAuthSecret.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69ACA7DD28854F84B3E9AF3 /* OutlookOAuthSecret.swift */; };
-                1A4962252674C0C100331CF7 /* GoogleAPIClientForREST_Gmail in Frameworks */ = {isa = PBXBuildFile; productRef = 1A4962242674C0C100331CF7 /* GoogleAPIClientForREST_Gmail */; };
+		1A1AE4AE267E14FF0014F314 /* OAuthSecret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1AE4AD267E14FF0014F314 /* OAuthSecret.swift */; };
+		1A4962252674C0C100331CF7 /* GoogleAPIClientForREST_Gmail in Frameworks */ = {isa = PBXBuildFile; productRef = 1A4962242674C0C100331CF7 /* GoogleAPIClientForREST_Gmail */; };
 		1A4962282674CEBD00331CF7 /* GTMAppAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 1A4962272674CEBD00331CF7 /* GTMAppAuth */; };
 		1A49622B2674D54100331CF7 /* AppAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 1A49622A2674D54100331CF7 /* AppAuth */; };
-		1A51DA9D272236210069A341 /* OAuthPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A51DA9C272236210069A341 /* OAuthPrompt.swift */; };
 		1A76AAE62675C38A0023B130 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A76AAE52675C38A0023B130 /* MainView.swift */; };
 		1A8AAA3726798047006F52D7 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8AAA3626798047006F52D7 /* Account.swift */; };
 		1A8AAA392679912E006F52D7 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8AAA382679912E006F52D7 /* AccountView.swift */; };
@@ -26,7 +23,7 @@
 		1A8AAA46267C35EC006F52D7 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8AAA45267C35EC006F52D7 /* AppSettings.swift */; };
 		1A92CB572680111900C5A8E0 /* AppDelegate+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A92CB562680111800C5A8E0 /* AppDelegate+Menu.swift */; };
 		1AAFACAB267836A8002C560E /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAFACAA267836A8002C560E /* Sidebar.swift */; };
-		1AAFACAD267848D1002C560E /* MailNotifrApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAFACAC267848D1002C560E /* MailNotifrApp.swift */; };
+		1AAFACAD267848D1002C560E /* MailNotifierApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAFACAC267848D1002C560E /* MailNotifierApp.swift */; };
 		1AAFACAF26785025002C560E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAFACAE26785025002C560E /* AppDelegate.swift */; };
 		1AB7FE3716B57B4E0040BBCE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AB7FE3616B57B4E0040BBCE /* Security.framework */; };
 		1AB7FF0116B57D280040BBCE /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = 1AB7FF0016B57D280040BBCE /* Credits.html */; };
@@ -34,11 +31,14 @@
 		1AB7FF0716B57D510040BBCE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1AB7FF0416B57D510040BBCE /* Localizable.strings */; };
 		1AC74A422673A1B4003F98E7 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 1AC74A412673A1B4003F98E7 /* LaunchAtLogin */; };
 		1ACD6FF01897FE3C00103E15 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1ACD6FEF1897FE3C00103E15 /* Images.xcassets */; };
+		AAAA00001234567800000001 /* Sounds in Resources */ = {isa = PBXBuildFile; fileRef = AAAA00001234567800000002 /* Sounds */; };
 		1AE48C082688856500906371 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 1AE48C072688856500906371 /* KeychainAccess */; };
 		1AF46DE926832110008A5FF2 /* MessageFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF46DE826832110008A5FF2 /* MessageFetcher.swift */; };
 		1AF46DEB26832368008A5FF2 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF46DEA26832368008A5FF2 /* Message.swift */; };
 		1AFB7F4C189FC0EB00B82441 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AFB7F4B189FC0EB00B82441 /* ServiceManagement.framework */; };
 		1AFCE88218D404E500487B98 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AFCE88118D404E500487B98 /* Carbon.framework */; };
+		1EC4BBAC4467E2BF76E3A163 /* OutlookOAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499A5AC263BA61DEF2148504 /* OutlookOAuthClient.swift */; };
+		9C892221F96E3B6F6DB806D8 /* OutlookOAuthSecret.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69ACA7DD28854F84B3E9AF3 /* OutlookOAuthSecret.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -56,10 +56,7 @@
 /* Begin PBXFileReference section */
 		1A1AB9C4267D648E00277DEA /* Browser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Browser.swift; sourceTree = "<group>"; };
 		1A1AB9C6267D6B6500277DEA /* Sound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
-                1A1AE4AD267E14FF0014F314 /* OAuthSecret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthSecret.swift; sourceTree = "<group>"; };
-                499A5AC263BA61DEF2148504 /* OutlookOAuthClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlookOAuthClient.swift; sourceTree = "<group>"; };
-                B69ACA7DD28854F84B3E9AF3 /* OutlookOAuthSecret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlookOAuthSecret.swift; sourceTree = "<group>"; };
-                1A51DA9C272236210069A341 /* OAuthPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthPrompt.swift; sourceTree = "<group>"; };
+		1A1AE4AD267E14FF0014F314 /* OAuthSecret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthSecret.swift; sourceTree = "<group>"; };
 		1A76AAE52675C38A0023B130 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		1A856E68267F4C8A00376737 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1A856E69267F4C8A00376737 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -73,18 +70,21 @@
 		1A8AAA45267C35EC006F52D7 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		1A92CB562680111800C5A8E0 /* AppDelegate+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Menu.swift"; sourceTree = "<group>"; };
 		1AAFACAA267836A8002C560E /* Sidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
-		1AAFACAC267848D1002C560E /* MailNotifrApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailNotifrApp.swift; sourceTree = "<group>"; };
+		1AAFACAC267848D1002C560E /* MailNotifierApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailNotifierApp.swift; sourceTree = "<group>"; };
 		1AAFACAE26785025002C560E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		1AB7FD7C16B578740040BBCE /* Mail Notifr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mail Notifr.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1AB7FD7C16B578740040BBCE /* Mail Notifier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mail Notifier.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AB7FDA316B57A270040BBCE /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		1AB7FE3616B57B4E0040BBCE /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		1AB7FF0016B57D280040BBCE /* Credits.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = Credits.html; path = Resources/Credits.html; sourceTree = SOURCE_ROOT; };
-		1ACD6FEE1897F56300103E15 /* MailNotifr.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MailNotifr.entitlements; sourceTree = SOURCE_ROOT; };
+		1ACD6FEE1897F56300103E15 /* MailNotifier.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MailNotifier.entitlements; sourceTree = SOURCE_ROOT; };
 		1ACD6FEF1897FE3C00103E15 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		AAAA00001234567800000002 /* Sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Sounds; path = Resources/Sounds; sourceTree = SOURCE_ROOT; };
 		1AF46DE826832110008A5FF2 /* MessageFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageFetcher.swift; sourceTree = "<group>"; };
 		1AF46DEA26832368008A5FF2 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		1AFB7F4B189FC0EB00B82441 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		1AFCE88118D404E500487B98 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
+		499A5AC263BA61DEF2148504 /* OutlookOAuthClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlookOAuthClient.swift; sourceTree = "<group>"; };
+		B69ACA7DD28854F84B3E9AF3 /* OutlookOAuthSecret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlookOAuthSecret.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,7 +112,7 @@
 			children = (
 				1AB7FDA916B57A940040BBCE /* Models */,
 				1AB7FDA816B57A830040BBCE /* Views */,
-				1AAFACAC267848D1002C560E /* MailNotifrApp.swift */,
+				1AAFACAC267848D1002C560E /* MailNotifierApp.swift */,
 				1AAFACAE26785025002C560E /* AppDelegate.swift */,
 				1A92CB562680111800C5A8E0 /* AppDelegate+Menu.swift */,
 			);
@@ -133,7 +133,7 @@
 		1AB7FD7D16B578740040BBCE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1AB7FD7C16B578740040BBCE /* Mail Notifr.app */,
+				1AB7FD7C16B578740040BBCE /* Mail Notifier.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -152,7 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				1AB7FDA316B57A270040BBCE /* Info.plist */,
-				1ACD6FEE1897F56300103E15 /* MailNotifr.entitlements */,
+				1ACD6FEE1897F56300103E15 /* MailNotifier.entitlements */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -164,7 +164,6 @@
 				1AAFACAA267836A8002C560E /* Sidebar.swift */,
 				1A8AAA3A26799391006F52D7 /* WelcomeView.swift */,
 				1A8AAA382679912E006F52D7 /* AccountView.swift */,
-				1A51DA9C272236210069A341 /* OAuthPrompt.swift */,
 				1A8AAA3E267C1CE5006F52D7 /* SettingsView.swift */,
 			);
 			name = Views;
@@ -174,11 +173,11 @@
 			isa = PBXGroup;
 			children = (
 				1A8AAA3626798047006F52D7 /* Account.swift */,
-                                1A8AAA3C267B1201006F52D7 /* OAuthClient.swift */,
-                                1A1AE4AD267E14FF0014F314 /* OAuthSecret.swift */,
-                                499A5AC263BA61DEF2148504 /* OutlookOAuthClient.swift */,
-                                B69ACA7DD28854F84B3E9AF3 /* OutlookOAuthSecret.swift */,
-                                1A8AAA45267C35EC006F52D7 /* AppSettings.swift */,
+				1A8AAA3C267B1201006F52D7 /* OAuthClient.swift */,
+				1A1AE4AD267E14FF0014F314 /* OAuthSecret.swift */,
+				499A5AC263BA61DEF2148504 /* OutlookOAuthClient.swift */,
+				B69ACA7DD28854F84B3E9AF3 /* OutlookOAuthSecret.swift */,
+				1A8AAA45267C35EC006F52D7 /* AppSettings.swift */,
 				1A1AB9C4267D648E00277DEA /* Browser.swift */,
 				1A1AB9C6267D6B6500277DEA /* Sound.swift */,
 				1AF46DEA26832368008A5FF2 /* Message.swift */,
@@ -190,6 +189,7 @@
 		1AB7FE3E16B57B740040BBCE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				AAAA00001234567800000002 /* Sounds */,
 				1ACD6FEF1897FE3C00103E15 /* Images.xcassets */,
 				1AB7FF0216B57D510040BBCE /* InfoPlist.strings */,
 				1AB7FF0416B57D510040BBCE /* Localizable.strings */,
@@ -201,9 +201,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1AB7FD7B16B578740040BBCE /* MailNotifr */ = {
+		1AB7FD7B16B578740040BBCE /* MailNotifier */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1AB7FD9A16B578740040BBCE /* Build configuration list for PBXNativeTarget "MailNotifr" */;
+			buildConfigurationList = 1AB7FD9A16B578740040BBCE /* Build configuration list for PBXNativeTarget "MailNotifier" */;
 			buildPhases = (
 				1AB7FD7816B578740040BBCE /* Sources */,
 				1AB7FD7916B578740040BBCE /* Frameworks */,
@@ -215,7 +215,7 @@
 			);
 			dependencies = (
 			);
-			name = MailNotifr;
+			name = MailNotifier;
 			packageProductDependencies = (
 				1AC74A412673A1B4003F98E7 /* LaunchAtLogin */,
 				1A4962242674C0C100331CF7 /* GoogleAPIClientForREST_Gmail */,
@@ -225,7 +225,7 @@
 				1AE48C072688856500906371 /* KeychainAccess */,
 			);
 			productName = "Gmail Notifr";
-			productReference = 1AB7FD7C16B578740040BBCE /* Mail Notifr.app */;
+			productReference = 1AB7FD7C16B578740040BBCE /* Mail Notifier.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -247,7 +247,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 1AB7FD7616B578740040BBCE /* Build configuration list for PBXProject "MailNotifr" */;
+			buildConfigurationList = 1AB7FD7616B578740040BBCE /* Build configuration list for PBXProject "MailNotifier" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -270,7 +270,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1AB7FD7B16B578740040BBCE /* MailNotifr */,
+				1AB7FD7B16B578740040BBCE /* MailNotifier */,
 			);
 		};
 /* End PBXProject section */
@@ -281,6 +281,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1ACD6FF01897FE3C00103E15 /* Images.xcassets in Resources */,
+				AAAA00001234567800000001 /* Sounds in Resources */,
 				1AB7FF0116B57D280040BBCE /* Credits.html in Resources */,
 				1AB7FF0616B57D510040BBCE /* InfoPlist.strings in Resources */,
 				1AB7FF0716B57D510040BBCE /* Localizable.strings in Resources */,
@@ -317,20 +318,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A8AAA46267C35EC006F52D7 /* AppSettings.swift in Sources */,
-				1AAFACAD267848D1002C560E /* MailNotifrApp.swift in Sources */,
+				1AAFACAD267848D1002C560E /* MailNotifierApp.swift in Sources */,
 				1AAFACAF26785025002C560E /* AppDelegate.swift in Sources */,
 				1A1AB9C7267D6B6500277DEA /* Sound.swift in Sources */,
 				1A8AAA3726798047006F52D7 /* Account.swift in Sources */,
 				1A8AAA3F267C1CE5006F52D7 /* SettingsView.swift in Sources */,
 				1AF46DE926832110008A5FF2 /* MessageFetcher.swift in Sources */,
-                                1A1AE4AE267E14FF0014F314 /* OAuthSecret.swift in Sources */,
-                                1EC4BBAC4467E2BF76E3A163 /* OutlookOAuthClient.swift in Sources */,
-                                9C892221F96E3B6F6DB806D8 /* OutlookOAuthSecret.swift in Sources */,
-                                1AAFACAB267836A8002C560E /* Sidebar.swift in Sources */,
+				1A1AE4AE267E14FF0014F314 /* OAuthSecret.swift in Sources */,
+				1EC4BBAC4467E2BF76E3A163 /* OutlookOAuthClient.swift in Sources */,
+				9C892221F96E3B6F6DB806D8 /* OutlookOAuthSecret.swift in Sources */,
+				1AAFACAB267836A8002C560E /* Sidebar.swift in Sources */,
 				1A76AAE62675C38A0023B130 /* MainView.swift in Sources */,
 				1A1AB9C5267D648E00277DEA /* Browser.swift in Sources */,
 				1A8AAA3B26799391006F52D7 /* WelcomeView.swift in Sources */,
-				1A51DA9D272236210069A341 /* OAuthPrompt.swift in Sources */,
 				1A8AAA392679912E006F52D7 /* AccountView.swift in Sources */,
 				1AF46DEB26832368008A5FF2 /* Message.swift in Sources */,
 				1A8AAA3D267B1201006F52D7 /* OAuthClient.swift in Sources */,
@@ -478,11 +478,11 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = MailNotifr.entitlements;
+				CODE_SIGN_ENTITLEMENTS = MailNotifier.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 200;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 955GSY56UT;
 				ENABLE_APP_SANDBOX = YES;
@@ -497,12 +497,14 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Mail Notifier";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.2;
+				MARKETING_VERSION = 3.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.strategicnerds.MailNotifier;
-				PRODUCT_NAME = "Mail Notifr";
+				PRODUCT_BUNDLE_IDENTIFIER = com.strategicnerds.MailNotifierApp;
+				PRODUCT_NAME = "Mail Notifier";
 				PROVISIONING_PROFILE = "";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
@@ -525,11 +527,11 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = MailNotifr.entitlements;
+				CODE_SIGN_ENTITLEMENTS = MailNotifier.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 200;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 955GSY56UT;
 				ENABLE_APP_SANDBOX = YES;
@@ -544,12 +546,14 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Mail Notifier";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.2;
+				MARKETING_VERSION = 3.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.strategicnerds.MailNotifier;
-				PRODUCT_NAME = "Mail Notifr";
+				PRODUCT_BUNDLE_IDENTIFIER = com.strategicnerds.MailNotifierApp;
+				PRODUCT_NAME = "Mail Notifier";
 				PROVISIONING_PROFILE = "";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
@@ -561,7 +565,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1AB7FD7616B578740040BBCE /* Build configuration list for PBXProject "MailNotifr" */ = {
+		1AB7FD7616B578740040BBCE /* Build configuration list for PBXProject "MailNotifier" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1AB7FD9816B578740040BBCE /* Debug */,
@@ -570,7 +574,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1AB7FD9A16B578740040BBCE /* Build configuration list for PBXNativeTarget "MailNotifr" */ = {
+		1AB7FD9A16B578740040BBCE /* Build configuration list for PBXNativeTarget "MailNotifier" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1AB7FD9B16B578740040BBCE /* Debug */,

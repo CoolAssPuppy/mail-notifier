@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  Mail Notifr
+//  Mail Notifier
 //
 //  Created by James Chen on 2021/06/15.
 //  Copyright © 2021 ashchan.com. All rights reserved.
@@ -305,7 +305,7 @@ extension AppDelegate {
     }
 
     @objc func showPreferences() {
-        NSWorkspace.shared.open(URL(string: "mailnotifr://preferences")!)
+        NSWorkspace.shared.open(URL(string: "mailnotifier://preferences")!)
     }
 }
 

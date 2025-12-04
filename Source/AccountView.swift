@@ -1,6 +1,6 @@
 //
 //  AccountView.swift
-//  Mail Notifr
+//  Mail Notifier
 //
 //  Created by James Chen on 2021/06/16.
 //  Copyright © 2021 ashchan.com. All rights reserved.
@@ -12,7 +12,6 @@ struct AccountView: View {
     @AppStorage(Accounts.storageKey) var accounts = Accounts()
     @State var account: Account
     @State private var showingDeleteAlert = false
-    @State private var showingOAuthPrompt = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -71,7 +70,7 @@ struct AccountView: View {
                 .help("Delete Account")
                 .alert(isPresented: $showingDeleteAlert) {
                     Alert(
-                        title: Text("Delete this account from Mail Notifr?"),
+                        title: Text("Delete this account from Mail Notifier?"),
                         message: Text("You can add your account again at any time."),
                         primaryButton: .default(Text("Delete")) {
                             self.delete()
@@ -87,12 +86,6 @@ struct AccountView: View {
                 .buttonStyle(.borderless)
                 .help("Reauthorize Account")
             }
-        }
-       .sheet(isPresented: $showingOAuthPrompt) {
-            OAuthPrompt()
-                .onAppear {
-                    OAuthPrompt.accountType = account.type
-                }
         }
         .onChange(of: account) { newValue in
            update(account: account)
@@ -290,8 +283,7 @@ private extension AccountView {
     }
 
     func reauthorize() {
-        OAuthPrompt.accountType = account.type
-        showingOAuthPrompt = true
+        Accounts.authorize(type: account.type)
     }
 }
 

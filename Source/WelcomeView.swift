@@ -1,6 +1,6 @@
 //
 //  WelcomeView.swift
-//  Mail Notifr
+//  Mail Notifier
 //
 //  Created by James Chen on 2021/06/16.
 //  Copyright © 2021 ashchan.com. All rights reserved.
@@ -9,8 +9,6 @@
 import SwiftUI
 
 struct WelcomeView: View {
-    @State private var showingOAuthPrompt = false
-
     var body: some View {
         VStack(spacing: 32) {
             Spacer()
@@ -40,7 +38,7 @@ struct WelcomeView: View {
                 }
 
                 VStack(spacing: 8) {
-                    Text("Welcome to Mail Notifr")
+                    Text("Welcome to Mail Notifier")
                         .font(.title)
                         .fontWeight(.semibold)
 
@@ -95,9 +93,6 @@ struct WelcomeView: View {
 
             Spacer()
         }
-        .sheet(isPresented: $showingOAuthPrompt) {
-            OAuthPrompt()
-        }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
             LinearGradient(
@@ -114,8 +109,7 @@ struct WelcomeView: View {
     }
 
     private func addAccount(_ type: AccountType) {
-        OAuthPrompt.accountType = type
-        showingOAuthPrompt = true
+        Accounts.authorize(type: type)
     }
 }
 

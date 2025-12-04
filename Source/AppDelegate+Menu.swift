@@ -1,6 +1,6 @@
 //
 //  AppDelegate+Menu.swift
-//  Mail Notifr
+//  Mail Notifier
 //
 //  Created by James Chen on 2021/06/21.
 //  Copyright © 2021 ashchan.com. All rights reserved.
@@ -31,10 +31,10 @@ extension AppDelegate {
         separatorAboveAboutItem.tag = MenuItemTag.separatorAboveAboutItem.rawValue
         menu.addItem(separatorAboveAboutItem)
 
-        menu.addItem(withTitle: NSLocalizedString("About Mail Notifr", comment: ""), action: #selector(showAbout), keyEquivalent: "")
+        menu.addItem(withTitle: NSLocalizedString("About Mail Notifier", comment: ""), action: #selector(showAbout), keyEquivalent: "")
         menu.addItem(withTitle: NSLocalizedString("Preferences...", comment: ""), action: #selector(showPreferences), keyEquivalent: "")
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(withTitle: NSLocalizedString("Quit Mail Notifr", comment: ""), action: #selector(NSApp.terminate(_:)), keyEquivalent: "")
+        menu.addItem(withTitle: NSLocalizedString("Quit Mail Notifier", comment: ""), action: #selector(NSApp.terminate(_:)), keyEquivalent: "")
 
         return menu
     }
