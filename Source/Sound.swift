@@ -10,7 +10,7 @@ import Foundation
 import AppKit
 
 enum Sound: String, Identifiable, CaseIterable {
-    // System sounds
+    // System sounds (alphabetized)
     case basso
     case blow
     case bottle
@@ -26,8 +26,10 @@ enum Sound: String, Identifiable, CaseIterable {
     case submarine
     case tink
 
-    // Custom sounds
+    // Custom sounds (alphabetized)
+    case blink
     case chimes
+    case iLoveYou = "i-love-you"
     case megRyan = "meg-ryan"
     case minstrel
     case ominous
@@ -36,8 +38,11 @@ enum Sound: String, Identifiable, CaseIterable {
     case power
     case ramius
     case robot
+    case splat
+    case spring
     case vader
     case wacky
+    case wahWah = "wah-wah"
     case whimsy
     case whistle
 
@@ -47,8 +52,9 @@ enum Sound: String, Identifiable, CaseIterable {
 
     private var isCustomSound: Bool {
         switch self {
-        case .chimes, .megRyan, .minstrel, .ominous, .organ, .pong,
-             .power, .ramius, .robot, .vader, .wacky, .whimsy, .whistle:
+        case .blink, .chimes, .iLoveYou, .megRyan, .minstrel, .ominous, .organ,
+             .pong, .power, .ramius, .robot, .splat, .spring, .vader, .wacky,
+             .wahWah, .whimsy, .whistle:
             return true
         default:
             return false

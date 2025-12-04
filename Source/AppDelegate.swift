@@ -381,7 +381,19 @@ extension AppDelegate:  UNUserNotificationCenterDelegate {
             return
         }
 
-        if let sound = account.sound {
+        // Check for VIP senders and play their sounds
+        let vipList = VIPList.default
+        var playedVIPSound = false
+        for message in fetcher.messages {
+            if let vipSound = vipList.soundForSender(message.senderEmail) {
+                vipSound.nsSound?.play()
+                playedVIPSound = true
+                break // Only play one VIP sound per fetch
+            }
+        }
+
+        // Fall back to account sound if no VIP sound was played
+        if !playedVIPSound, let sound = account.sound {
             sound.nsSound?.play()
         }
 

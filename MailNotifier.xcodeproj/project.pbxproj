@@ -35,6 +35,7 @@
 		1AE48C082688856500906371 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 1AE48C072688856500906371 /* KeychainAccess */; };
 		1AF46DE926832110008A5FF2 /* MessageFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF46DE826832110008A5FF2 /* MessageFetcher.swift */; };
 		1AF46DEB26832368008A5FF2 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF46DEA26832368008A5FF2 /* Message.swift */; };
+		BBBB00001234567800000001 /* VIP.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBBB00001234567800000002 /* VIP.swift */; };
 		1AFB7F4C189FC0EB00B82441 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AFB7F4B189FC0EB00B82441 /* ServiceManagement.framework */; };
 		1AFCE88218D404E500487B98 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AFCE88118D404E500487B98 /* Carbon.framework */; };
 		1EC4BBAC4467E2BF76E3A163 /* OutlookOAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499A5AC263BA61DEF2148504 /* OutlookOAuthClient.swift */; };
@@ -85,6 +86,7 @@
 		1AFCE88118D404E500487B98 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		499A5AC263BA61DEF2148504 /* OutlookOAuthClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlookOAuthClient.swift; sourceTree = "<group>"; };
 		B69ACA7DD28854F84B3E9AF3 /* OutlookOAuthSecret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlookOAuthSecret.swift; sourceTree = "<group>"; };
+		BBBB00001234567800000002 /* VIP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VIP.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,6 +184,7 @@
 				1A1AB9C6267D6B6500277DEA /* Sound.swift */,
 				1AF46DEA26832368008A5FF2 /* Message.swift */,
 				1AF46DE826832110008A5FF2 /* MessageFetcher.swift */,
+				BBBB00001234567800000002 /* VIP.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -335,6 +338,7 @@
 				1AF46DEB26832368008A5FF2 /* Message.swift in Sources */,
 				1A8AAA3D267B1201006F52D7 /* OAuthClient.swift in Sources */,
 				1A92CB572680111900C5A8E0 /* AppDelegate+Menu.swift in Sources */,
+				BBBB00001234567800000001 /* VIP.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

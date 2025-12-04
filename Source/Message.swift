@@ -25,6 +25,16 @@ struct Message {
             .trimmingCharacters(in: ["\"", "\\"])
     }
 
+    var senderEmail: String {
+        // Extract email from format like "Name <email@example.com>" or just "email@example.com"
+        if let start = from.firstIndex(of: "<"),
+           let end = from.firstIndex(of: ">") {
+            return String(from[from.index(after: start)..<end]).lowercased()
+        }
+        // If no angle brackets, assume the whole string is the email
+        return from.trimmingCharacters(in: .whitespaces).lowercased()
+    }
+
     var serverDate: Date {
         Date(timeIntervalSince1970: internalDate / 1000)
     }
