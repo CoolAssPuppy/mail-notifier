@@ -1,4 +1,5 @@
 .DS_Store
+*.mov
 dsa_priv.pem
 build
 *.pbxuser

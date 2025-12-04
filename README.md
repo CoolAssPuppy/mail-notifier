@@ -79,7 +79,6 @@ Since Mail Notifr has been sunset due to Google API restrictions, you can still 
    - Developer contact information
 4. Add scopes:
    - `https://www.googleapis.com/auth/gmail.readonly`
-   - `https://www.googleapis.com/auth/gmail.metadata`
 5. Add your Google account email as a test user
 6. Leave the app in "Testing" status
 
