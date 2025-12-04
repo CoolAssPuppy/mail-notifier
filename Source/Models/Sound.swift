@@ -2,8 +2,8 @@
 //  Sound.swift
 //  Mail Notifier
 //
-//  Created by James Chen on 2021/06/19.
-//  Copyright © 2021 ashchan.com. All rights reserved.
+
+//  Copyright (c) 2025 Strategic Nerds. All rights reserved.
 //
 
 import Foundation

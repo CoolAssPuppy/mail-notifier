@@ -2,8 +2,8 @@
 //  AccountView.swift
 //  Mail Notifier
 //
-//  Created by James Chen on 2021/06/16.
-//  Copyright © 2021 ashchan.com. All rights reserved.
+
+//  Copyright (c) 2025 Strategic Nerds. All rights reserved.
 //
 
 import SwiftUI
@@ -68,16 +68,6 @@ struct AccountView: View {
                 }
                 .buttonStyle(.borderless)
                 .help("Delete Account")
-                .alert(isPresented: $showingDeleteAlert) {
-                    Alert(
-                        title: Text("Delete this account from Mail Notifier?"),
-                        message: Text("You can add your account again at any time."),
-                        primaryButton: .default(Text("Delete")) {
-                            self.delete()
-                        },
-                        secondaryButton: .cancel()
-                    )
-                }
                 Button {
                     reauthorize()
                 } label: {
@@ -87,8 +77,16 @@ struct AccountView: View {
                 .help("Reauthorize Account")
             }
         }
-        .onChange(of: account) { newValue in
-           update(account: account)
+        .onChange(of: account) { _, newValue in
+           update(account: newValue)
+        }
+        .alert("Delete this account from Mail Notifier?", isPresented: $showingDeleteAlert) {
+            Button("Delete", role: .destructive) {
+                delete()
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("You can add your account again at any time.")
         }
     }
 
@@ -139,7 +137,7 @@ struct AccountView: View {
                         }
                     }
                     .pickerStyle(.menu)
-                    .onChange(of: account.notificationSound) { newValue in
+                    .onChange(of: account.notificationSound) { _, newValue in
                         if let sound = Sound(rawValue: newValue) {
                             sound.nsSound?.play()
                         }
@@ -287,8 +285,6 @@ private extension AccountView {
     }
 }
 
-struct AccountView_Previews: PreviewProvider {
-    static var previews: some View {
-        AccountView(account: Account(email: "ashchan@gmail.com", type: .gmail))
-    }
+#Preview {
+    AccountView(account: Account(email: "user@example.com", type: .gmail))
 }

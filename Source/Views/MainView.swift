@@ -2,8 +2,8 @@
 //  MainView.swift
 //  Mail Notifier
 //
-//  Created by James Chen on 2021/06/13.
-//  Copyright © 2021 ashchan.com. All rights reserved.
+
+//  Copyright (c) 2025 Strategic Nerds. All rights reserved.
 //
 
 import SwiftUI
@@ -40,8 +40,6 @@ struct MainView: View {
     }
 }
 
-struct Source_Previews: PreviewProvider {
-    static var previews: some View {
-        MainView(selection: .constant(""))
-    }
+#Preview {
+    MainView(selection: .constant(""))
 }

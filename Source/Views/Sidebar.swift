@@ -2,8 +2,8 @@
 //  Sidebar.swift
 //  Mail Notifier
 //
-//  Created by James Chen on 2021/06/15.
-//  Copyright © 2021 ashchan.com. All rights reserved.
+
+//  Copyright (c) 2025 Strategic Nerds. All rights reserved.
 //
 
 import SwiftUI
@@ -120,11 +120,9 @@ struct AvatarView: View {
     }
 }
 
-struct Sidebar_Previews: PreviewProvider {
-    static var previews: some View {
-        Sidebar(
-            accounts: [Account(email: "ashchan@gmail.com", type: .gmail)],
-            selection: .constant("general")
-        )
-    }
+#Preview {
+    Sidebar(
+        accounts: [Account(email: "user@example.com", type: .gmail)],
+        selection: .constant("general")
+    )
 }

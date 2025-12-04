@@ -2,22 +2,22 @@
 //  SettingsView.swift
 //  Mail Notifier
 //
-//  Created by James Chen on 2021/06/18.
-//  Copyright © 2021 ashchan.com. All rights reserved.
+
+//  Copyright (c) 2025 Strategic Nerds. All rights reserved.
 //
 
 import SwiftUI
-import LaunchAtLogin
 import KeyboardShortcuts
 
 struct SettingsView: View {
-    @ObservedObject private var launchAtLogin = LaunchAtLogin.observable
+    @StateObject private var launchAtLogin = LaunchAtLoginManager.shared
     @AppStorage(AppSettings.showUnreadCount) var showUnreadCount = AppSettings.shared.showUnreadCount
     @AppStorage(AppSettings.openSettingsOnStartKey) var openSettingsOnStart = false
     @AppStorage(VIPList.storageKey) var vipList = VIPList()
 
     @State private var newVIPEmail = ""
     @State private var newVIPSound = ""
+    @State private var showingCoffee = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -38,6 +38,16 @@ struct SettingsView: View {
                         .padding(.vertical, 8)
 
                     shortcutsSection
+
+                    Divider()
+                        .padding(.vertical, 8)
+
+                    supportSection
+
+                    Divider()
+                        .padding(.vertical, 8)
+
+                    aboutSection
 
                     Spacer()
                 }
@@ -75,7 +85,7 @@ struct SettingsView: View {
         VStack(alignment: .leading, spacing: 16) {
             sectionHeader(icon: "gearshape.fill", title: "General", gradient: [.blue, .cyan])
 
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 16) {
                 Toggle(isOn: $launchAtLogin.isEnabled) {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Launch at login")
@@ -95,7 +105,7 @@ struct SettingsView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: showUnreadCount) { newValue in
+                .onChange(of: showUnreadCount) { _, _ in
                     AppSettings.shared.showUnreadCountSettingChanged()
                 }
 
@@ -109,9 +119,7 @@ struct SettingsView: View {
                     }
                 }
             }
-            .padding(12)
-            .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
-            .cornerRadius(8)
+            .padding(.leading, 4)
         }
     }
 
@@ -124,7 +132,6 @@ struct SettingsView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
 
-                // Add new VIP form
                 HStack(spacing: 8) {
                     TextField("Email address", text: $newVIPEmail)
                         .textFieldStyle(.roundedBorder)
@@ -137,7 +144,7 @@ struct SettingsView: View {
                         }
                     }
                     .frame(width: 140)
-                    .onChange(of: newVIPSound) { newValue in
+                    .onChange(of: newVIPSound) { _, newValue in
                         if let sound = Sound(rawValue: newValue) {
                             sound.nsSound?.play()
                         }
@@ -154,9 +161,6 @@ struct SettingsView: View {
                 }
 
                 if !vipList.isEmpty {
-                    Divider()
-                        .padding(.vertical, 4)
-
                     ForEach(vipList) { vip in
                         VIPRow(vip: vip, onUpdate: { updated in
                             vipList.update(vip: updated)
@@ -166,9 +170,7 @@ struct SettingsView: View {
                     }
                 }
             }
-            .padding(12)
-            .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
-            .cornerRadius(8)
+            .padding(.leading, 4)
         }
     }
 
@@ -184,14 +186,16 @@ struct SettingsView: View {
             sectionHeader(icon: "command.circle.fill", title: "Keyboard Shortcuts", gradient: [.purple, .pink])
 
             VStack(alignment: .leading, spacing: 12) {
+                Text("These shortcuts work globally across all applications")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
                 HStack {
                     Text("Check All Mails")
                         .font(.body)
                     Spacer()
                     KeyboardShortcuts.Recorder(for: .checkAllMails)
                 }
-
-                Divider()
 
                 HStack {
                     Text("Compose Mail")
@@ -200,31 +204,66 @@ struct SettingsView: View {
                     KeyboardShortcuts.Recorder(for: .composeMail)
                 }
             }
-            .padding(12)
-            .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
-            .cornerRadius(8)
-
-            infoBox
+            .padding(.leading, 4)
         }
     }
 
-    private var infoBox: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Image(systemName: "info.circle.fill")
-                    .foregroundColor(.blue)
-                Text("Global Shortcuts")
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-            }
+    private var supportSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            sectionHeader(icon: "cup.and.saucer.fill", title: "Support", gradient: [.brown, .orange])
 
-            Text("These keyboard shortcuts work globally across all applications. Click the recorder field and press your desired key combination to set a shortcut.")
-                .font(.caption)
-                .foregroundColor(.secondary)
+            VStack(alignment: .leading, spacing: 8) {
+                Button(action: {
+                    showingCoffee = true
+                }) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "cup.and.saucer.fill")
+                        Text("Buy Me Coffee")
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                }
+                .buttonStyle(.bordered)
+                .tint(.orange)
+
+                Text("Support independent development")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .padding(.leading, 4)
         }
-        .padding(12)
-        .background(Color.blue.opacity(0.1))
-        .cornerRadius(8)
+        .sheet(isPresented: $showingCoffee) {
+            CoffeeView()
+                .frame(width: 500, height: 500)
+        }
+    }
+
+    private var aboutSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            sectionHeader(icon: "info.circle.fill", title: "About", gradient: [.gray, .secondary])
+
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Made with love by Strategic Nerds, Inc.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
+                Text("© 2025 Strategic Nerds, Inc.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
+                Text("Build \(appBuildNumber)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
+                Link("Contribute on GitHub", destination: URL(string: "https://github.com/CoolAssPuppy/MailNotifierWithOutlook")!)
+                    .font(.caption)
+            }
+            .padding(.leading, 4)
+        }
+    }
+
+    private var appBuildNumber: String {
+        Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown"
     }
 
     private func sectionHeader(icon: String, title: String, gradient: [Color]) -> some View {
@@ -277,7 +316,7 @@ struct VIPRow: View {
                 }
             }
             .frame(width: 120)
-            .onChange(of: selectedSound) { newValue in
+            .onChange(of: selectedSound) { _, newValue in
                 if let sound = Sound(rawValue: newValue) {
                     sound.nsSound?.play()
                 }
@@ -298,8 +337,6 @@ struct VIPRow: View {
     }
 }
 
-struct SettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingsView()
-    }
+#Preview {
+    SettingsView()
 }

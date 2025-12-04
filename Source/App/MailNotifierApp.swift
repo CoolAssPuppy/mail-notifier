@@ -2,13 +2,12 @@
 //  MailNotifierApp.swift
 //  Mail Notifier
 //
-//  Created by James Chen on 2021/06/15.
-//  Copyright © 2021 ashchan.com. All rights reserved.
+
+//  Copyright (c) 2025 Strategic Nerds. All rights reserved.
 //
 
 import AppKit
 import SwiftUI
-import LaunchAtLogin
 
 extension Notification.Name {
     static let mailToReceived = Notification.Name("mailToReceived")
@@ -18,10 +17,6 @@ extension Notification.Name {
 @main
 struct MailNotifierApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var delegate
-
-    init() {
-        LaunchAtLogin.migrateIfNeeded()
-    }
 
     var body: some Scene {
         Settings {

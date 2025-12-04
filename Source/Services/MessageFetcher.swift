@@ -2,8 +2,8 @@
 //  MessageFetcher.swift
 //  Mail Notifier
 //
-//  Created by James Chen on 2021/06/23.
-//  Copyright © 2021 ashchan.com. All rights reserved.
+
+//  Copyright (c) 2025 Strategic Nerds. All rights reserved.
 //
 
 import Foundation
@@ -141,23 +141,15 @@ private extension MessageFetcher {
                 }
             }
         } else {
-            guard let authState = authState, !hasAuthError else {
-                print("⚠️ Cannot fetch unread count - no auth state")
-                return
-            }
-            print("📊 Fetching unread count for \(account.email)")
-            NSLog("📊 Fetching unread count for \(account.email)")
+            guard let authState, !hasAuthError else { return }
 
-            // Use performAction to automatically refresh token if needed
             authState.performAction { accessToken, idToken, error in
-                if let error = error {
-                    print("❌ Token refresh error: \(error)")
+                if error != nil {
                     DispatchQueue.main.async { self.hasAuthError = true }
                     return
                 }
 
-                guard let accessToken = accessToken else {
-                    print("⚠️ No access token available")
+                guard let accessToken else {
                     DispatchQueue.main.async { self.hasAuthError = true }
                     return
                 }
@@ -165,36 +157,20 @@ private extension MessageFetcher {
                 var request = URLRequest(url: URL(string: "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox?$select=unreadItemCount")!)
                 request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
                 URLSession.shared.dataTask(with: request) { data, response, error in
-                    if let error = error {
-                        print("❌ Unread count fetch error: \(error)")
+                    if error != nil {
                         DispatchQueue.main.async { self.hasAuthError = true }
                         return
                     }
-                    if let httpResponse = response as? HTTPURLResponse {
-                        NSLog("📊 Unread count response status: \(httpResponse.statusCode)")
-                        if httpResponse.statusCode == 401 {
-                            NSLog("❌ Unauthorized - token may be expired")
-                            DispatchQueue.main.async { self.hasAuthError = true }
-                            return
-                        }
+                    if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
+                        DispatchQueue.main.async { self.hasAuthError = true }
+                        return
                     }
-                    if let data = data {
-                        if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
-                            NSLog("📊 Unread count response: \(json)")
-                            if let count = json["unreadItemCount"] as? Int {
-                                NSLog("✅ Unread count: \(count)")
-                                DispatchQueue.main.async { self.unreadMessagesCount = count }
-                            } else {
-                                NSLog("❌ No unreadItemCount in response")
-                                DispatchQueue.main.async { self.hasAuthError = true }
-                            }
-                        } else {
-                            NSLog("❌ Failed to parse unread count JSON")
-                            if let responseString = String(data: data, encoding: .utf8) {
-                                NSLog("Response: \(responseString)")
-                            }
-                            DispatchQueue.main.async { self.hasAuthError = true }
-                        }
+                    if let data,
+                       let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                       let count = json["unreadItemCount"] as? Int {
+                        DispatchQueue.main.async { self.unreadMessagesCount = count }
+                    } else {
+                        DispatchQueue.main.async { self.hasAuthError = true }
                     }
                 }.resume()
             }
@@ -222,22 +198,15 @@ private extension MessageFetcher {
                 }
             }
         } else {
-            guard let authState = authState, !hasAuthError else {
-                print("⚠️ Cannot fetch messages - no auth state")
-                return
-            }
-            print("📧 Fetching messages for \(account.email)")
+            guard let authState, !hasAuthError else { return }
 
-            // Use performAction to automatically refresh token if needed
             authState.performAction { accessToken, idToken, error in
-                if let error = error {
-                    print("❌ Token refresh error: \(error)")
+                if error != nil {
                     DispatchQueue.main.async { self.hasAuthError = true }
                     return
                 }
 
-                guard let accessToken = accessToken else {
-                    print("⚠️ No access token available")
+                guard let accessToken else {
                     DispatchQueue.main.async { self.hasAuthError = true }
                     return
                 }
@@ -250,49 +219,25 @@ private extension MessageFetcher {
                 ]
                 var request = URLRequest(url: components.url!)
                 request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-                print("📧 Request URL: \(components.url?.absoluteString ?? "invalid")")
+
                 URLSession.shared.dataTask(with: request) { data, response, error in
-                    if let error = error {
-                        print("❌ Messages fetch error: \(error)")
+                    if error != nil {
                         DispatchQueue.main.async { self.hasAuthError = true }
                         return
                     }
-                    if let httpResponse = response as? HTTPURLResponse {
-                        print("📧 Messages response status: \(httpResponse.statusCode)")
-                        if httpResponse.statusCode == 401 {
-                            print("❌ Unauthorized - token may be expired")
-                            DispatchQueue.main.async { self.hasAuthError = true }
-                            return
-                        }
+                    if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
+                        DispatchQueue.main.async { self.hasAuthError = true }
+                        return
                     }
-                    guard let data = data else {
-                        print("❌ No data in response")
+                    guard let data,
+                          let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                          let value = json["value"] as? [[String: Any]] else {
                         DispatchQueue.main.async { self.hasAuthError = true }
                         return
                     }
 
-                    guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-                        print("❌ Failed to parse messages JSON")
-                        if let responseString = String(data: data, encoding: .utf8) {
-                            print("Response: \(responseString)")
-                        }
-                        DispatchQueue.main.async { self.hasAuthError = true }
-                        return
-                    }
-
-                    print("📧 Messages response: \(json.keys)")
-
-                    guard let value = json["value"] as? [[String: Any]] else {
-                        print("❌ No 'value' array in response")
-                        DispatchQueue.main.async { self.hasAuthError = true }
-                        return
-                    }
-
-                    NSLog("✅ Found \(value.count) messages")
                     let msgs = value.compactMap { self.parseOutlookMessage($0) }
-                    NSLog("✅ Parsed \(msgs.count) messages successfully")
                     DispatchQueue.main.async {
-                        NSLog("✅ Setting messages array with \(msgs.count) messages")
                         self.messages = msgs
                     }
                 }.resume()

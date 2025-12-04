@@ -2,8 +2,7 @@
 //  Account.swift
 //  Mail Notifier
 //
-//  Created by James Chen on 2021/06/16.
-//  Copyright © 2021 ashchan.com. All rights reserved.
+//  Copyright (c) 2025 Strategic Nerds. All rights reserved.
 //
 
 import Foundation
@@ -20,13 +19,9 @@ struct Account: Codable {
     var email: String
     var type: AccountType = .gmail
     var enabled = true
-    // interval as minutes
     var checkInterval: Double = 30 {
         didSet {
-            checkInterval = max(
-                min(Double(Int(checkInterval)), 900),
-                1
-            )
+            checkInterval = max(min(Double(Int(checkInterval)), 900), 1)
         }
     }
     var notificationEnabled = true
@@ -36,9 +31,7 @@ struct Account: Codable {
 }
 
 extension Account: Identifiable, Hashable {
-    var id: String {
-        email
-    }
+    var id: String { email }
 
     var baseUrl: String {
         switch type {
@@ -65,13 +58,11 @@ extension Account {
 
     var authorization: GTMAppAuthFetcherAuthorization? {
         get {
-            if let data = keychain[data: id] {
-                return try? NSKeyedUnarchiver.unarchivedObject(ofClass: GTMAppAuthFetcherAuthorization.self, from: data)
-            }
-            return nil
+            guard let data = keychain[data: id] else { return nil }
+            return try? NSKeyedUnarchiver.unarchivedObject(ofClass: GTMAppAuthFetcherAuthorization.self, from: data)
         }
         set {
-            guard let newValue = newValue, newValue.canAuthorize() else {
+            guard let newValue, newValue.canAuthorize() else {
                 keychain[id] = nil
                 return
             }
@@ -83,36 +74,22 @@ extension Account {
     var authState: OIDAuthState? {
         get {
             let keychainKey = "\(id)-oid"
-            print("🔑 Reading authState for \(id) with key: \(keychainKey)")
-            if let data = keychain[data: keychainKey] {
-                print("🔑 Found keychain data, size: \(data.count) bytes")
-                if let state = try? NSKeyedUnarchiver.unarchivedObject(ofClass: OIDAuthState.self, from: data) {
-                    print("🔑 Successfully unarchived authState, isAuthorized: \(state.isAuthorized)")
-                    return state
-                } else {
-                    print("❌ Failed to unarchive authState")
-                }
-            } else {
-                print("❌ No keychain data found for key: \(keychainKey)")
-            }
-            return nil
+            guard let data = keychain[data: keychainKey] else { return nil }
+            return try? NSKeyedUnarchiver.unarchivedObject(ofClass: OIDAuthState.self, from: data)
         }
         set {
             let keychainKey = "\(id)-oid"
-            guard let newValue = newValue else {
-                print("🔑 Clearing authState for \(id)")
+            guard let newValue else {
                 keychain[keychainKey] = nil
                 return
             }
-            print("🔑 Saving authState for \(id), isAuthorized: \(newValue.isAuthorized)")
             let data = try? NSKeyedArchiver.archivedData(withRootObject: newValue, requiringSecureCoding: false)
             keychain[data: keychainKey] = data
-            print("🔑 Saved authState to keychain, data size: \(data?.count ?? 0) bytes")
         }
     }
 }
 
-// MARK: - Allow persisting accounts to @AppStorage
+// MARK: - Accounts Collection
 
 struct Accounts: RawRepresentable, Codable, RandomAccessCollection, MutableCollection, ExpressibleByArrayLiteral {
     private var storage: [Account]
@@ -125,23 +102,23 @@ struct Accounts: RawRepresentable, Codable, RandomAccessCollection, MutableColle
         self.storage = elements
     }
 
-    // Collection
+    // Collection conformance
     typealias Index = Int
     var startIndex: Int { storage.startIndex }
     var endIndex: Int { storage.endIndex }
     func index(after i: Int) -> Int { storage.index(after: i) }
+
     subscript(position: Int) -> Account {
         get { storage[position] }
         set { storage[position] = newValue }
     }
 
-    // RawRepresentable
+    // RawRepresentable conformance
     static let storageKey = "accounts"
 
     init?(rawValue: String) {
         guard let data = rawValue.data(using: .utf8),
-              let result = try? JSONDecoder().decode([Account].self, from: data)
-        else {
+              let result = try? JSONDecoder().decode([Account].self, from: data) else {
             return nil
         }
         self.storage = result
@@ -149,14 +126,13 @@ struct Accounts: RawRepresentable, Codable, RandomAccessCollection, MutableColle
 
     var rawValue: String {
         guard let data = try? JSONEncoder().encode(storage),
-              let result = String(data: data, encoding: .utf8)
-        else {
+              let result = String(data: data, encoding: .utf8) else {
             return "[]"
         }
         return result
     }
 
-    // Helpers to mimic array behaviour
+    // Array-like helpers
     var count: Int { storage.count }
     var isEmpty: Bool { storage.isEmpty }
 
@@ -165,6 +141,8 @@ struct Accounts: RawRepresentable, Codable, RandomAccessCollection, MutableColle
     mutating func move(fromOffsets source: IndexSet, toOffset destination: Int) { storage.move(fromOffsets: source, toOffset: destination) }
 }
 
+// MARK: - Notification Names
+
 extension Notification.Name {
     static let accountAdded = Notification.Name("accountAdded")
     static let accountDeleted = Notification.Name("accountDeleted")
@@ -172,21 +150,18 @@ extension Notification.Name {
     static let accountsReordered = Notification.Name("accountsReordered")
 }
 
+// MARK: - Static Accessors
+
 extension Accounts {
-
     static var `default`: Accounts {
-        get {
-            Accounts(rawValue: UserDefaults.standard.string(forKey: storageKey) ?? "[]") ?? []
-        }
-        set {
-            UserDefaults.standard.set(newValue.rawValue, forKey: storageKey)
-        }
+        get { Accounts(rawValue: UserDefaults.standard.string(forKey: storageKey) ?? "[]") ?? [] }
+        set { UserDefaults.standard.set(newValue.rawValue, forKey: storageKey) }
     }
 
-    static var hasAccounts: Bool {
-        !Self.default.isEmpty
-    }
+    static var hasAccounts: Bool { !Self.default.isEmpty }
 }
+
+// MARK: - Account Management
 
 extension Accounts {
     var enabled: Accounts {
@@ -210,18 +185,14 @@ extension Accounts {
     }
 
     mutating func add(account: Account) {
-        if firstIndex(where: { $0.id == account.id }) != nil {
-            return
-        }
+        guard firstIndex(where: { $0.id == account.id }) == nil else { return }
         append(account)
         save()
         NotificationCenter.default.post(name: .accountAdded, object: account)
     }
 
     mutating func delete(account: Account) {
-        guard let index = firstIndex(where: { $0.id == account.id }) else {
-            return
-        }
+        guard let index = firstIndex(where: { $0.id == account.id }) else { return }
         self[index].authorization = nil
         remove(at: index)
         save()
@@ -229,9 +200,7 @@ extension Accounts {
     }
 
     mutating func update(account: Account) {
-        guard let index = firstIndex(where: { $0.id == account.id }) else {
-            return
-        }
+        guard let index = firstIndex(where: { $0.id == account.id }) else { return }
         let needsRescheduling = Self.needsReschduling(oldValue: self[index], newValue: account)
         let needsImmediateFetching = Self.needsImmediateFetching(oldValue: self[index], newValue: account)
         self[index] = account
@@ -248,79 +217,60 @@ extension Accounts {
         save()
         NotificationCenter.default.post(name: .accountsReordered, object: nil)
     }
+}
 
+// MARK: - OAuth Authorization
+
+extension Accounts {
     static func authorize(type: AccountType) {
         switch type {
         case .gmail:
-            OAuthClient.shared.authorize() { state in
-                switch state {
-                case .success(let state):
-                    let authorization = GTMAppAuthFetcherAuthorization(authState: state)
-                    if var account = Self.default.find(email: authorization.userEmail!) {
-                        account.authorization = authorization
-                        var accounts = Self.default
-                        accounts.update(account: account)
-                    } else {
-                    var account = Account(email: authorization.userEmail!, type: .gmail)
-                        account.authorization = authorization
-                        var accounts = Self.default
-                        accounts.add(account: account)
-                    }
-                case .failure(let error):
-                    print(error)
+            OAuthClient.shared.authorize { result in
+                guard case .success(let state) = result else { return }
+                let authorization = GTMAppAuthFetcherAuthorization(authState: state)
+                guard let userEmail = authorization.userEmail else { return }
+
+                var accounts = Self.default
+                if var account = accounts.find(email: userEmail) {
+                    account.authorization = authorization
+                    accounts.update(account: account)
+                } else {
+                    var account = Account(email: userEmail, type: .gmail)
+                    account.authorization = authorization
+                    accounts.add(account: account)
                 }
             }
+
         case .outlook:
             OutlookOAuthClient.shared.authorize { result in
-                switch result {
-                case .success(let state):
-                    print("✅ Outlook OAuth Success!")
-                    print("Auth state: \(state)")
-                    print("Last token response: \(String(describing: state.lastTokenResponse))")
-                    print("Additional params: \(String(describing: state.lastTokenResponse?.additionalParameters))")
+                guard case .success(let state) = result else { return }
 
-                    // Try to get email from various possible locations in the token response
-                    var email: String? = nil
-                    if let params = state.lastTokenResponse?.additionalParameters {
-                        email = params["preferred_username"] as? String
-                            ?? params["email"] as? String
-                            ?? params["upn"] as? String
-                    }
+                // Extract email from token response
+                var email: String?
+                if let params = state.lastTokenResponse?.additionalParameters {
+                    email = params["preferred_username"] as? String
+                        ?? params["email"] as? String
+                        ?? params["upn"] as? String
+                }
 
-                    // Also check the ID token claims
-                    if email == nil, let idToken = state.lastTokenResponse?.idToken {
-                        print("ID Token: \(idToken)")
-                        // Try to decode the ID token to get email
-                        if let claims = decodeJWT(idToken) {
-                            print("JWT Claims: \(claims)")
-                            email = claims["preferred_username"] as? String
-                                ?? claims["email"] as? String
-                                ?? claims["upn"] as? String
-                        }
-                    }
+                // Try ID token claims if not found
+                if email == nil, let idToken = state.lastTokenResponse?.idToken,
+                   let claims = decodeJWT(idToken) {
+                    email = claims["preferred_username"] as? String
+                        ?? claims["email"] as? String
+                        ?? claims["upn"] as? String
+                }
 
-                    print("Extracted email: \(String(describing: email))")
+                guard let email else { return }
 
-                    if let email = email {
-                        if var account = Self.default.find(email: email) {
-                            print("Updating existing account: \(email)")
-                            account.authState = state
-                            print("Auth state saved to keychain")
-                            var accounts = Self.default
-                            accounts.update(account: account)
-                            print("Account updated and notification posted")
-                        } else {
-                            print("Creating new account: \(email)")
-                            var account = Account(email: email, type: .outlook)
-                            account.authState = state
-                            var accounts = Self.default
-                            accounts.add(account: account)
-                        }
-                    } else {
-                        print("❌ Could not extract email from OAuth response")
-                    }
-                case .failure(let error):
-                    print("❌ Outlook OAuth Error: \(error)")
+                var accounts = Self.default
+                if var account = accounts.find(email: email) {
+                    account.authState = state
+                    accounts.update(account: account)
+                } else {
+                    var account = Account(email: email, type: .outlook)
+                    account.authState = state
+                    accounts.add(account: account)
                 }
             }
         }
@@ -331,7 +281,6 @@ extension Accounts {
         guard segments.count > 1 else { return nil }
 
         var base64String = segments[1]
-        // Add padding if needed
         let remainder = base64String.count % 4
         if remainder > 0 {
             base64String = base64String.padding(toLength: base64String.count + 4 - remainder, withPad: "=", startingAt: 0)
