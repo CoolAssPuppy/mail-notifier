@@ -18,5 +18,6 @@ profile
 Pods
 *.xccheckout
 Source/OAuthSecret.swift
+Source/OutlookOAuthSecret.swift
 .env
 vendors/gyb.pyc
