@@ -17,7 +17,7 @@
 		1AB7FE3716B57B4E0040BBCE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AB7FE3616B57B4E0040BBCE /* Security.framework */; };
 		1AB7FF0616B57D510040BBCE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1AB7FF0216B57D510040BBCE /* InfoPlist.strings */; };
 		1AB7FF0716B57D510040BBCE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1AB7FF0416B57D510040BBCE /* Localizable.strings */; };
-		1AC74A422673A1B4003F98E7 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 1AC74A412673A1B4003F98E7 /* LaunchAtLogin */; };
+		1AC74A422673A1B4003F98E7 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		1ACD6FF01897FE3C00103E15 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1ACD6FEF1897FE3C00103E15 /* Images.xcassets */; };
 		1AE48C082688856500906371 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 1AE48C072688856500906371 /* KeychainAccess */; };
 		1AFB7F4C189FC0EB00B82441 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AFB7F4B189FC0EB00B82441 /* ServiceManagement.framework */; };
@@ -26,14 +26,15 @@
 		2653B736EE4D87433EB57862 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ED63218B9FE296BC95CEA74 /* Logger.swift */; };
 		2CC91C635D792009E42EF6E5 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C9338A46FA937DFE901BB3 /* WelcomeView.swift */; };
 		4EF28355C6A793018B5E354D /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24D0F2FB662F43E7E5BFB36 /* Account.swift */; };
-		525BC32E34625229001D3281 /* OutlookOAuthSecret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DA1A9A92CE1E727AF05D02 /* OutlookOAuthSecret.swift */; };
 		54EEED8E435ACE60F13C79A2 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BE80100250AFB4E4DD84CD /* Message.swift */; };
 		6669F70C1921B86064AE1A61 /* Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59A7A76885EBF486545423A /* Browser.swift */; };
 		729A4D4BF51CD5ED156B19D8 /* LaunchAtLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1382386877C91FDCCC75CC94 /* LaunchAtLoginManager.swift */; };
 		8A27383AAC6889794C9F198A /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D458FC7CEEE73405D5C42093 /* MainView.swift */; };
 		AAAA00001234567800000001 /* Sounds in Resources */ = {isa = PBXBuildFile; fileRef = AAAA00001234567800000002 /* Sounds */; };
 		B49F15C8067D1A971E915FA0 /* VIP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A76FFA6964FC29205B1BC1 /* VIP.swift */; };
+		B739C169C036123651A77BF4 /* OutlookOAuthSecret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1607969D7A0096DD95A42012 /* OutlookOAuthSecret.swift */; };
 		B86F8BC6E6E5CD8C8F6B9443 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0AE470E34CC178741CDA0AE /* Sound.swift */; };
+		BAD5434A7235D4903C373907 /* OAuthSecret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B1181D1CC21EE9948AA19F /* OAuthSecret.swift */; };
 		C23DF5470D9B611933F1AB38 /* OutlookOAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AB99D62958F994A2B4A961 /* OutlookOAuthClient.swift */; };
 		D973844977964C7017755379 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B8C2A24C1CBAC487FDF57E1 /* SettingsView.swift */; };
 		D9CE48FC094FAD6FF3521392 /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05D42DEB30F290C5890D7D3 /* Sidebar.swift */; };
@@ -41,7 +42,6 @@
 		EC359E14BF42095FFC7B83B6 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B396A44D305B1741FDA2CE4 /* AccountView.swift */; };
 		EC4761C5FD0A5F98362C8254 /* OAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD12A3AC1417541E6DE39DA /* OAuthClient.swift */; };
 		F8E008E94DD4EA862E065119 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9590F50FECC47EC6DC1FC72 /* AppDelegate.swift */; };
-		FD745D1CC6F3ED7E56A103D6 /* OAuthSecret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636AFD7D4DA84A76734B29E2 /* OAuthSecret.swift */; };
 		FF0CBDEA43F266DDF87AF304 /* MessageFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A90179387246195783BD301 /* MessageFetcher.swift */; };
 /* End PBXBuildFile section */
 
@@ -61,6 +61,7 @@
 		0ED63218B9FE296BC95CEA74 /* Logger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		1382386877C91FDCCC75CC94 /* LaunchAtLoginManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LaunchAtLoginManager.swift; sourceTree = "<group>"; };
 		156556891DDAF90BE805EE08 /* CoffeeView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CoffeeView.swift; sourceTree = "<group>"; };
+		1607969D7A0096DD95A42012 /* OutlookOAuthSecret.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OutlookOAuthSecret.swift; sourceTree = "<group>"; };
 		1A856E68267F4C8A00376737 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1A856E69267F4C8A00376737 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1A856E6A267F4CC400376737 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = Resources/ja.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -73,11 +74,10 @@
 		1ACD6FEF1897FE3C00103E15 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		1AFB7F4B189FC0EB00B82441 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		1AFCE88118D404E500487B98 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
+		35B1181D1CC21EE9948AA19F /* OAuthSecret.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OAuthSecret.swift; sourceTree = "<group>"; };
 		3B8C2A24C1CBAC487FDF57E1 /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		459D6FD8750D9AFB1663CECE /* StoreKitManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
-		48DA1A9A92CE1E727AF05D02 /* OutlookOAuthSecret.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OutlookOAuthSecret.swift; sourceTree = "<group>"; };
 		4B396A44D305B1741FDA2CE4 /* AccountView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
-		636AFD7D4DA84A76734B29E2 /* OAuthSecret.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OAuthSecret.swift; sourceTree = "<group>"; };
 		69BB13DA77BE2A8C7A0BDB54 /* Configuration.storekit */ = {isa = PBXFileReference; includeInIndex = 1; path = Configuration.storekit; sourceTree = "<group>"; };
 		8F32C01B151E34EAABCD8200 /* MailNotifierApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MailNotifierApp.swift; sourceTree = "<group>"; };
 		8F34144BE463ED34FDE3B4D9 /* AppDelegate+Menu.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Menu.swift"; sourceTree = "<group>"; };
@@ -105,7 +105,7 @@
 				1A4962252674C0C100331CF7 /* GoogleAPIClientForREST_Gmail in Frameworks */,
 				1AE48C082688856500906371 /* KeychainAccess in Frameworks */,
 				1AFCE88218D404E500487B98 /* Carbon.framework in Frameworks */,
-				1AC74A422673A1B4003F98E7 /* LaunchAtLogin in Frameworks */,
+				1AC74A422673A1B4003F98E7 /* BuildFile in Frameworks */,
 				1A4962282674CEBD00331CF7 /* GTMAppAuth in Frameworks */,
 				1A8AAA44267C23D4006F52D7 /* KeyboardShortcuts in Frameworks */,
 				1AFB7F4C189FC0EB00B82441 /* ServiceManagement.framework in Frameworks */,
@@ -180,8 +180,8 @@
 			children = (
 				FBD12A3AC1417541E6DE39DA /* OAuthClient.swift */,
 				B9AB99D62958F994A2B4A961 /* OutlookOAuthClient.swift */,
-				636AFD7D4DA84A76734B29E2 /* OAuthSecret.swift */,
-				48DA1A9A92CE1E727AF05D02 /* OutlookOAuthSecret.swift */,
+				35B1181D1CC21EE9948AA19F /* OAuthSecret.swift */,
+				1607969D7A0096DD95A42012 /* OutlookOAuthSecret.swift */,
 			);
 			name = OAuth;
 			path = OAuth;
@@ -261,7 +261,6 @@
 				1AB7FD7816B578740040BBCE /* Sources */,
 				1AB7FD7916B578740040BBCE /* Frameworks */,
 				1AB7FD7A16B578740040BBCE /* Resources */,
-				1AC74A452673A1FA003F98E7 /* Copy “Launch at Login Helper” */,
 				1A8F667416B5836700396E44 /* CopyFiles */,
 			);
 			buildRules = (
@@ -270,7 +269,6 @@
 			);
 			name = MailNotifier;
 			packageProductDependencies = (
-				1AC74A412673A1B4003F98E7 /* LaunchAtLogin */,
 				1A4962242674C0C100331CF7 /* GoogleAPIClientForREST_Gmail */,
 				1A4962272674CEBD00331CF7 /* GTMAppAuth */,
 				1A49622A2674D54100331CF7 /* AppAuth */,
@@ -312,7 +310,6 @@
 			);
 			mainGroup = 1AB7FD7116B578740040BBCE;
 			packageReferences = (
-				1AC74A402673A1B4003F98E7 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */,
 				1A4962232674C0C100331CF7 /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */,
 				1A4962262674CEBD00331CF7 /* XCRemoteSwiftPackageReference "GTMAppAuth" */,
 				1A4962292674D54100331CF7 /* XCRemoteSwiftPackageReference "AppAuth-iOS" */,
@@ -342,28 +339,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		1AC74A452673A1FA003F98E7 /* Copy “Launch at Login Helper” */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Copy “Launch at Login Helper”";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${BUILT_PRODUCTS_DIR}/LaunchAtLogin_LaunchAtLogin.bundle/Contents/Resources/copy-helper-swiftpm.sh\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		1AB7FD7816B578740040BBCE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -387,11 +362,11 @@
 				729A4D4BF51CD5ED156B19D8 /* LaunchAtLoginManager.swift in Sources */,
 				EC4761C5FD0A5F98362C8254 /* OAuthClient.swift in Sources */,
 				C23DF5470D9B611933F1AB38 /* OutlookOAuthClient.swift in Sources */,
-				FD745D1CC6F3ED7E56A103D6 /* OAuthSecret.swift in Sources */,
-				525BC32E34625229001D3281 /* OutlookOAuthSecret.swift in Sources */,
 				2653B736EE4D87433EB57862 /* Logger.swift in Sources */,
 				E221656FC65F4AAA8539CE36 /* StoreKitManager.swift in Sources */,
 				226AF61FF41FAEC1DE3230AB /* CoffeeView.swift in Sources */,
+				BAD5434A7235D4903C373907 /* OAuthSecret.swift in Sources */,
+				B739C169C036123651A77BF4 /* OutlookOAuthSecret.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -676,14 +651,6 @@
 				minimumVersion = 1.0.0;
 			};
 		};
-		1AC74A402673A1B4003F98E7 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.0.0;
-			};
-		};
 		1AE48C062688856400906371 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
@@ -714,11 +681,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1A8AAA42267C23D4006F52D7 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
 			productName = KeyboardShortcuts;
-		};
-		1AC74A412673A1B4003F98E7 /* LaunchAtLogin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1AC74A402673A1B4003F98E7 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */;
-			productName = LaunchAtLogin;
 		};
 		1AE48C072688856500906371 /* KeychainAccess */ = {
 			isa = XCSwiftPackageProductDependency;

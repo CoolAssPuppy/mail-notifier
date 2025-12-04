@@ -1,5 +1,5 @@
 {
-  "originHash" : "47a141543f10b759d991a5446d417aeefe6320713691816b7e3dc1a9e75b81aa",
+  "originHash" : "8d5b778cfe2762aec7676ac8d814c8fa0c3c6b61952c02cfdc95ba734ba3818c",
   "pins" : [
     {
       "identity" : "appauth-ios",
@@ -53,15 +53,6 @@
       "state" : {
         "revision" : "84e546727d66f1adc5439debad16270d0fdd04e7",
         "version" : "4.2.2"
-      }
-    },
-    {
-      "identity" : "launchatlogin",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/sindresorhus/LaunchAtLogin",
-      "state" : {
-        "revision" : "9a894d799269cb591037f9f9cb0961510d4dca81",
-        "version" : "5.0.2"
       }
     }
   ],
