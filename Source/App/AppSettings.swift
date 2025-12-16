@@ -16,10 +16,6 @@ struct AppSettings {
     static let openSettingsOnStartKey = "settings.openSettingsOnStart"
 }
 
-extension Notification.Name {
-    static let showUnreadCountSettingChanged = Notification.Name("showUnreadCountSettingChanged")
-}
-
 extension AppSettings {
     var showUnreadCount: Bool {
         get {

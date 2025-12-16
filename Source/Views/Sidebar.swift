@@ -14,30 +14,25 @@ struct Sidebar: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            List {
+            List(selection: $selection) {
                 Section {
                     ForEach($accounts) { $account in
-                        NavigationLink(
-                            destination: AccountView(account: account),
-                            tag: account.email,
-                            selection: $selection
-                        ) {
-                            HStack(spacing: 10) {
-                                AvatarView(
-                                    image: account.type == .gmail ? "g.circle.fill" : "cloud.fill",
-                                    backgroundColor: account.type == .gmail ? .red : .blue
-                                )
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text(verbatim: account.email)
-                                        .font(.system(size: 13))
-                                        .lineLimit(1)
-                                    Text(account.type == .gmail ? "Google" : "Outlook")
-                                        .font(.system(size: 10))
-                                        .foregroundColor(.secondary)
-                                }
+                        HStack(spacing: 10) {
+                            AvatarView(
+                                image: account.type == .gmail ? "g.circle.fill" : "cloud.fill",
+                                backgroundColor: account.type == .gmail ? .red : .blue
+                            )
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(verbatim: account.email)
+                                    .font(.system(size: 13))
+                                    .lineLimit(1)
+                                Text(account.type == .gmail ? "Google" : "Outlook")
+                                    .font(.system(size: 10))
+                                    .foregroundColor(.secondary)
                             }
                         }
                         .padding(.vertical, 2)
+                        .tag(account.email)
                     }
                     .onMove { source, destination in
                         let previousSelection = selection
@@ -55,18 +50,13 @@ struct Sidebar: View {
                 }
 
                 Section {
-                    NavigationLink(
-                        destination: SettingsView(),
-                        tag: "preferences",
-                        selection: $selection
-                    ) {
-                        HStack(spacing: 10) {
-                            AvatarView(image: "gearshape.fill", backgroundColor: .gray)
-                            Text("Settings")
-                                .font(.system(size: 13))
-                        }
+                    HStack(spacing: 10) {
+                        AvatarView(image: "gearshape.fill", backgroundColor: .gray)
+                        Text("Settings")
+                            .font(.system(size: 13))
                     }
                     .padding(.vertical, 2)
+                    .tag("preferences")
                 } header: {
                     Text("Preferences")
                         .font(.caption)
@@ -99,24 +89,6 @@ struct Sidebar: View {
             }
             .background(.regularMaterial)
         }
-    }
-}
-
-struct AvatarView: View {
-    var image: String
-    var backgroundColor: Color
-
-    var body: some View {
-        Circle()
-            .frame(width: 24, height: 24)
-            .foregroundColor(backgroundColor)
-            .overlay(
-                Image(systemName: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 14, height: 14)
-                    .foregroundColor(.white)
-            )
     }
 }
 

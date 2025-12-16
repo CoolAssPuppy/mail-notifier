@@ -11,11 +11,6 @@ import AppAuth
 import GTMAppAuth
 import GoogleAPIClientForREST_Gmail
 
-extension Notification.Name {
-    static let unreadCountUpdated = Notification.Name("unreadCountUpdated")
-    static let messagesFetched = Notification.Name("messagesFetched")
-}
-
 final class MessageFetcher: NSObject {
     var account: Account
     private var authorization: GTMAppAuthFetcherAuthorization? {

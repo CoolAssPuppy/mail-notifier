@@ -83,7 +83,7 @@ struct SettingsView: View {
 
     private var generalSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            sectionHeader(icon: "gearshape.fill", title: "General", gradient: [.blue, .cyan])
+            SectionHeader(icon: "gearshape.fill", title: "General", gradient: [.blue, .cyan])
 
             VStack(alignment: .leading, spacing: 16) {
                 Toggle(isOn: $launchAtLogin.isEnabled) {
@@ -125,7 +125,7 @@ struct SettingsView: View {
 
     private var vipSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            sectionHeader(icon: "star.fill", title: "VIP List", gradient: [.yellow, .orange])
+            SectionHeader(icon: "star.fill", title: "VIP List", gradient: [.yellow, .orange])
 
             VStack(alignment: .leading, spacing: 12) {
                 Text("Get special notification sounds for emails from VIP senders")
@@ -183,7 +183,7 @@ struct SettingsView: View {
 
     private var shortcutsSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            sectionHeader(icon: "command.circle.fill", title: "Keyboard Shortcuts", gradient: [.purple, .pink])
+            SectionHeader(icon: "command.circle.fill", title: "Keyboard Shortcuts", gradient: [.purple, .pink])
 
             VStack(alignment: .leading, spacing: 12) {
                 Text("These shortcuts work globally across all applications")
@@ -196,13 +196,6 @@ struct SettingsView: View {
                     Spacer()
                     KeyboardShortcuts.Recorder(for: .checkAllMails)
                 }
-
-                HStack {
-                    Text("Compose Mail")
-                        .font(.body)
-                    Spacer()
-                    KeyboardShortcuts.Recorder(for: .composeMail)
-                }
             }
             .padding(.leading, 4)
         }
@@ -210,7 +203,7 @@ struct SettingsView: View {
 
     private var supportSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            sectionHeader(icon: "cup.and.saucer.fill", title: "Support", gradient: [.brown, .orange])
+            SectionHeader(icon: "cup.and.saucer.fill", title: "Support", gradient: [.brown, .orange])
 
             VStack(alignment: .leading, spacing: 8) {
                 Button(action: {
@@ -226,7 +219,7 @@ struct SettingsView: View {
                 .buttonStyle(.bordered)
                 .tint(.orange)
 
-                Text("Support independent development")
+                Text("Support independent development. Google forces indie developers building email apps to pay USD $8000 to be certified every year. This app depends on your generosity.")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -240,7 +233,7 @@ struct SettingsView: View {
 
     private var aboutSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            sectionHeader(icon: "info.circle.fill", title: "About", gradient: [.gray, .secondary])
+            SectionHeader(icon: "info.circle.fill", title: "About", gradient: [.gray, .secondary])
 
             VStack(alignment: .leading, spacing: 6) {
                 Text("Made with love by Strategic Nerds, Inc.")
@@ -266,22 +259,6 @@ struct SettingsView: View {
         Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown"
     }
 
-    private func sectionHeader(icon: String, title: String, gradient: [Color]) -> some View {
-        HStack(spacing: 8) {
-            Image(systemName: icon)
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(
-                    LinearGradient(
-                        colors: gradient,
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-            Text(title)
-                .font(.system(size: 15, weight: .semibold))
-                .foregroundColor(.primary)
-        }
-    }
 }
 
 struct VIPRow: View {

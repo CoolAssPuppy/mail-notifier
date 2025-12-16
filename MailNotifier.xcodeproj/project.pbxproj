@@ -17,7 +17,7 @@
 		1AB7FE3716B57B4E0040BBCE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AB7FE3616B57B4E0040BBCE /* Security.framework */; };
 		1AB7FF0616B57D510040BBCE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1AB7FF0216B57D510040BBCE /* InfoPlist.strings */; };
 		1AB7FF0716B57D510040BBCE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1AB7FF0416B57D510040BBCE /* Localizable.strings */; };
-		1AC74A422673A1B4003F98E7 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		1AC74A422673A1B4003F98E7 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		1ACD6FF01897FE3C00103E15 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1ACD6FEF1897FE3C00103E15 /* Images.xcassets */; };
 		1AE48C082688856500906371 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 1AE48C072688856500906371 /* KeychainAccess */; };
 		1AFB7F4C189FC0EB00B82441 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AFB7F4B189FC0EB00B82441 /* ServiceManagement.framework */; };
@@ -27,9 +27,12 @@
 		2CC91C635D792009E42EF6E5 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C9338A46FA937DFE901BB3 /* WelcomeView.swift */; };
 		4EF28355C6A793018B5E354D /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24D0F2FB662F43E7E5BFB36 /* Account.swift */; };
 		54EEED8E435ACE60F13C79A2 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BE80100250AFB4E4DD84CD /* Message.swift */; };
+		5B5F110C397F4249B30194DA /* FetcherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FF4AB27FACDEC520B6B72B /* FetcherManager.swift */; };
+		62DD91D8778F6405F4FBB4F5 /* NotificationNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11501224804195CF6205114 /* NotificationNames.swift */; };
 		6669F70C1921B86064AE1A61 /* Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59A7A76885EBF486545423A /* Browser.swift */; };
 		729A4D4BF51CD5ED156B19D8 /* LaunchAtLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1382386877C91FDCCC75CC94 /* LaunchAtLoginManager.swift */; };
 		8A27383AAC6889794C9F198A /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D458FC7CEEE73405D5C42093 /* MainView.swift */; };
+		8CEE78FBDA0AC358124C9E0B /* SharedComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F58FAC7E92ED36CECDC3CE /* SharedComponents.swift */; };
 		AAAA00001234567800000001 /* Sounds in Resources */ = {isa = PBXBuildFile; fileRef = AAAA00001234567800000002 /* Sounds */; };
 		B49F15C8067D1A971E915FA0 /* VIP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A76FFA6964FC29205B1BC1 /* VIP.swift */; };
 		B86F8BC6E6E5CD8C8F6B9443 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0AE470E34CC178741CDA0AE /* Sound.swift */; };
@@ -38,7 +41,7 @@
 		D9CE48FC094FAD6FF3521392 /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05D42DEB30F290C5890D7D3 /* Sidebar.swift */; };
 		E221656FC65F4AAA8539CE36 /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459D6FD8750D9AFB1663CECE /* StoreKitManager.swift */; };
 		EC359E14BF42095FFC7B83B6 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B396A44D305B1741FDA2CE4 /* AccountView.swift */; };
-		EC4761C5FD0A5F98362C8254 /* OAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD12A3AC1417541E6DE39DA /* OAuthClient.swift */; };
+		EC4761C5FD0A5F98362C8254 /* GoogleOAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD12A3AC1417541E6DE39DA /* GoogleOAuthClient.swift */; };
 		F8E008E94DD4EA862E065119 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9590F50FECC47EC6DC1FC72 /* AppDelegate.swift */; };
 		FF0CBDEA43F266DDF87AF304 /* MessageFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A90179387246195783BD301 /* MessageFetcher.swift */; };
 /* End PBXBuildFile section */
@@ -56,9 +59,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		02F58FAC7E92ED36CECDC3CE /* SharedComponents.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SharedComponents.swift; sourceTree = "<group>"; };
 		0ED63218B9FE296BC95CEA74 /* Logger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		1382386877C91FDCCC75CC94 /* LaunchAtLoginManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LaunchAtLoginManager.swift; sourceTree = "<group>"; };
 		156556891DDAF90BE805EE08 /* CoffeeView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CoffeeView.swift; sourceTree = "<group>"; };
+		19FF4AB27FACDEC520B6B72B /* FetcherManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FetcherManager.swift; sourceTree = "<group>"; };
 		1A856E68267F4C8A00376737 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1A856E69267F4C8A00376737 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1A856E6A267F4CC400376737 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = Resources/ja.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -74,7 +79,7 @@
 		3B8C2A24C1CBAC487FDF57E1 /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		459D6FD8750D9AFB1663CECE /* StoreKitManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
 		4B396A44D305B1741FDA2CE4 /* AccountView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
-		69BB13DA77BE2A8C7A0BDB54 /* Configuration.storekit */ = {isa = PBXFileReference; includeInIndex = 1; path = Configuration.storekit; sourceTree = "<group>"; };
+		69BB13DA77BE2A8C7A0BDB54 /* Configuration.storekit */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		8F32C01B151E34EAABCD8200 /* MailNotifierApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MailNotifierApp.swift; sourceTree = "<group>"; };
 		8F34144BE463ED34FDE3B4D9 /* AppDelegate+Menu.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Menu.swift"; sourceTree = "<group>"; };
 		90C9338A46FA937DFE901BB3 /* WelcomeView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
@@ -89,8 +94,9 @@
 		D458FC7CEEE73405D5C42093 /* MainView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		D59A7A76885EBF486545423A /* Browser.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Browser.swift; sourceTree = "<group>"; };
 		E3A76FFA6964FC29205B1BC1 /* VIP.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = VIP.swift; sourceTree = "<group>"; };
+		F11501224804195CF6205114 /* NotificationNames.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotificationNames.swift; sourceTree = "<group>"; };
 		F24D0F2FB662F43E7E5BFB36 /* Account.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
-		FBD12A3AC1417541E6DE39DA /* OAuthClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OAuthClient.swift; sourceTree = "<group>"; };
+		FBD12A3AC1417541E6DE39DA /* GoogleOAuthClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GoogleOAuthClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,7 +108,7 @@
 				1A4962252674C0C100331CF7 /* GoogleAPIClientForREST_Gmail in Frameworks */,
 				1AE48C082688856500906371 /* KeychainAccess in Frameworks */,
 				1AFCE88218D404E500487B98 /* Carbon.framework in Frameworks */,
-				1AC74A422673A1B4003F98E7 /* BuildFile in Frameworks */,
+				1AC74A422673A1B4003F98E7 /* (null) in Frameworks */,
 				1A4962282674CEBD00331CF7 /* GTMAppAuth in Frameworks */,
 				1A8AAA44267C23D4006F52D7 /* KeyboardShortcuts in Frameworks */,
 				1AFB7F4C189FC0EB00B82441 /* ServiceManagement.framework in Frameworks */,
@@ -168,18 +174,25 @@
 			isa = PBXGroup;
 			children = (
 				0ED63218B9FE296BC95CEA74 /* Logger.swift */,
+				F11501224804195CF6205114 /* NotificationNames.swift */,
 			);
-			name = Utilities;
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		8BD542E3926DD8C0ACC1673E /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				02F58FAC7E92ED36CECDC3CE /* SharedComponents.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		99A71953F38597C948937FFF /* OAuth */ = {
 			isa = PBXGroup;
 			children = (
-				FBD12A3AC1417541E6DE39DA /* OAuthClient.swift */,
+				FBD12A3AC1417541E6DE39DA /* GoogleOAuthClient.swift */,
 				B9AB99D62958F994A2B4A961 /* OutlookOAuthClient.swift */,
 			);
-			name = OAuth;
 			path = OAuth;
 			sourceTree = "<group>";
 		};
@@ -192,8 +205,8 @@
 				4B396A44D305B1741FDA2CE4 /* AccountView.swift */,
 				3B8C2A24C1CBAC487FDF57E1 /* SettingsView.swift */,
 				156556891DDAF90BE805EE08 /* CoffeeView.swift */,
+				8BD542E3926DD8C0ACC1673E /* Components */,
 			);
-			name = Views;
 			path = Views;
 			sourceTree = "<group>";
 		};
@@ -206,7 +219,6 @@
 				FAFEA30D62776470F76ACB36 /* Services */,
 				7BC2632EAC534CD2DD3A19B6 /* Utilities */,
 			);
-			name = Source;
 			path = Source;
 			sourceTree = "<group>";
 		};
@@ -219,7 +231,6 @@
 				C0AE470E34CC178741CDA0AE /* Sound.swift */,
 				E3A76FFA6964FC29205B1BC1 /* VIP.swift */,
 			);
-			name = Models;
 			path = Models;
 			sourceTree = "<group>";
 		};
@@ -231,7 +242,6 @@
 				8F34144BE463ED34FDE3B4D9 /* AppDelegate+Menu.swift */,
 				9375B1EF8A702D029F7524AF /* AppSettings.swift */,
 			);
-			name = App;
 			path = App;
 			sourceTree = "<group>";
 		};
@@ -242,8 +252,8 @@
 				1A90179387246195783BD301 /* MessageFetcher.swift */,
 				1382386877C91FDCCC75CC94 /* LaunchAtLoginManager.swift */,
 				459D6FD8750D9AFB1663CECE /* StoreKitManager.swift */,
+				19FF4AB27FACDEC520B6B72B /* FetcherManager.swift */,
 			);
-			name = Services;
 			path = Services;
 			sourceTree = "<group>";
 		};
@@ -282,7 +292,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1500;
+				LastUpgradeCheck = 2620;
 				ORGANIZATIONNAME = strategicnerds.com;
 				TargetAttributes = {
 					1AB7FD7B16B578740040BBCE = {
@@ -356,11 +366,14 @@
 				D973844977964C7017755379 /* SettingsView.swift in Sources */,
 				FF0CBDEA43F266DDF87AF304 /* MessageFetcher.swift in Sources */,
 				729A4D4BF51CD5ED156B19D8 /* LaunchAtLoginManager.swift in Sources */,
-				EC4761C5FD0A5F98362C8254 /* OAuthClient.swift in Sources */,
+				EC4761C5FD0A5F98362C8254 /* GoogleOAuthClient.swift in Sources */,
 				C23DF5470D9B611933F1AB38 /* OutlookOAuthClient.swift in Sources */,
 				2653B736EE4D87433EB57862 /* Logger.swift in Sources */,
 				E221656FC65F4AAA8539CE36 /* StoreKitManager.swift in Sources */,
 				226AF61FF41FAEC1DE3230AB /* CoffeeView.swift in Sources */,
+				62DD91D8778F6405F4FBB4F5 /* NotificationNames.swift in Sources */,
+				8CEE78FBDA0AC358124C9E0B /* SharedComponents.swift in Sources */,
+				5B5F110C397F4249B30194DA /* FetcherManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,6 +406,7 @@
 			baseConfigurationReference = 987F828CACA47DC2A169B424 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -418,6 +432,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 955GSY56UT;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -440,6 +455,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
 			name = Debug;
@@ -449,6 +465,7 @@
 			baseConfigurationReference = 987F828CACA47DC2A169B424 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -475,6 +492,7 @@
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 955GSY56UT;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -488,6 +506,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
@@ -512,9 +531,9 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 955GSY56UT;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
@@ -561,10 +580,10 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 955GSY56UT;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";

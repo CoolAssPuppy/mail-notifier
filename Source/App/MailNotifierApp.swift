@@ -9,11 +9,6 @@
 import AppKit
 import SwiftUI
 
-extension Notification.Name {
-    static let mailToReceived = Notification.Name("mailToReceived")
-    static let openPreferencesWindow = Notification.Name("openPreferencesWindow")
-}
-
 @main
 struct MailNotifierApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var delegate

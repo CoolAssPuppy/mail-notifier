@@ -59,34 +59,16 @@ struct AccountView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.ultraThinMaterial)
-        .toolbar {
-            ToolbarItemGroup(placement: .automatic) {
-                Button {
-                    showingDeleteAlert = true
-                } label: {
-                    Image(systemName: "trash")
-                }
-                .buttonStyle(.borderless)
-                .help("Delete Account")
-                Button {
-                    reauthorize()
-                } label: {
-                    Image(systemName: "key.icloud")
-                }
-                .buttonStyle(.borderless)
-                .help("Reauthorize Account")
-            }
-        }
         .onChange(of: account) { _, newValue in
            update(account: newValue)
         }
-        .alert("Delete this account from Mail Notifier?", isPresented: $showingDeleteAlert) {
-            Button("Delete", role: .destructive) {
+        .alert("Confirm account deletion", isPresented: $showingDeleteAlert) {
+            Button("No", role: .cancel) { }
+            Button("Yes", role: .destructive) {
                 delete()
             }
-            Button("Cancel", role: .cancel) { }
         } message: {
-            Text("You can add your account again at any time.")
+            Text(String(format: NSLocalizedString("Are you sure you want to delete the account %@ from Mail Notifier?", comment: "Delete account confirmation message"), account.email))
         }
     }
 
@@ -109,7 +91,7 @@ struct AccountView: View {
 
     private var notificationSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            sectionHeader(icon: "bell.fill", title: "Notifications", gradient: [.orange, .red])
+            SectionHeader(icon: "bell.fill", title: "Notifications", gradient: [.orange, .red])
 
             VStack(alignment: .leading, spacing: 12) {
                 Toggle(isOn: $account.notificationEnabled) {
@@ -156,7 +138,7 @@ struct AccountView: View {
 
     private var behaviorSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            sectionHeader(icon: "slider.horizontal.3", title: "Behavior", gradient: [.blue, .purple])
+            SectionHeader(icon: "slider.horizontal.3", title: "Behavior", gradient: [.blue, .purple])
 
             VStack(alignment: .leading, spacing: 12) {
                 VStack(alignment: .leading, spacing: 8) {
@@ -209,7 +191,7 @@ struct AccountView: View {
 
     private var accountManagementSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            sectionHeader(icon: "person.circle.fill", title: "Account Management", gradient: [.green, .mint])
+            SectionHeader(icon: "person.circle.fill", title: "Account Management", gradient: [.green, .mint])
 
             VStack(alignment: .leading, spacing: 12) {
                 Toggle(isOn: $account.enabled) {
@@ -246,6 +228,32 @@ struct AccountView: View {
                     .buttonStyle(.bordered)
                     .controlSize(.small)
                 }
+
+                Divider()
+
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Delete account")
+                            .font(.body)
+                        Text("Remove account and all tokens")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+
+                    Spacer()
+
+                    Button {
+                        showingDeleteAlert = true
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: "trash")
+                            Text("Delete")
+                        }
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.red)
+                    .controlSize(.small)
+                }
             }
             .padding(12)
             .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
@@ -253,22 +261,6 @@ struct AccountView: View {
         }
     }
 
-    private func sectionHeader(icon: String, title: String, gradient: [Color]) -> some View {
-        HStack(spacing: 8) {
-            Image(systemName: icon)
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(
-                    LinearGradient(
-                        colors: gradient,
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-            Text(title)
-                .font(.system(size: 15, weight: .semibold))
-                .foregroundColor(.primary)
-        }
-    }
 }
 
 private extension AccountView {

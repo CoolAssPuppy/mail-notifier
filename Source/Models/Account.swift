@@ -141,15 +141,6 @@ struct Accounts: RawRepresentable, Codable, RandomAccessCollection, MutableColle
     mutating func move(fromOffsets source: IndexSet, toOffset destination: Int) { storage.move(fromOffsets: source, toOffset: destination) }
 }
 
-// MARK: - Notification Names
-
-extension Notification.Name {
-    static let accountAdded = Notification.Name("accountAdded")
-    static let accountDeleted = Notification.Name("accountDeleted")
-    static let accountUpdated = Notification.Name("accountUpdated")
-    static let accountsReordered = Notification.Name("accountsReordered")
-}
-
 // MARK: - Static Accessors
 
 extension Accounts {
@@ -225,7 +216,7 @@ extension Accounts {
     static func authorize(type: AccountType) {
         switch type {
         case .gmail:
-            OAuthClient.shared.authorize { result in
+            GoogleOAuthClient.shared.authorize { result in
                 guard case .success(let state) = result else { return }
                 let authorization = GTMAppAuthFetcherAuthorization(authState: state)
                 guard let userEmail = authorization.userEmail else { return }

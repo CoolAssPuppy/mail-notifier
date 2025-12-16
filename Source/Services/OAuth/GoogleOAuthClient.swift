@@ -1,5 +1,5 @@
 //
-//  OAuthClient.swift
+//  GoogleOAuthClient.swift
 //  Mail Notifier
 //
 //  Copyright (c) 2025 Strategic Nerds. All rights reserved.
@@ -8,9 +8,9 @@
 import AppAuth
 import GTMAppAuth
 
-struct OAuthClient {
+struct GoogleOAuthClient {
     private init() {}
-    static let shared = OAuthClient()
+    static let shared = GoogleOAuthClient()
 
     static var clientID: String {
         Bundle.main.object(forInfoDictionaryKey: "GoogleClientID") as? String ?? ""

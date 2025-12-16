@@ -15,7 +15,6 @@ import KeyboardShortcuts
 
 extension KeyboardShortcuts.Name {
     static let checkAllMails = Self("checkAllMails")
-    static let composeMail = Self("composeMail")
 }
 
 // MARK: - AppDelegate
@@ -24,7 +23,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: NSStatusItem?
     private var menu: NSMenu?
     private var subscriptions = Set<AnyCancellable>()
-    private var fetchers: [String: MessageFetcher] = [:]
+    private let fetcherManager = FetcherManager.shared
     private var preferencesWindow: NSWindow?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -33,7 +32,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         registerShortcuts()
         subscribeToNotifications()
         setupStatusItem()
-        updateFetchers()
+        fetcherManager.update()
         updateMenuBar()
         setupUserNotifications()
         setupURLHandler()
@@ -71,9 +70,6 @@ private extension AppDelegate {
         KeyboardShortcuts.onKeyUp(for: .checkAllMails) { [weak self] in
             self?.checkAllMails()
         }
-        KeyboardShortcuts.onKeyUp(for: .composeMail) { [weak self] in
-            self?.composeMail()
-        }
     }
 }
 
@@ -94,9 +90,9 @@ extension AppDelegate {
         case urlString.hasPrefix("mailnotifier://preferences"):
             Log.app.info("Routing to preferences")
             showPreferences()
-        case url.scheme == OAuthClient.redirectURL.components(separatedBy: ":").first:
+        case url.scheme == GoogleOAuthClient.redirectURL.components(separatedBy: ":").first:
             Log.app.info("Routing to Google OAuth")
-            OAuthClient.shared.resumeAuthFlow(url: url)
+            GoogleOAuthClient.shared.resumeAuthFlow(url: url)
         case url.scheme == OutlookOAuthClient.redirectURL.components(separatedBy: ":").first:
             Log.app.info("Routing to Outlook OAuth")
             OutlookOAuthClient.shared.resumeAuthFlow(url: url)
@@ -118,7 +114,7 @@ private extension AppDelegate {
         NotificationCenter.default
             .publisher(for: .accountAdded)
             .sink { [weak self] notification in
-                self?.updateFetchers(notification.object as? Account)
+                self?.fetcherManager.update(fetchingAccount: notification.object as? Account)
                 self?.updateMenuBar()
             }
             .store(in: &subscriptions)
@@ -126,7 +122,7 @@ private extension AppDelegate {
         NotificationCenter.default
             .publisher(for: .accountDeleted)
             .sink { [weak self] _ in
-                self?.rebuildFetchers()
+                self?.fetcherManager.rebuild()
                 self?.updateMenuBar()
             }
             .store(in: &subscriptions)
@@ -141,12 +137,12 @@ private extension AppDelegate {
                 let needsImmediateFetching = notification.userInfo?["needsImmediateFetching"] as? Bool ?? false
 
                 if needsRescheduling {
-                    rebuildFetchers()
-                    fetcher(for: account.email)?.reschedule()
+                    fetcherManager.rebuild()
+                    fetcherManager.fetcher(for: account.email)?.reschedule()
                 } else if needsImmediateFetching {
-                    updateFetchers(account)
+                    fetcherManager.update(fetchingAccount: account)
                 } else {
-                    rebuildFetchers()
+                    fetcherManager.rebuild()
                 }
                 updateMenuBar()
             }
@@ -191,38 +187,9 @@ private extension AppDelegate {
     }
 }
 
-// MARK: - Fetcher Management
+// MARK: - Menu Bar Updates
 
 private extension AppDelegate {
-    func rebuildFetchers() {
-        let accounts = Accounts.default.enabled
-
-        // Remove fetchers for deleted/disabled accounts
-        for email in fetchers.keys where !accounts.contains(where: { $0.email == email }) {
-            fetchers[email]?.cleanUp()
-            fetchers[email] = nil
-        }
-
-        // Add or update fetchers for enabled accounts
-        for account in accounts {
-            if let existingFetcher = fetchers[account.email] {
-                existingFetcher.account = account
-            } else {
-                fetchers[account.email] = MessageFetcher(account: account)
-            }
-        }
-    }
-
-    func updateFetchers(_ accountToFetch: Account? = nil) {
-        rebuildFetchers()
-
-        if let accountToFetch {
-            fetcher(for: accountToFetch.email)?.fetch()
-        } else {
-            fetchers.values.forEach { $0.fetch() }
-        }
-    }
-
     func updateMenuBar() {
         guard let menu else { return }
         updateMenu(menu)
@@ -232,7 +199,7 @@ private extension AppDelegate {
     func updateStatusItem() {
         guard let button = statusItem?.button else { return }
 
-        let messagesCount = fetchers.values.reduce(0) { $0 + $1.unreadMessagesCount }
+        let messagesCount = fetcherManager.totalUnreadCount
 
         button.title = (messagesCount > 0 && AppSettings.shared.showUnreadCount) ? "\(messagesCount)" : ""
 
@@ -264,8 +231,7 @@ extension AppDelegate {
     }
 
     func fetcher(for email: String?) -> MessageFetcher? {
-        guard let email else { return nil }
-        return fetchers[email]
+        fetcherManager.fetcher(for: email)
     }
 
     private func openMessage(messageId: String, email: String) {
@@ -283,7 +249,7 @@ extension AppDelegate {
     }
 
     @objc func checkAllMails() {
-        fetchers.values.forEach { $0.fetch() }
+        fetcherManager.checkAll()
     }
 
     @objc func composeMail() {
@@ -364,6 +330,7 @@ extension AppDelegate {
             )
             window.contentView = NSHostingView(rootView: MainViewWrapper())
             window.title = "Mail Notifier"
+            window.toolbar = nil
             window.isReleasedWhenClosed = false
             window.center()
             window.makeKeyAndOrderFront(nil)
