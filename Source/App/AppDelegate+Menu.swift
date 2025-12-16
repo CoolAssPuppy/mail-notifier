@@ -11,7 +11,7 @@ import AppKit
 
 private enum MenuItemTag: Int {
     case checkAll
-    case separatorBelowCompose
+    case separatorBelowCheck
     case separatorAboveAbout
 }
 
@@ -29,11 +29,9 @@ extension AppDelegate {
         checkAllItem.tag = MenuItemTag.checkAll.rawValue
         menu.addItem(checkAllItem)
 
-        menu.addItem(withTitle: NSLocalizedString("Compose Mail", comment: ""), action: #selector(composeMail), keyEquivalent: "")
-
-        let separatorBelowCompose = NSMenuItem.separator()
-        separatorBelowCompose.tag = MenuItemTag.separatorBelowCompose.rawValue
-        menu.addItem(separatorBelowCompose)
+        let separatorBelowCheck = NSMenuItem.separator()
+        separatorBelowCheck.tag = MenuItemTag.separatorBelowCheck.rawValue
+        menu.addItem(separatorBelowCheck)
 
         let separatorAbovePreferences = NSMenuItem.separator()
         separatorAbovePreferences.tag = MenuItemTag.separatorAboveAbout.rawValue
@@ -49,19 +47,19 @@ extension AppDelegate {
     func updateMenu(_ menu: NSMenu) {
         guard let checkAllItem = menu.item(withTag: MenuItemTag.checkAll.rawValue) else { return }
 
-        checkAllItem.title = NSLocalizedString(Accounts.default.count > 1 ? "Check All" : "Check", comment: "")
+        checkAllItem.title = NSLocalizedString(Accounts.default.count > 1 ? "Check For New Mail" : "Check", comment: "")
         checkAllItem.action = Accounts.default.enabled.isEmpty ? nil : #selector(checkAllMails)
 
-        let indexBelowCompose = menu.indexOfItem(withTag: MenuItemTag.separatorBelowCompose.rawValue)
+        let indexBelowCheck = menu.indexOfItem(withTag: MenuItemTag.separatorBelowCheck.rawValue)
         let indexAboveAbout = menu.indexOfItem(withTag: MenuItemTag.separatorAboveAbout.rawValue)
 
         // Remove existing account items
-        for index in ((indexBelowCompose + 1)..<indexAboveAbout).reversed() {
+        for index in ((indexBelowCheck + 1)..<indexAboveAbout).reversed() {
             menu.removeItem(at: index)
         }
 
         // Insert account items
-        var offset = indexBelowCompose + 1
+        var offset = indexBelowCheck + 1
         if Accounts.default.count > 1 {
             for account in Accounts.default {
                 menu.insertItem(createSubmenu(for: account), at: offset)
