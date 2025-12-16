@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <linearGradient id="badgeGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF7070;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#EE4444;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#CC2222;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="badgeHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.7" />
+      <stop offset="40%" style="stop-color:#FFFFFF;stop-opacity:0.1" />
+      <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:0" />
+    </linearGradient>
+    <clipPath id="badgeClip">
+      <circle cx="765" cy="325" r="91"/>
+    </clipPath>
+    <filter id="envelopeShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  
+  <!-- Envelope with shadow -->
+  <g transform="translate(237.23, 237.23) scale(1.12)" filter="url(#envelopeShadow)">
+    <path style="fill:#F6B445;" d="M490.667,85.333V384c-0.02,11.314-4.505,22.162-12.48,30.187L288,224l-2.987-4.587L490.667,85.333z"/>
+    <path style="fill:#F6A645;" d="M478.187,414.187c-8.025,7.975-18.873,12.46-30.187,12.48H42.667c-11.314-0.02-22.162-4.505-30.187-12.48L202.667,224l2.667-4.16l40,25.493l39.68-25.92L288,224L478.187,414.187z"/>
+    <path style="fill:#F6B445;" d="M205.334,219.84l-2.667,4.16L12.48,414.187C4.505,406.162,0.02,395.314,0,384V106.667c-0.013-4.304,0.634-8.585,1.92-12.693L10.667,96L205.334,219.84z"/>
+    <path style="fill:#FED049;" d="M490.667,85.333l-205.653,134.08l-39.68,25.92l-40-25.493L10.667,96L1.92,93.973C7.477,76.14,23.988,63.995,42.667,64h394.667C480,64,490.667,85.333,490.667,85.333L490.667,85.333z"/>
+  </g>
+  
+  <!-- Red notification badge with glow -->
+  <g filter="url(#glow)">
+    <circle cx="765" cy="325" r="91" fill="url(#badgeGradient)"/>
+    <ellipse cx="765" cy="295" rx="68.25" ry="40.95" 
+             fill="url(#badgeHighlight)" clip-path="url(#badgeClip)"/>
+  </g>
+  <circle cx="765" cy="325" r="89.5" 
+          fill="none" stroke="rgba(0,0,0,0.15)" stroke-width="3"/>
+</svg>

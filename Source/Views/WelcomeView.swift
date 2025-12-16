@@ -15,10 +15,9 @@ struct WelcomeView: View {
 
             VStack(spacing: 24) {
                 HStack(spacing: 24) {
-                    Image(nsImage: NSImage(named: "AppIcon")!)
+                    Image("EnvelopeBadge")
                         .resizable()
-                        .frame(width: 80, height: 80)
-                        .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
+                        .frame(width: 112, height: 112)
 
                     Image(systemName: "arrow.right")
                         .font(.system(size: 24, weight: .light))
@@ -27,7 +26,7 @@ struct WelcomeView: View {
                     Image(systemName: "person.crop.circle.badge.plus")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 80, height: 80)
+                        .frame(width: 112, height: 112)
                         .foregroundStyle(
                             LinearGradient(
                                 colors: [.blue, .cyan],
