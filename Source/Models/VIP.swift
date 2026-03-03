@@ -2,7 +2,7 @@
 //  VIP.swift
 //  Mail Notifier
 //
-//  Copyright (c) 2024 Strategic Nerds. All rights reserved.
+//  Copyright (c) 2025 Strategic Nerds. All rights reserved.
 //
 
 import Foundation

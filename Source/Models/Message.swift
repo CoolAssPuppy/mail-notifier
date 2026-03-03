@@ -46,7 +46,14 @@ struct Message {
     static func url(type: AccountType, email: String, id: String) -> URL {
         switch type {
         case .gmail:
-            return URL(string: "https://mail.google.com/mail/u/\(email)?account_id=\(email)&message_id=\(id)&view=conv&extsrc=atom")!
+            var components = URLComponents(string: "https://mail.google.com/mail/u/\(email)")!
+            components.queryItems = [
+                URLQueryItem(name: "account_id", value: email),
+                URLQueryItem(name: "message_id", value: id),
+                URLQueryItem(name: "view", value: "conv"),
+                URLQueryItem(name: "extsrc", value: "atom")
+            ]
+            return components.url!
         case .outlook:
             return URL(string: "https://outlook.live.com/mail/0/inbox/id/\(id)")!
         }

@@ -24,6 +24,10 @@ struct GoogleOAuthClient {
         "com.googleusercontent.apps.\(clientID.components(separatedBy: ".").first ?? ""):/oauthredirect"
     }
 
+    static var redirectScheme: String {
+        redirectURL.components(separatedBy: ":").first ?? ""
+    }
+
     static var currentAuthorizationFlow: OIDExternalUserAgentSession?
 
     func resumeAuthFlow(url: URL) {
