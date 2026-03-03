@@ -8,7 +8,6 @@
 import AppKit
 import Combine
 import SwiftUI
-import UserNotifications
 import KeyboardShortcuts
 
 // MARK: - Keyboard Shortcuts
@@ -24,17 +23,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var menu: NSMenu?
     private var subscriptions = Set<AnyCancellable>()
     private let fetcherManager = FetcherManager.shared
+    private let notificationService = NotificationService()
     private var preferencesWindow: NSWindow?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
 
+        notificationService.delegate = self
         registerShortcuts()
         subscribeToNotifications()
         setupStatusItem()
         fetcherManager.update()
         updateMenuBar()
-        setupUserNotifications()
+        notificationService.setup()
         setupURLHandler()
 
         if !Accounts.hasAccounts || AppSettings.shared.openSettingsOnStart {
@@ -83,27 +84,7 @@ extension AppDelegate {
             return
         }
 
-        Log.app.info("handleGetURLEvent received URL: \(urlString)")
-        Log.app.info("URL scheme: \(url.scheme ?? "nil")")
-
-        switch true {
-        case urlString.hasPrefix("mailnotifier://preferences"):
-            Log.app.info("Routing to preferences")
-            showPreferences()
-        case url.scheme == GoogleOAuthClient.redirectURL.components(separatedBy: ":").first:
-            Log.app.info("Routing to Google OAuth")
-            GoogleOAuthClient.shared.resumeAuthFlow(url: url)
-        case url.scheme == OutlookOAuthClient.redirectURL.components(separatedBy: ":").first:
-            Log.app.info("Routing to Outlook OAuth")
-            OutlookOAuthClient.shared.resumeAuthFlow(url: url)
-        case url.scheme == "mailto":
-            Log.app.info("Routing to mailto handler")
-            let mailtoContent = urlString.replacingOccurrences(of: "mailto:", with: "")
-            NotificationCenter.default.post(name: .mailToReceived, object: mailtoContent)
-        default:
-            Log.app.warning("No handler for URL: \(urlString)")
-            break
-        }
+        URLRouter.route(url: url)
     }
 }
 
@@ -172,8 +153,10 @@ private extension AppDelegate {
         NotificationCenter.default
             .publisher(for: .messagesFetched)
             .sink { [weak self] notification in
+                guard let self else { return }
                 let email = notification.object as? String ?? ""
-                self?.messagesFetched(email)
+                if let menu { updateMenu(menu) }
+                notificationService.handleMessagesFetched(email: email, fetcherManager: fetcherManager)
             }
             .store(in: &subscriptions)
 
@@ -182,6 +165,13 @@ private extension AppDelegate {
             .sink { [weak self] notification in
                 let param = notification.object as? String ?? ""
                 self?.handleMailTo(param)
+            }
+            .store(in: &subscriptions)
+
+        NotificationCenter.default
+            .publisher(for: .openPreferencesWindow)
+            .sink { [weak self] _ in
+                self?.showPreferences()
             }
             .store(in: &subscriptions)
     }
@@ -369,94 +359,11 @@ extension AppDelegate: NSWindowDelegate {
     }
 }
 
-// MARK: - User Notifications
+// MARK: - NotificationServiceDelegate
 
-extension AppDelegate: UNUserNotificationCenterDelegate {
-    func setupUserNotifications() {
-        Task {
-            do {
-                let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert])
-                if granted {
-                    await MainActor.run {
-                        UNUserNotificationCenter.current().delegate = self
-                    }
-                }
-            } catch {
-                Log.app.error("Failed to request notification authorization: \(error.localizedDescription)")
-            }
-        }
-    }
-
-    func userNotificationCenter(
-        _ center: UNUserNotificationCenter,
-        didReceive response: UNNotificationResponse,
-        withCompletionHandler completionHandler: @escaping () -> Void
-    ) {
-        center.removeDeliveredNotifications(withIdentifiers: [response.notification.request.identifier])
-
-        let userInfo = response.notification.request.content.userInfo
-        if let messageId = userInfo["messageId"] as? String,
-           let email = userInfo["email"] as? String {
-            openMessage(messageId: messageId, email: email)
-        }
-
-        completionHandler()
-    }
-
-    func deliverNotifications(for messages: [Message]) {
-        Task {
-            let delivered = await UNUserNotificationCenter.current().deliveredNotifications()
-            let deliveredIds = Set(delivered.map { $0.request.identifier })
-
-            for message in messages where !deliveredIds.contains(message.id) {
-                let content = UNMutableNotificationContent()
-                content.title = message.sender
-                content.subtitle = message.subject
-                content.body = message.decodedSnippet
-                content.userInfo = ["messageId": message.id, "email": message.email]
-                content.threadIdentifier = message.email
-
-                let request = UNNotificationRequest(identifier: message.id, content: content, trigger: nil)
-                try? await UNUserNotificationCenter.current().add(request)
-            }
-        }
-    }
-
-    func messagesFetched(_ email: String) {
-        if let menu {
-            updateMenu(menu)
-        }
-
-        guard let account = account(from: email), account.enabled,
-              let fetcher = fetcher(for: email),
-              fetcher.hasNewMessages else { return }
-
-        // Check for VIP senders
-        let vipList = VIPList.default
-        var playedVIPSound = false
-
-        for message in fetcher.messages {
-            if let vipSound = vipList.soundForSender(message.senderEmail) {
-                vipSound.nsSound?.play()
-                playedVIPSound = true
-                break
-            }
-        }
-
-        // Fall back to account sound
-        if !playedVIPSound, let sound = account.sound {
-            sound.nsSound?.play()
-        }
-
-        guard account.notificationEnabled else { return }
-
-        Task {
-            let settings = await UNUserNotificationCenter.current().notificationSettings()
-            guard settings.authorizationStatus == .authorized || settings.authorizationStatus == .provisional,
-                  settings.alertSetting == .enabled else { return }
-
-            deliverNotifications(for: fetcher.messages)
-        }
+extension AppDelegate: NotificationServiceDelegate {
+    func notificationService(_ service: NotificationService, didRequestOpenMessage messageId: String, email: String) {
+        openMessage(messageId: messageId, email: email)
     }
 }
 

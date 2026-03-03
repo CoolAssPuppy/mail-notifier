@@ -17,26 +17,33 @@
 		1AB7FE3716B57B4E0040BBCE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AB7FE3616B57B4E0040BBCE /* Security.framework */; };
 		1AB7FF0616B57D510040BBCE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1AB7FF0216B57D510040BBCE /* InfoPlist.strings */; };
 		1AB7FF0716B57D510040BBCE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1AB7FF0416B57D510040BBCE /* Localizable.strings */; };
-		1AC74A422673A1B4003F98E7 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		1AC74A422673A1B4003F98E7 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		1ACD6FF01897FE3C00103E15 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1ACD6FEF1897FE3C00103E15 /* Images.xcassets */; };
 		1AE48C082688856500906371 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 1AE48C072688856500906371 /* KeychainAccess */; };
 		1AFB7F4C189FC0EB00B82441 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AFB7F4B189FC0EB00B82441 /* ServiceManagement.framework */; };
 		1AFCE88218D404E500487B98 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AFCE88118D404E500487B98 /* Carbon.framework */; };
+		2057B4FE0CBB2AC8D29635EB /* OutlookProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADA37F239AD28CE88DFC2D6 /* OutlookProvider.swift */; };
+		21AC4AF84A9E2AD15A420C45 /* URLRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D8D31D06AC85361D8A7FBE /* URLRouter.swift */; };
 		226AF61FF41FAEC1DE3230AB /* CoffeeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156556891DDAF90BE805EE08 /* CoffeeView.swift */; };
 		2653B736EE4D87433EB57862 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ED63218B9FE296BC95CEA74 /* Logger.swift */; };
 		2CC91C635D792009E42EF6E5 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C9338A46FA937DFE901BB3 /* WelcomeView.swift */; };
 		4EF28355C6A793018B5E354D /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24D0F2FB662F43E7E5BFB36 /* Account.swift */; };
 		54EEED8E435ACE60F13C79A2 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BE80100250AFB4E4DD84CD /* Message.swift */; };
 		5B5F110C397F4249B30194DA /* FetcherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FF4AB27FACDEC520B6B72B /* FetcherManager.swift */; };
+		5E3D6B16AFBA38615A7CBD22 /* AccountAuthorizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC2320099B7BD9D6FE7C3CD /* AccountAuthorizer.swift */; };
 		62DD91D8778F6405F4FBB4F5 /* NotificationNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11501224804195CF6205114 /* NotificationNames.swift */; };
 		6669F70C1921B86064AE1A61 /* Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59A7A76885EBF486545423A /* Browser.swift */; };
 		729A4D4BF51CD5ED156B19D8 /* LaunchAtLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1382386877C91FDCCC75CC94 /* LaunchAtLoginManager.swift */; };
+		7AA016F2E590C1BC0E40DC56 /* MailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44A081B86F851EC5965812F /* MailProvider.swift */; };
 		8A27383AAC6889794C9F198A /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D458FC7CEEE73405D5C42093 /* MainView.swift */; };
 		8CEE78FBDA0AC358124C9E0B /* SharedComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F58FAC7E92ED36CECDC3CE /* SharedComponents.swift */; };
+		A0AE948C2659C4E83A893AEC /* AccountStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB584E4FEADCB25F8C3290B1 /* AccountStore.swift */; };
+		A3A48215FF724C4596BA37CA /* GmailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483DF45CFA2CA02331EC5FF3 /* GmailProvider.swift */; };
 		AAAA00001234567800000001 /* Sounds in Resources */ = {isa = PBXBuildFile; fileRef = AAAA00001234567800000002 /* Sounds */; };
 		B49F15C8067D1A971E915FA0 /* VIP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A76FFA6964FC29205B1BC1 /* VIP.swift */; };
 		B86F8BC6E6E5CD8C8F6B9443 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0AE470E34CC178741CDA0AE /* Sound.swift */; };
 		C23DF5470D9B611933F1AB38 /* OutlookOAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AB99D62958F994A2B4A961 /* OutlookOAuthClient.swift */; };
+		CCF5AC1E4DD80793649324B3 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1764649CFC64D93A2BD2F61 /* NotificationService.swift */; };
 		D973844977964C7017755379 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B8C2A24C1CBAC487FDF57E1 /* SettingsView.swift */; };
 		D9CE48FC094FAD6FF3521392 /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05D42DEB30F290C5890D7D3 /* Sidebar.swift */; };
 		E221656FC65F4AAA8539CE36 /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459D6FD8750D9AFB1663CECE /* StoreKitManager.swift */; };
@@ -78,19 +85,26 @@
 		1AFCE88118D404E500487B98 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		3B8C2A24C1CBAC487FDF57E1 /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		459D6FD8750D9AFB1663CECE /* StoreKitManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
+		483DF45CFA2CA02331EC5FF3 /* GmailProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GmailProvider.swift; sourceTree = "<group>"; };
 		4B396A44D305B1741FDA2CE4 /* AccountView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		69BB13DA77BE2A8C7A0BDB54 /* Configuration.storekit */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
+		6ADA37F239AD28CE88DFC2D6 /* OutlookProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OutlookProvider.swift; sourceTree = "<group>"; };
 		8F32C01B151E34EAABCD8200 /* MailNotifierApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MailNotifierApp.swift; sourceTree = "<group>"; };
 		8F34144BE463ED34FDE3B4D9 /* AppDelegate+Menu.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Menu.swift"; sourceTree = "<group>"; };
 		90C9338A46FA937DFE901BB3 /* WelcomeView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		9375B1EF8A702D029F7524AF /* AppSettings.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		987F828CACA47DC2A169B424 /* Secrets.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		9CC2320099B7BD9D6FE7C3CD /* AccountAuthorizer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AccountAuthorizer.swift; sourceTree = "<group>"; };
+		A3D8D31D06AC85361D8A7FBE /* URLRouter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = URLRouter.swift; sourceTree = "<group>"; };
 		A9590F50FECC47EC6DC1FC72 /* AppDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AAAA00001234567800000002 /* Sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Sounds; path = Resources/Sounds; sourceTree = SOURCE_ROOT; };
 		B05D42DEB30F290C5890D7D3 /* Sidebar.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
 		B2BE80100250AFB4E4DD84CD /* Message.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		B9AB99D62958F994A2B4A961 /* OutlookOAuthClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OutlookOAuthClient.swift; sourceTree = "<group>"; };
+		BB584E4FEADCB25F8C3290B1 /* AccountStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AccountStore.swift; sourceTree = "<group>"; };
 		C0AE470E34CC178741CDA0AE /* Sound.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
+		C1764649CFC64D93A2BD2F61 /* NotificationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		C44A081B86F851EC5965812F /* MailProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MailProvider.swift; sourceTree = "<group>"; };
 		D458FC7CEEE73405D5C42093 /* MainView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		D59A7A76885EBF486545423A /* Browser.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Browser.swift; sourceTree = "<group>"; };
 		E3A76FFA6964FC29205B1BC1 /* VIP.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = VIP.swift; sourceTree = "<group>"; };
@@ -108,7 +122,7 @@
 				1A4962252674C0C100331CF7 /* GoogleAPIClientForREST_Gmail in Frameworks */,
 				1AE48C082688856500906371 /* KeychainAccess in Frameworks */,
 				1AFCE88218D404E500487B98 /* Carbon.framework in Frameworks */,
-				1AC74A422673A1B4003F98E7 /* (null) in Frameworks */,
+				1AC74A422673A1B4003F98E7 /* BuildFile in Frameworks */,
 				1A4962282674CEBD00331CF7 /* GTMAppAuth in Frameworks */,
 				1A8AAA44267C23D4006F52D7 /* KeyboardShortcuts in Frameworks */,
 				1AFB7F4C189FC0EB00B82441 /* ServiceManagement.framework in Frameworks */,
@@ -168,6 +182,17 @@
 				1AB7FF0416B57D510040BBCE /* Localizable.strings */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		4C94753390C0EB73CF942E31 /* Providers */ = {
+			isa = PBXGroup;
+			children = (
+				C44A081B86F851EC5965812F /* MailProvider.swift */,
+				483DF45CFA2CA02331EC5FF3 /* GmailProvider.swift */,
+				6ADA37F239AD28CE88DFC2D6 /* OutlookProvider.swift */,
+			);
+			name = Providers;
+			path = Providers;
 			sourceTree = "<group>";
 		};
 		7BC2632EAC534CD2DD3A19B6 /* Utilities */ = {
@@ -230,6 +255,7 @@
 				B2BE80100250AFB4E4DD84CD /* Message.swift */,
 				C0AE470E34CC178741CDA0AE /* Sound.swift */,
 				E3A76FFA6964FC29205B1BC1 /* VIP.swift */,
+				BB584E4FEADCB25F8C3290B1 /* AccountStore.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -241,6 +267,7 @@
 				A9590F50FECC47EC6DC1FC72 /* AppDelegate.swift */,
 				8F34144BE463ED34FDE3B4D9 /* AppDelegate+Menu.swift */,
 				9375B1EF8A702D029F7524AF /* AppSettings.swift */,
+				A3D8D31D06AC85361D8A7FBE /* URLRouter.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -253,6 +280,9 @@
 				1382386877C91FDCCC75CC94 /* LaunchAtLoginManager.swift */,
 				459D6FD8750D9AFB1663CECE /* StoreKitManager.swift */,
 				19FF4AB27FACDEC520B6B72B /* FetcherManager.swift */,
+				C1764649CFC64D93A2BD2F61 /* NotificationService.swift */,
+				9CC2320099B7BD9D6FE7C3CD /* AccountAuthorizer.swift */,
+				4C94753390C0EB73CF942E31 /* Providers */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -374,6 +404,13 @@
 				62DD91D8778F6405F4FBB4F5 /* NotificationNames.swift in Sources */,
 				8CEE78FBDA0AC358124C9E0B /* SharedComponents.swift in Sources */,
 				5B5F110C397F4249B30194DA /* FetcherManager.swift in Sources */,
+				CCF5AC1E4DD80793649324B3 /* NotificationService.swift in Sources */,
+				21AC4AF84A9E2AD15A420C45 /* URLRouter.swift in Sources */,
+				A0AE948C2659C4E83A893AEC /* AccountStore.swift in Sources */,
+				5E3D6B16AFBA38615A7CBD22 /* AccountAuthorizer.swift in Sources */,
+				7AA016F2E590C1BC0E40DC56 /* MailProvider.swift in Sources */,
+				A3A48215FF724C4596BA37CA /* GmailProvider.swift in Sources */,
+				2057B4FE0CBB2AC8D29635EB /* OutlookProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -547,7 +584,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Mail Notifier";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 3.0;
+				MARKETING_VERSION = 3.0.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.strategicnerds.MailNotifierApp;
@@ -596,7 +633,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Mail Notifier";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 3.0;
+				MARKETING_VERSION = 3.0.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.strategicnerds.MailNotifierApp;

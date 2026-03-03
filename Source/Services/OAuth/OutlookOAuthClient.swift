@@ -25,6 +25,10 @@ struct OutlookOAuthClient {
         "msal\(clientID)://auth/"
     }
 
+    static var redirectScheme: String {
+        redirectURL.components(separatedBy: ":").first ?? ""
+    }
+
     static var currentAuthorizationFlow: OIDExternalUserAgentSession?
 
     func resumeAuthFlow(url: URL) {

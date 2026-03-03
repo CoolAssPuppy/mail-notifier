@@ -77,79 +77,10 @@ extension AppDelegate {
 // MARK: - Account Menu Items
 
 private extension AppDelegate {
-    func createSubmenu(for account: Account) -> NSMenuItem {
-        let submenu = NSMenu()
-        let menuItem = NSMenuItem(title: account.email, action: #selector(openInbox(_:)), keyEquivalent: "")
-        menuItem.representedObject = account.email
-        menuItem.submenu = submenu
 
-        submenu.addItem(withTitle: NSLocalizedString("Open Inbox", comment: ""), action: #selector(openInbox(_:)), keyEquivalent: "")
-
-        let checkMailsItem = NSMenuItem(
-            title: NSLocalizedString("Check", comment: ""),
-            action: account.enabled ? #selector(checkMails(_:)) : nil,
-            keyEquivalent: ""
-        )
-        submenu.addItem(checkMailsItem)
-        submenu.addItem(NSMenuItem.separator())
-
-        if let fetcher = fetcher(for: account.email), account.enabled {
-            if fetcher.unreadMessagesCount > 0 {
-                menuItem.title = "\(account.email) (\(fetcher.unreadMessagesCount))"
-            }
-
-            if fetcher.hasAuthError {
-                let reauthorizeItem = NSMenuItem(
-                    title: NSLocalizedString("Auth error - please reauthorize", comment: ""),
-                    action: #selector(reauthorize(_:)),
-                    keyEquivalent: ""
-                )
-                reauthorizeItem.representedObject = account
-                submenu.addItem(reauthorizeItem)
-            }
-
-            for message in fetcher.messages {
-                let messageItem = NSMenuItem(
-                    title: "\(message.sender): \(message.subject)",
-                    action: #selector(openMessage(_:)),
-                    keyEquivalent: ""
-                )
-                messageItem.representedObject = message
-                messageItem.toolTip = message.decodedSnippet
-                submenu.addItem(messageItem)
-            }
-
-            submenu.addItem(NSMenuItem.separator())
-
-            let lastChecked = fetcher.lastCheckedAt.formatted()
-            submenu.addItem(NSMenuItem(
-                title: NSLocalizedString("Last Checked:", comment: "") + " " + lastChecked,
-                action: nil,
-                keyEquivalent: ""
-            ))
-        }
-
-        submenu.addItem(withTitle: NSLocalizedString(account.enabled ? "Disable Account" : "Enable Account", comment: ""), action: #selector(toggleAccount(_:)), keyEquivalent: "")
-
-        // Set represented object for items without one
-        for item in submenu.items where !item.isSeparatorItem && item.representedObject == nil {
-            item.representedObject = account.email
-        }
-
-        return menuItem
-    }
-
-    func createMenuItems(for account: Account?) -> [NSMenuItem] {
-        guard let account else { return [] }
-
+    /// Shared menu items for an account's fetcher state: auth errors, messages, last checked, and enable/disable toggle.
+    func createAccountMenuItems(for account: Account) -> [NSMenuItem] {
         var items = [NSMenuItem]()
-
-        items.append(NSMenuItem(
-            title: NSLocalizedString("Open Inbox", comment: ""),
-            action: #selector(openInbox(_:)),
-            keyEquivalent: ""
-        ))
-        items.append(NSMenuItem.separator())
 
         if let fetcher = fetcher(for: account.email), account.enabled {
             if fetcher.hasAuthError {
@@ -173,14 +104,14 @@ private extension AppDelegate {
                 items.append(messageItem)
             }
 
+            items.append(NSMenuItem.separator())
+
             let lastChecked = fetcher.lastCheckedAt.formatted()
             items.append(NSMenuItem(
                 title: NSLocalizedString("Last Checked:", comment: "") + " " + lastChecked,
                 action: nil,
                 keyEquivalent: ""
             ))
-
-            items.append(NSMenuItem.separator())
         }
 
         items.append(NSMenuItem(
@@ -188,6 +119,56 @@ private extension AppDelegate {
             action: #selector(toggleAccount(_:)),
             keyEquivalent: ""
         ))
+
+        // Set represented object for items without one
+        for item in items where !item.isSeparatorItem && item.representedObject == nil {
+            item.representedObject = account.email
+        }
+
+        return items
+    }
+
+    func createSubmenu(for account: Account) -> NSMenuItem {
+        let submenu = NSMenu()
+        let menuItem = NSMenuItem(title: account.email, action: #selector(openInbox(_:)), keyEquivalent: "")
+        menuItem.representedObject = account.email
+        menuItem.submenu = submenu
+
+        submenu.addItem(withTitle: NSLocalizedString("Open Inbox", comment: ""), action: #selector(openInbox(_:)), keyEquivalent: "")
+
+        let checkMailsItem = NSMenuItem(
+            title: NSLocalizedString("Check", comment: ""),
+            action: account.enabled ? #selector(checkMails(_:)) : nil,
+            keyEquivalent: ""
+        )
+        submenu.addItem(checkMailsItem)
+        submenu.addItem(NSMenuItem.separator())
+
+        // Update title with unread count
+        if let fetcher = fetcher(for: account.email), account.enabled, fetcher.unreadMessagesCount > 0 {
+            menuItem.title = "\(account.email) (\(fetcher.unreadMessagesCount))"
+        }
+
+        for item in createAccountMenuItems(for: account) {
+            submenu.addItem(item)
+        }
+
+        return menuItem
+    }
+
+    func createMenuItems(for account: Account?) -> [NSMenuItem] {
+        guard let account else { return [] }
+
+        var items = [NSMenuItem]()
+
+        items.append(NSMenuItem(
+            title: NSLocalizedString("Open Inbox", comment: ""),
+            action: #selector(openInbox(_:)),
+            keyEquivalent: ""
+        ))
+        items.append(NSMenuItem.separator())
+
+        items.append(contentsOf: createAccountMenuItems(for: account))
         items.append(NSMenuItem.separator())
 
         // Set represented object for items without one
