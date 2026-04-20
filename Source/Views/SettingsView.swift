@@ -11,6 +11,7 @@ import KeyboardShortcuts
 
 struct SettingsView: View {
     @StateObject private var launchAtLogin = LaunchAtLoginManager.shared
+    @StateObject private var updater = UpdaterManager.shared
     @AppStorage(AppSettings.showUnreadCount) var showUnreadCount = AppSettings.shared.showUnreadCount
     @AppStorage(AppSettings.openSettingsOnStartKey) var openSettingsOnStart = false
     @AppStorage(VIPList.storageKey) var vipList = VIPList()
@@ -37,6 +38,11 @@ struct SettingsView: View {
                         .padding(.vertical, 8)
 
                     shortcutsSection
+
+                    Divider()
+                        .padding(.vertical, 8)
+
+                    updatesSection
 
                     Divider()
                         .padding(.vertical, 8)
@@ -195,6 +201,38 @@ struct SettingsView: View {
                     Spacer()
                     KeyboardShortcuts.Recorder(for: .checkAllMails)
                 }
+            }
+            .padding(.leading, 4)
+        }
+    }
+
+    private var updatesSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            SectionHeader(icon: "arrow.triangle.2.circlepath", title: "Updates", gradient: [.purple, .indigo])
+
+            VStack(alignment: .leading, spacing: 16) {
+                Toggle(isOn: $updater.automaticallyChecksForUpdates) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Check for updates automatically")
+                            .font(.body)
+                        Text("Mail Notifier checks once a day and prompts you before installing.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+
+                Button(action: {
+                    UpdaterManager.shared.checkForUpdates()
+                }) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "arrow.down.circle")
+                        Text("Check for Updates Now")
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                }
+                .buttonStyle(.bordered)
+                .disabled(!updater.canCheckForUpdates)
             }
             .padding(.leading, 4)
         }

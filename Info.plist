@@ -69,5 +69,13 @@
 	<string>$(GOOGLE_CLIENT_ID)</string>
 	<key>OutlookClientID</key>
 	<string>$(OUTLOOK_CLIENT_ID)</string>
+	<key>SUFeedURL</key>
+	<string>https://coolasspuppy.com/mail-notifier-updates</string>
+	<key>SUPublicEDKey</key>
+	<string>REPLACE_WITH_SPARKLE_PUBLIC_KEY</string>
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+	<key>SUScheduledCheckInterval</key>
+	<integer>86400</integer>
 </dict>
 </plist>

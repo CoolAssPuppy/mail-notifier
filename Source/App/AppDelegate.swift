@@ -24,6 +24,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var subscriptions = Set<AnyCancellable>()
     private let fetcherManager = FetcherManager.shared
     private let notificationService = NotificationService()
+    private let updaterManager = UpdaterManager.shared
     private var preferencesWindow: NSWindow?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -240,6 +241,12 @@ extension AppDelegate {
 
     @objc func checkAllMails() {
         fetcherManager.checkAll()
+    }
+
+    @objc func checkForUpdates() {
+        Task { @MainActor in
+            UpdaterManager.shared.checkForUpdates()
+        }
     }
 
     @objc func composeMail() {

@@ -38,6 +38,7 @@ extension AppDelegate {
         menu.addItem(separatorAbovePreferences)
 
         menu.addItem(withTitle: NSLocalizedString("Preferences...", comment: ""), action: #selector(showPreferences), keyEquivalent: "")
+        menu.addItem(withTitle: NSLocalizedString("Check for Updates…", comment: ""), action: #selector(checkForUpdates), keyEquivalent: "")
         menu.addItem(NSMenuItem.separator())
         menu.addItem(withTitle: NSLocalizedString("Quit Mail Notifier", comment: ""), action: #selector(NSApp.terminate(_:)), keyEquivalent: "")
 

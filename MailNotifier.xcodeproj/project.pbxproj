@@ -26,6 +26,7 @@
 		38580E8A8BE7FBBE2988F900 /* NotificationNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D68FB4988855EDF84FB661 /* NotificationNames.swift */; };
 		3BE9334DE287FBCF9E2770E6 /* AppAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 18804011B7BFAA25376B926C /* AppAuth */; };
 		408FED39F299B062EC152101 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85734040168C129FCDDAE13D /* WelcomeView.swift */; };
+		42E9081BE938811A5683C9A5 /* UpdaterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53C88A02CD4CB9DA9FCDEEE /* UpdaterManager.swift */; };
 		476B55D1C8E2D484625F4FA0 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAA878B780CA7066B721262 /* AppSettings.swift */; };
 		4A630E6B3CAAE8B20B195149 /* OAuthSecret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4D994A8D656FC5C5EA4D49 /* OAuthSecret.swift */; };
 		519533A448D4CD1CD27F1468 /* OutlookOAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B2763164C0B8D569025080 /* OutlookOAuthClient.swift */; };
@@ -135,6 +136,7 @@
 		D512FA1103BB22CBF481A3A7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = "en.lproj/.!21433!Localizable.strings"; sourceTree = "<group>"; };
 		E12AC87ABBBE01ADBAD56BB1 /* MailNotifierApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailNotifierApp.swift; sourceTree = "<group>"; };
 		E1B2763164C0B8D569025080 /* OutlookOAuthClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlookOAuthClient.swift; sourceTree = "<group>"; };
+		E53C88A02CD4CB9DA9FCDEEE /* UpdaterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterManager.swift; sourceTree = "<group>"; };
 		E945FECDCBE6C3ED0CB6C791 /* splat.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = splat.aiff; sourceTree = "<group>"; };
 		EB37884BCB61678E068B3C3D /* MailProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailProvider.swift; sourceTree = "<group>"; };
 		EEA9F3DE9853CF06BBDD72BF /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -142,7 +144,7 @@
 		F7DF9E463FD10F104229B4C9 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F89BE57ADCE70EF138125A1C /* wacky.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = wacky.aiff; sourceTree = "<group>"; };
 		FB460ED3BAD3CC445B93C9FE /* AppDelegate+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Menu.swift"; sourceTree = "<group>"; };
-		"TEMP_15CFD978-3898-422A-94BA-50A81C2CB2BE" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		"TEMP_8689313C-3233-4F8F-A167-5AE7DFE6BFE2" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -311,16 +313,17 @@
 				0A0F81187CA285BE37EEB61E /* LaunchAtLoginManager.swift */,
 				3F7DC03CB3B7DF64E5A4999E /* MessageFetcher.swift */,
 				11DC26A3E47DDBFAA0FC8DFF /* NotificationService.swift */,
+				E53C88A02CD4CB9DA9FCDEEE /* UpdaterManager.swift */,
 				725481FBBF290332B07F415C /* OAuth */,
 				76DE2743165A37F5216E804E /* Providers */,
 			);
 			path = Services;
 			sourceTree = "<group>";
 		};
-		"TEMP_29F257F2-4DAD-4D63-8E9B-343C2857CC96" /* mail-notifier */ = {
+		"TEMP_B50CA91F-A643-452A-8FD7-B8B6F58611B7" /* mail-notifier */ = {
 			isa = PBXGroup;
 			children = (
-				"TEMP_15CFD978-3898-422A-94BA-50A81C2CB2BE" /* Secrets.xcconfig */,
+				"TEMP_8689313C-3233-4F8F-A167-5AE7DFE6BFE2" /* Secrets.xcconfig */,
 			);
 			path = "mail-notifier";
 			sourceTree = "<group>";
@@ -504,6 +507,7 @@
 				7F602BF6F21F9E50A543133D /* Sidebar.swift in Sources */,
 				6F19E5430EB52E328D689CD3 /* Sound.swift in Sources */,
 				C37D1FA9636CCF698C5B5AF7 /* URLRouter.swift in Sources */,
+				42E9081BE938811A5683C9A5 /* UpdaterManager.swift in Sources */,
 				A0F0A08A7BC55D3BB180D455 /* VIP.swift in Sources */,
 				408FED39F299B062EC152101 /* WelcomeView.swift in Sources */,
 			);
@@ -582,7 +586,7 @@
 		};
 		229918186B40865D81363975 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_15CFD978-3898-422A-94BA-50A81C2CB2BE" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_8689313C-3233-4F8F-A167-5AE7DFE6BFE2" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -663,7 +667,7 @@
 		};
 		B4A4092827DAC2ECABE337D5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_15CFD978-3898-422A-94BA-50A81C2CB2BE" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_8689313C-3233-4F8F-A167-5AE7DFE6BFE2" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
