@@ -275,7 +275,7 @@ struct SettingsView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
 
-                Text("Build \(appBuildNumber)")
+                Text("Version \(appVersion)")
                     .font(.caption)
                     .foregroundColor(.secondary)
 
@@ -286,8 +286,8 @@ struct SettingsView: View {
         }
     }
 
-    private var appBuildNumber: String {
-        Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown"
+    private var appVersion: String {
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
     }
 
 }

@@ -312,11 +312,10 @@ extension AppDelegate {
     }
 
     @objc func showPreferences() {
-        NSApp.setActivationPolicy(.regular)
-
+        // Stay .accessory — we never want a dock icon, even while the
+        // Settings window is open. .accessory apps can still own standard
+        // windows; makeKeyAndOrderFront + activate is enough to focus them.
         Task { @MainActor in
-            try? await Task.sleep(for: .milliseconds(100))
-
             NSApp.activate(ignoringOtherApps: true)
 
             if let existingWindow = preferencesWindow {
@@ -372,7 +371,6 @@ extension AppDelegate: NSWindowDelegate {
         guard let window = notification.object as? NSWindow,
               window == preferencesWindow else { return }
         preferencesWindow = nil
-        NSApp.setActivationPolicy(.accessory)
     }
 }
 
