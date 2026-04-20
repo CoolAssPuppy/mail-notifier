@@ -279,7 +279,7 @@ struct SettingsView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
 
-                Link("Contribute on GitHub", destination: URL(string: "https://github.com/CoolAssPuppy/MailNotifierWithOutlook")!)
+                Link("Contribute on GitHub", destination: URL(string: "https://github.com/CoolAssPuppy/mail-notifier")!)
                     .font(.caption)
             }
             .padding(.leading, 4)
