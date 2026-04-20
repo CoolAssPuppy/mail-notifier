@@ -29,6 +29,7 @@ SIGN_UPDATE="${SPARKLE_SIGN_UPDATE:-$HOME/bin/sparkle/sign_update}"
 SPARKLE_KEY_ACCOUNT="${SPARKLE_KEY_ACCOUNT:-com.strategicnerds.MailNotifierApp}"
 
 BACKGROUND="$REPO_ROOT/dmg-assets/background.tiff"
+VOLUME_ICON="$REPO_ROOT/dmg-assets/VolumeIcon.icns"
 DMG_OUT="$REPO_ROOT/dist/MailNotifier-$VERSION.dmg"
 
 if [[ ! -d "$APP_PATH" ]]; then
@@ -66,6 +67,7 @@ echo ""
 # Update if the art changes.
 create-dmg \
   --volname "Mail Notifier" \
+  --volicon "$VOLUME_ICON" \
   --background "$BACKGROUND" \
   --window-pos 200 120 \
   --window-size 660 400 \

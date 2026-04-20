@@ -6,6 +6,24 @@
     <description>Mail Notifier updates</description>
     <language>en</language>
     <item>
+      <title>Version 3.1.1</title>
+      <pubDate>Mon, 20 Apr 2026 18:34:24 +0000</pubDate>
+      <sparkle:version>4</sparkle:version>
+      <sparkle:shortVersionString>3.1.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[
+        <ul>
+          <li>The DMG now has a proper volume icon matching the app.</li>
+        </ul>
+      ]]></description>
+      <enclosure
+        url="https://hlwjnusdotqtmtwrjidu.supabase.co/storage/v1/object/public/downloads/MailNotifier-3.1.1.dmg"
+        sparkle:edSignature="7282ZwdZv7g6NQDML+rYdpyrbcEmxilVGi7/mhKaqyr8AsXOZQO57wZGo/Pjy54cJ1SjvkYCwoDSSfTemjrJBQ=="
+        length="6073594"
+        type="application/x-apple-diskimage" />
+    </item>
+
+    <item>
       <title>Version 3.1.0</title>
       <pubDate>Mon, 20 Apr 2026 18:29:45 +0000</pubDate>
       <sparkle:version>3</sparkle:version>
