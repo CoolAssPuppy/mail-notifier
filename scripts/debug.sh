@@ -52,6 +52,17 @@ mkdir -p "$DIST"
 rm -rf "$DIST/Mail Notifier.app"
 ditto "$SRC_APP" "$DIST/Mail Notifier.app"
 
+# Both the DerivedData copy and dist/debug copy share the same bundle ID and
+# URL schemes. If both stay registered with LaunchServices, macOS may route
+# OAuth callbacks to the wrong one and the auth flow will "hang" — the app
+# that doesn't own the pending AppAuth session silently drops the callback.
+# Remove and unregister the DerivedData copy so dist/debug is the sole handler,
+# then force a fresh registration of dist/debug to make it the preferred handler.
+LSREG="/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister"
+"$LSREG" -u "$SRC_APP" >/dev/null 2>&1 || true
+rm -rf "$SRC_APP"
+"$LSREG" -f "$DIST/Mail Notifier.app" >/dev/null 2>&1 || true
+
 echo ""
 echo "Built: $DIST/Mail Notifier.app"
 
