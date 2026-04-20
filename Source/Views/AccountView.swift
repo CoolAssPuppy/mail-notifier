@@ -115,7 +115,7 @@ struct AccountView: View {
                             .tag("")
                         Divider()
                         ForEach(Sound.allCases) { sound in
-                            Text(sound.name)
+                            Text(sound.name).tag(sound.rawValue)
                         }
                     }
                     .pickerStyle(.menu)
