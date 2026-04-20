@@ -227,6 +227,28 @@ See [SPARKLE.md](SPARKLE.md) for the one-time Sparkle signing-key and Dub.co sho
 
 This bumps `project.yml`, archives, exports a Developer ID-signed `.app`, notarizes and staples it, builds a signed + notarized + Sparkle-signed DMG, and uploads the DMG plus the updated appcast to the `downloads` Supabase bucket. Commit `project.yml` and `dist/appcast.xml` after the script finishes.
 
+### Sparkle private key backup
+
+The Ed25519 private key that signs every Mail Notifier update lives in the login keychain under account `com.strategicnerds.MailNotifierApp`. A PEM copy is stored in **Doppler** (`agent-server/prd`, secret `SPARKLE_PRIVATE_KEY`) so releases can still be cut from a fresh machine if this laptop dies.
+
+If the key is lost entirely and no backup exists, every installed copy of the app is permanently stranded — Sparkle has no key-rotation mechanism.
+
+To restore it on a new machine:
+
+```bash
+doppler secrets get SPARKLE_PRIVATE_KEY \
+  --project agent-server --config prd --plain \
+  > /tmp/mail-notifier-sparkle-private.pem
+
+~/Library/Developer/Xcode/DerivedData/MailNotifier-*/SourcePackages/artifacts/sparkle/Sparkle/bin/generate_keys \
+  --account com.strategicnerds.MailNotifierApp \
+  -f /tmp/mail-notifier-sparkle-private.pem
+
+rm -P /tmp/mail-notifier-sparkle-private.pem
+```
+
+Verify the restore produced the right pair by running `generate_keys --account com.strategicnerds.MailNotifierApp -p` and comparing the printed public key to `SUPublicEDKey` in `Info.plist`. See [SPARKLE.md](SPARKLE.md) for the full setup walkthrough.
+
 ### Notes
 
 - Google OAuth tokens in testing mode expire after approximately 7 days. Reauthorize accounts from preferences when needed.

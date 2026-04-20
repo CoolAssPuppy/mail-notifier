@@ -35,7 +35,7 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DIST="$REPO_ROOT/dist"
 SCRIPTS="$REPO_ROOT/scripts"
 
-NOTARY_PROFILE="${NOTARY_PROFILE:-mail-notifier}"
+NOTARY_PROFILE="${NOTARY_PROFILE:-agent-server}"
 SPARKLE_SIGN_UPDATE="${SPARKLE_SIGN_UPDATE:-$HOME/bin/sparkle/sign_update}"
 SIGN_IDENTITY="Developer ID Application: Prashant Sridharan (955GSY56UT)"
 

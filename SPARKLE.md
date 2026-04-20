@@ -38,7 +38,39 @@ It will:
 
 `sign_update` needs to know which account to use, since you may have several. The release script already passes `--account com.strategicnerds.MailNotifierApp` to `sign_update`, so no further action is needed once the key exists in Keychain.
 
-**Back up the private key now.** Export from Keychain Access to a `.p12` and store it in 1Password.
+**Back up the private key now.** Keychain Access will not let you export it directly (Sparkle stores the key as a generic-password item and the Export menu is greyed out). Use `generate_keys -x` to dump it to a PEM file, then store the PEM contents in your password manager:
+
+```bash
+~/Library/Developer/Xcode/DerivedData/MailNotifier-*/SourcePackages/artifacts/sparkle/Sparkle/bin/generate_keys \
+  --account com.strategicnerds.MailNotifierApp \
+  -x ~/mail-notifier-sparkle-private.pem
+```
+
+The contents of `~/mail-notifier-sparkle-private.pem` are stored in **Doppler** under `agent-server/prd` as `SPARKLE_PRIVATE_KEY`.
+
+After confirming the secret is in Doppler, wipe the local file:
+
+```bash
+rm -P ~/mail-notifier-sparkle-private.pem
+```
+
+### Restoring the private key on a new machine
+
+If you ever need to rebuild Mail Notifier releases on a new machine (or a clean Keychain), pull the PEM out of Doppler and re-import it:
+
+```bash
+doppler secrets get SPARKLE_PRIVATE_KEY \
+  --project agent-server --config prd --plain \
+  > /tmp/mail-notifier-sparkle-private.pem
+
+~/Library/Developer/Xcode/DerivedData/MailNotifier-*/SourcePackages/artifacts/sparkle/Sparkle/bin/generate_keys \
+  --account com.strategicnerds.MailNotifierApp \
+  -f /tmp/mail-notifier-sparkle-private.pem
+
+rm -P /tmp/mail-notifier-sparkle-private.pem
+```
+
+Verify by running `generate_keys --account com.strategicnerds.MailNotifierApp -p` — it should print the same public key that lives in `Info.plist` (`SUPublicEDKey`). If it prints a different key, the restore produced a mismatched pair and any DMG signed with it will fail verification on installed apps.
 
 Copy the public key that `generate_keys` printed. You'll paste it in step 4.
 
