@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+  <channel>
+    <title>Mail Notifier</title>
+    <link>https://hlwjnusdotqtmtwrjidu.supabase.co/storage/v1/object/public/downloads/mail-notifier-appcast.xml</link>
+    <description>Mail Notifier updates</description>
+    <language>en</language>
+  </channel>
+</rss>
