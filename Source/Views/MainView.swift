@@ -20,6 +20,11 @@ struct MainView: View {
         } detail: {
             if let selection {
                 detailView(for: selection)
+                    // Tie detail view identity to the current selection so
+                    // SwiftUI recreates AccountView (and resets its @State
+                    // `account`) when the user clicks a different account
+                    // in the sidebar instead of reusing the old instance.
+                    .id(selection)
             } else {
                 WelcomeView()
             }
