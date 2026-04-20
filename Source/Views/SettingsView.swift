@@ -17,7 +17,6 @@ struct SettingsView: View {
 
     @State private var newVIPEmail = ""
     @State private var newVIPSound = ""
-    @State private var showingCoffee = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -206,12 +205,10 @@ struct SettingsView: View {
             SectionHeader(icon: "cup.and.saucer.fill", title: "Support", gradient: [.brown, .orange])
 
             VStack(alignment: .leading, spacing: 8) {
-                Button(action: {
-                    showingCoffee = true
-                }) {
+                Link(destination: URL(string: "https://venmo.com/coolasspuppy")!) {
                     HStack(spacing: 6) {
                         Image(systemName: "cup.and.saucer.fill")
-                        Text("Buy Me Coffee")
+                        Text("Buy Me Coffee on Venmo")
                     }
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
@@ -224,10 +221,6 @@ struct SettingsView: View {
                     .foregroundColor(.secondary)
             }
             .padding(.leading, 4)
-        }
-        .sheet(isPresented: $showingCoffee) {
-            CoffeeView()
-                .frame(width: 500, height: 500)
         }
     }
 
