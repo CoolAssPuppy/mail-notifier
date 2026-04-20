@@ -46,20 +46,37 @@ struct Message {
     static func url(type: AccountType, email: String, id: String) -> URL {
         switch type {
         case .gmail:
-            var components = URLComponents(string: "https://mail.google.com/mail/u/\(email)")!
+            var components = URLComponents()
+            components.scheme = "https"
+            components.host = "mail.google.com"
+            let encodedEmail = email.addingPercentEncoding(withAllowedCharacters: .urlPathComponentAllowed) ?? email
+            components.percentEncodedPath = "/mail/u/\(encodedEmail)"
             components.queryItems = [
                 URLQueryItem(name: "account_id", value: email),
                 URLQueryItem(name: "message_id", value: id),
                 URLQueryItem(name: "view", value: "conv"),
                 URLQueryItem(name: "extsrc", value: "atom")
             ]
-            return components.url!
+            return components.url ?? URL(string: "https://mail.google.com")!
         case .outlook:
-            return URL(string: "https://outlook.live.com/mail/0/inbox/id/\(id)")!
+            var components = URLComponents()
+            components.scheme = "https"
+            components.host = "outlook.live.com"
+            let encodedMessageID = id.addingPercentEncoding(withAllowedCharacters: .urlPathComponentAllowed) ?? id
+            components.percentEncodedPath = "/mail/0/inbox/id/\(encodedMessageID)"
+            return components.url ?? URL(string: "https://outlook.live.com/mail/0/inbox")!
         }
     }
 
     var decodedSnippet: String {
         CFXMLCreateStringByUnescapingEntities(nil, snippet as CFString, nil) as String
     }
+}
+
+private extension CharacterSet {
+    static let urlPathComponentAllowed: CharacterSet = {
+        var set = CharacterSet.urlPathAllowed
+        set.remove(charactersIn: "/")
+        return set
+    }()
 }

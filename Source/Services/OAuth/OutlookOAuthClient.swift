@@ -17,10 +17,6 @@ struct OutlookOAuthClient {
         Bundle.main.object(forInfoDictionaryKey: "OutlookClientID") as? String ?? ""
     }
 
-    static var clientSecret: String {
-        Bundle.main.object(forInfoDictionaryKey: "OutlookClientSecret") as? String ?? ""
-    }
-
     static var redirectURL: String {
         "msal\(clientID)://auth/"
     }

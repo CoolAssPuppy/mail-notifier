@@ -163,8 +163,8 @@ private extension AppDelegate {
         NotificationCenter.default
             .publisher(for: .mailToReceived)
             .sink { [weak self] notification in
-                let param = notification.object as? String ?? ""
-                self?.handleMailTo(param)
+                guard let url = notification.object as? URL else { return }
+                self?.handleMailTo(url)
             }
             .store(in: &subscriptions)
 
@@ -248,32 +248,37 @@ extension AppDelegate {
 
     func composeMail(to: String? = nil, subject: String? = nil) {
         let account = Accounts.default.first
-        let baseURL = account?.baseUrl ?? "https://mail.google.com/"
+        var components = URLComponents(url: account?.baseURL ?? URL(string: "https://mail.google.com")!, resolvingAgainstBaseURL: false)
 
-        var urlString: String
+        var queryItems: [URLQueryItem] = []
         if account?.type == .outlook {
-            urlString = baseURL + "?path=/mail/action/compose"
+            queryItems.append(URLQueryItem(name: "path", value: "/mail/action/compose"))
         } else {
-            urlString = baseURL + "?view=cm&tf=0&fs=1"
+            queryItems += [
+                URLQueryItem(name: "view", value: "cm"),
+                URLQueryItem(name: "tf", value: "0"),
+                URLQueryItem(name: "fs", value: "1")
+            ]
         }
 
         if let to, !to.isEmpty {
-            urlString += "&to=\(to)"
+            queryItems.append(URLQueryItem(name: "to", value: to))
         }
 
         if let subject, !subject.isEmpty {
-            let param = account?.type == .outlook ? "subject" : "su"
-            urlString += "&\(param)=\(subject)"
+            let parameterName = account?.type == .outlook ? "subject" : "su"
+            queryItems.append(URLQueryItem(name: parameterName, value: subject))
         }
 
-        guard let url = URL(string: urlString) else { return }
+        components?.queryItems = queryItems
+
+        guard let url = components?.url else { return }
         openURL(url: url, in: account?.browser)
     }
 
     @objc func openInbox(_ sender: Any) {
-        guard let account = account(from: email(from: sender)),
-              let url = URL(string: account.baseUrl) else { return }
-        openURL(url: url, in: account.browser)
+        guard let account = account(from: email(from: sender)) else { return }
+        openURL(url: account.baseURL, in: account.browser)
     }
 
     @objc func checkMails(_ sender: Any) {
@@ -334,17 +339,22 @@ extension AppDelegate {
 // MARK: - Mail To Handling
 
 extension AppDelegate {
-    func handleMailTo(_ param: String) {
-        let components = param.split(separator: "?")
-        guard let to = components.first else { return }
+    func handleMailTo(_ url: URL) {
+        guard url.scheme == "mailto" else { return }
 
-        var subject: String?
-        if components.count > 1 {
-            let query = components[1].split(separator: "&").first { $0.hasPrefix("subject=") }
-            subject = query?.replacingOccurrences(of: "subject=", with: "")
-        }
+        let rawRecipient = url.absoluteString.replacingOccurrences(of: "mailto:", with: "")
+        let fallbackRecipient = rawRecipient.components(separatedBy: "?").first ?? ""
+        let recipient = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+            .percentEncodedPath.removingPercentEncoding
+            ?? fallbackRecipient.removingPercentEncoding
+            ?? ""
 
-        composeMail(to: String(to), subject: subject)
+        let subject = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+            .queryItems?
+            .first(where: { $0.name.lowercased() == "subject" })?
+            .value
+
+        composeMail(to: recipient.isEmpty ? nil : recipient, subject: subject)
     }
 }
 

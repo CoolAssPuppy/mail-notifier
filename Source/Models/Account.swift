@@ -30,12 +30,17 @@ struct Account: Codable {
 extension Account: Identifiable, Hashable {
     var id: String { email }
 
-    var baseUrl: String {
+    var baseURL: URL {
         switch type {
         case .gmail:
-            return "https://mail.google.com/mail/b/\(email)"
+            var components = URLComponents()
+            components.scheme = "https"
+            components.host = "mail.google.com"
+            let encodedEmail = email.addingPercentEncoding(withAllowedCharacters: .urlPathComponentAllowed) ?? email
+            components.percentEncodedPath = "/mail/b/\(encodedEmail)"
+            return components.url ?? URL(string: "https://mail.google.com")!
         case .outlook:
-            return "https://outlook.live.com/mail/0/inbox"
+            return URL(string: "https://outlook.live.com/mail/0/inbox")!
         }
     }
 
@@ -46,4 +51,12 @@ extension Account: Identifiable, Hashable {
     var sound: Sound? {
         Sound(rawValue: notificationSound)
     }
+}
+
+private extension CharacterSet {
+    static let urlPathComponentAllowed: CharacterSet = {
+        var set = CharacterSet.urlPathAllowed
+        set.remove(charactersIn: "/")
+        return set
+    }()
 }

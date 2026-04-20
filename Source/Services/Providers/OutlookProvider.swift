@@ -138,7 +138,14 @@ private extension OutlookProvider {
                 return
             }
 
-            var request = URLRequest(url: URL(string: url)!)
+            guard let requestURL = URL(string: url) else {
+                DispatchQueue.main.async {
+                    completion(.failure(.parsingError("Invalid request URL")))
+                }
+                return
+            }
+
+            var request = URLRequest(url: requestURL)
             request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
 
             URLSession.shared.dataTask(with: request) { data, response, error in
@@ -149,9 +156,23 @@ private extension OutlookProvider {
                     return
                 }
 
-                if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    DispatchQueue.main.async {
+                        completion(.failure(.parsingError("Missing HTTP response")))
+                    }
+                    return
+                }
+
+                if httpResponse.statusCode == 401 {
                     DispatchQueue.main.async {
                         completion(.failure(.authenticationRequired))
+                    }
+                    return
+                }
+
+                guard (200...299).contains(httpResponse.statusCode) else {
+                    DispatchQueue.main.async {
+                        completion(.failure(.httpError(statusCode: httpResponse.statusCode)))
                     }
                     return
                 }
