@@ -28,7 +28,7 @@ Run it with a keychain-account name specific to this app so it doesn't collide w
 
 ```bash
 cd ~/Library/Developer/Xcode/DerivedData/MailNotifier-*/SourcePackages/artifacts/sparkle/Sparkle/bin
-./generate_keys -a com.strategicnerds.MailNotifierApp
+./generate_keys --account com.strategicnerds.MailNotifierApp
 ```
 
 It will:
@@ -36,13 +36,7 @@ It will:
 - Store the private key in the login keychain under "Private key for signing Sparkle updates" with account `com.strategicnerds.MailNotifierApp`.
 - Print the base64 **public** key to stdout.
 
-`sign_update` needs to know which account to use, since you may have several. Use:
-
-```bash
-~/bin/sparkle/sign_update -a com.strategicnerds.MailNotifierApp <dmg-path>
-```
-
-The release script reads `sign_update` output; see `scripts/build-dmg.sh` — add the `-a com.strategicnerds.MailNotifierApp` flag there once the key exists.
+`sign_update` needs to know which account to use, since you may have several. The release script already passes `--account com.strategicnerds.MailNotifierApp` to `sign_update`, so no further action is needed once the key exists in Keychain.
 
 **Back up the private key now.** Export from Keychain Access to a `.p12` and store it in 1Password.
 

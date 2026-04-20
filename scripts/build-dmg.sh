@@ -26,6 +26,7 @@ VERSION="${2:?Usage: $0 <path-to-Mail-Notifier.app> <version> <notarytool-profil
 NOTARY_PROFILE="${3:?Usage: $0 <path-to-Mail-Notifier.app> <version> <notarytool-profile>}"
 
 SIGN_UPDATE="${SPARKLE_SIGN_UPDATE:-$HOME/bin/sparkle/sign_update}"
+SPARKLE_KEY_ACCOUNT="${SPARKLE_KEY_ACCOUNT:-com.strategicnerds.MailNotifierApp}"
 
 BACKGROUND="$REPO_ROOT/dmg-assets/background.tiff"
 DMG_OUT="$REPO_ROOT/dist/MailNotifier-$VERSION.dmg"
@@ -98,9 +99,9 @@ xcrun stapler validate "$DMG_OUT"
 spctl -a -t open --context context:primary-signature -v "$DMG_OUT"
 
 echo ""
-echo "Signing DMG with Sparkle..."
+echo "Signing DMG with Sparkle (account: $SPARKLE_KEY_ACCOUNT)..."
 SPARKLE_OUT="${DMG_OUT%.dmg}.sparkle.txt"
-"$SIGN_UPDATE" "$DMG_OUT" | tee "$SPARKLE_OUT"
+"$SIGN_UPDATE" --account "$SPARKLE_KEY_ACCOUNT" "$DMG_OUT" | tee "$SPARKLE_OUT"
 
 echo ""
 echo "============================================================"
