@@ -16,6 +16,17 @@ struct GoogleOAuthClient {
         Bundle.main.object(forInfoDictionaryKey: "GoogleClientID") as? String ?? ""
     }
 
+    // Google OAuth clients of the "iOS application" type issue a client_secret
+    // that the token endpoint validates on every code -> token exchange. The
+    // secret is intentionally bundled with the app (it isn't cryptographically
+    // secret — PKCE is what secures the flow) and leaving it nil causes Google
+    // to reject token exchange with invalid_client, so the redirect arrives
+    // but the account never gets created.
+    static var clientSecret: String? {
+        let value = Bundle.main.object(forInfoDictionaryKey: "GoogleClientSecret") as? String ?? ""
+        return value.isEmpty ? nil : value
+    }
+
     static var redirectURL: String {
         "com.googleusercontent.apps.\(clientID.components(separatedBy: ".").first ?? ""):/oauthredirect"
     }
@@ -36,7 +47,7 @@ struct GoogleOAuthClient {
         let request = OIDAuthorizationRequest(
             configuration: GTMAppAuthFetcherAuthorization.configurationForGoogle(),
             clientId: Self.clientID,
-            clientSecret: nil,
+            clientSecret: Self.clientSecret,
             scopes: [OIDScopeEmail, "https://www.googleapis.com/auth/gmail.readonly"],
             redirectURL: URL(string: Self.redirectURL)!,
             responseType: OIDResponseTypeCode,
