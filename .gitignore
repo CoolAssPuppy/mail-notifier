@@ -29,3 +29,4 @@ dist/*.dmg
 dist/*.sparkle.txt
 dist/*.xcarchive/
 dist/export-*/
+dist/debug/
