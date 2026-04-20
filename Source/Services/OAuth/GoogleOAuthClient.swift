@@ -16,10 +16,6 @@ struct GoogleOAuthClient {
         Bundle.main.object(forInfoDictionaryKey: "GoogleClientID") as? String ?? ""
     }
 
-    static var clientSecret: String {
-        Bundle.main.object(forInfoDictionaryKey: "GoogleClientSecret") as? String ?? ""
-    }
-
     static var redirectURL: String {
         "com.googleusercontent.apps.\(clientID.components(separatedBy: ".").first ?? ""):/oauthredirect"
     }
@@ -40,7 +36,7 @@ struct GoogleOAuthClient {
         let request = OIDAuthorizationRequest(
             configuration: GTMAppAuthFetcherAuthorization.configurationForGoogle(),
             clientId: Self.clientID,
-            clientSecret: Self.clientSecret,
+            clientSecret: nil,
             scopes: [OIDScopeEmail, "https://www.googleapis.com/auth/gmail.readonly"],
             redirectURL: URL(string: Self.redirectURL)!,
             responseType: OIDResponseTypeCode,

@@ -11,6 +11,7 @@ import AppAuth
 enum MailProviderError: Error {
     case authenticationRequired
     case networkError(Error)
+    case httpError(statusCode: Int)
     case parsingError(String)
 }
 
