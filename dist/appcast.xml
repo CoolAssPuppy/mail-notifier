@@ -5,5 +5,23 @@
     <link>https://hlwjnusdotqtmtwrjidu.supabase.co/storage/v1/object/public/downloads/mail-notifier-appcast.xml</link>
     <description>Mail Notifier updates</description>
     <language>en</language>
+    <item>
+      <title>Version 3.1.0</title>
+      <pubDate>Mon, 20 Apr 2026 18:29:45 +0000</pubDate>
+      <sparkle:version>3</sparkle:version>
+      <sparkle:shortVersionString>3.1.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[
+        <ul>
+          <li>First release outside the Mac App Store. Signed, notarized, installed from a DMG.</li><li>Auto-updates via Sparkle — the app checks daily and prompts before installing.</li><li>Replaced in-app tipping with a direct Venmo link to @coolasspuppy.</li><li>Fixed sound previews and account switching.</li>
+        </ul>
+      ]]></description>
+      <enclosure
+        url="https://hlwjnusdotqtmtwrjidu.supabase.co/storage/v1/object/public/downloads/MailNotifier-3.1.0.dmg"
+        sparkle:edSignature="3wkgwCp3tVymjOt1QyVnQHrPqHx48W2KiJr712lNdCeK3e9s+un1ImD0axZbCJfTa7JYBIsECsyaVkAe55uKDw=="
+        length="5872306"
+        type="application/x-apple-diskimage" />
+    </item>
+
   </channel>
 </rss>
