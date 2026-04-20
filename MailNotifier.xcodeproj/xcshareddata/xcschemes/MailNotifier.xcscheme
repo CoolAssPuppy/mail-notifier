@@ -1,28 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "2620"
+   LastUpgradeVersion = "1500"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
-      buildImplicitDependencies = "YES">
-      <PreActions>
-         <ExecutionAction
-            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
-            <ActionContent
-               title = "Run Script"
-               scriptText = "${PROJECT_DIR}/vendors/generateSecret.sh&#10;">
-               <EnvironmentBuildable>
-                  <BuildableReference
-                     BuildableIdentifier = "primary"
-                     BlueprintIdentifier = "1AB7FD7B16B578740040BBCE"
-                     BuildableName = "Mail Notifier.app"
-                     BlueprintName = "MailNotifier"
-                     ReferencedContainer = "container:MailNotifier.xcodeproj">
-                  </BuildableReference>
-               </EnvironmentBuildable>
-            </ActionContent>
-         </ExecutionAction>
-      </PreActions>
+      buildImplicitDependencies = "YES"
+      runPostActionsOnFailure = "NO">
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
@@ -32,8 +15,8 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1AB7FD7B16B578740040BBCE"
-               BuildableName = "Mail Notifier.app"
+               BlueprintIdentifier = "706F45B061F0707756CE93D7"
+               BuildableName = "MailNotifier.app"
                BlueprintName = "MailNotifier"
                ReferencedContainer = "container:MailNotifier.xcodeproj">
             </BuildableReference>
@@ -44,9 +27,21 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      onlyGenerateCoverageForSpecifiedTargets = "NO">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "706F45B061F0707756CE93D7"
+            BuildableName = "MailNotifier.app"
+            BlueprintName = "MailNotifier"
+            ReferencedContainer = "container:MailNotifier.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <Testables>
       </Testables>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -62,15 +57,14 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1AB7FD7B16B578740040BBCE"
-            BuildableName = "Mail Notifier.app"
+            BlueprintIdentifier = "706F45B061F0707756CE93D7"
+            BuildableName = "MailNotifier.app"
             BlueprintName = "MailNotifier"
             ReferencedContainer = "container:MailNotifier.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <StoreKitConfigurationFileReference
-         identifier = "../../Configuration.storekit">
-      </StoreKitConfigurationFileReference>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -82,12 +76,14 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1AB7FD7B16B578740040BBCE"
-            BuildableName = "Mail Notifier.app"
+            BlueprintIdentifier = "706F45B061F0707756CE93D7"
+            BuildableName = "MailNotifier.app"
             BlueprintName = "MailNotifier"
             ReferencedContainer = "container:MailNotifier.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

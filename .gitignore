@@ -2,6 +2,7 @@
 *.mov
 dsa_priv.pem
 build
+DerivedData
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -17,7 +18,14 @@ profile
 *.moved-aside
 Pods
 *.xccheckout
+
 # Secrets
 Secrets.xcconfig
 .env
 vendors/gyb.pyc
+
+# Release artifacts (dist/appcast.xml is the canonical record and is kept)
+dist/*.dmg
+dist/*.sparkle.txt
+dist/*.xcarchive/
+dist/export-*/

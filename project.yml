@@ -1,0 +1,88 @@
+name: MailNotifier
+options:
+  bundleIdPrefix: com.strategicnerds
+  deploymentTarget:
+    macOS: "14.0"
+  xcodeVersion: "15.0"
+  createIntermediateGroups: true
+
+configFiles:
+  Debug: Secrets.xcconfig
+  Release: Secrets.xcconfig
+
+packages:
+  GoogleAPIClientForREST:
+    url: https://github.com/google/google-api-objectivec-client-for-rest
+    from: "2.0.0"
+  GTMAppAuth:
+    url: https://github.com/google/GTMAppAuth
+    from: "1.0.0"
+  AppAuth:
+    url: https://github.com/openid/AppAuth-iOS
+    from: "1.4.0"
+  KeyboardShortcuts:
+    url: https://github.com/sindresorhus/KeyboardShortcuts
+    from: "1.0.0"
+  KeychainAccess:
+    url: https://github.com/kishikawakatsumi/KeychainAccess
+    from: "4.0.0"
+  Sparkle:
+    url: https://github.com/sparkle-project/Sparkle
+    from: "2.6.0"
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    ENABLE_HARDENED_RUNTIME: YES
+    ENABLE_APP_SANDBOX: NO
+    CODE_SIGN_STYLE: Automatic
+    DEVELOPMENT_TEAM: 955GSY56UT
+
+targets:
+  MailNotifier:
+    type: application
+    platform: macOS
+    scheme:
+      testTargets: []
+      gatherCoverageData: false
+    sources:
+      - path: Source
+        excludes:
+          - "**/*.gyb"
+      - path: Images.xcassets
+      - path: Resources
+    dependencies:
+      - package: GoogleAPIClientForREST
+        product: GoogleAPIClientForREST_Gmail
+      - package: GTMAppAuth
+      - package: AppAuth
+      - package: KeyboardShortcuts
+      - package: KeychainAccess
+      - package: Sparkle
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.strategicnerds.MailNotifierApp
+        PRODUCT_NAME: "Mail Notifier"
+        MARKETING_VERSION: "3.1.0"
+        CURRENT_PROJECT_VERSION: "2"
+        INFOPLIST_FILE: Info.plist
+        CODE_SIGN_ENTITLEMENTS: MailNotifier.entitlements
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        LS_MINIMUM_SYSTEM_VERSION: "14.0"
+        COMBINE_HIDPI_IMAGES: YES
+    preBuildScripts:
+      - name: Generate OAuth secrets
+        script: |
+          set -e
+          if [ -e "${PROJECT_DIR}/.env" ]; then
+            # shellcheck disable=SC1091
+            source "${PROJECT_DIR}/.env"
+          fi
+          find "${PROJECT_DIR}/Source" -name '*.gyb' | while read -r file; do
+            if [ ! -f "${file%.gyb}" ]; then
+              echo "Generating ${file%.gyb}"
+              "${PROJECT_DIR}/vendors/gyb" --line-directive '' -o "${file%.gyb}" "$file"
+            fi
+          done
+        basedOnDependencyAnalysis: false
