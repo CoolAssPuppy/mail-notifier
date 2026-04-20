@@ -6,6 +6,24 @@
     <description>Mail Notifier updates</description>
     <language>en</language>
     <item>
+      <title>Version 3.1.2</title>
+      <pubDate>Mon, 20 Apr 2026 18:49:52 +0000</pubDate>
+      <sparkle:version>5</sparkle:version>
+      <sparkle:shortVersionString>3.1.2</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[
+        <ul>
+          <li>No more dock icon flashing when the Settings window opens. Stays menu-bar-only at all times.</li><li>About section now shows the version number instead of the internal build number.</li>
+        </ul>
+      ]]></description>
+      <enclosure
+        url="https://hlwjnusdotqtmtwrjidu.supabase.co/storage/v1/object/public/downloads/MailNotifier-3.1.2.dmg"
+        sparkle:edSignature="5mck9m3H258Rt0zqzxbQwouuB5nkFogfAdUL8X5UYYlN08Pp3ijB0ypEV0hvmYzd7fOwAVFfh/cgRNBXXZczCQ=="
+        length="6070024"
+        type="application/x-apple-diskimage" />
+    </item>
+
+    <item>
       <title>Version 3.1.1</title>
       <pubDate>Mon, 20 Apr 2026 18:34:24 +0000</pubDate>
       <sparkle:version>4</sparkle:version>
