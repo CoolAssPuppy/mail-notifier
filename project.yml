@@ -52,6 +52,10 @@ targets:
           - "**/*.gyb"
       - path: Images.xcassets
       - path: Resources
+        excludes:
+          - Sounds
+      - path: Resources/Sounds
+        type: folder
     dependencies:
       - package: GoogleAPIClientForREST
         product: GoogleAPIClientForREST_Gmail
