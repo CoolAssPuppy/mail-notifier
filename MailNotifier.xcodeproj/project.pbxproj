@@ -25,6 +25,7 @@
 		4A630E6B3CAAE8B20B195149 /* OAuthSecret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4D994A8D656FC5C5EA4D49 /* OAuthSecret.swift */; };
 		519533A448D4CD1CD27F1468 /* OutlookOAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B2763164C0B8D569025080 /* OutlookOAuthClient.swift */; };
 		545AB158AF5447C4E5E4E391 /* AppDelegate+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB460ED3BAD3CC445B93C9FE /* AppDelegate+Menu.swift */; };
+		5AD770B9E27FF1225B05E35F /* MenuBarPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2468E8CBA3EBBB4B7D0EF7 /* MenuBarPopover.swift */; };
 		6F19E5430EB52E328D689CD3 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46E588E11C2BE3E1F023F9C /* Sound.swift */; };
 		7F602BF6F21F9E50A543133D /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA368017C433781193033E36 /* Sidebar.swift */; };
 		83430705CAA40BA25BC92102 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7154321B3CBE9093B1A9A994 /* MainView.swift */; };
@@ -58,6 +59,7 @@
 		11DC26A3E47DDBFAA0FC8DFF /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		179B4B52740A6D538321EB41 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		18F3A9C26F687C1CC69C150A /* OutlookProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlookProvider.swift; sourceTree = "<group>"; };
+		1A2468E8CBA3EBBB4B7D0EF7 /* MenuBarPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarPopover.swift; sourceTree = "<group>"; };
 		1AD05293C4B42F6617F15238 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		2E228875B97655097EB026AF /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		2EDE02622D66D28B58223F26 /* SharedComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedComponents.swift; sourceTree = "<group>"; };
@@ -110,7 +112,7 @@
 		EEA9F3DE9853CF06BBDD72BF /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F7DF9E463FD10F104229B4C9 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FB460ED3BAD3CC445B93C9FE /* AppDelegate+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Menu.swift"; sourceTree = "<group>"; };
-		"TEMP_75ED45E9-1D4A-4287-8249-A0AD39A92A06" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		"TEMP_E77CCA12-95ED-43D0-A202-2DC86B8D906A" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +150,7 @@
 			children = (
 				9BCBA8FC5DECF4BFBACBCD42 /* AccountView.swift */,
 				7154321B3CBE9093B1A9A994 /* MainView.swift */,
+				1A2468E8CBA3EBBB4B7D0EF7 /* MenuBarPopover.swift */,
 				07F726C271625BE814AAF2A8 /* SettingsView.swift */,
 				AA368017C433781193033E36 /* Sidebar.swift */,
 				85734040168C129FCDDAE13D /* WelcomeView.swift */,
@@ -261,10 +264,10 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		"TEMP_4C0E7BE3-B98D-4409-98B6-88CE911899C7" /* mail-notifier */ = {
+		"TEMP_8B9C63E6-35D7-4504-B424-DF5F52A6FCBD" /* mail-notifier */ = {
 			isa = PBXGroup;
 			children = (
-				"TEMP_75ED45E9-1D4A-4287-8249-A0AD39A92A06" /* Secrets.xcconfig */,
+				"TEMP_E77CCA12-95ED-43D0-A202-2DC86B8D906A" /* Secrets.xcconfig */,
 			);
 			path = "mail-notifier";
 			sourceTree = "<group>";
@@ -419,6 +422,7 @@
 				8B5B4FF0B74D99E74566FE22 /* MailNotifierApp.swift in Sources */,
 				F56EE74B3B07A645CB3EA85F /* MailProvider.swift in Sources */,
 				83430705CAA40BA25BC92102 /* MainView.swift in Sources */,
+				5AD770B9E27FF1225B05E35F /* MenuBarPopover.swift in Sources */,
 				9C44662469001F540F3DBC49 /* Message.swift in Sources */,
 				11AB8C1107B6B1710DBC6941 /* MessageFetcher.swift in Sources */,
 				38580E8A8BE7FBBE2988F900 /* NotificationNames.swift in Sources */,
@@ -510,7 +514,7 @@
 		};
 		229918186B40865D81363975 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_75ED45E9-1D4A-4287-8249-A0AD39A92A06" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_E77CCA12-95ED-43D0-A202-2DC86B8D906A" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -591,7 +595,7 @@
 		};
 		B4A4092827DAC2ECABE337D5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_75ED45E9-1D4A-4287-8249-A0AD39A92A06" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_E77CCA12-95ED-43D0-A202-2DC86B8D906A" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;

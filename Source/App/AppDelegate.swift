@@ -20,9 +20,12 @@ extension KeyboardShortcuts.Name {
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: NSStatusItem?
-    private var menu: NSMenu?
+    private var rightClickMenu: NSMenu?
+    private var popover: NSPopover?
+    private var popoverEventMonitor: Any?
+    private lazy var popoverModel = MenuBarPopoverModel()
     private var subscriptions = Set<AnyCancellable>()
-    private let fetcherManager = FetcherManager.shared
+    let fetcherManager = FetcherManager.shared
     private let notificationService = NotificationService()
     private let updaterManager = UpdaterManager.shared
     private var preferencesWindow: NSWindow?
@@ -54,9 +57,11 @@ private extension AppDelegate {
         guard let button = statusItem?.button else { return }
         button.image = NSImage(named: "NoMailsTemplate")
         button.imagePosition = .imageLeft
+        button.target = self
+        button.action = #selector(statusItemClicked(_:))
+        button.sendAction(on: [.leftMouseUp, .rightMouseUp])
 
-        menu = createMenu()
-        statusItem?.menu = menu
+        rightClickMenu = createRightClickMenu()
     }
 
     func setupURLHandler() {
@@ -156,7 +161,7 @@ private extension AppDelegate {
             .sink { [weak self] notification in
                 guard let self else { return }
                 let email = notification.object as? String ?? ""
-                if let menu { updateMenu(menu) }
+                self.updateMenuBar()
                 notificationService.handleMessagesFetched(email: email, fetcherManager: fetcherManager)
             }
             .store(in: &subscriptions)
@@ -182,8 +187,7 @@ private extension AppDelegate {
 
 private extension AppDelegate {
     func updateMenuBar() {
-        guard let menu else { return }
-        updateMenu(menu)
+        popoverModel.refresh()
         updateStatusItem()
     }
 
@@ -206,6 +210,108 @@ private extension AppDelegate {
         }
 
         button.appearsDisabled = Accounts.default.enabled.isEmpty
+    }
+}
+
+// MARK: - Status Item Click Handling
+
+extension AppDelegate {
+    @objc func statusItemClicked(_ sender: Any?) {
+        let event = NSApp.currentEvent
+        let isRightClick = event?.type == .rightMouseUp
+            || (event?.modifierFlags.contains(.control) ?? false)
+
+        if isRightClick {
+            showRightClickMenu()
+        } else {
+            togglePopover()
+        }
+    }
+
+    private func showRightClickMenu() {
+        guard let statusItem, let menu = rightClickMenu else { return }
+        statusItem.menu = menu
+        statusItem.button?.performClick(nil)
+        // Detach so the next left-click still triggers our action.
+        DispatchQueue.main.async { [weak statusItem] in
+            statusItem?.menu = nil
+        }
+    }
+}
+
+// MARK: - Popover
+
+extension AppDelegate: NSPopoverDelegate {
+    private func togglePopover() {
+        guard let button = statusItem?.button else { return }
+
+        if let popover, popover.isShown {
+            popover.performClose(nil)
+            return
+        }
+
+        let popover = self.popover ?? buildPopover()
+        self.popover = popover
+
+        popoverModel.refresh()
+
+        NSApp.activate(ignoringOtherApps: true)
+        popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
+
+        // Dismiss when the user clicks outside the popover.
+        popoverEventMonitor = NSEvent.addGlobalMonitorForEvents(
+            matching: [.leftMouseDown, .rightMouseDown]
+        ) { [weak self] _ in
+            self?.popover?.performClose(nil)
+        }
+    }
+
+    private func buildPopover() -> NSPopover {
+        let popover = NSPopover()
+        popover.behavior = .transient
+        popover.animates = true
+        popover.delegate = self
+
+        let actions = MenuBarPopoverActions(
+            openMessage: { [weak self] message in
+                self?.popover?.performClose(nil)
+                self?.openMessage(messageId: message.id, email: message.email)
+            },
+            openInbox: { [weak self] account in
+                self?.popover?.performClose(nil)
+                self?.openURL(url: account.baseURL, in: account.browser)
+            },
+            reauthorize: { [weak self] account in
+                self?.popover?.performClose(nil)
+                self?.showPreferences()
+                Accounts.authorize(type: account.type)
+            },
+            checkAll: { [weak self] in
+                self?.checkAllMails()
+            },
+            openWindow: { [weak self] in
+                self?.popover?.performClose(nil)
+                self?.showPreferences()
+            },
+            openSettings: { [weak self] in
+                self?.popover?.performClose(nil)
+                self?.showPreferences()
+            },
+            quit: {
+                NSApp.terminate(nil)
+            }
+        )
+
+        let view = MenuBarPopover(model: popoverModel, actions: actions)
+        popover.contentViewController = NSHostingController(rootView: view)
+        return popover
+    }
+
+    func popoverDidClose(_ notification: Notification) {
+        if let monitor = popoverEventMonitor {
+            NSEvent.removeMonitor(monitor)
+            popoverEventMonitor = nil
+        }
     }
 }
 
