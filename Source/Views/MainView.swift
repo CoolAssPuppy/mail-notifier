@@ -2,7 +2,9 @@
 //  MainView.swift
 //  Mail Notifier
 //
-
+//  Root layout for the main window. Hosts the sidebar + content split and
+//  overlays the settings drawer when invoked.
+//
 //  Copyright (c) 2025 Strategic Nerds. All rights reserved.
 //
 
@@ -11,99 +13,103 @@ import SwiftUI
 struct MainView: View {
     @AppStorage(Accounts.storageKey) var accounts = Accounts()
     @Binding var selection: String?
-    @State private var columnVisibility: NavigationSplitViewVisibility = .all
+    @State private var isSettingsOpen = false
 
     var body: some View {
-        NavigationSplitView(columnVisibility: $columnVisibility) {
-            Sidebar(accounts: accounts, selection: $selection)
-                .navigationSplitViewColumnWidth(min: 220, ideal: 220, max: 280)
-        } detail: {
-            if let selection {
-                detailView(for: selection)
-                    // Tie detail view identity to the current selection so
-                    // SwiftUI recreates AccountView (and resets its @State
-                    // `account`) when the user clicks a different account
-                    // in the sidebar instead of reusing the old instance.
-                    .id(selection)
-            } else {
-                WelcomeView()
+        ZStack(alignment: .top) {
+            HStack(spacing: 0) {
+                Sidebar(
+                    accounts: accounts,
+                    selection: $selection,
+                    totalUnread: FetcherManager.shared.totalUnreadCount
+                )
+                .frame(width: 260)
+
+                content
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            .background(Color.appBackground)
+
+            SettingsDrawer(isPresented: $isSettingsOpen)
+        }
+        .frame(minWidth: 880, minHeight: 580)
+        .background(WindowChrome())
+        .onReceive(NotificationCenter.default.publisher(for: .accountAdded)) { notification in
+            if let account = notification.object as? Account {
+                selection = account.email
             }
         }
-        .navigationSplitViewStyle(.balanced)
-        .toolbar(.hidden, for: .windowToolbar)
-        .toolbar(removing: .sidebarToggle)
-        .onChange(of: columnVisibility) { _, newValue in
-            // Force sidebar to always be visible
-            if newValue != .all {
-                columnVisibility = .all
-            }
+        .onReceive(NotificationCenter.default.publisher(for: .openSettingsDrawer)) { _ in
+            isSettingsOpen = true
         }
-        .background(WindowAccessor())
-        .frame(minWidth: 600, maxWidth: .infinity, minHeight: 300, maxHeight: .infinity)
-        .onReceive(NotificationCenter.default.publisher(for: .accountAdded)) {
-            notification in
-            if let newAccount = notification.object as? Account {
-                selection = newAccount.email
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button(action: { isSettingsOpen.toggle() }) {
+                    Image(systemName: "gearshape")
+                }
+                .keyboardShortcut(",", modifiers: .command)
+                .help("Settings (⌘,)")
             }
         }
     }
 
     @ViewBuilder
-    private func detailView(for selection: String) -> some View {
-        if selection == "preferences" {
-            SettingsView()
-        } else if selection == "welcome" {
+    private var content: some View {
+        if accounts.isEmpty || selection == "welcome" {
             WelcomeView()
-        } else if let account = accounts.first(where: { $0.email == selection }) {
+        } else if let email = selection,
+                  let account = accounts.first(where: { $0.email == email }) {
             AccountView(account: account)
+                .id(account.email)
+        } else if let firstAccount = accounts.first {
+            AccountView(account: firstAccount)
+                .id(firstAccount.email)
+                .onAppear {
+                    selection = firstAccount.email
+                }
         } else {
             WelcomeView()
         }
     }
 }
 
-// MARK: - Window Accessor
+extension Notification.Name {
+    /// Posted when the user (or AppDelegate) wants to surface the Settings drawer.
+    static let openSettingsDrawer = Notification.Name("openSettingsDrawer")
+}
 
-private struct WindowAccessor: NSViewRepresentable {
-    func makeNSView(context: Context) -> ToolbarRemovingView {
-        ToolbarRemovingView()
+// MARK: - Window chrome configuration
+
+private struct WindowChrome: NSViewRepresentable {
+    func makeNSView(context: Context) -> NSView {
+        let view = ChromeView()
+        return view
     }
 
-    func updateNSView(_ nsView: ToolbarRemovingView, context: Context) {
-        nsView.removeToolbar()
+    func updateNSView(_ nsView: NSView, context: Context) {
+        (nsView as? ChromeView)?.applyChrome()
     }
 }
 
-private class ToolbarRemovingView: NSView {
-    private var observation: NSKeyValueObservation?
-
+private final class ChromeView: NSView {
     override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
-        setupObservation()
-        removeToolbar()
+        applyChrome()
     }
 
-    private func setupObservation() {
-        observation?.invalidate()
-        guard let window = window else { return }
-
-        // Observe toolbar changes and remove immediately
-        observation = window.observe(\.toolbar, options: [.new]) { [weak self] window, _ in
-            DispatchQueue.main.async {
-                self?.removeToolbar()
-            }
-        }
-    }
-
-    func removeToolbar() {
-        window?.toolbar = nil
-    }
-
-    deinit {
-        observation?.invalidate()
+    func applyChrome() {
+        guard let window else { return }
+        window.titlebarAppearsTransparent = true
+        window.titleVisibility = .hidden
+        window.styleMask.insert(.fullSizeContentView)
+        window.toolbar = nil
+        window.appearance = NSAppearance(named: .darkAqua)
+        window.backgroundColor = NSColor.black
+        window.isMovableByWindowBackground = true
     }
 }
 
 #Preview {
-    MainView(selection: .constant(""))
+    MainView(selection: .constant(nil))
+        .frame(width: 1080, height: 720)
 }

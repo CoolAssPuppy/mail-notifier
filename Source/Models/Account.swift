@@ -51,6 +51,16 @@ extension Account: Identifiable, Hashable {
     var sound: Sound? {
         Sound(rawValue: notificationSound)
     }
+
+    /// User-chosen label ("Work", "Supabase"). `nil` when unset.
+    var friendlyName: String? {
+        FriendlyNameStore.name(for: email)
+    }
+
+    /// Friendly name when set, otherwise the raw email.
+    var displayName: String {
+        friendlyName ?? email
+    }
 }
 
 private extension CharacterSet {

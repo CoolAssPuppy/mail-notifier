@@ -34,6 +34,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.setActivationPolicy(.accessory)
 
         notificationService.delegate = self
+        FriendlyNameStore.start()
         registerShortcuts()
         subscribeToNotifications()
         setupStatusItem()
@@ -180,6 +181,13 @@ private extension AppDelegate {
                 self?.showPreferences()
             }
             .store(in: &subscriptions)
+
+        NotificationCenter.default
+            .publisher(for: .friendlyNamesChanged)
+            .sink { [weak self] _ in
+                self?.updateMenuBar()
+            }
+            .store(in: &subscriptions)
     }
 }
 
@@ -295,7 +303,7 @@ extension AppDelegate: NSPopoverDelegate {
             },
             openSettings: { [weak self] in
                 self?.popover?.performClose(nil)
-                self?.showPreferences()
+                self?.showSettingsDrawer()
             },
             quit: {
                 NSApp.terminate(nil)
@@ -418,9 +426,9 @@ extension AppDelegate {
     }
 
     @objc func showPreferences() {
-        // Stay .accessory — we never want a dock icon, even while the
-        // Settings window is open. .accessory apps can still own standard
-        // windows; makeKeyAndOrderFront + activate is enough to focus them.
+        // Stay .accessory — we never want a dock icon, even while the main
+        // window is open. .accessory apps can still own standard windows;
+        // makeKeyAndOrderFront + activate is enough to focus them.
         Task { @MainActor in
             NSApp.activate(ignoringOtherApps: true)
 
@@ -430,20 +438,33 @@ extension AppDelegate {
             }
 
             let window = NSWindow(
-                contentRect: NSRect(x: 0, y: 0, width: 700, height: 500),
-                styleMask: [.titled, .closable, .miniaturizable, .resizable],
+                contentRect: NSRect(x: 0, y: 0, width: 1040, height: 680),
+                styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
                 backing: .buffered,
                 defer: false
             )
             window.contentView = NSHostingView(rootView: MainViewWrapper())
             window.title = "Mail Notifier"
             window.toolbar = nil
+            window.titlebarAppearsTransparent = true
+            window.titleVisibility = .hidden
+            window.appearance = NSAppearance(named: .darkAqua)
+            window.backgroundColor = NSColor.black
             window.isReleasedWhenClosed = false
             window.center()
             window.makeKeyAndOrderFront(nil)
             window.delegate = self
 
             preferencesWindow = window
+        }
+    }
+
+    @objc func showSettingsDrawer() {
+        showPreferences()
+        Task { @MainActor in
+            // Wait one runloop tick so the window exists and MainView is mounted.
+            try? await Task.sleep(nanoseconds: 50_000_000)
+            NotificationCenter.default.post(name: .openSettingsDrawer, object: nil)
         }
     }
 }

@@ -2,5 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<!--
+	To enable cross-machine sync for friendly account names, add the iCloud
+	Key-Value Storage capability in Apple Developer Portal for this bundle
+	identifier and re-enable the entitlement below. FriendlyNameStore will
+	continue to work locally without it.
+
+	<key>com.apple.developer.ubiquity-kvstore-identifier</key>
+	<string>$(TeamIdentifierPrefix)$(CFBundleIdentifier)</string>
+	-->
 </dict>
 </plist>

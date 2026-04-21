@@ -8,25 +8,6 @@
 import SwiftUI
 import Combine
 
-// MARK: - Color Tokens
-
-private extension Color {
-    static let popBackground   = Color(red: 0x0E/255, green: 0x11/255, blue: 0x17/255)
-    static let popHeaderBg     = Color(red: 0x10/255, green: 0x13/255, blue: 0x1A/255)
-    static let popCard         = Color(red: 0x13/255, green: 0x17/255, blue: 0x1F/255)
-    static let popCardElevated = Color(red: 0x1A/255, green: 0x1F/255, blue: 0x29/255)
-    static let popBorder       = Color(red: 0x1F/255, green: 0x24/255, blue: 0x2E/255)
-    static let popBorderStrong = Color(red: 0x26/255, green: 0x2C/255, blue: 0x38/255)
-    static let popDivider      = Color(red: 0x1D/255, green: 0x21/255, blue: 0x29/255)
-    static let popForeground   = Color(red: 0xEC/255, green: 0xEF/255, blue: 0xF4/255)
-    static let popMuted        = Color(red: 0x8A/255, green: 0x8F/255, blue: 0x9A/255)
-    static let popTertiary     = Color(red: 0x6B/255, green: 0x70/255, blue: 0x80/255)
-    static let popPrimary      = Color(red: 0x4F/255, green: 0x8A/255, blue: 0xFF/255)
-    static let popSuccess      = Color(red: 0x34/255, green: 0xD3/255, blue: 0x99/255)
-    static let popWarning      = Color(red: 0xFB/255, green: 0xBF/255, blue: 0x24/255)
-    static let popDestructive  = Color(red: 0xF8/255, green: 0x71/255, blue: 0x71/255)
-}
-
 // MARK: - View Model
 
 final class MenuBarPopoverModel: ObservableObject {
@@ -117,13 +98,13 @@ struct MenuBarPopover: View {
     var body: some View {
         VStack(spacing: 0) {
             HeaderBar(totalUnread: model.totalUnread, accountCount: model.accountStates.count)
-            Divider().background(Color.popDivider)
+            Divider().background(Color.appDivider)
             content
-            Divider().background(Color.popDivider)
+            Divider().background(Color.appDivider)
             BottomBar(actions: actions)
         }
         .frame(width: 380)
-        .background(Color.popBackground)
+        .background(Color.appBackground)
     }
 
     @ViewBuilder
@@ -165,15 +146,15 @@ private struct HeaderBar: View {
             VStack(alignment: .leading, spacing: 1) {
                 Text("Mail Notifier")
                     .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(Color.popForeground)
+                    .foregroundStyle(Color.appForeground)
                 HStack(spacing: 6) {
                     Circle()
-                        .fill(Color.popSuccess)
+                        .fill(Color.appSuccess)
                         .frame(width: 6, height: 6)
-                        .shadow(color: Color.popSuccess.opacity(0.5), radius: 4)
+                        .shadow(color: Color.appSuccess.opacity(0.5), radius: 4)
                     Text(statusLine)
                         .font(.system(size: 10))
-                        .foregroundStyle(Color.popMuted)
+                        .foregroundStyle(Color.appMuted)
                 }
             }
 
@@ -185,7 +166,7 @@ private struct HeaderBar: View {
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
-        .background(Color.popHeaderBg)
+        .background(Color.appSurface)
     }
 
     private var statusLine: String {
@@ -224,19 +205,19 @@ private struct UnreadPill: View {
         HStack(spacing: 5) {
             Image(systemName: "tray.fill")
                 .font(.system(size: 8, weight: .semibold))
-                .foregroundStyle(Color.popWarning)
+                .foregroundStyle(Color.appWarning)
             Text("\(count) unread")
                 .font(.system(size: 10, weight: .semibold))
-                .foregroundStyle(Color.popWarning)
+                .foregroundStyle(Color.appWarning)
                 .monospacedDigit()
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
         .background(
-            Capsule().fill(Color.popWarning.opacity(0.12))
+            Capsule().fill(Color.appWarning.opacity(0.12))
         )
         .overlay(
-            Capsule().strokeBorder(Color.popWarning.opacity(0.3), lineWidth: 1)
+            Capsule().strokeBorder(Color.appWarning.opacity(0.3), lineWidth: 1)
         )
     }
 }
@@ -251,12 +232,12 @@ private struct AccountsListLabel: View {
             Text("ACCOUNTS")
                 .font(.system(size: 10, weight: .semibold))
                 .tracking(0.6)
-                .foregroundStyle(Color.popTertiary)
+                .foregroundStyle(Color.appTertiary)
             Spacer()
             if let timestamp = lastCheckedAt {
                 Text("Last checked \(timestamp, formatter: Self.timeFormatter)")
                     .font(.system(size: 10))
-                    .foregroundStyle(Color.popTertiary)
+                    .foregroundStyle(Color.appTertiary)
                     .monospacedDigit()
             }
         }
@@ -292,14 +273,14 @@ private struct AccountCard: View {
             headerRow
 
             if isExpanded && canExpand {
-                Divider().background(Color.popBorder)
+                Divider().background(Color.appBorder)
                 messagesList
                     .transition(.opacity.combined(with: .move(edge: .top)))
             }
         }
         .background(
             RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(Color.popCard)
+                .fill(Color.appCard)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 10, style: .continuous)
@@ -311,11 +292,11 @@ private struct AccountCard: View {
 
     private var borderColor: Color {
         if state.hasAuthError {
-            return Color.popDestructive.opacity(0.25)
+            return Color.appDestructive.opacity(0.25)
         } else if isExpanded {
             return Color(red: 0x2D/255, green: 0x39/255, blue: 0x56/255)
         } else {
-            return Color.popBorder
+            return Color.appBorder
         }
     }
 
@@ -325,9 +306,9 @@ private struct AccountCard: View {
                 ProviderBadge(type: state.account.type, dimmed: state.hasAuthError)
 
                 VStack(alignment: .leading, spacing: 1) {
-                    Text(state.account.email)
+                    Text(state.account.displayName)
                         .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(Color.popForeground)
+                        .foregroundStyle(Color.appForeground)
                         .lineLimit(1)
                         .truncationMode(.middle)
 
@@ -355,25 +336,31 @@ private struct AccountCard: View {
             HStack(spacing: 5) {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .font(.system(size: 9))
-                    .foregroundStyle(Color.popDestructive)
+                    .foregroundStyle(Color.appDestructive)
                 Text("Authorization expired")
                     .font(.system(size: 10, weight: .medium))
-                    .foregroundStyle(Color.popDestructive)
+                    .foregroundStyle(Color.appDestructive)
             }
         } else {
             Text(secondaryLine)
                 .font(.system(size: 10))
-                .foregroundStyle(Color.popMuted)
+                .foregroundStyle(Color.appMuted)
                 .lineLimit(1)
+                .truncationMode(.middle)
         }
     }
 
     private var secondaryLine: String {
-        let typeLabel = state.account.type == .gmail ? "Gmail" : "Outlook"
+        let hasFriendlyName = state.account.friendlyName != nil
+        let base = hasFriendlyName ? state.account.email : providerLabel
         if let timestamp = state.lastCheckedAt {
-            return "\(typeLabel) · checked \(Self.timeFormatter.string(from: timestamp))"
+            return "\(base) · checked \(Self.timeFormatter.string(from: timestamp))"
         }
-        return typeLabel
+        return base
+    }
+
+    private var providerLabel: String {
+        state.account.type == .gmail ? "Gmail" : "Outlook"
     }
 
     @ViewBuilder
@@ -382,14 +369,14 @@ private struct AccountCard: View {
             Button(action: onReauthorize) {
                 Text("Reauthorize")
                     .font(.system(size: 10, weight: .semibold))
-                    .foregroundStyle(Color.popDestructive)
+                    .foregroundStyle(Color.appDestructive)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 4)
                     .background(
-                        Capsule().fill(Color.popDestructive.opacity(0.12))
+                        Capsule().fill(Color.appDestructive.opacity(0.12))
                     )
                     .overlay(
-                        Capsule().strokeBorder(Color.popDestructive.opacity(0.4), lineWidth: 1)
+                        Capsule().strokeBorder(Color.appDestructive.opacity(0.4), lineWidth: 1)
                     )
             }
             .buttonStyle(.plain)
@@ -398,22 +385,22 @@ private struct AccountCard: View {
                 if state.unreadCount > 0 {
                     Text("\(state.unreadCount) new")
                         .font(.system(size: 10, weight: .semibold))
-                        .foregroundStyle(Color.popWarning)
+                        .foregroundStyle(Color.appWarning)
                         .monospacedDigit()
                         .padding(.horizontal, 8)
                         .padding(.vertical, 3)
                         .background(
-                            Capsule().fill(Color.popWarning.opacity(0.12))
+                            Capsule().fill(Color.appWarning.opacity(0.12))
                         )
                         .overlay(
-                            Capsule().strokeBorder(Color.popWarning.opacity(0.3), lineWidth: 1)
+                            Capsule().strokeBorder(Color.appWarning.opacity(0.3), lineWidth: 1)
                         )
                 }
 
                 if canExpand {
                     Image(systemName: "chevron.right")
                         .font(.system(size: 9, weight: .semibold))
-                        .foregroundStyle(Color.popTertiary)
+                        .foregroundStyle(Color.appTertiary)
                         .rotationEffect(.degrees(isExpanded ? 90 : 0))
                         .animation(.easeOut(duration: 0.18), value: isExpanded)
                 }
@@ -424,7 +411,7 @@ private struct AccountCard: View {
     @ViewBuilder
     private var headerBackground: some View {
         if isExpanded && canExpand {
-            Color.popPrimary.opacity(0.06)
+            Color.appPrimary.opacity(0.06)
         } else if isHovered {
             Color.white.opacity(0.02)
         } else {
@@ -466,34 +453,30 @@ private struct AccountCard: View {
 
 // MARK: - Provider Badge
 
-private struct ProviderBadge: View {
+struct ProviderBadge: View {
     let type: AccountType
-    let dimmed: Bool
+    var size: CGFloat = 24
+    var dimmed: Bool = false
 
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 5, style: .continuous)
-                .fill(Color.popCardElevated)
+                .fill(Color.appCardElevated)
             RoundedRectangle(cornerRadius: 5, style: .continuous)
-                .strokeBorder(Color.popBorderStrong, lineWidth: 1)
-            Text(letter)
-                .font(.system(size: 11, weight: .black, design: .rounded))
-                .foregroundStyle(letterColor.opacity(dimmed ? 0.4 : 1))
+                .strokeBorder(Color.appBorderStrong, lineWidth: 1)
+            Image(assetName)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: size * 0.6, height: size * 0.6)
+                .opacity(dimmed ? 0.45 : 1)
         }
-        .frame(width: 24, height: 24)
+        .frame(width: size, height: size)
     }
 
-    private var letter: String {
+    private var assetName: String {
         switch type {
-        case .gmail: return "M"
-        case .outlook: return "O"
-        }
-    }
-
-    private var letterColor: Color {
-        switch type {
-        case .gmail: return Color(red: 0xEA/255, green: 0x43/255, blue: 0x35/255)
-        case .outlook: return Color(red: 0x00/255, green: 0x78/255, blue: 0xD4/255)
+        case .gmail: return "Gmail"
+        case .outlook: return "Outlook"
         }
     }
 }
@@ -513,21 +496,21 @@ private struct MessageRow: View {
                     if isVIP {
                         Image(systemName: "star.fill")
                             .font(.system(size: 8))
-                            .foregroundStyle(Color.popWarning)
+                            .foregroundStyle(Color.appWarning)
                     }
                     Text(message.sender)
                         .font(.system(size: 11, weight: .semibold))
-                        .foregroundStyle(Color.popForeground)
+                        .foregroundStyle(Color.appForeground)
                         .lineLimit(1)
                     Spacer(minLength: 6)
                     Text(timeString)
                         .font(.system(size: 9))
-                        .foregroundStyle(Color.popTertiary)
+                        .foregroundStyle(Color.appTertiary)
                         .monospacedDigit()
                 }
                 Text(snippetLine)
                     .font(.system(size: 10))
-                    .foregroundStyle(Color.popMuted)
+                    .foregroundStyle(Color.appMuted)
                     .lineLimit(1)
                     .truncationMode(.tail)
             }
@@ -536,7 +519,7 @@ private struct MessageRow: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(
                 RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .fill(isHovered ? Color.popPrimary.opacity(0.08) : Color.clear)
+                    .fill(isHovered ? Color.appPrimary.opacity(0.08) : Color.clear)
             )
             .contentShape(Rectangle())
         }
@@ -601,24 +584,24 @@ private struct EmptyAccountsState: View {
         VStack(spacing: 12) {
             ZStack {
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(Color.popCard)
+                    .fill(Color.appCard)
                 Image(systemName: "envelope")
                     .font(.system(size: 22, weight: .light))
-                    .foregroundStyle(Color.popMuted)
+                    .foregroundStyle(Color.appMuted)
             }
             .frame(width: 56, height: 56)
             .overlay(
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .strokeBorder(Color.popBorder, lineWidth: 1)
+                    .strokeBorder(Color.appBorder, lineWidth: 1)
             )
 
             VStack(spacing: 4) {
                 Text("No accounts yet")
                     .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(Color.popForeground)
+                    .foregroundStyle(Color.appForeground)
                 Text("Add a Gmail or Outlook inbox to start watching your mail.")
                     .font(.system(size: 11))
-                    .foregroundStyle(Color.popMuted)
+                    .foregroundStyle(Color.appMuted)
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: 240)
             }
@@ -630,14 +613,14 @@ private struct EmptyAccountsState: View {
                     Text("Add account")
                         .font(.system(size: 11, weight: .semibold))
                 }
-                .foregroundStyle(Color.popPrimary)
+                .foregroundStyle(Color.appPrimary)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
                 .background(
-                    Capsule().fill(Color.popPrimary.opacity(0.12))
+                    Capsule().fill(Color.appPrimary.opacity(0.12))
                 )
                 .overlay(
-                    Capsule().strokeBorder(Color.popPrimary.opacity(0.3), lineWidth: 1)
+                    Capsule().strokeBorder(Color.appPrimary.opacity(0.3), lineWidth: 1)
                 )
             }
             .buttonStyle(.plain)
@@ -663,7 +646,7 @@ private struct BottomBar: View {
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 9)
-        .background(Color.popHeaderBg)
+        .background(Color.appSurface)
     }
 }
 
@@ -682,13 +665,13 @@ private struct CheckNowIconButton: View {
         }) {
             Image(systemName: "arrow.triangle.2.circlepath")
                 .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(isHovered ? Color.popForeground : Color.popMuted)
+                .foregroundStyle(isHovered ? Color.appForeground : Color.appMuted)
                 .rotationEffect(.degrees(isSpinning ? 360 : 0))
                 .animation(isSpinning ? .easeInOut(duration: 0.6) : .default, value: isSpinning)
                 .frame(width: 28, height: 26)
                 .background(
                     RoundedRectangle(cornerRadius: 8, style: .continuous)
-                        .fill(isHovered ? Color.popCardElevated : Color.clear)
+                        .fill(isHovered ? Color.appCardElevated : Color.clear)
                 )
         }
         .buttonStyle(.plain)
@@ -707,11 +690,11 @@ private struct IconButton: View {
         Button(action: action) {
             Image(systemName: systemName)
                 .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(isHovered ? Color.popForeground : Color.popMuted)
+                .foregroundStyle(isHovered ? Color.appForeground : Color.appMuted)
                 .frame(width: 28, height: 26)
                 .background(
                     RoundedRectangle(cornerRadius: 8, style: .continuous)
-                        .fill(isHovered ? Color.popCardElevated : Color.clear)
+                        .fill(isHovered ? Color.appCardElevated : Color.clear)
                 )
         }
         .buttonStyle(.plain)

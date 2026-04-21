@@ -23,7 +23,7 @@ extension AppDelegate {
         menu.addItem(NSMenuItem.separator())
 
         menu.addItem(withTitle: NSLocalizedString("Settings…", comment: ""),
-                     action: #selector(showPreferences),
+                     action: #selector(showSettingsDrawer),
                      keyEquivalent: ",")
         menu.addItem(withTitle: NSLocalizedString("Check for Updates…", comment: ""),
                      action: #selector(checkForUpdates),
