@@ -1,3 +1,15 @@
+## 3.2.0 (Apr 21, 2026)
+
+* Complete UI redesign: menu bar popover with collapsed accounts, main window with sidebar + account detail, slide-down settings drawer
+* Ten selectable themes (System, Hoth, Risa, Weasley, Starbuck, Cylon, Vader, Kirk, Hermione, Nerds); System follows macOS light/dark live
+* Theme selector in the menu bar popover bottom bar — hover the active dot to expand, click to apply
+* Friendly account names (e.g. "Work", "Personal") that appear everywhere in place of the email; stored locally with graceful fallback when the iCloud KVS entitlement is enabled
+* Gmail and Outlook vector brand icons in the asset catalog
+* Account detail pane shows live status (Active / Auth expired / Disabled), last-checked time, and unread count in the header
+* Per-account settings condensed into three cards (Identity, Notifications, Behavior, Account Management)
+* Settings drawer slides down over the main window with Escape / ✕ dismissal; every original preference preserved
+* VIP list now inline in the drawer with per-sender sound preview
+
 ## 2.1.1 (Feb 3, 2022)
 * Fix default browser setting
 
