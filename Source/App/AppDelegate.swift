@@ -34,7 +34,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.setActivationPolicy(.accessory)
 
         notificationService.delegate = self
-        FriendlyNameStore.start()
+        FriendlyNameStore.shared.start()
         registerShortcuts()
         subscribeToNotifications()
         setupStatusItem()

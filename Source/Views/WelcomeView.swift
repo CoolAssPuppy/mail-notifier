@@ -2,7 +2,6 @@
 //  WelcomeView.swift
 //  Mail Notifier
 //
-//  First-run / empty-state screen. Offers OAuth flows for Gmail and Outlook.
 //  Copyright (c) 2025 Strategic Nerds. All rights reserved.
 //
 

@@ -2,10 +2,6 @@
 //  SettingsDrawer.swift
 //  Mail Notifier
 //
-//  Slide-down drawer overlay that hosts `SettingsView`. Drops in over the
-//  main window content, dims the underlying view, and dismisses on the X
-//  button or the Escape key.
-//
 //  Copyright (c) 2025 Strategic Nerds. All rights reserved.
 //
 
@@ -20,9 +16,7 @@ struct SettingsDrawer: View {
             if isPresented {
                 Color.black.opacity(0.55)
                     .ignoresSafeArea()
-                    .onTapGesture {
-                        close()
-                    }
+                    .onTapGesture { close() }
                     .transition(.opacity)
 
                 drawer
@@ -41,10 +35,8 @@ struct SettingsDrawer: View {
                 .fill(Color.appDivider)
                 .frame(height: 1)
 
-            ScrollView {
-                SettingsView()
-            }
-            .frame(maxHeight: contentHeight)
+            ScrollView { SettingsView() }
+                .frame(maxHeight: contentHeight)
 
             Rectangle()
                 .fill(Color.appDivider)
@@ -53,26 +45,17 @@ struct SettingsDrawer: View {
             footer
         }
         .background(Color.appSurface)
-        .overlay(
-            UnevenRoundedRectangle(
-                cornerRadii: .init(
-                    topLeading: 0, bottomLeading: 14,
-                    bottomTrailing: 14, topTrailing: 0
-                ),
-                style: .continuous
-            )
-            .strokeBorder(Color.appBorder, lineWidth: 1)
-        )
-        .clipShape(
-            UnevenRoundedRectangle(
-                cornerRadii: .init(
-                    topLeading: 0, bottomLeading: 14,
-                    bottomTrailing: 14, topTrailing: 0
-                ),
-                style: .continuous
-            )
-        )
+        .overlay(drawerShape.strokeBorder(Color.appBorder, lineWidth: 1))
+        .clipShape(drawerShape)
         .shadow(color: .black.opacity(0.45), radius: 18, y: 8)
+    }
+
+    private var drawerShape: UnevenRoundedRectangle {
+        UnevenRoundedRectangle(
+            cornerRadii: .init(topLeading: 0, bottomLeading: 14,
+                               bottomTrailing: 14, topTrailing: 0),
+            style: .continuous
+        )
     }
 
     private var header: some View {
@@ -93,12 +76,8 @@ struct SettingsDrawer: View {
                     .font(.system(size: 11, weight: .bold))
                     .foregroundStyle(Color.appForeground)
                     .frame(width: 28, height: 28)
-                    .background(
-                        Circle().fill(Color.appCard)
-                    )
-                    .overlay(
-                        Circle().strokeBorder(Color.appBorderStrong, lineWidth: 1)
-                    )
+                    .background(Circle().fill(Color.appCard))
+                    .overlay(Circle().strokeBorder(Color.appBorderStrong, lineWidth: 1))
             }
             .buttonStyle(.plain)
             .keyboardShortcut(.cancelAction)
@@ -108,16 +87,20 @@ struct SettingsDrawer: View {
     }
 
     private var footer: some View {
-        HStack {
-            HStack(spacing: 6) {
-                Text("Made with care by Strategic Nerds")
-                    .font(.system(size: 10))
-                    .foregroundStyle(Color.appTertiary)
-                Circle().fill(Color.appDim).frame(width: 3, height: 3)
-                Text("© 2025")
-                    .font(.system(size: 10))
-                    .foregroundStyle(Color.appTertiary)
-            }
+        HStack(spacing: 4) {
+            Text("Made with")
+                .font(.system(size: 10))
+                .foregroundStyle(Color.appTertiary)
+            Image(systemName: "heart.fill")
+                .font(.system(size: 9))
+                .foregroundStyle(Color.appDestructive)
+            Text("in Lisbon by Strategic Nerds")
+                .font(.system(size: 10))
+                .foregroundStyle(Color.appTertiary)
+            Circle().fill(Color.appDim).frame(width: 3, height: 3).padding(.horizontal, 4)
+            Text("© 2026")
+                .font(.system(size: 10))
+                .foregroundStyle(Color.appTertiary)
             Spacer()
         }
         .padding(.horizontal, 24)
@@ -144,9 +127,15 @@ private struct EscapeKeyMonitor: NSViewRepresentable {
 
     func updateNSView(_ nsView: KeyMonitorView, context: Context) {
         nsView.onEscape = onEscape
-        if isActive {
+        guard isActive, let window = nsView.window else { return }
+        // Only grab focus once per appearance; otherwise we steal focus from
+        // TextFields inside the drawer on every parent re-render.
+        if window.firstResponder !== nsView && !(window.firstResponder is NSTextView) {
             DispatchQueue.main.async {
-                nsView.window?.makeFirstResponder(nsView)
+                if nsView.window?.firstResponder !== nsView &&
+                   !(nsView.window?.firstResponder is NSTextView) {
+                    nsView.window?.makeFirstResponder(nsView)
+                }
             }
         }
     }
@@ -160,8 +149,10 @@ private final class KeyMonitorView: NSView {
     override func keyDown(with event: NSEvent) {
         if event.keyCode == 53 {
             onEscape?()
-        } else {
-            super.keyDown(with: event)
+            return
         }
+        // Pass through anything else so text input keeps working when a
+        // field inside the drawer is focused after our initial responder grab.
+        nextResponder?.keyDown(with: event)
     }
 }

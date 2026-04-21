@@ -2,9 +2,6 @@
 //  MainView.swift
 //  Mail Notifier
 //
-//  Root layout for the main window. Hosts the sidebar + content split and
-//  overlays the settings drawer when invoked.
-//
 //  Copyright (c) 2025 Strategic Nerds. All rights reserved.
 //
 
@@ -71,11 +68,6 @@ struct MainView: View {
             WelcomeView()
         }
     }
-}
-
-extension Notification.Name {
-    /// Posted when the user (or AppDelegate) wants to surface the Settings drawer.
-    static let openSettingsDrawer = Notification.Name("openSettingsDrawer")
 }
 
 // MARK: - Window chrome configuration

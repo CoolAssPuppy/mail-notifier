@@ -35,6 +35,7 @@ final class MenuBarPopoverModel: ObservableObject {
     @Published private(set) var accountStates: [AccountState] = []
     @Published private(set) var totalUnread: Int = 0
     @Published private(set) var lastCheckedAt: Date?
+    @Published private(set) var vipEmails: Set<String> = []
 
     private let fetcherManager = FetcherManager.shared
     private var subscriptions = Set<AnyCancellable>()
@@ -42,12 +43,12 @@ final class MenuBarPopoverModel: ObservableObject {
 
     init() {
         refresh()
+        refreshVIPs()
         subscribe()
     }
 
     func refresh() {
-        let accounts = Array(Accounts.default)
-        accountStates = accounts.map { account in
+        let next: [AccountState] = Accounts.default.map { account in
             let fetcher = fetcherManager.fetcher(for: account.email)
             let messages = (fetcher?.messages ?? []).prefix(Self.recentMessageLimit)
             return AccountState(
@@ -58,22 +59,39 @@ final class MenuBarPopoverModel: ObservableObject {
                 lastCheckedAt: fetcher?.lastCheckedAt
             )
         }
-        totalUnread = accountStates.reduce(0) { $0 + $1.unreadCount }
-        lastCheckedAt = accountStates.compactMap(\.lastCheckedAt).max()
+
+        guard next != accountStates else { return }
+
+        accountStates = next
+        totalUnread = next.reduce(0) { $0 + $1.unreadCount }
+        lastCheckedAt = next.compactMap(\.lastCheckedAt).max()
+    }
+
+    private func refreshVIPs() {
+        vipEmails = Set(VIPList.default.map { $0.email.lowercased() })
     }
 
     private func subscribe() {
-        let names: [Notification.Name] = [
+        let accountNames: [Notification.Name] = [
             .accountAdded, .accountDeleted, .accountUpdated, .accountsReordered,
-            .messagesFetched, .unreadCountUpdated
+            .messagesFetched, .unreadCountUpdated, .friendlyNamesChanged
         ]
-        for name in names {
-            NotificationCenter.default
-                .publisher(for: name)
-                .receive(on: RunLoop.main)
-                .sink { [weak self] _ in self?.refresh() }
-                .store(in: &subscriptions)
-        }
+
+        Publishers.MergeMany(accountNames.map { NotificationCenter.default.publisher(for: $0) })
+            .debounce(for: .milliseconds(50), scheduler: RunLoop.main)
+            .sink { [weak self] _ in self?.refresh() }
+            .store(in: &subscriptions)
+
+        UserDefaults.standard.publisher(for: \.vipListRaw)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in self?.refreshVIPs() }
+            .store(in: &subscriptions)
+    }
+}
+
+private extension UserDefaults {
+    @objc dynamic var vipListRaw: String? {
+        string(forKey: VIPList.storageKey)
     }
 }
 
@@ -120,6 +138,7 @@ struct MenuBarPopover: View {
                 ForEach(model.accountStates) { state in
                     AccountCard(
                         state: state,
+                        vipEmails: model.vipEmails,
                         onOpenInbox: { actions.openInbox(state.account) },
                         onOpenMessage: actions.openMessage,
                         onReauthorize: { actions.reauthorize(state.account) }
@@ -184,8 +203,7 @@ private struct BrandMark: View {
             RoundedRectangle(cornerRadius: 6, style: .continuous)
                 .fill(
                     LinearGradient(
-                        colors: [Color(red: 0x4F/255, green: 0x8A/255, blue: 0xFF/255),
-                                 Color(red: 0x25/255, green: 0x63/255, blue: 0xEB/255)],
+                        colors: [Color.appPrimary, Color.appPrimaryDeep],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
@@ -235,7 +253,7 @@ private struct AccountsListLabel: View {
                 .foregroundStyle(Color.appTertiary)
             Spacer()
             if let timestamp = lastCheckedAt {
-                Text("Last checked \(timestamp, formatter: Self.timeFormatter)")
+                Text("Last checked \(Formatters.shortTime.string(from: timestamp))")
                     .font(.system(size: 10))
                     .foregroundStyle(Color.appTertiary)
                     .monospacedDigit()
@@ -244,19 +262,13 @@ private struct AccountsListLabel: View {
         .padding(.horizontal, 8)
         .padding(.bottom, 2)
     }
-
-    private static let timeFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
-        formatter.dateStyle = .none
-        return formatter
-    }()
 }
 
 // MARK: - Account Card
 
 private struct AccountCard: View {
     let state: MenuBarPopoverModel.AccountState
+    let vipEmails: Set<String>
     let onOpenInbox: () -> Void
     let onOpenMessage: (Message) -> Void
     let onReauthorize: () -> Void
@@ -294,7 +306,7 @@ private struct AccountCard: View {
         if state.hasAuthError {
             return Color.appDestructive.opacity(0.25)
         } else if isExpanded {
-            return Color(red: 0x2D/255, green: 0x39/255, blue: 0x56/255)
+            return Color.appBorderFocus
         } else {
             return Color.appBorder
         }
@@ -351,16 +363,11 @@ private struct AccountCard: View {
     }
 
     private var secondaryLine: String {
-        let hasFriendlyName = state.account.friendlyName != nil
-        let base = hasFriendlyName ? state.account.email : providerLabel
+        let base = state.account.friendlyName != nil ? state.account.email : state.account.type.displayLabel
         if let timestamp = state.lastCheckedAt {
-            return "\(base) · checked \(Self.timeFormatter.string(from: timestamp))"
+            return "\(base) · checked \(Formatters.shortTime.string(from: timestamp))"
         }
         return base
-    }
-
-    private var providerLabel: String {
-        state.account.type == .gmail ? "Gmail" : "Outlook"
     }
 
     @ViewBuilder
@@ -422,7 +429,10 @@ private struct AccountCard: View {
     private var messagesList: some View {
         VStack(spacing: 1) {
             ForEach(state.recentMessages, id: \.id) { message in
-                MessageRow(message: message) {
+                MessageRow(
+                    message: message,
+                    isVIP: vipEmails.contains(message.senderEmail)
+                ) {
                     onOpenMessage(message)
                 }
             }
@@ -432,23 +442,13 @@ private struct AccountCard: View {
     }
 
     private func handleHeaderTap() {
-        if state.hasAuthError {
-            return
-        }
+        if state.hasAuthError { return }
         if canExpand {
             isExpanded.toggle()
         } else {
-            // No messages yet — open inbox in browser instead.
             onOpenInbox()
         }
     }
-
-    private static let timeFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
-        formatter.dateStyle = .none
-        return formatter
-    }()
 }
 
 // MARK: - Provider Badge
@@ -464,7 +464,7 @@ struct ProviderBadge: View {
                 .fill(Color.appCardElevated)
             RoundedRectangle(cornerRadius: 5, style: .continuous)
                 .strokeBorder(Color.appBorderStrong, lineWidth: 1)
-            Image(assetName)
+            Image(type.assetName)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: size * 0.6, height: size * 0.6)
@@ -472,19 +472,13 @@ struct ProviderBadge: View {
         }
         .frame(width: size, height: size)
     }
-
-    private var assetName: String {
-        switch type {
-        case .gmail: return "Gmail"
-        case .outlook: return "Outlook"
-        }
-    }
 }
 
 // MARK: - Message Row
 
 private struct MessageRow: View {
     let message: Message
+    let isVIP: Bool
     let onTap: () -> Void
 
     @State private var isHovered = false
@@ -503,7 +497,7 @@ private struct MessageRow: View {
                         .foregroundStyle(Color.appForeground)
                         .lineLimit(1)
                     Spacer(minLength: 6)
-                    Text(timeString)
+                    Text(Formatters.relativeLabel(for: message.serverDate))
                         .font(.system(size: 9))
                         .foregroundStyle(Color.appTertiary)
                         .monospacedDigit()
@@ -524,55 +518,13 @@ private struct MessageRow: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .onHover { hovering in
-            isHovered = hovering
-        }
-    }
-
-    private var isVIP: Bool {
-        let vipList = VIPList(rawValue: UserDefaults.standard.string(forKey: VIPList.storageKey) ?? "[]") ?? []
-        return vipList.contains(where: { $0.email.lowercased() == message.senderEmail })
+        .onHover { isHovered = $0 }
     }
 
     private var snippetLine: String {
         let subject = message.subject.trimmingCharacters(in: .whitespacesAndNewlines)
-        if !subject.isEmpty { return subject }
-        return message.decodedSnippet
+        return subject.isEmpty ? message.decodedSnippet : subject
     }
-
-    private var timeString: String {
-        let calendar = Calendar.current
-        let now = Date()
-        let date = message.serverDate
-        if calendar.isDateInToday(date) {
-            return Self.timeFormatter.string(from: date)
-        } else if calendar.isDateInYesterday(date) {
-            return "Yesterday"
-        } else if let days = calendar.dateComponents([.day], from: date, to: now).day, days < 7 {
-            return Self.weekdayFormatter.string(from: date)
-        } else {
-            return Self.shortDateFormatter.string(from: date)
-        }
-    }
-
-    private static let timeFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
-        formatter.dateStyle = .none
-        return formatter
-    }()
-
-    private static let weekdayFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE"
-        return formatter
-    }()
-
-    private static let shortDateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMM d"
-        return formatter
-    }()
 }
 
 // MARK: - Empty State
@@ -636,69 +588,19 @@ private struct BottomBar: View {
 
     var body: some View {
         HStack(spacing: 4) {
-            CheckNowIconButton(action: actions.checkAll)
-            IconButton(systemName: "macwindow", help: "Open main window", action: actions.openWindow)
-            IconButton(systemName: "gearshape", help: "Settings (⌘,)", action: actions.openSettings)
+            AppIconButton(systemName: "arrow.triangle.2.circlepath",
+                          help: "Check all accounts now",
+                          spinOnTap: true,
+                          action: actions.checkAll)
+            AppIconButton(systemName: "macwindow", help: "Open main window", action: actions.openWindow)
+            AppIconButton(systemName: "gearshape", help: "Settings (⌘,)", action: actions.openSettings)
 
             Spacer(minLength: 0)
 
-            IconButton(systemName: "power", help: "Quit Mail Notifier", action: actions.quit)
+            AppIconButton(systemName: "power", help: "Quit Mail Notifier", action: actions.quit)
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 9)
         .background(Color.appSurface)
-    }
-}
-
-private struct CheckNowIconButton: View {
-    let action: () -> Void
-    @State private var isHovered = false
-    @State private var isSpinning = false
-
-    var body: some View {
-        Button(action: {
-            isSpinning = true
-            action()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-                isSpinning = false
-            }
-        }) {
-            Image(systemName: "arrow.triangle.2.circlepath")
-                .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(isHovered ? Color.appForeground : Color.appMuted)
-                .rotationEffect(.degrees(isSpinning ? 360 : 0))
-                .animation(isSpinning ? .easeInOut(duration: 0.6) : .default, value: isSpinning)
-                .frame(width: 28, height: 26)
-                .background(
-                    RoundedRectangle(cornerRadius: 8, style: .continuous)
-                        .fill(isHovered ? Color.appCardElevated : Color.clear)
-                )
-        }
-        .buttonStyle(.plain)
-        .onHover { isHovered = $0 }
-        .help("Check all accounts now")
-    }
-}
-
-private struct IconButton: View {
-    let systemName: String
-    let help: String
-    let action: () -> Void
-    @State private var isHovered = false
-
-    var body: some View {
-        Button(action: action) {
-            Image(systemName: systemName)
-                .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(isHovered ? Color.appForeground : Color.appMuted)
-                .frame(width: 28, height: 26)
-                .background(
-                    RoundedRectangle(cornerRadius: 8, style: .continuous)
-                        .fill(isHovered ? Color.appCardElevated : Color.clear)
-                )
-        }
-        .buttonStyle(.plain)
-        .onHover { isHovered = $0 }
-        .help(help)
     }
 }

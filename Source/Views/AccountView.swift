@@ -2,9 +2,6 @@
 //  AccountView.swift
 //  Mail Notifier
 //
-//  Detail pane for a configured account. Lets the user edit friendly name,
-//  notification + polling behavior, and reauthorize or remove the account.
-//
 //  Copyright (c) 2025 Strategic Nerds. All rights reserved.
 //
 
@@ -12,9 +9,11 @@ import SwiftUI
 
 struct AccountView: View {
     @AppStorage(Accounts.storageKey) var accounts = Accounts()
+    @ObservedObject private var friendlyNames = FriendlyNameStore.shared
     @State var account: Account
     @State private var friendlyNameDraft: String
     @State private var showingDeleteAlert = false
+    @FocusState private var friendlyFieldFocused: Bool
 
     init(account: Account) {
         self._account = State(initialValue: account)
@@ -48,9 +47,15 @@ struct AccountView: View {
                   updated.id == account.id else { return }
             account = updated
         }
-        .onReceive(NotificationCenter.default.publisher(for: .friendlyNamesChanged)) { notification in
-            if let email = notification.object as? String, email != account.email { return }
-            friendlyNameDraft = account.friendlyName ?? ""
+        .onChange(of: friendlyNames.names) { _, _ in
+            if !friendlyFieldFocused {
+                friendlyNameDraft = account.friendlyName ?? ""
+            }
+        }
+        .onChange(of: friendlyFieldFocused) { _, focused in
+            if !focused {
+                FriendlyNameStore.shared.setName(friendlyNameDraft, for: account.email)
+            }
         }
         .onChange(of: account) { _, newValue in
             accounts.update(account: newValue)
@@ -93,29 +98,30 @@ struct AccountView: View {
         )
     }
 
+    private var fetcher: MessageFetcher? {
+        FetcherManager.shared.fetcher(for: account.email)
+    }
+
     @ViewBuilder
     private var headerMeta: some View {
+        let fetcher = self.fetcher
         HStack(spacing: 10) {
-            Text(providerLabel)
+            Text(account.type.displayLabel)
                 .font(.system(size: 11))
                 .foregroundStyle(Color.appMuted)
 
             dot
 
-            statusBadge
+            statusBadge(fetcher: fetcher)
 
-            if let lastChecked, let lastText = lastCheckedText(lastChecked) {
+            if let timestamp = fetcher?.lastCheckedAt {
                 dot
-                Text(lastText)
+                Text("Checked \(Formatters.shortTime.string(from: timestamp)) · \(fetcher?.unreadMessagesCount ?? 0) unread")
                     .font(.system(size: 11))
                     .foregroundStyle(Color.appMuted)
                     .monospacedDigit()
             }
         }
-    }
-
-    private var providerLabel: String {
-        account.type == .gmail ? "Gmail" : "Outlook"
     }
 
     private var dot: some View {
@@ -125,8 +131,7 @@ struct AccountView: View {
     }
 
     @ViewBuilder
-    private var statusBadge: some View {
-        let fetcher = FetcherManager.shared.fetcher(for: account.email)
+    private func statusBadge(fetcher: MessageFetcher?) -> some View {
         if !account.enabled {
             statusLabel(color: .appMuted, label: "Disabled")
         } else if fetcher?.hasAuthError == true {
@@ -148,22 +153,10 @@ struct AccountView: View {
         }
     }
 
-    private var lastChecked: Date? {
-        FetcherManager.shared.fetcher(for: account.email)?.lastCheckedAt
-    }
-
-    private func lastCheckedText(_ date: Date) -> String? {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .none
-        formatter.timeStyle = .short
-        let unread = FetcherManager.shared.fetcher(for: account.email)?.unreadMessagesCount ?? 0
-        return "Checked \(formatter.string(from: date)) · \(unread) unread"
-    }
-
     private var headerActions: some View {
         HStack(spacing: 6) {
             AppSecondaryButton(title: "Check now", systemImage: "arrow.triangle.2.circlepath") {
-                FetcherManager.shared.fetcher(for: account.email)?.fetch()
+                fetcher?.fetch()
             }
             AppIconButton(systemName: "arrow.up.forward.app", help: "Open inbox in browser") {
                 NSWorkspace.shared.open(account.baseURL)
@@ -184,6 +177,7 @@ struct AccountView: View {
                         .textFieldStyle(.plain)
                         .font(.system(size: 12))
                         .foregroundStyle(Color.appForeground)
+                        .focused($friendlyFieldFocused)
                         .padding(.horizontal, 10)
                         .padding(.vertical, 6)
                         .background(
@@ -195,10 +189,8 @@ struct AccountView: View {
                                 .strokeBorder(Color.appBorderStrong, lineWidth: 1)
                         )
                         .frame(width: 240)
-                        .onSubmit(commitFriendlyName)
-                        .onChange(of: friendlyNameDraft) { _, newValue in
-                            // Debounce-less commit on every edit is fine — writes are local.
-                            FriendlyNameStore.setName(newValue, for: account.email)
+                        .onSubmit {
+                            FriendlyNameStore.shared.setName(friendlyNameDraft, for: account.email)
                         }
                 }
 
@@ -212,10 +204,6 @@ struct AccountView: View {
                 }
             }
         }
-    }
-
-    private func commitFriendlyName() {
-        FriendlyNameStore.setName(friendlyNameDraft, for: account.email)
     }
 
     // MARK: - Notifications card

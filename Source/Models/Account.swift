@@ -10,6 +10,22 @@ import Foundation
 enum AccountType: String, Codable, CaseIterable {
     case gmail
     case outlook
+
+    /// Human label used in subtitles, pickers, and status text.
+    var displayLabel: String {
+        switch self {
+        case .gmail: return "Gmail"
+        case .outlook: return "Outlook"
+        }
+    }
+
+    /// Asset catalog name for the provider brand icon.
+    var assetName: String {
+        switch self {
+        case .gmail: return "Gmail"
+        case .outlook: return "Outlook"
+        }
+    }
 }
 
 struct Account: Codable {
@@ -54,7 +70,7 @@ extension Account: Identifiable, Hashable {
 
     /// User-chosen label ("Work", "Supabase"). `nil` when unset.
     var friendlyName: String? {
-        FriendlyNameStore.name(for: email)
+        FriendlyNameStore.shared.name(for: email)
     }
 
     /// Friendly name when set, otherwise the raw email.

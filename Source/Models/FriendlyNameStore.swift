@@ -6,86 +6,98 @@
 //
 
 import Foundation
+import Combine
 
 /// Keyed map of account email → user-chosen friendly name (e.g. "Work", "Supabase").
 ///
-/// The store is backed by `NSUbiquitousKeyValueStore` so names roam across machines
-/// signed into the same Apple ID. A mirror is kept in `UserDefaults` so reads never
-/// block on iCloud availability and the feature still works when iCloud is off.
+/// Backed by `NSUbiquitousKeyValueStore` so names roam across machines signed
+/// into the same Apple ID, with a `UserDefaults` mirror so reads are fast and
+/// the feature still works when iCloud is unavailable.
 ///
-/// Posts `.friendlyNamesChanged` whenever values change (local or remote).
-enum FriendlyNameStore {
+/// Views observe `shared` as an `@ObservedObject` to refresh when names
+/// change locally or arrive from the cloud.
+final class FriendlyNameStore: ObservableObject {
+    static let shared = FriendlyNameStore()
+
+    @Published private(set) var names: [String: String] = [:]
+
     private static let kvsKey = "friendlyNames"
     private static let defaultsKey = "friendlyNames"
 
-    private static let kvs = NSUbiquitousKeyValueStore.default
-    private static let defaults = UserDefaults.standard
+    private let kvs = NSUbiquitousKeyValueStore.default
+    private let defaults = UserDefaults.standard
+    private var kvsObserver: NSObjectProtocol?
+
+    private init() {
+        names = readMerged()
+    }
 
     // MARK: - Public API
 
-    static func name(for email: String) -> String? {
-        let key = normalize(email)
-        let merged = readMerged()
-        return merged[key]?.trimmed.nonEmpty
+    func name(for email: String) -> String? {
+        names[normalize(email)]
     }
 
-    static func setName(_ name: String?, for email: String) {
+    func setName(_ name: String?, for email: String) {
         let key = normalize(email)
-        var merged = readMerged()
+        let trimmed = name?.trimmed.nonEmpty
+        guard trimmed != names[key] else { return }
 
-        if let trimmed = name?.trimmed.nonEmpty {
-            merged[key] = trimmed
+        if let trimmed {
+            names[key] = trimmed
         } else {
-            merged.removeValue(forKey: key)
+            names.removeValue(forKey: key)
         }
 
-        write(merged)
+        defaults.set(names, forKey: Self.defaultsKey)
+        kvs.set(names, forKey: Self.kvsKey)
+        kvs.synchronize()
+
         NotificationCenter.default.post(name: .friendlyNamesChanged, object: email)
     }
 
-    static func remove(email: String) {
+    func remove(email: String) {
         setName(nil, for: email)
     }
 
-    static func start() {
-        NotificationCenter.default.addObserver(
+    func start() {
+        guard kvsObserver == nil else { return }
+        kvsObserver = NotificationCenter.default.addObserver(
             forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
             object: kvs,
             queue: .main
-        ) { _ in
-            mirrorFromKVSToDefaults()
-            NotificationCenter.default.post(name: .friendlyNamesChanged, object: nil)
+        ) { [weak self] _ in
+            self?.syncFromCloud()
         }
         kvs.synchronize()
-        mirrorFromKVSToDefaults()
+        syncFromCloud()
+    }
+
+    deinit {
+        if let kvsObserver {
+            NotificationCenter.default.removeObserver(kvsObserver)
+        }
     }
 
     // MARK: - Storage helpers
 
-    private static func readMerged() -> [String: String] {
-        let cloud = (kvs.dictionary(forKey: kvsKey) as? [String: String]) ?? [:]
-        let local = defaults.dictionary(forKey: defaultsKey) as? [String: String] ?? [:]
+    private func syncFromCloud() {
+        let cloud = (kvs.dictionary(forKey: Self.kvsKey) as? [String: String]) ?? [:]
+        guard cloud != names else { return }
+        names = cloud
+        defaults.set(cloud, forKey: Self.defaultsKey)
+        NotificationCenter.default.post(name: .friendlyNamesChanged, object: nil)
+    }
+
+    private func readMerged() -> [String: String] {
+        let cloud = (kvs.dictionary(forKey: Self.kvsKey) as? [String: String]) ?? [:]
+        let local = defaults.dictionary(forKey: Self.defaultsKey) as? [String: String] ?? [:]
         return local.merging(cloud) { _, new in new }
     }
 
-    private static func write(_ map: [String: String]) {
-        defaults.set(map, forKey: defaultsKey)
-        kvs.set(map, forKey: kvsKey)
-        kvs.synchronize()
-    }
-
-    private static func mirrorFromKVSToDefaults() {
-        guard let cloud = kvs.dictionary(forKey: kvsKey) as? [String: String] else { return }
-        defaults.set(cloud, forKey: defaultsKey)
-    }
-
-    private static func normalize(_ email: String) -> String {
+    private func normalize(_ email: String) -> String {
         email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
     }
-}
-
-extension Notification.Name {
-    static let friendlyNamesChanged = Notification.Name("friendlyNamesChanged")
 }
 
 private extension String {

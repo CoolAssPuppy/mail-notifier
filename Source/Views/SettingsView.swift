@@ -2,12 +2,6 @@
 //  SettingsView.swift
 //  Mail Notifier
 //
-//  App-wide preferences rendered as a two-column card grid. Used by
-//  `SettingsDrawer` to slide down over the main window. Retains every
-//  original setting: launch-at-login, unread-count-in-menu-bar,
-//  open-on-start, VIP list, global shortcut, Sparkle auto-update,
-//  support links, and About info.
-//
 //  Copyright (c) 2025 Strategic Nerds. All rights reserved.
 //
 
@@ -37,7 +31,6 @@ struct SettingsView: View {
                 VStack(spacing: 14) {
                     updatesCard
                     supportCard
-                    aboutCard
                 }
                 .frame(maxWidth: .infinity)
             }
@@ -216,7 +209,7 @@ struct SettingsView: View {
             VStack(spacing: 0) {
                 AppSettingRow(
                     "Check for updates automatically",
-                    description: "Sparkle checks once a day, prompts before installing."
+                    description: "Checks once a day, prompts before installing."
                 ) {
                     Toggle("", isOn: $updater.automaticallyChecksForUpdates)
                         .labelsHidden()
@@ -229,7 +222,7 @@ struct SettingsView: View {
 
                 AppSettingRow(
                     "Current version \(appVersion)",
-                    description: "Sparkle-managed auto-update."
+                    description: nil
                 ) {
                     AppSecondaryButton(title: "Check now", systemImage: "arrow.down.circle") {
                         UpdaterManager.shared.checkForUpdates()
@@ -294,75 +287,6 @@ struct SettingsView: View {
                         )
                     }
                     .buttonStyle(.plain)
-                }
-            }
-        }
-    }
-
-    // MARK: - About
-
-    private var aboutCard: some View {
-        AppCard("About") {
-            VStack(alignment: .leading, spacing: 14) {
-                HStack(alignment: .top, spacing: 14) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10, style: .continuous)
-                            .fill(
-                                LinearGradient(
-                                    colors: [Color.appPrimary, Color.appPrimaryDeep],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                        Image(systemName: "envelope.fill")
-                            .font(.system(size: 17, weight: .semibold))
-                            .foregroundStyle(.white)
-                    }
-                    .frame(width: 44, height: 44)
-
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Mail Notifier")
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundStyle(Color.appForeground)
-                        Text("A native mail watcher for Gmail and Outlook.")
-                            .font(.system(size: 11))
-                            .foregroundStyle(Color.appMuted)
-
-                        HStack(spacing: 8) {
-                            Text(appVersion)
-                                .font(.system(size: 10, weight: .semibold))
-                                .foregroundStyle(Color.appForeground)
-                                .monospacedDigit()
-                                .padding(.horizontal, 7)
-                                .padding(.vertical, 2)
-                                .background(
-                                    Capsule().fill(Color.appCardInset)
-                                )
-                                .overlay(
-                                    Capsule().strokeBorder(Color.appBorderStrong, lineWidth: 1)
-                                )
-                            Text("macOS 14+")
-                                .font(.system(size: 10))
-                                .foregroundStyle(Color.appTertiary)
-                        }
-                        .padding(.top, 3)
-                    }
-
-                    Spacer()
-                }
-
-                AppRowDivider()
-
-                VStack(alignment: .leading, spacing: 5) {
-                    Text("Made with care by Strategic Nerds, Inc.")
-                        .font(.system(size: 11))
-                        .foregroundStyle(Color.appForegroundSoft)
-                    Text("© 2025 Strategic Nerds, Inc.")
-                        .font(.system(size: 11))
-                        .foregroundStyle(Color.appForegroundSoft)
-                    Link("Contribute on GitHub", destination: URL(string: "https://github.com/CoolAssPuppy/mail-notifier")!)
-                        .font(.system(size: 11))
-                        .foregroundStyle(Color.appPrimary)
                 }
             }
         }

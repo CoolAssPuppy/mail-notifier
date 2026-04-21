@@ -2,9 +2,6 @@
 //  SharedComponents.swift
 //  Mail Notifier
 //
-//  Reusable SwiftUI building blocks for the redesigned app: cards, rows,
-//  toggles, primary/secondary buttons.
-//
 //  Copyright (c) 2025 Strategic Nerds. All rights reserved.
 //
 
@@ -47,9 +44,7 @@ struct AppCard<Trailing: View, Content: View>: View {
 
 extension AppCard where Trailing == EmptyView {
     init(_ title: String, @ViewBuilder content: @escaping () -> Content) {
-        self.title = title
-        self.trailing = { EmptyView() }
-        self.content = content
+        self.init(title: title, trailing: { EmptyView() }, content: content)
     }
 }
 
@@ -57,9 +52,7 @@ extension AppCard {
     init(_ title: String,
          @ViewBuilder trailing: @escaping () -> Trailing,
          @ViewBuilder content: @escaping () -> Content) {
-        self.title = title
-        self.trailing = trailing
-        self.content = content
+        self.init(title: title, trailing: trailing, content: content)
     }
 }
 
@@ -156,15 +149,19 @@ struct AppIconButton: View {
     let systemName: String
     var help: String = ""
     var tint: Color = .appMuted
+    var spinOnTap: Bool = false
     let action: () -> Void
 
     @State private var isHovered = false
+    @State private var isSpinning = false
 
     var body: some View {
-        Button(action: action) {
+        Button(action: handleTap) {
             Image(systemName: systemName)
                 .font(.system(size: 12, weight: .medium))
                 .foregroundStyle(isHovered ? Color.appForeground : tint)
+                .rotationEffect(.degrees(isSpinning ? 360 : 0))
+                .animation(isSpinning ? .easeInOut(duration: 0.6) : .default, value: isSpinning)
                 .frame(width: 28, height: 26)
                 .background(
                     RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
@@ -174,6 +171,16 @@ struct AppIconButton: View {
         .buttonStyle(.plain)
         .onHover { isHovered = $0 }
         .help(help)
+    }
+
+    private func handleTap() {
+        if spinOnTap {
+            isSpinning = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                isSpinning = false
+            }
+        }
+        action()
     }
 }
 
@@ -252,8 +259,6 @@ struct AppProviderChoiceCard: View {
         .onHover { isHovered = $0 }
     }
 }
-
-// MARK: - Legacy section header kept for compile compatibility with old previews.
 
 struct SectionHeader: View {
     let icon: String

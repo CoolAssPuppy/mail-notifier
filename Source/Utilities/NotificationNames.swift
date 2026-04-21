@@ -26,4 +26,8 @@ extension Notification.Name {
     // MARK: URL Events
     static let mailToReceived = Notification.Name("mailToReceived")
     static let openPreferencesWindow = Notification.Name("openPreferencesWindow")
+
+    // MARK: UI Events
+    static let openSettingsDrawer = Notification.Name("openSettingsDrawer")
+    static let friendlyNamesChanged = Notification.Name("friendlyNamesChanged")
 }

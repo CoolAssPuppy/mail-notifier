@@ -2,7 +2,6 @@
 //  Theme.swift
 //  Mail Notifier
 //
-//  Shared color + typography tokens used by every SwiftUI surface in the app.
 //  Copyright (c) 2025 Strategic Nerds. All rights reserved.
 //
 

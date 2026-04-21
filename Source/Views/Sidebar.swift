@@ -2,9 +2,6 @@
 //  Sidebar.swift
 //  Mail Notifier
 //
-//  Left-hand account list inside the main window. Selecting a row drives the
-//  detail pane; the "Add account" button surfaces the welcome flow.
-//
 //  Copyright (c) 2025 Strategic Nerds. All rights reserved.
 //
 
@@ -12,6 +9,7 @@ import SwiftUI
 
 struct Sidebar: View {
     @AppStorage(Accounts.storageKey) var accounts = Accounts()
+    @ObservedObject private var friendlyNames = FriendlyNameStore.shared
     @Binding var selection: String?
     var totalUnread: Int = 0
 
@@ -169,8 +167,8 @@ private struct SidebarAccountRow: View {
     let isSelected: Bool
     let unreadCount: Int
 
+    @ObservedObject private var friendlyNames = FriendlyNameStore.shared
     @State private var isHovered = false
-    @State private var friendlyNameTick = 0
 
     var body: some View {
         HStack(spacing: 10) {
@@ -205,17 +203,10 @@ private struct SidebarAccountRow: View {
         .contentShape(Rectangle())
         .onHover { isHovered = $0 }
         .opacity(account.enabled ? 1 : 0.55)
-        .id(friendlyNameTick) // refresh label when iCloud KVS changes
-        .onReceive(NotificationCenter.default.publisher(for: .friendlyNamesChanged)) { _ in
-            friendlyNameTick += 1
-        }
     }
 
     private var subtitle: String {
-        if account.friendlyName != nil {
-            return account.email
-        }
-        return account.type == .gmail ? "Gmail" : "Outlook"
+        account.friendlyName != nil ? account.email : account.type.displayLabel
     }
 
     private var textColor: Color {
