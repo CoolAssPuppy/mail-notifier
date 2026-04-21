@@ -2,13 +2,14 @@
 
 Mail Notifier ships with [Sparkle 2](https://sparkle-project.org). Users get "Check for Updates…" in the status-bar menu and in Settings > Updates, plus daily automatic checks.
 
-Appcast and release DMGs live in the existing Supabase `downloads` bucket on project `hlwjnusdotqtmtwrjidu` (shared with Agent Server, different filenames). The appcast URL is fronted by a Dub.co shortlink so the feed location can be moved later without re-shipping the app.
+Appcast and release DMGs live in the **Cloudflare R2 `strategic-nerds-downloads` bucket** (shared with Agent Server and Meeting Notifier — each app has its own folder under `apps/`). The bucket is exposed publicly at `https://downloads.strategicnerds.com`. The appcast URL is fronted by a Dub.co shortlink so the feed location can be moved later without re-shipping the app.
 
 URLs:
 
 - **Feed (baked into the app)**: `https://coolasspuppy.com/mail-notifier-updates` (Dub shortlink)
-- **Appcast destination**: `https://hlwjnusdotqtmtwrjidu.supabase.co/storage/v1/object/public/downloads/mail-notifier-appcast.xml`
-- **DMG pattern**: `https://hlwjnusdotqtmtwrjidu.supabase.co/storage/v1/object/public/downloads/MailNotifier-<version>.dmg`
+- **Appcast destination**: `https://downloads.strategicnerds.com/apps/mail-notifier/appcast.xml`
+- **DMG pattern**: `https://downloads.strategicnerds.com/apps/mail-notifier/MailNotifier-<version>.dmg`
+- **Latest DMG (stable URL)**: `https://downloads.strategicnerds.com/apps/mail-notifier/MailNotifier-latest.dmg` (overwritten on every release)
 
 Do steps 1 through 5 once. Then step 6 on every release.
 
@@ -74,32 +75,32 @@ Verify by running `generate_keys --account com.strategicnerds.MailNotifierApp -p
 
 Copy the public key that `generate_keys` printed. You'll paste it in step 4.
 
-## 2. Confirm the Supabase bucket
+## 2. Confirm the R2 bucket
 
-The `downloads` bucket on project `hlwjnusdotqtmtwrjidu` already hosts Agent Server artifacts and is public. No new bucket needed. Upload this initial appcast via the dashboard (Storage > downloads > Upload file) as `mail-notifier-appcast.xml`:
+The `strategic-nerds-downloads` R2 bucket already hosts Agent Server and Meeting Notifier artifacts and is public via `downloads.strategicnerds.com`. Each app lives under `apps/<app-name>/`. No new bucket needed.
+
+The release script automatically uploads `dist/appcast.xml` to `apps/mail-notifier/appcast.xml` on every release. The bootstrap appcast (an empty channel) is checked into `dist/appcast.xml` and looks like:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
   <channel>
     <title>Mail Notifier</title>
-    <link>https://hlwjnusdotqtmtwrjidu.supabase.co/storage/v1/object/public/downloads/mail-notifier-appcast.xml</link>
+    <link>https://downloads.strategicnerds.com/apps/mail-notifier/appcast.xml</link>
     <description>Mail Notifier updates</description>
     <language>en</language>
   </channel>
 </rss>
 ```
 
-(This is the same file checked into `dist/appcast.xml`.)
-
-Verify by opening the URL in a browser — you should see the XML.
+After the first release, verify by opening `https://downloads.strategicnerds.com/apps/mail-notifier/appcast.xml` in a browser — you should see the XML with at least one `<item>`.
 
 ## 3. Create the Dub.co shortlink
 
 Create it once in the Dub dashboard:
 
 - **Short URL**: `https://coolasspuppy.com/mail-notifier-updates`
-- **Destination URL**: `https://hlwjnusdotqtmtwrjidu.supabase.co/storage/v1/object/public/downloads/mail-notifier-appcast.xml`
+- **Destination URL**: `https://downloads.strategicnerds.com/apps/mail-notifier/appcast.xml`
 
 Settings:
 - Cloaking/frame: **OFF** (Sparkle needs a plain HTTP redirect, not an iframe wrapper).
@@ -112,7 +113,7 @@ Test:
 curl -sI "https://coolasspuppy.com/mail-notifier-updates" | grep -i '^location:'
 ```
 
-You should see a `location:` header pointing at the Supabase URL above.
+You should see a `location:` header pointing at the R2 URL above.
 
 **This slug is baked into every shipped copy of the app and cannot be changed.** You can repoint the destination URL later. You cannot change the slug.
 
@@ -154,8 +155,8 @@ The script:
 3. Archives + exports a Developer ID-signed `.app`.
 4. Notarizes + staples the `.app`.
 5. Builds a signed + notarized + stapled DMG and Sparkle-signs it.
-6. Pulls the Supabase service-role key from Doppler (`agent-server/prd`).
-7. Uploads the DMG and the updated `dist/appcast.xml` to the `downloads` bucket.
+6. Pulls Cloudflare R2 credentials from Doppler (`agent-server/prd`: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `R2_BUCKET_NAME`, `R2_PUBLIC_BASE_URL`).
+7. Uploads the DMG to `apps/mail-notifier/MailNotifier-<version>.dmg` AND `apps/mail-notifier/MailNotifier-latest.dmg`, plus the updated `dist/appcast.xml` to `apps/mail-notifier/appcast.xml` (all via `wrangler r2 object put`).
 8. Verifies the feed via the Dub shortlink.
 
 Commit `project.yml` and `dist/appcast.xml` after a successful release.
