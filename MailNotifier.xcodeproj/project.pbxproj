@@ -20,6 +20,7 @@
 		2F0E61F15730320692F222F1 /* Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF089B2ADA2A224578FA3B8A /* Formatters.swift */; };
 		353E0A2021CFE7030D88721B /* FriendlyNameStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FC974A840D1A18FD08E426 /* FriendlyNameStore.swift */; };
 		38580E8A8BE7FBBE2988F900 /* NotificationNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D68FB4988855EDF84FB661 /* NotificationNames.swift */; };
+		3B34CC5B1AEFD51B72EDC13D /* ThemeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6530850D2A751A92684E51DA /* ThemeStore.swift */; };
 		3BE9334DE287FBCF9E2770E6 /* AppAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 18804011B7BFAA25376B926C /* AppAuth */; };
 		408FED39F299B062EC152101 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85734040168C129FCDDAE13D /* WelcomeView.swift */; };
 		42E9081BE938811A5683C9A5 /* UpdaterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53C88A02CD4CB9DA9FCDEEE /* UpdaterManager.swift */; };
@@ -83,6 +84,7 @@
 		5A105D8E7E7F9FDA229C0CCD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5BCBFC5DE7D942DC59F40416 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5E5E9BC2F24238A846536579 /* SettingsDrawer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDrawer.swift; sourceTree = "<group>"; };
+		6530850D2A751A92684E51DA /* ThemeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeStore.swift; sourceTree = "<group>"; };
 		6598132958428BC352FF659A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6CE7E944430BC38AB4BA460B /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6E50399587B146E0525C325E /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -120,7 +122,7 @@
 		EEA9F3DE9853CF06BBDD72BF /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F7DF9E463FD10F104229B4C9 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FB460ED3BAD3CC445B93C9FE /* AppDelegate+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Menu.swift"; sourceTree = "<group>"; };
-		"TEMP_0FD984D2-6028-4B0B-A914-857DC8E8F2A0" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		"TEMP_EE9D59D3-8478-47B1-8C84-2F2D000D1D3F" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,6 +208,7 @@
 				49FC974A840D1A18FD08E426 /* FriendlyNameStore.swift */,
 				1AD05293C4B42F6617F15238 /* Message.swift */,
 				C46E588E11C2BE3E1F023F9C /* Sound.swift */,
+				6530850D2A751A92684E51DA /* ThemeStore.swift */,
 				85847722F72E75C126DBDA5E /* VIP.swift */,
 			);
 			path = Models;
@@ -276,10 +279,10 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		"TEMP_4BD36168-AC6F-4CB5-AFD4-C45D8AABC61C" /* mail-notifier */ = {
+		"TEMP_2D6A9957-0FCE-42BA-88A2-43C7AE8CD9FD" /* mail-notifier */ = {
 			isa = PBXGroup;
 			children = (
-				"TEMP_0FD984D2-6028-4B0B-A914-857DC8E8F2A0" /* Secrets.xcconfig */,
+				"TEMP_EE9D59D3-8478-47B1-8C84-2F2D000D1D3F" /* Secrets.xcconfig */,
 			);
 			path = "mail-notifier";
 			sourceTree = "<group>";
@@ -450,6 +453,7 @@
 				7F602BF6F21F9E50A543133D /* Sidebar.swift in Sources */,
 				6F19E5430EB52E328D689CD3 /* Sound.swift in Sources */,
 				AB04FDB131DB0747824C03A2 /* Theme.swift in Sources */,
+				3B34CC5B1AEFD51B72EDC13D /* ThemeStore.swift in Sources */,
 				C37D1FA9636CCF698C5B5AF7 /* URLRouter.swift in Sources */,
 				42E9081BE938811A5683C9A5 /* UpdaterManager.swift in Sources */,
 				A0F0A08A7BC55D3BB180D455 /* VIP.swift in Sources */,
@@ -514,14 +518,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MailNotifier.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				LS_MINIMUM_SYSTEM_VERSION = 14.0;
-				MARKETING_VERSION = 3.1.3;
+				MARKETING_VERSION = 3.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.strategicnerds.MailNotifierApp;
 				PRODUCT_NAME = "Mail Notifier";
 				SDKROOT = macosx;
@@ -530,7 +534,7 @@
 		};
 		229918186B40865D81363975 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_0FD984D2-6028-4B0B-A914-857DC8E8F2A0" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_EE9D59D3-8478-47B1-8C84-2F2D000D1D3F" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -595,14 +599,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MailNotifier.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				LS_MINIMUM_SYSTEM_VERSION = 14.0;
-				MARKETING_VERSION = 3.1.3;
+				MARKETING_VERSION = 3.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.strategicnerds.MailNotifierApp;
 				PRODUCT_NAME = "Mail Notifier";
 				SDKROOT = macosx;
@@ -611,7 +615,7 @@
 		};
 		B4A4092827DAC2ECABE337D5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_0FD984D2-6028-4B0B-A914-857DC8E8F2A0" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_EE9D59D3-8478-47B1-8C84-2F2D000D1D3F" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;

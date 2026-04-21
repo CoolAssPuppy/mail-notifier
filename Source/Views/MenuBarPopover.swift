@@ -111,18 +111,22 @@ struct MenuBarPopoverActions {
 
 struct MenuBarPopover: View {
     @ObservedObject var model: MenuBarPopoverModel
+    @ObservedObject private var themeStore = ThemeStore.shared
     let actions: MenuBarPopoverActions
 
     var body: some View {
-        VStack(spacing: 0) {
+        let theme = themeStore.palette
+        return VStack(spacing: 0) {
             HeaderBar(totalUnread: model.totalUnread, accountCount: model.accountStates.count)
-            Divider().background(Color.appDivider)
+            Divider().background(theme.divider)
             content
-            Divider().background(Color.appDivider)
+            Divider().background(theme.divider)
             BottomBar(actions: actions)
         }
         .frame(width: 380)
-        .background(Color.appBackground)
+        .background(theme.background)
+        .environment(\.theme, theme)
+        .environment(\.colorScheme, theme.isDark ? .dark : .light)
     }
 
     @ViewBuilder
@@ -158,6 +162,8 @@ private struct HeaderBar: View {
     let totalUnread: Int
     let accountCount: Int
 
+    @Environment(\.theme) private var theme
+
     var body: some View {
         HStack(spacing: 10) {
             BrandMark()
@@ -165,15 +171,15 @@ private struct HeaderBar: View {
             VStack(alignment: .leading, spacing: 1) {
                 Text("Mail Notifier")
                     .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(Color.appForeground)
+                    .foregroundStyle(theme.foreground)
                 HStack(spacing: 6) {
                     Circle()
-                        .fill(Color.appSuccess)
+                        .fill(theme.success)
                         .frame(width: 6, height: 6)
-                        .shadow(color: Color.appSuccess.opacity(0.5), radius: 4)
+                        .shadow(color: theme.success.opacity(0.5), radius: 4)
                     Text(statusLine)
                         .font(.system(size: 10))
-                        .foregroundStyle(Color.appMuted)
+                        .foregroundStyle(theme.muted)
                 }
             }
 
@@ -185,7 +191,7 @@ private struct HeaderBar: View {
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
-        .background(Color.appSurface)
+        .background(theme.surface)
     }
 
     private var statusLine: String {
@@ -198,12 +204,14 @@ private struct HeaderBar: View {
 }
 
 private struct BrandMark: View {
+    @Environment(\.theme) private var theme
+
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 6, style: .continuous)
                 .fill(
                     LinearGradient(
-                        colors: [Color.appPrimary, Color.appPrimaryDeep],
+                        colors: [theme.primary, theme.primaryDeep],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
@@ -219,23 +227,25 @@ private struct BrandMark: View {
 private struct UnreadPill: View {
     let count: Int
 
+    @Environment(\.theme) private var theme
+
     var body: some View {
         HStack(spacing: 5) {
             Image(systemName: "tray.fill")
                 .font(.system(size: 8, weight: .semibold))
-                .foregroundStyle(Color.appWarning)
+                .foregroundStyle(theme.warning)
             Text("\(count) unread")
                 .font(.system(size: 10, weight: .semibold))
-                .foregroundStyle(Color.appWarning)
+                .foregroundStyle(theme.warning)
                 .monospacedDigit()
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
         .background(
-            Capsule().fill(Color.appWarning.opacity(0.12))
+            Capsule().fill(theme.warning.opacity(0.12))
         )
         .overlay(
-            Capsule().strokeBorder(Color.appWarning.opacity(0.3), lineWidth: 1)
+            Capsule().strokeBorder(theme.warning.opacity(0.3), lineWidth: 1)
         )
     }
 }
@@ -245,17 +255,19 @@ private struct UnreadPill: View {
 private struct AccountsListLabel: View {
     let lastCheckedAt: Date?
 
+    @Environment(\.theme) private var theme
+
     var body: some View {
         HStack {
             Text("ACCOUNTS")
                 .font(.system(size: 10, weight: .semibold))
                 .tracking(0.6)
-                .foregroundStyle(Color.appTertiary)
+                .foregroundStyle(theme.tertiary)
             Spacer()
             if let timestamp = lastCheckedAt {
                 Text("Last checked \(Formatters.shortTime.string(from: timestamp))")
                     .font(.system(size: 10))
-                    .foregroundStyle(Color.appTertiary)
+                    .foregroundStyle(theme.tertiary)
                     .monospacedDigit()
             }
         }
@@ -273,6 +285,7 @@ private struct AccountCard: View {
     let onOpenMessage: (Message) -> Void
     let onReauthorize: () -> Void
 
+    @Environment(\.theme) private var theme
     @State private var isExpanded = false
     @State private var isHovered = false
 
@@ -285,14 +298,14 @@ private struct AccountCard: View {
             headerRow
 
             if isExpanded && canExpand {
-                Divider().background(Color.appBorder)
+                Divider().background(theme.border)
                 messagesList
                     .transition(.opacity.combined(with: .move(edge: .top)))
             }
         }
         .background(
             RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(Color.appCard)
+                .fill(theme.card)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 10, style: .continuous)
@@ -304,42 +317,43 @@ private struct AccountCard: View {
 
     private var borderColor: Color {
         if state.hasAuthError {
-            return Color.appDestructive.opacity(0.25)
+            return theme.destructive.opacity(0.25)
         } else if isExpanded {
-            return Color.appBorderFocus
+            return theme.borderFocus
         } else {
-            return Color.appBorder
+            return theme.border
         }
     }
 
     private var headerRow: some View {
-        Button(action: handleHeaderTap) {
-            HStack(spacing: 10) {
-                ProviderBadge(type: state.account.type, dimmed: state.hasAuthError)
+        HStack(spacing: 10) {
+            Button(action: openInboxTapped) {
+                HStack(spacing: 10) {
+                    ProviderBadge(type: state.account.type, dimmed: state.hasAuthError)
 
-                VStack(alignment: .leading, spacing: 1) {
-                    Text(state.account.displayName)
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(Color.appForeground)
-                        .lineLimit(1)
-                        .truncationMode(.middle)
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text(state.account.displayName)
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(theme.foreground)
+                            .lineLimit(1)
+                            .truncationMode(.middle)
 
-                    subtitle
+                        subtitle
+                    }
+
+                    Spacer(minLength: 8)
                 }
-
-                Spacer(minLength: 8)
-
-                trailingAccessory
+                .contentShape(Rectangle())
             }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 10)
-            .background(headerBackground)
-            .contentShape(Rectangle())
+            .buttonStyle(.plain)
+            .help(state.hasAuthError ? "" : "Open inbox in browser")
+
+            trailingAccessory
         }
-        .buttonStyle(.plain)
-        .onHover { hovering in
-            isHovered = hovering
-        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .background(headerBackground)
+        .onHover { isHovered = $0 }
     }
 
     @ViewBuilder
@@ -348,15 +362,15 @@ private struct AccountCard: View {
             HStack(spacing: 5) {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .font(.system(size: 9))
-                    .foregroundStyle(Color.appDestructive)
+                    .foregroundStyle(theme.destructive)
                 Text("Authorization expired")
                     .font(.system(size: 10, weight: .medium))
-                    .foregroundStyle(Color.appDestructive)
+                    .foregroundStyle(theme.destructive)
             }
         } else {
             Text(secondaryLine)
                 .font(.system(size: 10))
-                .foregroundStyle(Color.appMuted)
+                .foregroundStyle(theme.muted)
                 .lineLimit(1)
                 .truncationMode(.middle)
         }
@@ -376,14 +390,14 @@ private struct AccountCard: View {
             Button(action: onReauthorize) {
                 Text("Reauthorize")
                     .font(.system(size: 10, weight: .semibold))
-                    .foregroundStyle(Color.appDestructive)
+                    .foregroundStyle(theme.destructive)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 4)
                     .background(
-                        Capsule().fill(Color.appDestructive.opacity(0.12))
+                        Capsule().fill(theme.destructive.opacity(0.12))
                     )
                     .overlay(
-                        Capsule().strokeBorder(Color.appDestructive.opacity(0.4), lineWidth: 1)
+                        Capsule().strokeBorder(theme.destructive.opacity(0.4), lineWidth: 1)
                     )
             }
             .buttonStyle(.plain)
@@ -392,24 +406,30 @@ private struct AccountCard: View {
                 if state.unreadCount > 0 {
                     Text("\(state.unreadCount) new")
                         .font(.system(size: 10, weight: .semibold))
-                        .foregroundStyle(Color.appWarning)
+                        .foregroundStyle(theme.warning)
                         .monospacedDigit()
                         .padding(.horizontal, 8)
                         .padding(.vertical, 3)
                         .background(
-                            Capsule().fill(Color.appWarning.opacity(0.12))
+                            Capsule().fill(theme.warning.opacity(0.12))
                         )
                         .overlay(
-                            Capsule().strokeBorder(Color.appWarning.opacity(0.3), lineWidth: 1)
+                            Capsule().strokeBorder(theme.warning.opacity(0.3), lineWidth: 1)
                         )
                 }
 
                 if canExpand {
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 9, weight: .semibold))
-                        .foregroundStyle(Color.appTertiary)
-                        .rotationEffect(.degrees(isExpanded ? 90 : 0))
-                        .animation(.easeOut(duration: 0.18), value: isExpanded)
+                    Button(action: { isExpanded.toggle() }) {
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 9, weight: .semibold))
+                            .foregroundStyle(theme.tertiary)
+                            .rotationEffect(.degrees(isExpanded ? 90 : 0))
+                            .animation(.easeOut(duration: 0.18), value: isExpanded)
+                            .frame(width: 22, height: 22)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .help(isExpanded ? "Hide recent messages" : "Show recent messages")
                 }
             }
         }
@@ -418,7 +438,7 @@ private struct AccountCard: View {
     @ViewBuilder
     private var headerBackground: some View {
         if isExpanded && canExpand {
-            Color.appPrimary.opacity(0.06)
+            theme.primary.opacity(0.06)
         } else if isHovered {
             Color.white.opacity(0.02)
         } else {
@@ -441,13 +461,9 @@ private struct AccountCard: View {
         .padding(.vertical, 6)
     }
 
-    private func handleHeaderTap() {
+    private func openInboxTapped() {
         if state.hasAuthError { return }
-        if canExpand {
-            isExpanded.toggle()
-        } else {
-            onOpenInbox()
-        }
+        onOpenInbox()
     }
 }
 
@@ -458,12 +474,14 @@ struct ProviderBadge: View {
     var size: CGFloat = 24
     var dimmed: Bool = false
 
+    @Environment(\.theme) private var theme
+
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 5, style: .continuous)
-                .fill(Color.appCardElevated)
+                .fill(theme.cardElevated)
             RoundedRectangle(cornerRadius: 5, style: .continuous)
-                .strokeBorder(Color.appBorderStrong, lineWidth: 1)
+                .strokeBorder(theme.borderStrong, lineWidth: 1)
             Image(type.assetName)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
@@ -481,6 +499,7 @@ private struct MessageRow: View {
     let isVIP: Bool
     let onTap: () -> Void
 
+    @Environment(\.theme) private var theme
     @State private var isHovered = false
 
     var body: some View {
@@ -490,21 +509,21 @@ private struct MessageRow: View {
                     if isVIP {
                         Image(systemName: "star.fill")
                             .font(.system(size: 8))
-                            .foregroundStyle(Color.appWarning)
+                            .foregroundStyle(theme.warning)
                     }
                     Text(message.sender)
                         .font(.system(size: 11, weight: .semibold))
-                        .foregroundStyle(Color.appForeground)
+                        .foregroundStyle(theme.foreground)
                         .lineLimit(1)
                     Spacer(minLength: 6)
                     Text(Formatters.relativeLabel(for: message.serverDate))
                         .font(.system(size: 9))
-                        .foregroundStyle(Color.appTertiary)
+                        .foregroundStyle(theme.tertiary)
                         .monospacedDigit()
                 }
                 Text(snippetLine)
                     .font(.system(size: 10))
-                    .foregroundStyle(Color.appMuted)
+                    .foregroundStyle(theme.muted)
                     .lineLimit(1)
                     .truncationMode(.tail)
             }
@@ -513,7 +532,7 @@ private struct MessageRow: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(
                 RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .fill(isHovered ? Color.appPrimary.opacity(0.08) : Color.clear)
+                    .fill(isHovered ? theme.primary.opacity(0.08) : Color.clear)
             )
             .contentShape(Rectangle())
         }
@@ -531,29 +550,30 @@ private struct MessageRow: View {
 
 private struct EmptyAccountsState: View {
     let onAddAccount: () -> Void
+    @Environment(\.theme) private var theme
 
     var body: some View {
         VStack(spacing: 12) {
             ZStack {
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(Color.appCard)
+                    .fill(theme.card)
                 Image(systemName: "envelope")
                     .font(.system(size: 22, weight: .light))
-                    .foregroundStyle(Color.appMuted)
+                    .foregroundStyle(theme.muted)
             }
             .frame(width: 56, height: 56)
             .overlay(
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .strokeBorder(Color.appBorder, lineWidth: 1)
+                    .strokeBorder(theme.border, lineWidth: 1)
             )
 
             VStack(spacing: 4) {
                 Text("No accounts yet")
                     .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(Color.appForeground)
+                    .foregroundStyle(theme.foreground)
                 Text("Add a Gmail or Outlook inbox to start watching your mail.")
                     .font(.system(size: 11))
-                    .foregroundStyle(Color.appMuted)
+                    .foregroundStyle(theme.muted)
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: 240)
             }
@@ -565,14 +585,14 @@ private struct EmptyAccountsState: View {
                     Text("Add account")
                         .font(.system(size: 11, weight: .semibold))
                 }
-                .foregroundStyle(Color.appPrimary)
+                .foregroundStyle(theme.primary)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
                 .background(
-                    Capsule().fill(Color.appPrimary.opacity(0.12))
+                    Capsule().fill(theme.primary.opacity(0.12))
                 )
                 .overlay(
-                    Capsule().strokeBorder(Color.appPrimary.opacity(0.3), lineWidth: 1)
+                    Capsule().strokeBorder(theme.primary.opacity(0.3), lineWidth: 1)
                 )
             }
             .buttonStyle(.plain)
@@ -586,6 +606,8 @@ private struct EmptyAccountsState: View {
 private struct BottomBar: View {
     let actions: MenuBarPopoverActions
 
+    @Environment(\.theme) private var theme
+
     var body: some View {
         HStack(spacing: 4) {
             AppIconButton(systemName: "arrow.triangle.2.circlepath",
@@ -597,10 +619,95 @@ private struct BottomBar: View {
 
             Spacer(minLength: 0)
 
+            ThemeStrip()
+
+            Spacer(minLength: 0)
+
             AppIconButton(systemName: "power", help: "Quit Mail Notifier", action: actions.quit)
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 9)
-        .background(Color.appSurface)
+        .background(theme.surface)
+    }
+}
+
+// MARK: - Theme Strip
+
+private struct ThemeStrip: View {
+    @ObservedObject private var store = ThemeStore.shared
+    @Environment(\.theme) private var theme
+    @State private var isExpanded = false
+
+    private static let bouncy: Animation = .spring(response: 0.35, dampingFraction: 0.6)
+    private static let dotSize: CGFloat = 10
+
+    var body: some View {
+        HStack(spacing: isExpanded ? 6 : 0) {
+            ForEach(AppTheme.allCases) { option in
+                let palette = option.palette
+                let isActive = store.current == option
+                let show = isExpanded || isActive
+
+                Button {
+                    withAnimation(Self.bouncy) {
+                        store.current = option
+                        isExpanded = false
+                    }
+                } label: {
+                    ZStack {
+                        dotFill(for: option, palette: palette)
+                        if isActive {
+                            Circle()
+                                .stroke(theme.foreground.opacity(0.9), lineWidth: 1.5)
+                                .padding(-2.5)
+                        }
+                    }
+                    .frame(width: Self.dotSize, height: Self.dotSize)
+                    .scaleEffect(show ? 1 : 0.01)
+                    .opacity(show ? 1 : 0)
+                }
+                .buttonStyle(.plain)
+                .frame(width: show ? Self.dotSize : 0)
+                .clipped()
+                .help(option.label)
+            }
+        }
+        .padding(.horizontal, isExpanded ? 9 : 6)
+        .padding(.vertical, 5)
+        .background(Capsule().fill(theme.card))
+        .overlay(Capsule().strokeBorder(theme.border, lineWidth: 1))
+        .animation(Self.bouncy, value: isExpanded)
+        .onHover { hovering in
+            withAnimation(Self.bouncy) {
+                isExpanded = hovering
+            }
+        }
+    }
+
+    /// Picks the right fill for a theme dot. System renders as a split
+    /// black/white disc so users recognize it as "auto-adapt".
+    @ViewBuilder
+    private func dotFill(for option: AppTheme, palette: ThemePalette) -> some View {
+        if option == .system {
+            ZStack {
+                Circle().fill(Color.white)
+                Circle()
+                    .fill(Color.black)
+                    .mask(
+                        Rectangle()
+                            .frame(width: Self.dotSize, height: Self.dotSize)
+                            .offset(x: Self.dotSize / 2)
+                    )
+            }
+        } else {
+            Circle()
+                .fill(
+                    LinearGradient(
+                        colors: [palette.primary, palette.primaryDeep],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+        }
     }
 }

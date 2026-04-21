@@ -70,7 +70,10 @@ final class FriendlyNameStore: ObservableObject {
             self?.syncFromCloud()
         }
         kvs.synchronize()
-        syncFromCloud()
+        // Initial value was already loaded from `readMerged()` in `init`.
+        // Do NOT call `syncFromCloud()` here — when the iCloud entitlement
+        // is missing the KVS read returns an empty dict, which would
+        // overwrite the UserDefaults mirror with nothing.
     }
 
     deinit {
@@ -83,6 +86,10 @@ final class FriendlyNameStore: ObservableObject {
 
     private func syncFromCloud() {
         let cloud = (kvs.dictionary(forKey: Self.kvsKey) as? [String: String]) ?? [:]
+        // Guard against a missing iCloud entitlement or a not-yet-populated
+        // KVS wiping legitimate local state. Only accept cloud as
+        // authoritative when it actually contains data.
+        guard !cloud.isEmpty else { return }
         guard cloud != names else { return }
         names = cloud
         defaults.set(cloud, forKey: Self.defaultsKey)

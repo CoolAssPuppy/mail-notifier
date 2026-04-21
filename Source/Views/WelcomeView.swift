@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct WelcomeView: View {
+    @Environment(\.theme) private var theme
+
     var body: some View {
         VStack(spacing: 0) {
             Spacer(minLength: 0)
@@ -18,12 +20,12 @@ struct WelcomeView: View {
                 VStack(spacing: 10) {
                     Text("Welcome to Mail Notifier")
                         .font(.system(size: 28, weight: .semibold))
-                        .foregroundStyle(Color.appForeground)
+                        .foregroundStyle(theme.foreground)
                         .fixedSize()
 
                     Text("Connect a Gmail or Outlook inbox and Mail Notifier will quietly watch it from your menu bar. No mail data ever leaves your Mac.")
                         .font(.system(size: 14))
-                        .foregroundStyle(Color.appMuted)
+                        .foregroundStyle(theme.muted)
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: 440)
                         .fixedSize(horizontal: false, vertical: true)
@@ -56,7 +58,7 @@ struct WelcomeView: View {
             Spacer(minLength: 0)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.appBackground)
+        .background(theme.background)
     }
 
     private var heroBadge: some View {
@@ -65,26 +67,26 @@ struct WelcomeView: View {
                 .fill(
                     LinearGradient(
                         colors: [
-                            Color.appPrimary.opacity(0.18),
-                            Color.appPrimaryDeep.opacity(0.06)
+                            theme.primary.opacity(0.18),
+                            theme.primaryDeep.opacity(0.06)
                         ],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
                 )
             RoundedRectangle(cornerRadius: 24, style: .continuous)
-                .strokeBorder(Color.appPrimary.opacity(0.25), lineWidth: 1)
+                .strokeBorder(theme.primary.opacity(0.25), lineWidth: 1)
 
             RoundedRectangle(cornerRadius: 18, style: .continuous)
                 .fill(
                     LinearGradient(
-                        colors: [Color.appPrimary, Color.appPrimaryDeep],
+                        colors: [theme.primary, theme.primaryDeep],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
                 )
                 .frame(width: 80, height: 80)
-                .shadow(color: Color.appPrimary.opacity(0.35), radius: 16, y: 8)
+                .shadow(color: theme.primary.opacity(0.35), radius: 16, y: 8)
                 .overlay(
                     Image(systemName: "envelope.fill")
                         .font(.system(size: 32, weight: .semibold))
@@ -99,7 +101,7 @@ struct WelcomeView: View {
             trustItem(icon: "lock.fill", label: "Tokens stored in macOS Keychain")
 
             Circle()
-                .fill(Color.appDim)
+                .fill(theme.dim)
                 .frame(width: 3, height: 3)
 
             trustItem(icon: "info.circle", label: "No telemetry, no analytics, no servers")
@@ -110,10 +112,10 @@ struct WelcomeView: View {
         HStack(spacing: 6) {
             Image(systemName: icon)
                 .font(.system(size: 10, weight: .medium))
-                .foregroundStyle(Color.appTertiary)
+                .foregroundStyle(theme.tertiary)
             Text(label)
                 .font(.system(size: 11))
-                .foregroundStyle(Color.appTertiary)
+                .foregroundStyle(theme.tertiary)
         }
     }
 }

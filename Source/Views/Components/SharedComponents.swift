@@ -9,11 +9,12 @@ import SwiftUI
 
 // MARK: - Card
 
-/// Section card with uppercase label, optional trailing accessory, and body content.
 struct AppCard<Trailing: View, Content: View>: View {
     let title: String
     @ViewBuilder var trailing: () -> Trailing
     @ViewBuilder var content: () -> Content
+
+    @Environment(\.theme) private var theme
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -21,7 +22,7 @@ struct AppCard<Trailing: View, Content: View>: View {
                 Text(title.uppercased())
                     .font(.system(size: 10, weight: .semibold))
                     .tracking(0.6)
-                    .foregroundStyle(Color.appTertiary)
+                    .foregroundStyle(theme.tertiary)
                 Spacer(minLength: 0)
                 trailing()
             }
@@ -33,11 +34,11 @@ struct AppCard<Trailing: View, Content: View>: View {
         .padding(.vertical, 18)
         .background(
             RoundedRectangle(cornerRadius: AppRadius.xl, style: .continuous)
-                .fill(Color.appCard)
+                .fill(theme.card)
         )
         .overlay(
             RoundedRectangle(cornerRadius: AppRadius.xl, style: .continuous)
-                .strokeBorder(Color.appBorder, lineWidth: 1)
+                .strokeBorder(theme.border, lineWidth: 1)
         )
     }
 }
@@ -63,6 +64,8 @@ struct AppSettingRow<Trailing: View>: View {
     let description: String?
     @ViewBuilder var trailing: () -> Trailing
 
+    @Environment(\.theme) private var theme
+
     init(_ title: String,
          description: String? = nil,
          @ViewBuilder trailing: @escaping () -> Trailing) {
@@ -76,11 +79,11 @@ struct AppSettingRow<Trailing: View>: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
                     .font(.system(size: 13, weight: .medium))
-                    .foregroundStyle(Color.appForeground)
+                    .foregroundStyle(theme.foreground)
                 if let description {
                     Text(description)
                         .font(.system(size: 11))
-                        .foregroundStyle(Color.appMuted)
+                        .foregroundStyle(theme.muted)
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
@@ -93,11 +96,18 @@ struct AppSettingRow<Trailing: View>: View {
 // MARK: - Row divider
 
 struct AppRowDivider: View {
+    @Environment(\.theme) private var theme
     var body: some View {
         Rectangle()
-            .fill(Color.appDividerSubtle)
+            .fill(theme.dividerSubtle)
             .frame(height: 1)
     }
+}
+
+// MARK: - Button roles for themed tinting
+
+enum AppButtonTint {
+    case foreground, primary, destructive
 }
 
 // MARK: - Secondary (bordered) button
@@ -105,9 +115,10 @@ struct AppRowDivider: View {
 struct AppSecondaryButton: View {
     let title: String
     var systemImage: String? = nil
-    var tint: Color = .appForeground
+    var tint: AppButtonTint = .foreground
     let action: () -> Void
 
+    @Environment(\.theme) private var theme
     @State private var isHovered = false
 
     var body: some View {
@@ -120,12 +131,12 @@ struct AppSecondaryButton: View {
                 Text(title)
                     .font(.system(size: 11, weight: .medium))
             }
-            .foregroundStyle(tint)
+            .foregroundStyle(tintColor)
             .padding(.horizontal, 11)
             .padding(.vertical, 6)
             .background(
                 RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
-                    .fill(isHovered ? Color.appCardElevated : Color.appCardInset)
+                    .fill(isHovered ? theme.cardElevated : theme.cardInset)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
@@ -136,10 +147,19 @@ struct AppSecondaryButton: View {
         .onHover { isHovered = $0 }
     }
 
+    private var tintColor: Color {
+        switch tint {
+        case .foreground:  return theme.foreground
+        case .primary:     return theme.primary
+        case .destructive: return theme.destructive
+        }
+    }
+
     private var borderColor: Color {
-        tint == .appDestructive
-            ? Color.appDestructive.opacity(0.35)
-            : Color.appBorderStrong
+        switch tint {
+        case .destructive: return theme.destructive.opacity(0.35)
+        default:           return theme.borderStrong
+        }
     }
 }
 
@@ -148,10 +168,11 @@ struct AppSecondaryButton: View {
 struct AppIconButton: View {
     let systemName: String
     var help: String = ""
-    var tint: Color = .appMuted
+    var tint: AppButtonTint = .foreground
     var spinOnTap: Bool = false
     let action: () -> Void
 
+    @Environment(\.theme) private var theme
     @State private var isHovered = false
     @State private var isSpinning = false
 
@@ -159,18 +180,26 @@ struct AppIconButton: View {
         Button(action: handleTap) {
             Image(systemName: systemName)
                 .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(isHovered ? Color.appForeground : tint)
+                .foregroundStyle(isHovered ? theme.foreground : restingColor)
                 .rotationEffect(.degrees(isSpinning ? 360 : 0))
                 .animation(isSpinning ? .easeInOut(duration: 0.6) : .default, value: isSpinning)
                 .frame(width: 28, height: 26)
                 .background(
                     RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
-                        .fill(isHovered ? Color.appCardElevated : Color.clear)
+                        .fill(isHovered ? theme.cardElevated : Color.clear)
                 )
         }
         .buttonStyle(.plain)
         .onHover { isHovered = $0 }
         .help(help)
+    }
+
+    private var restingColor: Color {
+        switch tint {
+        case .foreground:  return theme.muted
+        case .primary:     return theme.primary
+        case .destructive: return theme.destructive
+        }
     }
 
     private func handleTap() {
@@ -192,6 +221,7 @@ struct AppProviderChoiceCard: View {
     let assetName: String
     let action: () -> Void
 
+    @Environment(\.theme) private var theme
     @State private var isHovered = false
 
     var body: some View {
@@ -200,10 +230,10 @@ struct AppProviderChoiceCard: View {
                 HStack {
                     ZStack {
                         RoundedRectangle(cornerRadius: 9, style: .continuous)
-                            .fill(Color.appCardElevated)
+                            .fill(theme.cardElevated)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 9, style: .continuous)
-                                    .strokeBorder(Color.appBorderStrong, lineWidth: 1)
+                                    .strokeBorder(theme.borderStrong, lineWidth: 1)
                             )
                         Image(assetName)
                             .resizable()
@@ -216,12 +246,12 @@ struct AppProviderChoiceCard: View {
 
                     ZStack {
                         Circle()
-                            .fill(Color.appCardElevated)
+                            .fill(theme.cardElevated)
                         Circle()
-                            .strokeBorder(Color.appBorderStrong, lineWidth: 1)
+                            .strokeBorder(theme.borderStrong, lineWidth: 1)
                         Image(systemName: "chevron.right")
                             .font(.system(size: 10, weight: .semibold))
-                            .foregroundStyle(Color.appMuted)
+                            .foregroundStyle(theme.muted)
                     }
                     .frame(width: 24, height: 24)
                 }
@@ -229,30 +259,30 @@ struct AppProviderChoiceCard: View {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(title)
                         .font(.system(size: 14, weight: .semibold))
-                        .foregroundStyle(Color.appForeground)
+                        .foregroundStyle(theme.foreground)
                     Text(subtitle)
                         .font(.system(size: 11))
-                        .foregroundStyle(Color.appMuted)
+                        .foregroundStyle(theme.muted)
                 }
 
                 HStack(spacing: 5) {
                     Image(systemName: "checkmark")
                         .font(.system(size: 8, weight: .bold))
-                        .foregroundStyle(Color.appSuccess)
+                        .foregroundStyle(theme.success)
                     Text("Read-only access")
                         .font(.system(size: 10))
-                        .foregroundStyle(Color.appMuted)
+                        .foregroundStyle(theme.muted)
                 }
             }
             .padding(18)
             .frame(width: 220, alignment: .leading)
             .background(
                 RoundedRectangle(cornerRadius: AppRadius.xxl, style: .continuous)
-                    .fill(isHovered ? Color.appCardElevated : Color.appCard)
+                    .fill(isHovered ? theme.cardElevated : theme.card)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: AppRadius.xxl, style: .continuous)
-                    .strokeBorder(isHovered ? Color.appBorderFocus : Color.appBorder, lineWidth: 1)
+                    .strokeBorder(isHovered ? theme.borderFocus : theme.border, lineWidth: 1)
             )
         }
         .buttonStyle(.plain)
@@ -260,25 +290,12 @@ struct AppProviderChoiceCard: View {
     }
 }
 
-struct SectionHeader: View {
-    let icon: String
-    let title: String
-    let gradient: [Color]
+// MARK: - Picker style
 
-    var body: some View {
-        HStack(spacing: 8) {
-            Image(systemName: icon)
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(
-                    LinearGradient(
-                        colors: gradient,
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-            Text(title)
-                .font(.system(size: 15, weight: .semibold))
-                .foregroundColor(.primary)
-        }
+extension View {
+    func appBoxedPicker(width: CGFloat = 200) -> some View {
+        self
+            .labelsHidden()
+            .frame(width: width, alignment: .trailing)
     }
 }

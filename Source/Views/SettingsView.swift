@@ -15,6 +15,7 @@ struct SettingsView: View {
     @AppStorage(AppSettings.openSettingsOnStartKey) private var openSettingsOnStart = false
     @AppStorage(VIPList.storageKey) private var vipList = VIPList()
 
+    @Environment(\.theme) private var theme
     @State private var newVIPEmail = ""
     @State private var newVIPSound = ""
 
@@ -53,7 +54,7 @@ struct SettingsView: View {
                         .labelsHidden()
                         .toggleStyle(.switch)
                         .controlSize(.small)
-                        .tint(Color.appPrimary)
+                        .tint(theme.primary)
                 }
 
                 AppRowDivider().padding(.vertical, 10)
@@ -66,7 +67,7 @@ struct SettingsView: View {
                         .labelsHidden()
                         .toggleStyle(.switch)
                         .controlSize(.small)
-                        .tint(Color.appPrimary)
+                        .tint(theme.primary)
                         .onChange(of: showUnreadCount) { _, _ in
                             AppSettings.shared.showUnreadCountSettingChanged()
                         }
@@ -82,7 +83,7 @@ struct SettingsView: View {
                         .labelsHidden()
                         .toggleStyle(.switch)
                         .controlSize(.small)
-                        .tint(Color.appPrimary)
+                        .tint(theme.primary)
                 }
             }
         }
@@ -107,23 +108,23 @@ struct SettingsView: View {
         AppCard("VIP List") {
             Text("Custom notification sounds for important senders. Plays in any account.")
                 .font(.system(size: 10))
-                .foregroundStyle(Color.appMuted)
+                .foregroundStyle(theme.muted)
                 .padding(.bottom, 10)
 
             HStack(spacing: 6) {
                 TextField("Email address", text: $newVIPEmail)
                     .textFieldStyle(.plain)
                     .font(.system(size: 11))
-                    .foregroundStyle(Color.appForeground)
+                    .foregroundStyle(theme.foreground)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 6)
                     .background(
                         RoundedRectangle(cornerRadius: AppRadius.sm, style: .continuous)
-                            .fill(Color.appCardInset)
+                            .fill(theme.cardInset)
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: AppRadius.sm, style: .continuous)
-                            .strokeBorder(Color.appBorderStrong, lineWidth: 1)
+                            .strokeBorder(theme.borderStrong, lineWidth: 1)
                     )
 
                 Picker("", selection: $newVIPSound) {
@@ -143,15 +144,15 @@ struct SettingsView: View {
                 Button(action: addVIP) {
                     Image(systemName: "plus")
                         .font(.system(size: 11, weight: .bold))
-                        .foregroundStyle(canAddVIP ? Color.appForeground : Color.appDim)
+                        .foregroundStyle(canAddVIP ? theme.foreground : theme.dim)
                         .frame(width: 28, height: 28)
                         .background(
                             RoundedRectangle(cornerRadius: AppRadius.sm, style: .continuous)
-                                .fill(Color.appCardElevated)
+                                .fill(theme.cardElevated)
                         )
                         .overlay(
                             RoundedRectangle(cornerRadius: AppRadius.sm, style: .continuous)
-                                .strokeBorder(Color.appBorderStrong, lineWidth: 1)
+                                .strokeBorder(theme.borderStrong, lineWidth: 1)
                         )
                 }
                 .buttonStyle(.plain)
@@ -191,19 +192,19 @@ struct SettingsView: View {
     private var updatesCard: some View {
         AppCard("Updates", trailing: {
             HStack(spacing: 5) {
-                Circle().fill(Color.appSuccess).frame(width: 5, height: 5)
+                Circle().fill(theme.success).frame(width: 5, height: 5)
                 Text("UP TO DATE")
                     .font(.system(size: 9, weight: .semibold))
                     .tracking(0.3)
-                    .foregroundStyle(Color.appSuccess)
+                    .foregroundStyle(theme.success)
             }
             .padding(.horizontal, 8)
             .padding(.vertical, 2)
             .background(
-                Capsule().fill(Color.appSuccess.opacity(0.10))
+                Capsule().fill(theme.success.opacity(0.10))
             )
             .overlay(
-                Capsule().strokeBorder(Color.appSuccess.opacity(0.3), lineWidth: 1)
+                Capsule().strokeBorder(theme.success.opacity(0.3), lineWidth: 1)
             )
         }) {
             VStack(spacing: 0) {
@@ -215,7 +216,7 @@ struct SettingsView: View {
                         .labelsHidden()
                         .toggleStyle(.switch)
                         .controlSize(.small)
-                        .tint(Color.appPrimary)
+                        .tint(theme.primary)
                 }
 
                 AppRowDivider().padding(.vertical, 10)
@@ -239,7 +240,7 @@ struct SettingsView: View {
             VStack(alignment: .leading, spacing: 12) {
                 Text("Mail Notifier is built by one person. Google charges indie email apps $8,000 per year for certification. If this app saves you time, please consider buying me a coffee.")
                     .font(.system(size: 11))
-                    .foregroundStyle(Color.appForegroundSoft)
+                    .foregroundStyle(theme.foregroundSoft)
                     .lineSpacing(3)
                     .fixedSize(horizontal: false, vertical: true)
 
@@ -258,7 +259,7 @@ struct SettingsView: View {
                             RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
                                 .fill(
                                     LinearGradient(
-                                        colors: [Color.appAccentOrange, Color.appAccentOrangeDeep],
+                                        colors: [theme.primary, theme.primaryDeep],
                                         startPoint: .topLeading,
                                         endPoint: .bottomTrailing
                                     )
@@ -274,16 +275,16 @@ struct SettingsView: View {
                             Text("Star on GitHub")
                                 .font(.system(size: 11, weight: .medium))
                         }
-                        .foregroundStyle(Color.appForeground)
+                        .foregroundStyle(theme.foreground)
                         .padding(.horizontal, 11)
                         .padding(.vertical, 7)
                         .background(
                             RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
-                                .fill(Color.appCardInset)
+                                .fill(theme.cardInset)
                         )
                         .overlay(
                             RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
-                                .strokeBorder(Color.appBorderStrong, lineWidth: 1)
+                                .strokeBorder(theme.borderStrong, lineWidth: 1)
                         )
                     }
                     .buttonStyle(.plain)
@@ -304,6 +305,7 @@ private struct VIPRow: View {
     let onUpdate: (VIP) -> Void
     let onDelete: () -> Void
 
+    @Environment(\.theme) private var theme
     @State private var selectedSound: String
 
     init(vip: VIP, onUpdate: @escaping (VIP) -> Void, onDelete: @escaping () -> Void) {
@@ -317,10 +319,10 @@ private struct VIPRow: View {
         HStack(spacing: 10) {
             Image(systemName: "star.fill")
                 .font(.system(size: 10))
-                .foregroundStyle(Color.appWarning)
+                .foregroundStyle(theme.warning)
             Text(vip.email)
                 .font(.system(size: 12))
-                .foregroundStyle(Color.appForeground)
+                .foregroundStyle(theme.foreground)
                 .lineLimit(1)
             Spacer()
             Picker("", selection: $selectedSound) {
@@ -337,7 +339,7 @@ private struct VIPRow: View {
                 updated.notificationSound = newValue
                 onUpdate(updated)
             }
-            AppIconButton(systemName: "trash", tint: .appDestructive, action: onDelete)
+            AppIconButton(systemName: "trash", tint: .destructive, action: onDelete)
         }
         .padding(.vertical, 6)
     }
@@ -346,5 +348,4 @@ private struct VIPRow: View {
 #Preview {
     SettingsView()
         .frame(width: 980, height: 560)
-        .background(Color.appSurface)
 }

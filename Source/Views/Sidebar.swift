@@ -10,8 +10,10 @@ import SwiftUI
 struct Sidebar: View {
     @AppStorage(Accounts.storageKey) var accounts = Accounts()
     @ObservedObject private var friendlyNames = FriendlyNameStore.shared
+    @Environment(\.theme) private var theme
     @Binding var selection: String?
     var totalUnread: Int = 0
+    var onOpenSettings: () -> Void = {}
 
     var body: some View {
         VStack(spacing: 0) {
@@ -26,10 +28,10 @@ struct Sidebar: View {
             footer
         }
         .frame(maxHeight: .infinity)
-        .background(Color.appSurface)
+        .background(theme.surface)
         .overlay(
             Rectangle()
-                .fill(Color.appDivider)
+                .fill(theme.divider)
                 .frame(width: 1),
             alignment: .trailing
         )
@@ -43,7 +45,7 @@ struct Sidebar: View {
                 RoundedRectangle(cornerRadius: 6, style: .continuous)
                     .fill(
                         LinearGradient(
-                            colors: [Color.appPrimary, Color.appPrimaryDeep],
+                            colors: [theme.primary, theme.primaryDeep],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
@@ -57,10 +59,10 @@ struct Sidebar: View {
             VStack(alignment: .leading, spacing: 1) {
                 Text("Mail Notifier")
                     .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(Color.appForeground)
+                    .foregroundStyle(theme.foreground)
                 Text(accounts.isEmpty ? "Setup required" : "\(accounts.count) configured")
                     .font(.system(size: 10))
-                    .foregroundStyle(Color.appMuted)
+                    .foregroundStyle(theme.muted)
             }
 
             Spacer()
@@ -75,12 +77,12 @@ struct Sidebar: View {
             Text("ACCOUNTS")
                 .font(.system(size: 10, weight: .semibold))
                 .tracking(0.6)
-                .foregroundStyle(Color.appTertiary)
+                .foregroundStyle(theme.tertiary)
             Spacer()
             if totalUnread > 0 {
                 Text("\(totalUnread) unread")
                     .font(.system(size: 10, weight: .semibold))
-                    .foregroundStyle(Color.appWarning)
+                    .foregroundStyle(theme.warning)
                     .monospacedDigit()
             }
         }
@@ -116,44 +118,51 @@ struct Sidebar: View {
     // MARK: - Footer
 
     private var footer: some View {
-        VStack(spacing: 8) {
+        HStack(spacing: 8) {
             Button(action: { selection = "welcome" }) {
-                HStack(spacing: 7) {
+                HStack(spacing: 6) {
                     Image(systemName: "plus")
                         .font(.system(size: 10, weight: .bold))
-                    Text("Add account")
+                    Text("Add")
                         .font(.system(size: 11, weight: .medium))
                 }
-                .foregroundStyle(Color.appForeground)
+                .foregroundStyle(theme.foreground)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 8)
                 .background(
                     RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
-                        .fill(Color.appCard)
+                        .fill(theme.card)
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
                         .strokeBorder(style: StrokeStyle(lineWidth: 1, dash: [3, 3]))
-                        .foregroundStyle(Color.appBorderStrong)
+                        .foregroundStyle(theme.borderStrong)
                 )
             }
             .buttonStyle(.plain)
 
-            HStack(spacing: 5) {
-                Image(systemName: "arrow.triangle.2.circlepath")
-                    .font(.system(size: 10))
-                    .foregroundStyle(Color.appMuted)
-                Text("Check all (⌥⌘N)")
-                    .font(.system(size: 10))
-                    .foregroundStyle(Color.appMuted)
-                Spacer()
+            Button(action: onOpenSettings) {
+                Image(systemName: "gearshape")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(theme.muted)
+                    .frame(width: 34, height: 32)
+                    .background(
+                        RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
+                            .fill(theme.card)
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
+                            .strokeBorder(theme.borderStrong, lineWidth: 1)
+                    )
             }
-            .padding(.horizontal, 4)
+            .buttonStyle(.plain)
+            .keyboardShortcut(",", modifiers: .command)
+            .help("Settings (⌘,)")
         }
         .padding(12)
         .overlay(
             Rectangle()
-                .fill(Color.appDivider)
+                .fill(theme.divider)
                 .frame(height: 1),
             alignment: .top
         )
@@ -168,6 +177,7 @@ private struct SidebarAccountRow: View {
     let unreadCount: Int
 
     @ObservedObject private var friendlyNames = FriendlyNameStore.shared
+    @Environment(\.theme) private var theme
     @State private var isHovered = false
 
     var body: some View {
@@ -182,7 +192,7 @@ private struct SidebarAccountRow: View {
                     .truncationMode(.middle)
                 Text(subtitle)
                     .font(.system(size: 10))
-                    .foregroundStyle(Color.appTertiary)
+                    .foregroundStyle(theme.tertiary)
                     .lineLimit(1)
             }
 
@@ -196,7 +206,7 @@ private struct SidebarAccountRow: View {
         .overlay(
             RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
                 .strokeBorder(
-                    isSelected ? Color.appPrimary.opacity(0.25) : Color.clear,
+                    isSelected ? theme.primary.opacity(0.25) : Color.clear,
                     lineWidth: 1
                 )
         )
@@ -210,14 +220,14 @@ private struct SidebarAccountRow: View {
     }
 
     private var textColor: Color {
-        isSelected ? Color.appForeground : Color.appForegroundSoft
+        isSelected ? theme.foreground : theme.foregroundSoft
     }
 
     @ViewBuilder
     private var background: some View {
         if isSelected {
             RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
-                .fill(Color.appPrimary.opacity(0.10))
+                .fill(theme.primary.opacity(0.10))
         } else if isHovered {
             RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
                 .fill(Color.white.opacity(0.02))
@@ -231,20 +241,20 @@ private struct SidebarAccountRow: View {
         if !account.enabled {
             Text("Off")
                 .font(.system(size: 9, weight: .semibold))
-                .foregroundStyle(Color.appTertiary)
+                .foregroundStyle(theme.tertiary)
                 .padding(.horizontal, 6)
                 .padding(.vertical, 2)
                 .background(
-                    Capsule().fill(Color.appCardElevated)
+                    Capsule().fill(theme.cardElevated)
                 )
         } else if unreadCount > 0 {
             Text("\(unreadCount)")
                 .font(.system(size: 9, weight: .bold))
                 .monospacedDigit()
-                .foregroundStyle(Color.appBackground)
+                .foregroundStyle(theme.background)
                 .frame(minWidth: 18, minHeight: 18)
                 .padding(.horizontal, 5)
-                .background(Capsule().fill(Color.appWarning))
+                .background(Capsule().fill(theme.warning))
         }
     }
 }

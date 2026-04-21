@@ -11,6 +11,8 @@ struct SettingsDrawer: View {
     @Binding var isPresented: Bool
     var contentHeight: CGFloat = 600
 
+    @Environment(\.theme) private var theme
+
     var body: some View {
         ZStack(alignment: .top) {
             if isPresented {
@@ -32,20 +34,20 @@ struct SettingsDrawer: View {
             header
 
             Rectangle()
-                .fill(Color.appDivider)
+                .fill(theme.divider)
                 .frame(height: 1)
 
             ScrollView { SettingsView() }
                 .frame(maxHeight: contentHeight)
 
             Rectangle()
-                .fill(Color.appDivider)
+                .fill(theme.divider)
                 .frame(height: 1)
 
             footer
         }
-        .background(Color.appSurface)
-        .overlay(drawerShape.strokeBorder(Color.appBorder, lineWidth: 1))
+        .background(theme.surface)
+        .overlay(drawerShape.strokeBorder(theme.border, lineWidth: 1))
         .clipShape(drawerShape)
         .shadow(color: .black.opacity(0.45), radius: 18, y: 8)
     }
@@ -63,10 +65,10 @@ struct SettingsDrawer: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text("Settings")
                     .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(Color.appForeground)
+                    .foregroundStyle(theme.foreground)
                 Text("Preferences for Mail Notifier · ⌘, to toggle")
                     .font(.system(size: 11))
-                    .foregroundStyle(Color.appMuted)
+                    .foregroundStyle(theme.muted)
             }
 
             Spacer()
@@ -74,10 +76,10 @@ struct SettingsDrawer: View {
             Button(action: close) {
                 Image(systemName: "xmark")
                     .font(.system(size: 11, weight: .bold))
-                    .foregroundStyle(Color.appForeground)
+                    .foregroundStyle(theme.foreground)
                     .frame(width: 28, height: 28)
-                    .background(Circle().fill(Color.appCard))
-                    .overlay(Circle().strokeBorder(Color.appBorderStrong, lineWidth: 1))
+                    .background(Circle().fill(theme.card))
+                    .overlay(Circle().strokeBorder(theme.borderStrong, lineWidth: 1))
             }
             .buttonStyle(.plain)
             .keyboardShortcut(.cancelAction)
@@ -90,22 +92,22 @@ struct SettingsDrawer: View {
         HStack(spacing: 4) {
             Text("Made with")
                 .font(.system(size: 10))
-                .foregroundStyle(Color.appTertiary)
+                .foregroundStyle(theme.tertiary)
             Image(systemName: "heart.fill")
                 .font(.system(size: 9))
-                .foregroundStyle(Color.appDestructive)
+                .foregroundStyle(theme.destructive)
             Text("in Lisbon by Strategic Nerds")
                 .font(.system(size: 10))
-                .foregroundStyle(Color.appTertiary)
-            Circle().fill(Color.appDim).frame(width: 3, height: 3).padding(.horizontal, 4)
+                .foregroundStyle(theme.tertiary)
+            Circle().fill(theme.dim).frame(width: 3, height: 3).padding(.horizontal, 4)
             Text("© 2026")
                 .font(.system(size: 10))
-                .foregroundStyle(Color.appTertiary)
+                .foregroundStyle(theme.tertiary)
             Spacer()
         }
         .padding(.horizontal, 24)
         .padding(.vertical, 12)
-        .background(Color.appBackground)
+        .background(theme.background)
     }
 
     private func close() {
