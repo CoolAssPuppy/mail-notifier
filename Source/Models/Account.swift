@@ -78,11 +78,3 @@ extension Account: Identifiable, Hashable {
         friendlyName ?? email
     }
 }
-
-private extension CharacterSet {
-    static let urlPathComponentAllowed: CharacterSet = {
-        var set = CharacterSet.urlPathAllowed
-        set.remove(charactersIn: "/")
-        return set
-    }()
-}

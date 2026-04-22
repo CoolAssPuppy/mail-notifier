@@ -42,6 +42,7 @@
 		A0F0A08A7BC55D3BB180D455 /* VIP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85847722F72E75C126DBDA5E /* VIP.swift */; };
 		A251911196F10ED30B0415CE /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 78BC9BB6E40F761B3D8BF4E4 /* Sparkle */; };
 		A6B3394F51A2A5835A3198A0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A041711E87CFA58E09D99FF /* AppDelegate.swift */; };
+		A9E26273228389E34B1301B2 /* URLEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593B0B24623F6B3BBF2C5DEB /* URLEncoding.swift */; };
 		AB04FDB131DB0747824C03A2 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C83F8313F9B9B2D8322268 /* Theme.swift */; };
 		AC7B341B09EE8F0209B51C10 /* OutlookProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F3A9C26F687C1CC69C150A /* OutlookProvider.swift */; };
 		C37D1FA9636CCF698C5B5AF7 /* URLRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764695FD367A93846CADCEBD /* URLRouter.swift */; };
@@ -80,6 +81,7 @@
 		49FC974A840D1A18FD08E426 /* FriendlyNameStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendlyNameStore.swift; sourceTree = "<group>"; };
 		4F02C65B9502185B46945AC7 /* tlh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tlh; path = tlh.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58D68FB4988855EDF84FB661 /* NotificationNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationNames.swift; sourceTree = "<group>"; };
+		593B0B24623F6B3BBF2C5DEB /* URLEncoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLEncoding.swift; sourceTree = "<group>"; };
 		5A041711E87CFA58E09D99FF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5A105D8E7E7F9FDA229C0CCD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5BCBFC5DE7D942DC59F40416 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -122,7 +124,7 @@
 		EEA9F3DE9853CF06BBDD72BF /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F7DF9E463FD10F104229B4C9 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FB460ED3BAD3CC445B93C9FE /* AppDelegate+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Menu.swift"; sourceTree = "<group>"; };
-		"TEMP_1AE7C30A-E427-4687-9170-F5D5581D7B91" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		"TEMP_6BF3D015-D276-46CC-A082-0C290769A77B" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -260,6 +262,7 @@
 				DF089B2ADA2A224578FA3B8A /* Formatters.swift */,
 				3753916EFC671DA64C799FD0 /* Logger.swift */,
 				58D68FB4988855EDF84FB661 /* NotificationNames.swift */,
+				593B0B24623F6B3BBF2C5DEB /* URLEncoding.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -279,10 +282,10 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		"TEMP_D34BE7B4-A08A-493B-A53F-52E5EB46BC5A" /* mail-notifier */ = {
+		"TEMP_9A3A3763-55D4-4A06-807C-A6B3360CC67F" /* mail-notifier */ = {
 			isa = PBXGroup;
 			children = (
-				"TEMP_1AE7C30A-E427-4687-9170-F5D5581D7B91" /* Secrets.xcconfig */,
+				"TEMP_6BF3D015-D276-46CC-A082-0C290769A77B" /* Secrets.xcconfig */,
 			);
 			path = "mail-notifier";
 			sourceTree = "<group>";
@@ -454,6 +457,7 @@
 				6F19E5430EB52E328D689CD3 /* Sound.swift in Sources */,
 				AB04FDB131DB0747824C03A2 /* Theme.swift in Sources */,
 				3B34CC5B1AEFD51B72EDC13D /* ThemeStore.swift in Sources */,
+				A9E26273228389E34B1301B2 /* URLEncoding.swift in Sources */,
 				C37D1FA9636CCF698C5B5AF7 /* URLRouter.swift in Sources */,
 				42E9081BE938811A5683C9A5 /* UpdaterManager.swift in Sources */,
 				A0F0A08A7BC55D3BB180D455 /* VIP.swift in Sources */,
@@ -534,7 +538,7 @@
 		};
 		229918186B40865D81363975 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_1AE7C30A-E427-4687-9170-F5D5581D7B91" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_6BF3D015-D276-46CC-A082-0C290769A77B" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -615,7 +619,7 @@
 		};
 		B4A4092827DAC2ECABE337D5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_1AE7C30A-E427-4687-9170-F5D5581D7B91" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_6BF3D015-D276-46CC-A082-0C290769A77B" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;

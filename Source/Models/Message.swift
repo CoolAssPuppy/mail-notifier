@@ -72,11 +72,3 @@ struct Message {
         CFXMLCreateStringByUnescapingEntities(nil, snippet as CFString, nil) as String
     }
 }
-
-private extension CharacterSet {
-    static let urlPathComponentAllowed: CharacterSet = {
-        var set = CharacterSet.urlPathAllowed
-        set.remove(charactersIn: "/")
-        return set
-    }()
-}

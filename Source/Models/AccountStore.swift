@@ -103,6 +103,7 @@ extension Accounts {
     mutating func delete(account: Account) {
         guard let index = firstIndex(where: { $0.id == account.id }) else { return }
         self[index].authorization = nil
+        self[index].authState = nil
         remove(at: index)
         save()
         NotificationCenter.default.post(name: .accountDeleted, object: account)
