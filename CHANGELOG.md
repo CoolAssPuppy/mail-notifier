@@ -1,3 +1,7 @@
+## 3.2.2 (Apr 22, 2026)
+
+* Visual Tidiness
+
 ## 3.2.1 (Apr 22, 2026)
 
 * Bug fixes
