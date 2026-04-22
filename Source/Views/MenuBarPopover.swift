@@ -329,7 +329,7 @@ private struct AccountCard: View {
         HStack(spacing: 10) {
             Button(action: openInboxTapped) {
                 HStack(spacing: 10) {
-                    ProviderBadge(type: state.account.type, dimmed: state.hasAuthError)
+                    ProviderBadge(type: state.account.type, size: 29, dimmed: state.hasAuthError)
 
                     VStack(alignment: .leading, spacing: 1) {
                         Text(state.account.displayName)
@@ -404,10 +404,11 @@ private struct AccountCard: View {
         } else {
             HStack(spacing: 6) {
                 if state.unreadCount > 0 {
-                    Text("\(state.unreadCount) new")
+                    Text("\(state.unreadCount)")
                         .font(.system(size: 10, weight: .semibold))
                         .foregroundStyle(theme.warning)
                         .monospacedDigit()
+                        .frame(minWidth: 22, alignment: .trailing)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 3)
                         .background(
