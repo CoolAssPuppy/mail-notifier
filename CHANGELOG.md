@@ -1,3 +1,7 @@
+## 3.2.1 (Apr 22, 2026)
+
+* Bug fixes
+
 ## 3.2.0 (Apr 21, 2026)
 
 * Complete UI redesign: menu bar popover with collapsed accounts, main window with sidebar + account detail, slide-down settings drawer

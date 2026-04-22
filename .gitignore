@@ -30,3 +30,6 @@ dist/*.sparkle.txt
 dist/*.xcarchive/
 dist/export-*/
 dist/debug/
+
+# Wrangler (Cloudflare R2 uploads) local cache
+.wrangler/
