@@ -408,7 +408,6 @@ private struct AccountCard: View {
                         .font(.system(size: 10, weight: .semibold))
                         .foregroundStyle(theme.warning)
                         .monospacedDigit()
-                        .frame(minWidth: 22, alignment: .trailing)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 3)
                         .background(
