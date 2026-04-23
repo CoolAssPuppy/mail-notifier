@@ -38,7 +38,8 @@ extension Account {
                 let data = try NSKeyedArchiver.archivedData(withRootObject: newValue, requiringSecureCoding: true)
                 keychain[data: accountId] = data
             } catch {
-                Log.keychain.error("Failed to archive authorization for account \(self.maskedAccountID, privacy: .public): \(error.localizedDescription, privacy: .public)")
+                let masked = maskedAccountID
+                Log.keychain.error("Failed to archive authorization for account \(masked, privacy: .public): \(error.localizedDescription, privacy: .public)")
             }
         }
     }
@@ -65,7 +66,8 @@ extension Account {
                 let data = try NSKeyedArchiver.archivedData(withRootObject: newValue, requiringSecureCoding: true)
                 keychain[data: keychainKey] = data
             } catch {
-                Log.keychain.error("Failed to archive auth state for account \(self.maskedAccountID, privacy: .public): \(error.localizedDescription, privacy: .public)")
+                let masked = maskedAccountID
+                Log.keychain.error("Failed to archive auth state for account \(masked, privacy: .public): \(error.localizedDescription, privacy: .public)")
             }
         }
     }

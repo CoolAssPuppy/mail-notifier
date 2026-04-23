@@ -367,21 +367,13 @@ private struct AccountCard: View {
                     .font(.system(size: 10, weight: .medium))
                     .foregroundStyle(theme.destructive)
             }
-        } else {
-            Text(secondaryLine)
+        } else if state.account.friendlyName != nil {
+            Text(state.account.email)
                 .font(.system(size: 10))
                 .foregroundStyle(theme.muted)
                 .lineLimit(1)
                 .truncationMode(.middle)
         }
-    }
-
-    private var secondaryLine: String {
-        let base = state.account.friendlyName != nil ? state.account.email : state.account.type.displayLabel
-        if let timestamp = state.lastCheckedAt {
-            return "\(base) · checked \(Formatters.shortTime.string(from: timestamp))"
-        }
-        return base
     }
 
     @ViewBuilder

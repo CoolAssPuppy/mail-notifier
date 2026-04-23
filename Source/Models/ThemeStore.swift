@@ -348,7 +348,7 @@ extension ThemePalette {
         destructive:    Color(red: 0xF8/255, green: 0x71/255, blue: 0x71/255)
     )
 
-    /// Nerds — Strategic Nerds brand. #121212 canvas, #FCDE09 primary.
+    /// Nerds — Strategic Nerds brand. #121212 canvas, #FDB817 primary.
     static let nerds = ThemePalette(
         isDark: true,
         background:     Color(red: 0x12/255, green: 0x12/255, blue: 0x12/255),
@@ -358,7 +358,7 @@ extension ThemePalette {
         cardInset:      Color(red: 0x0E/255, green: 0x0E/255, blue: 0x0E/255),
         border:         Color(red: 0x2A/255, green: 0x2A/255, blue: 0x2A/255),
         borderStrong:   Color(red: 0x38/255, green: 0x38/255, blue: 0x38/255),
-        borderFocus:    Color(red: 0xFC/255, green: 0xDE/255, blue: 0x09/255).opacity(0.55),
+        borderFocus:    Color(red: 0xFD/255, green: 0xB8/255, blue: 0x17/255).opacity(0.55),
         divider:        Color(red: 0x22/255, green: 0x22/255, blue: 0x22/255),
         dividerSubtle:  Color(red: 0x1A/255, green: 0x1A/255, blue: 0x1A/255),
         foreground:     Color(red: 0xF5/255, green: 0xF5/255, blue: 0xF5/255),
@@ -366,11 +366,11 @@ extension ThemePalette {
         muted:          Color(red: 0xA3/255, green: 0xA3/255, blue: 0xA3/255),
         tertiary:       Color(red: 0x73/255, green: 0x73/255, blue: 0x73/255),
         dim:            Color(red: 0x4D/255, green: 0x4D/255, blue: 0x4D/255),
-        primary:        Color(red: 0xFC/255, green: 0xDE/255, blue: 0x09/255),
-        primaryDeep:    Color(red: 0xD4/255, green: 0xA8/255, blue: 0x06/255),
+        primary:        Color(red: 0xFD/255, green: 0xB8/255, blue: 0x17/255),
+        primaryDeep:    Color(red: 0xD4/255, green: 0x96/255, blue: 0x12/255),
         primaryForeground: Color(red: 0x12/255, green: 0x12/255, blue: 0x12/255),
         success:        Color(red: 0x34/255, green: 0xD3/255, blue: 0x99/255),
-        warning:        Color(red: 0xFC/255, green: 0xDE/255, blue: 0x09/255),
+        warning:        Color(red: 0xFD/255, green: 0xB8/255, blue: 0x17/255),
         destructive:    Color(red: 0xF8/255, green: 0x71/255, blue: 0x71/255)
     )
 
