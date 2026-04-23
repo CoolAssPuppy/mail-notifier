@@ -60,8 +60,9 @@ final class OutlookProvider: NSObject, MailProvider {
     }
 
     func didChange(_ state: OIDAuthState) {
-        var account = Account(email: accountEmail, type: .outlook)
+        guard var account = Accounts.default.find(email: accountEmail) else { return }
         account.authState = state
+        Accounts.default.update(account: account)
         authState = state
     }
 

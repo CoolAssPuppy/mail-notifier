@@ -34,9 +34,10 @@ final class GmailProvider: NSObject, MailProvider {
     }
 
     func didChange(_ state: OIDAuthState) {
-        var account = Account(email: accountEmail, type: .gmail)
+        guard var account = Accounts.default.find(email: accountEmail) else { return }
         let newAuth = GTMAppAuthFetcherAuthorization(authState: state)
         account.authorization = newAuth
+        Accounts.default.update(account: account)
         authorization = newAuth
     }
 

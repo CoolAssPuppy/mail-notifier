@@ -48,36 +48,7 @@ final class MessageFetcher: NSObject {
     @objc func fetch() {
         reschedule()
         provider.updateCredentials(from: account)
-
-        provider.fetchUnreadCount { [weak self] result in
-            guard let self else { return }
-            switch result {
-            case .success(let count):
-                hasAuthError = false
-                unreadMessagesCount = count
-            case .failure(.authenticationRequired):
-                hasAuthError = true
-                unreadMessagesCount = 0
-                messages = []
-            case .failure:
-                hasAuthError = true
-            }
-        }
-
-        provider.fetchMessages(limit: maximumMessagesStored) { [weak self] result in
-            guard let self else { return }
-            switch result {
-            case .success(let msgs):
-                hasAuthError = false
-                messages = msgs
-                lastCheckedAt = Date()
-            case .failure(.authenticationRequired):
-                hasAuthError = true
-                messages = []
-            case .failure:
-                hasAuthError = true
-            }
-        }
+        performFetch()
     }
 
     func reschedule() {
@@ -100,6 +71,68 @@ final class MessageFetcher: NSObject {
         switch account.type {
         case .gmail: GmailProvider(account: account)
         case .outlook: OutlookProvider(account: account)
+        }
+    }
+
+    private func performFetch() {
+        let group = DispatchGroup()
+        let resultQueue = DispatchQueue(label: "com.strategicnerds.mailnotifier.fetchresult")
+
+        var unreadResult: Result<Int, MailProviderError>?
+        var messagesResult: Result<[Message], MailProviderError>?
+
+        group.enter()
+        provider.fetchUnreadCount { result in
+            resultQueue.async {
+                unreadResult = result
+                group.leave()
+            }
+        }
+
+        group.enter()
+        provider.fetchMessages(limit: maximumMessagesStored) { result in
+            resultQueue.async {
+                messagesResult = result
+                group.leave()
+            }
+        }
+
+        group.notify(queue: .main) { [weak self] in
+            guard let self else { return }
+            self.applyFetchResults(
+                unreadResult: unreadResult ?? .failure(.parsingError("Missing unread count result")),
+                messagesResult: messagesResult ?? .failure(.parsingError("Missing message list result"))
+            )
+        }
+    }
+
+    private func applyFetchResults(
+        unreadResult: Result<Int, MailProviderError>,
+        messagesResult: Result<[Message], MailProviderError>
+    ) {
+        let isAuthFailure: Bool = {
+            if case .failure(.authenticationRequired) = unreadResult { return true }
+            if case .failure(.authenticationRequired) = messagesResult { return true }
+            return false
+        }()
+
+        hasAuthError = isAuthFailure
+        if isAuthFailure {
+            unreadMessagesCount = 0
+            messages = []
+            return
+        }
+
+        if case .success(let count) = unreadResult {
+            unreadMessagesCount = count
+        }
+
+        switch messagesResult {
+        case .success(let msgs):
+            messages = msgs
+            lastCheckedAt = Date()
+        case .failure:
+            break
         }
     }
 }

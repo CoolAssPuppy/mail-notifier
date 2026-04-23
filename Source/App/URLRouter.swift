@@ -9,22 +9,57 @@ import Foundation
 
 /// Routes incoming URLs to the appropriate handler based on URL scheme.
 enum URLRouter {
+    private enum Route {
+        case preferences
+        case googleOAuth
+        case outlookOAuth
+        case mailTo
+    }
+
     static func route(url: URL) {
-        switch true {
-        case url.scheme == "mailnotifier", url.host == "preferences":
+        guard let route = route(for: url) else {
+            Log.app.warning("No handler for URL with scheme: \(url.scheme ?? "nil"), host: \(url.host ?? "nil"), path: \(url.path)")
+            return
+        }
+
+        switch route {
+        case .preferences:
             Log.app.info("Routing to preferences")
             NotificationCenter.default.post(name: .openPreferencesWindow, object: nil)
-        case url.scheme == GoogleOAuthClient.redirectScheme, url.path == "/oauthredirect":
+        case .googleOAuth:
             Log.app.info("Routing to Google OAuth")
             GoogleOAuthClient.shared.resumeAuthFlow(url: url)
-        case url.scheme == OutlookOAuthClient.redirectScheme, url.host == "auth":
+        case .outlookOAuth:
             Log.app.info("Routing to Outlook OAuth")
             OutlookOAuthClient.shared.resumeAuthFlow(url: url)
-        case url.scheme == "mailto":
+        case .mailTo:
             Log.app.info("Routing to mailto handler")
             NotificationCenter.default.post(name: .mailToReceived, object: url)
-        default:
-            Log.app.warning("No handler for URL with scheme: \(url.scheme ?? "nil")")
         }
+    }
+
+    private static func route(for url: URL) -> Route? {
+        if isPreferencesURL(url) { return .preferences }
+        if isGoogleOAuthCallback(url) { return .googleOAuth }
+        if isOutlookOAuthCallback(url) { return .outlookOAuth }
+        if url.scheme?.lowercased() == "mailto" { return .mailTo }
+        return nil
+    }
+
+    private static func isPreferencesURL(_ url: URL) -> Bool {
+        url.scheme?.lowercased() == "mailnotifier"
+            && url.host?.lowercased() == "preferences"
+    }
+
+    private static func isGoogleOAuthCallback(_ url: URL) -> Bool {
+        url.scheme == GoogleOAuthClient.redirectScheme
+            && url.host?.isEmpty != false
+            && url.path == "/oauthredirect"
+    }
+
+    private static func isOutlookOAuthCallback(_ url: URL) -> Bool {
+        url.scheme == OutlookOAuthClient.redirectScheme
+            && url.host?.lowercased() == "auth"
+            && (url.path == "/" || url.path.isEmpty)
     }
 }

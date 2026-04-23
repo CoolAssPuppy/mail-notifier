@@ -51,7 +51,10 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
             let delivered = await UNUserNotificationCenter.current().deliveredNotifications()
             let deliveredIds = Set(delivered.map { $0.request.identifier })
 
-            for message in messages where !deliveredIds.contains(message.id) {
+            for message in messages {
+                let notificationID = notificationIdentifier(for: message)
+                guard !deliveredIds.contains(notificationID) else { continue }
+
                 let content = UNMutableNotificationContent()
                 content.title = message.sender
                 content.subtitle = message.subject
@@ -59,7 +62,7 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
                 content.userInfo = ["messageId": message.id, "email": message.email]
                 content.threadIdentifier = message.email
 
-                let request = UNNotificationRequest(identifier: message.id, content: content, trigger: nil)
+                let request = UNNotificationRequest(identifier: notificationID, content: content, trigger: nil)
                 do {
                     try await UNUserNotificationCenter.current().add(request)
                 } catch {
@@ -67,6 +70,10 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
                 }
             }
         }
+    }
+
+    private func notificationIdentifier(for message: Message) -> String {
+        "\(message.type.rawValue):\(message.email.lowercased()):\(message.id)"
     }
 
     func handleMessagesFetched(email: String, fetcherManager: FetcherManager) {

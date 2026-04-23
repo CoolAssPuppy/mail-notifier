@@ -15,6 +15,7 @@ import AppAuth
 extension Account {
     var keychain: Keychain {
         Keychain(service: "com.strategicnerds.MailNotifierApp")
+            .accessibility(.whenUnlockedThisDeviceOnly)
     }
 
     var authorization: GTMAppAuthFetcherAuthorization? {
@@ -23,7 +24,7 @@ extension Account {
             do {
                 return try NSKeyedUnarchiver.unarchivedObject(ofClass: GTMAppAuthFetcherAuthorization.self, from: data)
             } catch {
-                Log.keychain.error("Failed to unarchive authorization for \(id): \(error.localizedDescription)")
+                Log.keychain.error("Failed to unarchive authorization for account \(self.maskedAccountID, privacy: .public): \(error.localizedDescription, privacy: .public)")
                 return nil
             }
         }
@@ -37,7 +38,7 @@ extension Account {
                 let data = try NSKeyedArchiver.archivedData(withRootObject: newValue, requiringSecureCoding: true)
                 keychain[data: accountId] = data
             } catch {
-                Log.keychain.error("Failed to archive authorization for \(accountId): \(error.localizedDescription)")
+                Log.keychain.error("Failed to archive authorization for account \(self.maskedAccountID, privacy: .public): \(error.localizedDescription, privacy: .public)")
             }
         }
     }
@@ -49,7 +50,7 @@ extension Account {
             do {
                 return try NSKeyedUnarchiver.unarchivedObject(ofClass: OIDAuthState.self, from: data)
             } catch {
-                Log.keychain.error("Failed to unarchive auth state for \(keychainKey): \(error.localizedDescription)")
+                Log.keychain.error("Failed to unarchive auth state for account \(self.maskedAccountID, privacy: .public): \(error.localizedDescription, privacy: .public)")
                 return nil
             }
         }
@@ -64,9 +65,18 @@ extension Account {
                 let data = try NSKeyedArchiver.archivedData(withRootObject: newValue, requiringSecureCoding: true)
                 keychain[data: keychainKey] = data
             } catch {
-                Log.keychain.error("Failed to archive auth state for \(keychainKey): \(error.localizedDescription)")
+                Log.keychain.error("Failed to archive auth state for account \(self.maskedAccountID, privacy: .public): \(error.localizedDescription, privacy: .public)")
             }
         }
+    }
+
+    private var maskedAccountID: String {
+        let lower = id.lowercased()
+        if let at = lower.firstIndex(of: "@") {
+            let domain = lower[at...]
+            return "***\(domain)"
+        }
+        return "***"
     }
 }
 
@@ -95,53 +105,74 @@ extension Accounts {
         case .outlook:
             OutlookOAuthClient.shared.authorize { result in
                 guard case .success(let state) = result else { return }
+                fetchOutlookEmail(for: state) { email in
+                    guard let email else { return }
 
-                // Extract email from token response
-                var email: String?
-                if let params = state.lastTokenResponse?.additionalParameters {
-                    email = params["preferred_username"] as? String
-                        ?? params["email"] as? String
-                        ?? params["upn"] as? String
-                }
-
-                // Try ID token claims if not found
-                if email == nil, let idToken = state.lastTokenResponse?.idToken,
-                   let claims = decodeJWT(idToken) {
-                    email = claims["preferred_username"] as? String
-                        ?? claims["email"] as? String
-                        ?? claims["upn"] as? String
-                }
-
-                guard let email else { return }
-
-                var accounts = Self.default
-                if var account = accounts.find(email: email) {
-                    account.authState = state
-                    accounts.update(account: account)
-                } else {
-                    var account = Account(email: email, type: .outlook)
-                    account.authState = state
-                    accounts.add(account: account)
+                    var accounts = Self.default
+                    if var account = accounts.find(email: email) {
+                        account.authState = state
+                        accounts.update(account: account)
+                    } else {
+                        var account = Account(email: email, type: .outlook)
+                        account.authState = state
+                        accounts.add(account: account)
+                    }
                 }
             }
         }
     }
 
-    private static func decodeJWT(_ jwt: String) -> [String: Any]? {
-        let segments = jwt.components(separatedBy: ".")
-        guard segments.count > 1 else { return nil }
+    private static func fetchOutlookEmail(for state: OIDAuthState, completion: @escaping (String?) -> Void) {
+        state.performAction { accessToken, _, error in
+            if let error {
+                Log.auth.error("Failed to fetch Outlook access token for profile lookup: \(error.localizedDescription, privacy: .public)")
+                completion(nil)
+                return
+            }
 
-        var base64String = segments[1]
-        let remainder = base64String.count % 4
-        if remainder > 0 {
-            base64String = base64String.padding(toLength: base64String.count + 4 - remainder, withPad: "=", startingAt: 0)
+            guard let accessToken else {
+                completion(nil)
+                return
+            }
+
+            guard let url = URL(string: "https://graph.microsoft.com/v1.0/me?$select=mail,userPrincipalName") else {
+                completion(nil)
+                return
+            }
+
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+
+            URLSession.shared.dataTask(with: request) { data, response, error in
+                if let error {
+                    Log.network.error("Outlook profile lookup failed: \(error.localizedDescription, privacy: .public)")
+                    completion(nil)
+                    return
+                }
+
+                guard let httpResponse = response as? HTTPURLResponse,
+                      (200...299).contains(httpResponse.statusCode),
+                      let data else {
+                    completion(nil)
+                    return
+                }
+
+                struct OutlookMeResponse: Decodable {
+                    let mail: String?
+                    let userPrincipalName: String?
+                }
+
+                let profile = try? JSONDecoder().decode(OutlookMeResponse.self, from: data)
+                let email = profile?.mail?.nonEmpty ?? profile?.userPrincipalName?.nonEmpty
+                completion(email?.lowercased())
+            }.resume()
         }
+    }
+}
 
-        guard let data = Data(base64Encoded: base64String, options: .ignoreUnknownCharacters),
-              let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
-            return nil
-        }
-
-        return json
+private extension String {
+    var nonEmpty: String? {
+        isEmpty ? nil : self
     }
 }

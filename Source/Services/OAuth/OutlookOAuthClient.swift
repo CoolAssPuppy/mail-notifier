@@ -35,9 +35,20 @@ struct OutlookOAuthClient {
     }
 
     func authorize(_ completion: @escaping (Result<OIDAuthState, Error>) -> Void) {
+        guard !Self.clientID.isEmpty else {
+            completion(.failure(NSError(domain: "OutlookAuth", code: -1, userInfo: [NSLocalizedDescriptionKey: "Outlook Client ID is missing."])))
+            return
+        }
+        guard let authorizationEndpoint = URL(string: "https://login.microsoftonline.com/common/oauth2/v2.0/authorize"),
+              let tokenEndpoint = URL(string: "https://login.microsoftonline.com/common/oauth2/v2.0/token"),
+              let redirectURL = URL(string: Self.redirectURL) else {
+            completion(.failure(NSError(domain: "OutlookAuth", code: -1, userInfo: [NSLocalizedDescriptionKey: "Outlook OAuth configuration is invalid."])))
+            return
+        }
+
         let configuration = OIDServiceConfiguration(
-            authorizationEndpoint: URL(string: "https://login.microsoftonline.com/common/oauth2/v2.0/authorize")!,
-            tokenEndpoint: URL(string: "https://login.microsoftonline.com/common/oauth2/v2.0/token")!
+            authorizationEndpoint: authorizationEndpoint,
+            tokenEndpoint: tokenEndpoint
         )
 
         let request = OIDAuthorizationRequest(
@@ -51,7 +62,7 @@ struct OutlookOAuthClient {
                 "offline_access",
                 "https://graph.microsoft.com/Mail.Read"
             ],
-            redirectURL: URL(string: Self.redirectURL)!,
+            redirectURL: redirectURL,
             responseType: OIDResponseTypeCode,
             additionalParameters: ["prompt": "select_account"]
         )

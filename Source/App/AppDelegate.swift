@@ -84,10 +84,18 @@ private extension AppDelegate {
 // MARK: - URL Handling
 
 extension AppDelegate {
+    private static let maximumIncomingURLLength = 8_192
+    private static let maximumMailToFieldLength = 2_048
+
     @objc func handleGetURLEvent(_ event: NSAppleEventDescriptor, withReplyEvent replyEvent: NSAppleEventDescriptor) {
         guard let urlString = event.paramDescriptor(forKeyword: keyDirectObject)?.stringValue,
               let url = URL(string: urlString) else {
             Log.app.error("handleGetURLEvent: Failed to get URL from event")
+            return
+        }
+
+        guard urlString.count <= Self.maximumIncomingURLLength else {
+            Log.app.warning("handleGetURLEvent: Ignored incoming URL that exceeded max length")
             return
         }
 
@@ -487,7 +495,25 @@ extension AppDelegate {
             .first(where: { $0.name.lowercased() == "subject" })?
             .value
 
-        composeMail(to: recipient.isEmpty ? nil : recipient, subject: subject)
+        let validatedRecipient = sanitizeMailToField(recipient)
+        let validatedSubject = sanitizeMailToField(subject)
+        composeMail(to: validatedRecipient, subject: validatedSubject)
+    }
+
+    private func sanitizeMailToField(_ value: String?) -> String? {
+        guard let value else { return nil }
+        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+        guard trimmed.count <= Self.maximumMailToFieldLength else {
+            Log.app.warning("Ignored mailto field exceeding max length")
+            return nil
+        }
+        let disallowed = CharacterSet.newlines.union(.controlCharacters)
+        guard trimmed.rangeOfCharacter(from: disallowed) == nil else {
+            Log.app.warning("Ignored mailto field containing control/newline characters")
+            return nil
+        }
+        return trimmed
     }
 }
 

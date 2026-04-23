@@ -44,12 +44,21 @@ struct GoogleOAuthClient {
     }
 
     func authorize(_ authorized: @escaping (Result<OIDAuthState, Error>) -> Void) {
+        guard !Self.clientID.isEmpty else {
+            authorized(.failure(AuthError(message: "Google Client ID is missing.")))
+            return
+        }
+        guard let redirectURL = URL(string: Self.redirectURL) else {
+            authorized(.failure(AuthError(message: "Google redirect URL is invalid.")))
+            return
+        }
+
         let request = OIDAuthorizationRequest(
             configuration: GTMAppAuthFetcherAuthorization.configurationForGoogle(),
             clientId: Self.clientID,
             clientSecret: Self.clientSecret,
             scopes: [OIDScopeEmail, "https://www.googleapis.com/auth/gmail.readonly"],
-            redirectURL: URL(string: Self.redirectURL)!,
+            redirectURL: redirectURL,
             responseType: OIDResponseTypeCode,
             additionalParameters: nil
         )
