@@ -1,3 +1,9 @@
+## 3.2.3 (Apr 23, 2026)
+
+* Cleaner menu bar account rows (no per-account "checked" timestamp)
+* Refreshed Nerds theme accent
+* Security and reliability hardening (URL router, OAuth callbacks, token refresh persistence, notification deduplication, fetch race fix, keychain accessibility)
+
 ## 3.2.2 (Apr 22, 2026)
 
 * Visual Tidiness

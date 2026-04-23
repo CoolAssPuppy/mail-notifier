@@ -6,6 +6,24 @@
     <description>Mail Notifier updates</description>
     <language>en</language>
     <item>
+      <title>Version 3.2.3</title>
+      <pubDate>Thu, 23 Apr 2026 07:09:17 +0000</pubDate>
+      <sparkle:version>11</sparkle:version>
+      <sparkle:shortVersionString>3.2.3</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[
+        <ul>
+          <li>Cleaner menu bar account rows.</li><li>Refreshed Nerds theme accent.</li><li>Security and reliability hardening.</li>
+        </ul>
+      ]]></description>
+      <enclosure
+        url="https://downloads.strategicnerds.com/apps/mail-notifier/MailNotifier-3.2.3.dmg"
+        sparkle:edSignature="KV++EV3yzYVmjNMVe5YImsaHY231Auxy7ojKzvy73S2luewtpmbZCeIwJ7syCzKejcHVvU1HWbw4+vk0Kjo0DQ=="
+        length="6481257"
+        type="application/x-apple-diskimage" />
+    </item>
+
+    <item>
       <title>Version 3.2.2</title>
       <pubDate>Wed, 22 Apr 2026 14:01:21 +0000</pubDate>
       <sparkle:version>10</sparkle:version>
