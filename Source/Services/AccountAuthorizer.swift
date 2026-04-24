@@ -89,9 +89,15 @@ extension Accounts {
         switch type {
         case .gmail:
             GoogleOAuthClient.shared.authorize { result in
-                guard case .success(let state) = result else { return }
+                guard case .success(let state) = result else {
+                    Telemetry.capture("account.signin_failed", properties: ["provider": "gmail"])
+                    return
+                }
                 let authorization = GTMAppAuthFetcherAuthorization(authState: state)
-                guard let userEmail = authorization.userEmail else { return }
+                guard let userEmail = authorization.userEmail else {
+                    Telemetry.capture("account.signin_failed", properties: ["provider": "gmail", "reason": "no_email"])
+                    return
+                }
 
                 var accounts = Self.default
                 if var account = accounts.find(email: userEmail) {
@@ -101,14 +107,21 @@ extension Accounts {
                     var account = Account(email: userEmail, type: .gmail)
                     account.authorization = authorization
                     accounts.add(account: account)
+                    Telemetry.capture("account.added", properties: ["provider": "gmail"])
                 }
             }
 
         case .outlook:
             OutlookOAuthClient.shared.authorize { result in
-                guard case .success(let state) = result else { return }
+                guard case .success(let state) = result else {
+                    Telemetry.capture("account.signin_failed", properties: ["provider": "outlook"])
+                    return
+                }
                 fetchOutlookEmail(for: state) { email in
-                    guard let email else { return }
+                    guard let email else {
+                        Telemetry.capture("account.signin_failed", properties: ["provider": "outlook", "reason": "no_email"])
+                        return
+                    }
 
                     var accounts = Self.default
                     if var account = accounts.find(email: email) {
@@ -118,6 +131,7 @@ extension Accounts {
                         var account = Account(email: email, type: .outlook)
                         account.authState = state
                         accounts.add(account: account)
+                        Telemetry.capture("account.added", properties: ["provider": "outlook"])
                     }
                 }
             }

@@ -18,6 +18,7 @@ struct SettingsView: View {
     @Environment(\.theme) private var theme
     @State private var newVIPEmail = ""
     @State private var newVIPSound = ""
+    @State private var telemetryOptIn: Bool = Telemetry.isOptedIn
 
     var body: some View {
         VStack(spacing: 0) {
@@ -84,6 +85,25 @@ struct SettingsView: View {
                         .toggleStyle(.switch)
                         .controlSize(.small)
                         .tint(theme.primary)
+                }
+
+                AppRowDivider().padding(.vertical, 10)
+
+                AppSettingRow(
+                    "Send anonymous usage data",
+                    description: "Help improve Mail Notifier."
+                ) {
+                    Toggle("", isOn: Binding(
+                        get: { telemetryOptIn },
+                        set: { newValue in
+                            telemetryOptIn = newValue
+                            Telemetry.setOptedIn(newValue)
+                        }
+                    ))
+                    .labelsHidden()
+                    .toggleStyle(.switch)
+                    .controlSize(.small)
+                    .tint(theme.primary)
                 }
             }
         }
@@ -164,7 +184,10 @@ struct SettingsView: View {
                     ForEach(vipList) { vip in
                         VIPRow(vip: vip,
                                onUpdate: { vipList.update(vip: $0) },
-                               onDelete: { vipList.delete(vip: vip) })
+                               onDelete: {
+                                   vipList.delete(vip: vip)
+                                   Telemetry.capture("vip.removed")
+                               })
                         if vip.id != vipList.last?.id {
                             AppRowDivider()
                         }
@@ -183,6 +206,7 @@ struct SettingsView: View {
         let vip = VIP(email: newVIPEmail.trimmingCharacters(in: .whitespaces),
                       notificationSound: newVIPSound)
         vipList.add(vip: vip)
+        Telemetry.capture("vip.added")
         newVIPEmail = ""
         newVIPSound = ""
     }

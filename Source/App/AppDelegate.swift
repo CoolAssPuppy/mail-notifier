@@ -33,6 +33,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
 
+        Telemetry.setup()
+
         notificationService.delegate = self
         FriendlyNameStore.shared.start()
         registerShortcuts()
@@ -43,9 +45,25 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         notificationService.setup()
         setupURLHandler()
 
+        Telemetry.capture("app.launched")
+        reportUpdateInstalledIfNeeded()
+
         if !Accounts.hasAccounts || AppSettings.shared.openSettingsOnStart {
             showPreferences()
         }
+    }
+
+    /// Fires `update.installed` when the short-version changes between
+    /// launches. Silent on first ever launch. See Linear Bar's equivalent
+    /// for rationale.
+    private func reportUpdateInstalledIfNeeded() {
+        let key = "com.strategicnerds.MailNotifier.telemetry.lastLaunchedVersion"
+        let defaults = UserDefaults.standard
+        let current = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
+        let previous = defaults.string(forKey: key)
+        defaults.set(current, forKey: key)
+        guard let previous, !previous.isEmpty, previous != current else { return }
+        Telemetry.capture("update.installed", properties: ["from": previous, "to": current])
     }
 }
 
@@ -273,6 +291,7 @@ extension AppDelegate: NSPopoverDelegate {
 
         NSApp.activate(ignoringOtherApps: true)
         popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
+        Telemetry.capture("menu.opened")
 
         // Dismiss when the user clicks outside the popover.
         popoverEventMonitor = NSEvent.addGlobalMonitorForEvents(

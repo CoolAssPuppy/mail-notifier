@@ -17,6 +17,7 @@
 		1283CE4E93BC4C22590BAD14 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3753916EFC671DA64C799FD0 /* Logger.swift */; };
 		247E7F167FC88D12CFB97E6E /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DC26A3E47DDBFAA0FC8DFF /* NotificationService.swift */; };
 		271E73C4E7F99E2CEE5B37EA /* SharedComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDE02622D66D28B58223F26 /* SharedComponents.swift */; };
+		2B50C905CE1A2C056310736F /* Telemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D907452E84B43ADEF6461E4 /* Telemetry.swift */; };
 		2F0E61F15730320692F222F1 /* Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF089B2ADA2A224578FA3B8A /* Formatters.swift */; };
 		353E0A2021CFE7030D88721B /* FriendlyNameStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FC974A840D1A18FD08E426 /* FriendlyNameStore.swift */; };
 		38580E8A8BE7FBBE2988F900 /* NotificationNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D68FB4988855EDF84FB661 /* NotificationNames.swift */; };
@@ -26,6 +27,7 @@
 		42E9081BE938811A5683C9A5 /* UpdaterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53C88A02CD4CB9DA9FCDEEE /* UpdaterManager.swift */; };
 		476B55D1C8E2D484625F4FA0 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAA878B780CA7066B721262 /* AppSettings.swift */; };
 		4A630E6B3CAAE8B20B195149 /* OAuthSecret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4D994A8D656FC5C5EA4D49 /* OAuthSecret.swift */; };
+		50122A8EBA78790005ECBBDB /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = 323E4DDFA841EB77D4CE1F2F /* PostHog */; };
 		519533A448D4CD1CD27F1468 /* OutlookOAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B2763164C0B8D569025080 /* OutlookOAuthClient.swift */; };
 		545AB158AF5447C4E5E4E391 /* AppDelegate+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB460ED3BAD3CC445B93C9FE /* AppDelegate+Menu.swift */; };
 		5AD770B9E27FF1225B05E35F /* MenuBarPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2468E8CBA3EBBB4B7D0EF7 /* MenuBarPopover.swift */; };
@@ -67,6 +69,7 @@
 		18F3A9C26F687C1CC69C150A /* OutlookProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlookProvider.swift; sourceTree = "<group>"; };
 		1A2468E8CBA3EBBB4B7D0EF7 /* MenuBarPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarPopover.swift; sourceTree = "<group>"; };
 		1AD05293C4B42F6617F15238 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		2D907452E84B43ADEF6461E4 /* Telemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Telemetry.swift; sourceTree = "<group>"; };
 		2E228875B97655097EB026AF /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		2EDE02622D66D28B58223F26 /* SharedComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedComponents.swift; sourceTree = "<group>"; };
 		2FDA3D0281F8543127FAE682 /* FetcherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetcherManager.swift; sourceTree = "<group>"; };
@@ -124,7 +127,7 @@
 		EEA9F3DE9853CF06BBDD72BF /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F7DF9E463FD10F104229B4C9 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FB460ED3BAD3CC445B93C9FE /* AppDelegate+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Menu.swift"; sourceTree = "<group>"; };
-		"TEMP_211A58B9-D9C0-4F30-B064-93BB04D43F8B" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		"TEMP_6BEF1E8F-DA13-416E-AFA8-AE69ECAE2C26" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,6 +141,7 @@
 				CD020436245EBD0EF9019915 /* KeyboardShortcuts in Frameworks */,
 				8BB4B0D1748B82E578DF70CE /* KeychainAccess in Frameworks */,
 				A251911196F10ED30B0415CE /* Sparkle in Frameworks */,
+				50122A8EBA78790005ECBBDB /* PostHog in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,6 +279,7 @@
 				0A0F81187CA285BE37EEB61E /* LaunchAtLoginManager.swift */,
 				3F7DC03CB3B7DF64E5A4999E /* MessageFetcher.swift */,
 				11DC26A3E47DDBFAA0FC8DFF /* NotificationService.swift */,
+				2D907452E84B43ADEF6461E4 /* Telemetry.swift */,
 				E53C88A02CD4CB9DA9FCDEEE /* UpdaterManager.swift */,
 				725481FBBF290332B07F415C /* OAuth */,
 				76DE2743165A37F5216E804E /* Providers */,
@@ -282,10 +287,10 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		"TEMP_96A1FFC7-3D7F-495B-9AD1-CFC4B9C6D629" /* mail-notifier */ = {
+		"TEMP_EB8C4C82-DF0E-485B-AE44-1939AA8C863A" /* mail-notifier */ = {
 			isa = PBXGroup;
 			children = (
-				"TEMP_211A58B9-D9C0-4F30-B064-93BB04D43F8B" /* Secrets.xcconfig */,
+				"TEMP_6BEF1E8F-DA13-416E-AFA8-AE69ECAE2C26" /* Secrets.xcconfig */,
 			);
 			path = "mail-notifier";
 			sourceTree = "<group>";
@@ -314,6 +319,7 @@
 				28E1AF1D66FD44477B15F8EE /* KeyboardShortcuts */,
 				9432710E34018A892573591F /* KeychainAccess */,
 				78BC9BB6E40F761B3D8BF4E4 /* Sparkle */,
+				323E4DDFA841EB77D4CE1F2F /* PostHog */,
 			);
 			productName = MailNotifier;
 			productReference = A73D31320A8D2D0D9B116AC4 /* MailNotifier.app */;
@@ -370,6 +376,7 @@
 				F730E70880468A3D5EDBA430 /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */,
 				236EE94A6262EDA5A668F189 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 				C73A2ADBF6F2D005B4D3806A /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+				A214CBB86339217EBCD1195B /* XCRemoteSwiftPackageReference "posthog-ios" */,
 				DEE1826DE935FF5263EB5EF6 /* XCRemoteSwiftPackageReference "Sparkle" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -455,6 +462,7 @@
 				271E73C4E7F99E2CEE5B37EA /* SharedComponents.swift in Sources */,
 				7F602BF6F21F9E50A543133D /* Sidebar.swift in Sources */,
 				6F19E5430EB52E328D689CD3 /* Sound.swift in Sources */,
+				2B50C905CE1A2C056310736F /* Telemetry.swift in Sources */,
 				AB04FDB131DB0747824C03A2 /* Theme.swift in Sources */,
 				3B34CC5B1AEFD51B72EDC13D /* ThemeStore.swift in Sources */,
 				A9E26273228389E34B1301B2 /* URLEncoding.swift in Sources */,
@@ -538,7 +546,7 @@
 		};
 		229918186B40865D81363975 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_211A58B9-D9C0-4F30-B064-93BB04D43F8B" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_6BEF1E8F-DA13-416E-AFA8-AE69ECAE2C26" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -619,7 +627,7 @@
 		};
 		B4A4092827DAC2ECABE337D5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_211A58B9-D9C0-4F30-B064-93BB04D43F8B" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_6BEF1E8F-DA13-416E-AFA8-AE69ECAE2C26" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -725,6 +733,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		A214CBB86339217EBCD1195B /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/PostHog/posthog-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 		B5835CE83F24C75EF930BD8F /* XCRemoteSwiftPackageReference "AppAuth-iOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/openid/AppAuth-iOS";
@@ -774,6 +790,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 236EE94A6262EDA5A668F189 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
 			productName = KeyboardShortcuts;
+		};
+		323E4DDFA841EB77D4CE1F2F /* PostHog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A214CBB86339217EBCD1195B /* XCRemoteSwiftPackageReference "posthog-ios" */;
+			productName = PostHog;
 		};
 		4A928A2A5F163EE5B1628E08 /* GoogleAPIClientForREST_Gmail */ = {
 			isa = XCSwiftPackageProductDependency;

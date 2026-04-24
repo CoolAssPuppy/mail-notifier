@@ -38,6 +38,9 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
         center.removeDeliveredNotifications(withIdentifiers: [response.notification.request.identifier])
 
         let userInfo = response.notification.request.content.userInfo
+        let isVIP = (userInfo["isVIP"] as? Bool) ?? false
+        Telemetry.capture("notification.clicked", properties: ["is_vip": isVIP])
+
         if let messageId = userInfo["messageId"] as? String,
            let email = userInfo["email"] as? String {
             delegate?.notificationService(self, didRequestOpenMessage: messageId, email: email)
@@ -50,21 +53,24 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
         Task {
             let delivered = await UNUserNotificationCenter.current().deliveredNotifications()
             let deliveredIds = Set(delivered.map { $0.request.identifier })
+            let vipList = VIPList.default
 
             for message in messages {
                 let notificationID = notificationIdentifier(for: message)
                 guard !deliveredIds.contains(notificationID) else { continue }
 
+                let isVIP = vipList.soundForSender(message.senderEmail) != nil
                 let content = UNMutableNotificationContent()
                 content.title = message.sender
                 content.subtitle = message.subject
                 content.body = message.decodedSnippet
-                content.userInfo = ["messageId": message.id, "email": message.email]
+                content.userInfo = ["messageId": message.id, "email": message.email, "isVIP": isVIP]
                 content.threadIdentifier = message.email
 
                 let request = UNNotificationRequest(identifier: notificationID, content: content, trigger: nil)
                 do {
                     try await UNUserNotificationCenter.current().add(request)
+                    Telemetry.capture("notification.shown", properties: ["is_vip": isVIP])
                 } catch {
                     Log.app.error("Failed to deliver notification for message \(message.id): \(error.localizedDescription)")
                 }

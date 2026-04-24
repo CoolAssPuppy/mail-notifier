@@ -79,5 +79,11 @@
 	<true/>
 	<key>SUScheduledCheckInterval</key>
 	<integer>86400</integer>
+	<key>POSTHOG_API_KEY</key>
+	<string>phc_ycu9Cvxgo6SfkEXau7PSjTMKkNodioqeHEH5rjagLEPU</string>
+	<key>POSTHOG_HOST</key>
+	<string>https://us.i.posthog.com</string>
+	<key>TELEMETRY_SOURCE</key>
+	<string>mail_notifier_macos</string>
 </dict>
 </plist>
