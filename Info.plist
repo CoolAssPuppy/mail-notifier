@@ -80,7 +80,7 @@
 	<key>SUScheduledCheckInterval</key>
 	<integer>86400</integer>
 	<key>POSTHOG_API_KEY</key>
-	<string>phc_ycu9Cvxgo6SfkEXau7PSjTMKkNodioqeHEH5rjagLEPU</string>
+	<string>phc_ekpeEsK9bWymasbwFW69vHHrQpLakGEpVXQ760uhVQL</string>
 	<key>POSTHOG_HOST</key>
 	<string>https://us.i.posthog.com</string>
 	<key>TELEMETRY_SOURCE</key>
