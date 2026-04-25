@@ -32,7 +32,6 @@ struct SettingsView: View {
 
                 VStack(spacing: 14) {
                     updatesCard
-                    supportCard
                     contactCard
                 }
                 .frame(maxWidth: .infinity)
@@ -251,66 +250,6 @@ struct SettingsView: View {
         }
     }
 
-    // MARK: - Support
-
-    private var supportCard: some View {
-        AppCard("Support") {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Mail Notifier is built by one person. Google charges indie email apps $8,000 per year for certification. If this app saves you time, please consider buying me a coffee.")
-                    .font(.system(size: 11))
-                    .foregroundStyle(theme.foregroundSoft)
-                    .lineSpacing(3)
-                    .fixedSize(horizontal: false, vertical: true)
-
-                HStack(spacing: 8) {
-                    Link(destination: URL(string: "https://venmo.com/coolasspuppy")!) {
-                        HStack(spacing: 7) {
-                            Image(systemName: "cup.and.saucer.fill")
-                                .font(.system(size: 11))
-                            Text("Buy me a coffee")
-                                .font(.system(size: 12, weight: .semibold))
-                        }
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 7)
-                        .background(
-                            RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
-                                .fill(
-                                    LinearGradient(
-                                        colors: [theme.primary, theme.primaryDeep],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    )
-                                )
-                        )
-                    }
-                    .buttonStyle(.plain)
-
-                    Link(destination: URL(string: "https://github.com/CoolAssPuppy/mail-notifier")!) {
-                        HStack(spacing: 6) {
-                            Image(systemName: "star")
-                                .font(.system(size: 11))
-                            Text("Star on GitHub")
-                                .font(.system(size: 11, weight: .medium))
-                        }
-                        .foregroundStyle(theme.foreground)
-                        .padding(.horizontal, 11)
-                        .padding(.vertical, 7)
-                        .background(
-                            RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
-                                .fill(theme.cardInset)
-                        )
-                        .overlay(
-                            RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
-                                .strokeBorder(theme.borderStrong, lineWidth: 1)
-                        )
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-        }
-    }
-
     private var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
     }
@@ -320,28 +259,53 @@ struct SettingsView: View {
     private var contactCard: some View {
         AppCard("Contact") {
             VStack(alignment: .leading, spacing: 10) {
-                contactRow(icon: "ladybug.fill",
-                           title: "bugs@strategicnerds.dev",
-                           url: "mailto:bugs@strategicnerds.dev")
-                contactRow(icon: "chevron.left.forwardslash.chevron.right",
-                           title: "coolasspuppy/mail-notifier",
-                           url: "https://github.com/CoolAssPuppy/mail-notifier")
-                contactRow(icon: "cup.and.saucer.fill",
-                           title: "Buy me coffee",
-                           url: "https://venmo.com/u/coolasspuppy")
-                contactRow(icon: "book.closed.fill",
-                           title: "Buy my book",
-                           url: "https://www.strategicnerds.com/picksandshovels")
+                contactRow(
+                    iconView: AnyView(
+                        Image(systemName: "ladybug.fill")
+                            .font(.system(size: 12))
+                            .foregroundStyle(theme.muted)
+                    ),
+                    title: "bugs@strategicnerds.dev",
+                    url: "mailto:bugs@strategicnerds.dev"
+                )
+                contactRow(
+                    iconView: AnyView(
+                        Image("GitHubMark")
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 13, height: 13)
+                            .foregroundStyle(theme.muted)
+                    ),
+                    title: "coolasspuppy/mail-notifier",
+                    url: "https://github.com/CoolAssPuppy/mail-notifier"
+                )
+                contactRow(
+                    iconView: AnyView(
+                        Image(systemName: "cup.and.saucer.fill")
+                            .font(.system(size: 12))
+                            .foregroundStyle(theme.muted)
+                    ),
+                    title: "Buy me coffee",
+                    url: "https://venmo.com/u/coolasspuppy"
+                )
+                contactRow(
+                    iconView: AnyView(
+                        Image(systemName: "book.closed.fill")
+                            .font(.system(size: 12))
+                            .foregroundStyle(theme.muted)
+                    ),
+                    title: "Buy my book",
+                    url: "https://www.strategicnerds.com/picksandshovels"
+                )
             }
         }
     }
 
-    private func contactRow(icon: String, title: String, url: String) -> some View {
+    private func contactRow(iconView: AnyView, title: String, url: String) -> some View {
         Link(destination: URL(string: url)!) {
             HStack(spacing: 8) {
-                Image(systemName: icon)
-                    .font(.system(size: 12))
-                    .foregroundStyle(theme.muted)
+                iconView
                     .frame(width: 16, alignment: .center)
                 Text(title)
                     .font(.system(size: 12))
