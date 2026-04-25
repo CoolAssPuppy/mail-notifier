@@ -33,6 +33,7 @@ struct SettingsView: View {
                 VStack(spacing: 14) {
                     updatesCard
                     supportCard
+                    contactCard
                 }
                 .frame(maxWidth: .infinity)
             }
@@ -214,28 +215,9 @@ struct SettingsView: View {
     // MARK: - Updates
 
     private var updatesCard: some View {
-        AppCard("Updates", trailing: {
-            HStack(spacing: 5) {
-                Circle().fill(theme.success).frame(width: 5, height: 5)
-                Text("UP TO DATE")
-                    .font(.system(size: 9, weight: .semibold))
-                    .tracking(0.3)
-                    .foregroundStyle(theme.success)
-            }
-            .padding(.horizontal, 8)
-            .padding(.vertical, 2)
-            .background(
-                Capsule().fill(theme.success.opacity(0.10))
-            )
-            .overlay(
-                Capsule().strokeBorder(theme.success.opacity(0.3), lineWidth: 1)
-            )
-        }) {
+        AppCard("Updates") {
             VStack(spacing: 0) {
-                AppSettingRow(
-                    "Check for updates automatically",
-                    description: "Checks once a day, prompts before installing."
-                ) {
+                AppSettingRow("Automatically check for updates", description: nil) {
                     Toggle("", isOn: $updater.automaticallyChecksForUpdates)
                         .labelsHidden()
                         .toggleStyle(.switch)
@@ -245,14 +227,26 @@ struct SettingsView: View {
 
                 AppRowDivider().padding(.vertical, 10)
 
-                AppSettingRow(
-                    "Current version \(appVersion)",
-                    description: nil
-                ) {
-                    AppSecondaryButton(title: "Check now", systemImage: "arrow.down.circle") {
-                        UpdaterManager.shared.checkForUpdates()
-                    }
+                AppSettingRow("Current version", description: nil) {
+                    Text(appVersion)
+                        .font(.system(size: 11, design: .monospaced))
+                        .foregroundStyle(theme.foreground)
                 }
+
+                AppRowDivider().padding(.vertical, 10)
+
+                Button { UpdaterManager.shared.checkForUpdates() } label: {
+                    Text("Check for updates…")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(theme.foreground)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
+                        .background(
+                            RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
+                                .strokeBorder(theme.borderStrong, lineWidth: 1)
+                        )
+                }
+                .buttonStyle(.plain)
             }
         }
     }
@@ -319,6 +313,42 @@ struct SettingsView: View {
 
     private var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
+    }
+
+    // MARK: - Contact
+
+    private var contactCard: some View {
+        AppCard("Contact") {
+            VStack(alignment: .leading, spacing: 10) {
+                contactRow(icon: "ladybug.fill",
+                           title: "bugs@strategicnerds.dev",
+                           url: "mailto:bugs@strategicnerds.dev")
+                contactRow(icon: "chevron.left.forwardslash.chevron.right",
+                           title: "coolasspuppy/mail-notifier",
+                           url: "https://github.com/CoolAssPuppy/mail-notifier")
+                contactRow(icon: "cup.and.saucer.fill",
+                           title: "Buy me coffee",
+                           url: "https://venmo.com/u/coolasspuppy")
+                contactRow(icon: "book.closed.fill",
+                           title: "Buy my book",
+                           url: "https://www.strategicnerds.com/picksandshovels")
+            }
+        }
+    }
+
+    private func contactRow(icon: String, title: String, url: String) -> some View {
+        Link(destination: URL(string: url)!) {
+            HStack(spacing: 8) {
+                Image(systemName: icon)
+                    .font(.system(size: 12))
+                    .foregroundStyle(theme.muted)
+                    .frame(width: 16, alignment: .center)
+                Text(title)
+                    .font(.system(size: 12))
+                    .foregroundStyle(theme.primary)
+            }
+        }
+        .buttonStyle(.plain)
     }
 }
 
