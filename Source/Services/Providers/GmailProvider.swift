@@ -55,11 +55,15 @@ final class GmailProvider: NSObject, MailProvider {
         service.authorizer = authorization
 
         service.executeQuery(query) { _, result, error in
-            if let label = result as? GTLRGmail_Label, error == nil {
-                completion(.success(label.messagesUnread?.intValue ?? 0))
-            } else {
-                completion(.failure(.authenticationRequired))
+            if let error {
+                completion(.failure(Self.mapGmailError(error)))
+                return
             }
+            guard let label = result as? GTLRGmail_Label else {
+                completion(.failure(.parsingError("Unexpected response type for label fetch")))
+                return
+            }
+            completion(.success(label.messagesUnread?.intValue ?? 0))
         }
     }
 
@@ -78,19 +82,59 @@ final class GmailProvider: NSObject, MailProvider {
         service.authorizer = authorization
 
         service.executeQuery(query) { [weak self] _, result, error in
-            if let list = result as? GTLRGmail_ListMessagesResponse, error == nil {
-                if let messages = list.messages {
-                    self?.fetchMessageDetails(
-                        ids: messages.compactMap { $0.identifier },
-                        completion: completion
-                    )
-                } else {
-                    completion(.success([]))
-                }
-            } else {
-                completion(.failure(.authenticationRequired))
+            if let error {
+                completion(.failure(Self.mapGmailError(error)))
+                return
             }
+            guard let list = result as? GTLRGmail_ListMessagesResponse else {
+                completion(.failure(.parsingError("Unexpected response type for message list")))
+                return
+            }
+            guard let messages = list.messages else {
+                completion(.success([]))
+                return
+            }
+            self?.fetchMessageDetails(
+                ids: messages.compactMap { $0.identifier },
+                completion: completion
+            )
         }
+    }
+}
+
+// MARK: - Error mapping
+
+extension GmailProvider {
+    /// Maps an `NSError` from the Google API client to the app's
+    /// `MailProviderError` taxonomy. Previously every failure was flattened to
+    /// `.authenticationRequired`, which painted transient network errors as
+    /// "Auth expired" in the UI.
+    static func mapGmailError(_ error: Error) -> MailProviderError {
+        let nsError = error as NSError
+        if nsError.domain == NSURLErrorDomain {
+            return .networkError(error)
+        }
+        if let httpStatus = httpStatusCode(from: nsError) {
+            if httpStatus == 401 || httpStatus == 403 {
+                return .authenticationRequired
+            }
+            return .httpError(statusCode: httpStatus)
+        }
+        return .parsingError(error.localizedDescription)
+    }
+
+    /// Pulls an HTTP status code from a Google API client error. Tries the
+    /// structured error object first, then falls back to the NSError code if
+    /// the domain is the GTLR error domain.
+    private static func httpStatusCode(from error: NSError) -> Int? {
+        if let underlying = GTLRErrorObject.underlyingObject(forError: error),
+           let code = underlying.code {
+            return code.intValue
+        }
+        if error.domain == kGTLRErrorObjectDomain {
+            return error.code
+        }
+        return nil
     }
 }
 
@@ -118,13 +162,17 @@ private extension GmailProvider {
 
         service.executeQuery(batchQuery) { [weak self] _, result, error in
             guard let self else { return }
-            if let batchResult = result as? GTLRBatchResult,
-               let gmailMessages = batchResult.successes as? [String: GTLRGmail_Message] {
-                let messages = self.convertMessages(gmailMessages.values.map { $0 })
-                completion(.success(messages))
-            } else {
-                completion(.failure(.authenticationRequired))
+            if let error {
+                completion(.failure(Self.mapGmailError(error)))
+                return
             }
+            guard let batchResult = result as? GTLRBatchResult,
+                  let gmailMessages = batchResult.successes as? [String: GTLRGmail_Message] else {
+                completion(.failure(.parsingError("Unexpected response type for batch message fetch")))
+                return
+            }
+            let messages = self.convertMessages(gmailMessages.values.map { $0 })
+            completion(.success(messages))
         }
     }
 
