@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AppKit
 import GTMAppAuth
 import KeychainAccess
 import AppAuth
@@ -85,10 +86,16 @@ extension Account {
 // MARK: - OAuth Authorization Flows
 
 extension Accounts {
+    /// Starts the OAuth flow for `type`. Looks up `NSApp.keyWindow` so the
+    /// AppAuth-driven `ASWebAuthenticationSession` can present its sheet
+    /// attached to the app rather than spawning the user's default browser.
+    /// Falls back to the browser flow when no window is key (very early
+    /// app launch, no UI on screen yet).
     static func authorize(type: AccountType) {
+        let window = NSApp.keyWindow
         switch type {
         case .gmail:
-            GoogleOAuthClient.shared.authorize { result in
+            GoogleOAuthClient.shared.authorize(presentingWindow: window) { result in
                 guard case .success(let state) = result else {
                     Telemetry.capture("account.signin_failed", properties: ["provider": "gmail"])
                     return
@@ -112,7 +119,7 @@ extension Accounts {
             }
 
         case .outlook:
-            OutlookOAuthClient.shared.authorize { result in
+            OutlookOAuthClient.shared.authorize(presentingWindow: window) { result in
                 guard case .success(let state) = result else {
                     Telemetry.capture("account.signin_failed", properties: ["provider": "outlook"])
                     return

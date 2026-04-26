@@ -34,7 +34,10 @@ struct OutlookOAuthClient {
         }
     }
 
-    func authorize(_ completion: @escaping (Result<OIDAuthState, Error>) -> Void) {
+    /// Starts the Microsoft OAuth flow. See `GoogleOAuthClient.authorize` for
+    /// the rationale behind the `presentingWindow` parameter — same idea.
+    func authorize(presentingWindow: NSWindow?,
+                   _ completion: @escaping (Result<OIDAuthState, Error>) -> Void) {
         guard !Self.clientID.isEmpty else {
             completion(.failure(NSError(domain: "OutlookAuth", code: -1, userInfo: [NSLocalizedDescriptionKey: "Outlook Client ID is missing."])))
             return
@@ -67,12 +70,25 @@ struct OutlookOAuthClient {
             additionalParameters: ["prompt": "select_account"]
         )
 
-        Self.currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request) { state, error in
+        let callback: (OIDAuthState?, Error?) -> Void = { state, error in
             if let state {
                 completion(.success(state))
             } else {
                 completion(.failure(error ?? NSError(domain: "OutlookAuth", code: -1, userInfo: nil)))
             }
+        }
+
+        if let presentingWindow {
+            Self.currentAuthorizationFlow = OIDAuthState.authState(
+                byPresenting: request,
+                presenting: presentingWindow,
+                callback: callback
+            )
+        } else {
+            Self.currentAuthorizationFlow = OIDAuthState.authState(
+                byPresenting: request,
+                callback: callback
+            )
         }
     }
 }

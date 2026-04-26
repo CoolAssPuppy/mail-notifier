@@ -6,6 +6,7 @@
 //
 
 import AppAuth
+import AppKit
 import GTMAppAuth
 
 struct GoogleOAuthClient {
@@ -43,7 +44,14 @@ struct GoogleOAuthClient {
         }
     }
 
-    func authorize(_ authorized: @escaping (Result<OIDAuthState, Error>) -> Void) {
+    /// Starts the Google OAuth flow.
+    /// - Parameter presentingWindow: When non-nil, AppAuth uses
+    ///   `ASWebAuthenticationSession` to present the auth UI as a sheet
+    ///   attached to this window — same shape as Apple's "Sign in with…"
+    ///   flow. When nil, the deprecated default-browser flow runs as a
+    ///   fallback so callers without a window context still work.
+    func authorize(presentingWindow: NSWindow?,
+                   _ authorized: @escaping (Result<OIDAuthState, Error>) -> Void) {
         guard !Self.clientID.isEmpty else {
             authorized(.failure(AuthError(message: "Google Client ID is missing.")))
             return
@@ -62,12 +70,26 @@ struct GoogleOAuthClient {
             responseType: OIDResponseTypeCode,
             additionalParameters: nil
         )
-        Self.currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request) { state, error in
-            if let state = state {
+
+        let callback: (OIDAuthState?, Error?) -> Void = { state, error in
+            if let state {
                 authorized(.success(state))
             } else {
                 authorized(.failure(error ?? AuthError(message: "Auth with Google failed.")))
             }
+        }
+
+        if let presentingWindow {
+            Self.currentAuthorizationFlow = OIDAuthState.authState(
+                byPresenting: request,
+                presenting: presentingWindow,
+                callback: callback
+            )
+        } else {
+            Self.currentAuthorizationFlow = OIDAuthState.authState(
+                byPresenting: request,
+                callback: callback
+            )
         }
     }
 
