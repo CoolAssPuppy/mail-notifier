@@ -33,3 +33,5 @@ dist/debug/
 
 # Wrangler (Cloudflare R2 uploads) local cache
 .wrangler/
+default.profraw
+*.profraw

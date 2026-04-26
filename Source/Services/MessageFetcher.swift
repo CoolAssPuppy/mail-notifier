@@ -106,7 +106,9 @@ final class MessageFetcher: NSObject {
         }
     }
 
-    private func applyFetchResults(
+    /// Reduces a pair of fetch results into the fetcher's published state.
+    /// Internal access is intentional — exposed for unit testing.
+    func applyFetchResults(
         unreadResult: Result<Int, MailProviderError>,
         messagesResult: Result<[Message], MailProviderError>
     ) {

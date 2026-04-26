@@ -9,7 +9,7 @@ import Foundation
 
 /// Routes incoming URLs to the appropriate handler based on URL scheme.
 enum URLRouter {
-    private enum Route {
+    enum Route: Equatable {
         case preferences
         case googleOAuth
         case outlookOAuth
@@ -38,7 +38,7 @@ enum URLRouter {
         }
     }
 
-    private static func route(for url: URL) -> Route? {
+    static func route(for url: URL) -> Route? {
         if isPreferencesURL(url) { return .preferences }
         if isGoogleOAuthCallback(url) { return .googleOAuth }
         if isOutlookOAuthCallback(url) { return .outlookOAuth }
@@ -46,18 +46,18 @@ enum URLRouter {
         return nil
     }
 
-    private static func isPreferencesURL(_ url: URL) -> Bool {
+    static func isPreferencesURL(_ url: URL) -> Bool {
         url.scheme?.lowercased() == "mailnotifier"
             && url.host?.lowercased() == "preferences"
     }
 
-    private static func isGoogleOAuthCallback(_ url: URL) -> Bool {
+    static func isGoogleOAuthCallback(_ url: URL) -> Bool {
         url.scheme == GoogleOAuthClient.redirectScheme
             && url.host?.isEmpty != false
             && url.path == "/oauthredirect"
     }
 
-    private static func isOutlookOAuthCallback(_ url: URL) -> Bool {
+    static func isOutlookOAuthCallback(_ url: URL) -> Bool {
         url.scheme == OutlookOAuthClient.redirectScheme
             && url.host?.lowercased() == "auth"
             && (url.path == "/" || url.path.isEmpty)

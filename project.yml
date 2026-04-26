@@ -37,18 +37,25 @@ settings:
   base:
     SWIFT_VERSION: "5.9"
     MACOSX_DEPLOYMENT_TARGET: "14.0"
-    ENABLE_HARDENED_RUNTIME: YES
     ENABLE_APP_SANDBOX: NO
     CODE_SIGN_STYLE: Automatic
     DEVELOPMENT_TEAM: 955GSY56UT
+  configs:
+    # Hardened runtime breaks XCTest's runtime injection into the host app.
+    # Keep it off for Debug (so `xcodebuild test` works) and on for Release.
+    Debug:
+      ENABLE_HARDENED_RUNTIME: NO
+    Release:
+      ENABLE_HARDENED_RUNTIME: YES
 
 targets:
   MailNotifier:
     type: application
     platform: macOS
     scheme:
-      testTargets: []
-      gatherCoverageData: false
+      testTargets:
+        - MailNotifierTests
+      gatherCoverageData: true
     sources:
       - path: Source
         excludes:
@@ -94,3 +101,23 @@ targets:
             fi
           done
         basedOnDependencyAnalysis: false
+
+  MailNotifierTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: Tests
+    dependencies:
+      - target: MailNotifier
+    settings:
+      base:
+        BUNDLE_LOADER: "$(TEST_HOST)"
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Mail Notifier.app/Contents/MacOS/Mail Notifier"
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.strategicnerds.MailNotifierTests
+        SWIFT_VERSION: "5.9"
+        MACOSX_DEPLOYMENT_TARGET: "14.0"
+        # Hardened runtime breaks XCTest's runtime injection into the host
+        # app during `xcodebuild test`. Disable for the test bundle only.
+        ENABLE_HARDENED_RUNTIME: NO
+        CODE_SIGN_STYLE: Automatic

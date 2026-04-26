@@ -62,9 +62,13 @@ struct Accounts: RawRepresentable, Codable, RandomAccessCollection, MutableColle
 // MARK: - Static Accessors
 
 extension Accounts {
+    /// UserDefaults backing store. Tests inject a non-standard suite so they
+    /// don't pollute the user's real preferences.
+    static var defaults: UserDefaults = .standard
+
     static var `default`: Accounts {
-        get { Accounts(rawValue: UserDefaults.standard.string(forKey: storageKey) ?? "[]") ?? [] }
-        set { UserDefaults.standard.set(newValue.rawValue, forKey: storageKey) }
+        get { Accounts(rawValue: defaults.string(forKey: storageKey) ?? "[]") ?? [] }
+        set { defaults.set(newValue.rawValue, forKey: storageKey) }
     }
 
     static var hasAccounts: Bool { !Self.default.isEmpty }

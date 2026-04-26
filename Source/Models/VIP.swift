@@ -71,12 +71,16 @@ struct VIPList: RawRepresentable, Codable, RandomAccessCollection, MutableCollec
 }
 
 extension VIPList {
+    /// UserDefaults backing store. Tests inject a non-standard suite so they
+    /// don't pollute the user's real preferences.
+    static var defaults: UserDefaults = .standard
+
     static var `default`: VIPList {
         get {
-            VIPList(rawValue: UserDefaults.standard.string(forKey: storageKey) ?? "[]") ?? []
+            VIPList(rawValue: defaults.string(forKey: storageKey) ?? "[]") ?? []
         }
         set {
-            UserDefaults.standard.set(newValue.rawValue, forKey: storageKey)
+            defaults.set(newValue.rawValue, forKey: storageKey)
         }
     }
 
