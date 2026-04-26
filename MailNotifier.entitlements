@@ -3,25 +3,13 @@
 <plist version="1.0">
 <dict>
 	<!--
-	iCloud Key-Value Storage for cross-machine sync of friendly account
-	names is wired up in FriendlyNameStore.swift but the entitlement
-	below is commented out because the matching capability has not yet
-	been enabled in App Store Connect for the
+	iCloud Key-Value Storage. Friendly account names sync across Macs
+	signed into the same Apple ID via NSUbiquitousKeyValueStore in
+	FriendlyNameStore.swift; this entitlement is what wires that up.
+	The matching capability is enabled in App Store Connect for the
 	com.strategicnerds.MailNotifierApp bundle identifier.
-
-	To enable cross-Mac sync:
-	  1. Sign in to https://developer.apple.com/account/resources/identifiers/
-	  2. Open the com.strategicnerds.MailNotifierApp identifier
-	  3. Toggle ON "iCloud" → "Include CloudKit support: NO" (KVS only)
-	  4. Save, regenerate the provisioning profile
-	  5. Uncomment the entitlement below
-	  6. Bump build number, sign, and ship
-
-	Local UserDefaults persistence in FriendlyNameStore continues to
-	work today without any of this — KVS is purely the sync upgrade.
-
+	-->
 	<key>com.apple.developer.ubiquity-kvstore-identifier</key>
 	<string>$(TeamIdentifierPrefix)$(CFBundleIdentifier)</string>
-	-->
 </dict>
 </plist>
