@@ -104,7 +104,8 @@ struct WelcomeView: View {
                 .fill(theme.dim)
                 .frame(width: 3, height: 3)
 
-            trustItem(icon: "info.circle", label: "No telemetry, no analytics, no servers")
+            trustItem(icon: "chart.bar.fill",
+                      label: "Anonymous usage stats — change in Settings")
         }
     }
 
