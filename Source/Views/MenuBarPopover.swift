@@ -196,9 +196,12 @@ private struct HeaderBar: View {
 
     private var statusLine: String {
         switch accountCount {
-        case 0: return "No accounts configured"
-        case 1: return "1 account configured"
-        default: return "\(accountCount) accounts configured"
+        case 0:
+            return NSLocalizedString("No accounts configured", comment: "")
+        case 1:
+            return NSLocalizedString("1 account configured", comment: "")
+        default:
+            return String(format: NSLocalizedString("%lld accounts configured", comment: ""), accountCount)
         }
     }
 }
@@ -265,6 +268,8 @@ private struct AccountsListLabel: View {
                 .foregroundStyle(theme.tertiary)
             Spacer()
             if let timestamp = lastCheckedAt {
+                // SwiftUI auto-localizes interpolated literals as
+                // LocalizedStringKey "Last checked %@".
                 Text("Last checked \(Formatters.shortTime.string(from: timestamp))")
                     .font(.system(size: 10))
                     .foregroundStyle(theme.tertiary)
@@ -346,7 +351,7 @@ private struct AccountCard: View {
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .help(state.hasAuthError ? "" : "Open inbox in browser")
+            .help(state.hasAuthError ? "" : NSLocalizedString("Open inbox in browser", comment: ""))
 
             trailingAccessory
         }
@@ -421,7 +426,9 @@ private struct AccountCard: View {
                             .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
-                    .help(isExpanded ? "Hide recent messages" : "Show recent messages")
+                    .help(isExpanded
+                          ? NSLocalizedString("Hide recent messages", comment: "")
+                          : NSLocalizedString("Show recent messages", comment: ""))
                 }
             }
         }

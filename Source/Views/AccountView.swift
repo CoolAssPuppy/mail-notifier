@@ -142,7 +142,7 @@ struct AccountView: View {
         }
     }
 
-    private func statusLabel(color: Color, label: String) -> some View {
+    private func statusLabel(color: Color, label: LocalizedStringKey) -> some View {
         HStack(spacing: 5) {
             Circle()
                 .fill(color)
@@ -295,7 +295,7 @@ struct AccountView: View {
                             .fill(theme.borderStrong)
                             .frame(width: 1, height: 28)
 
-                        Text("\(Int(account.checkInterval)) min")
+                        Text(LocalizedStringKey("\(Int(account.checkInterval)) min"))
                             .font(.system(size: 12, weight: .semibold))
                             .foregroundStyle(theme.foreground)
                             .monospacedDigit()

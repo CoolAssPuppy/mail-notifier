@@ -10,7 +10,10 @@ import SwiftUI
 // MARK: - Card
 
 struct AppCard<Trailing: View, Content: View>: View {
-    let title: String
+    // LocalizedStringKey, not String — string literals at call sites still
+    // satisfy this (they bridge implicitly), and using it routes Text() to
+    // the localizing overload so .strings translations are honored.
+    let title: LocalizedStringKey
     @ViewBuilder var trailing: () -> Trailing
     @ViewBuilder var content: () -> Content
 
@@ -19,10 +22,11 @@ struct AppCard<Trailing: View, Content: View>: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: AppSpacing.md) {
-                Text(title.uppercased())
+                Text(title)
                     .font(.system(size: 10, weight: .semibold))
                     .tracking(0.6)
                     .foregroundStyle(theme.tertiary)
+                    .textCase(.uppercase)
                 Spacer(minLength: 0)
                 trailing()
             }
@@ -44,13 +48,13 @@ struct AppCard<Trailing: View, Content: View>: View {
 }
 
 extension AppCard where Trailing == EmptyView {
-    init(_ title: String, @ViewBuilder content: @escaping () -> Content) {
+    init(_ title: LocalizedStringKey, @ViewBuilder content: @escaping () -> Content) {
         self.init(title: title, trailing: { EmptyView() }, content: content)
     }
 }
 
 extension AppCard {
-    init(_ title: String,
+    init(_ title: LocalizedStringKey,
          @ViewBuilder trailing: @escaping () -> Trailing,
          @ViewBuilder content: @escaping () -> Content) {
         self.init(title: title, trailing: trailing, content: content)
@@ -60,14 +64,14 @@ extension AppCard {
 // MARK: - Row with label + description + trailing control
 
 struct AppSettingRow<Trailing: View>: View {
-    let title: String
-    let description: String?
+    let title: LocalizedStringKey
+    let description: LocalizedStringKey?
     @ViewBuilder var trailing: () -> Trailing
 
     @Environment(\.theme) private var theme
 
-    init(_ title: String,
-         description: String? = nil,
+    init(_ title: LocalizedStringKey,
+         description: LocalizedStringKey? = nil,
          @ViewBuilder trailing: @escaping () -> Trailing) {
         self.title = title
         self.description = description
@@ -113,7 +117,7 @@ enum AppButtonTint {
 // MARK: - Secondary (bordered) button
 
 struct AppSecondaryButton: View {
-    let title: String
+    let title: LocalizedStringKey
     var systemImage: String? = nil
     var tint: AppButtonTint = .foreground
     let action: () -> Void
@@ -167,7 +171,7 @@ struct AppSecondaryButton: View {
 
 struct AppIconButton: View {
     let systemName: String
-    var help: String = ""
+    var help: LocalizedStringKey = ""
     var tint: AppButtonTint = .foreground
     var spinOnTap: Bool = false
     let action: () -> Void
@@ -216,8 +220,8 @@ struct AppIconButton: View {
 // MARK: - Provider choice card (welcome view)
 
 struct AppProviderChoiceCard: View {
-    let title: String
-    let subtitle: String
+    let title: LocalizedStringKey
+    let subtitle: LocalizedStringKey
     let assetName: String
     let action: () -> Void
 
@@ -269,7 +273,7 @@ struct AppProviderChoiceCard: View {
                     Image(systemName: "checkmark")
                         .font(.system(size: 8, weight: .bold))
                         .foregroundStyle(theme.success)
-                    Text("Read-only access")
+                    Text(LocalizedStringKey("Read-only access"))
                         .font(.system(size: 10))
                         .foregroundStyle(theme.muted)
                 }

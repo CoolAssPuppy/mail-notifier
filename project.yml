@@ -41,10 +41,16 @@ settings:
     CODE_SIGN_STYLE: Automatic
     DEVELOPMENT_TEAM: 955GSY56UT
   configs:
-    # Hardened runtime breaks XCTest's runtime injection into the host app.
-    # Keep it off for Debug (so `xcodebuild test` works) and on for Release.
     Debug:
+      # Hardened runtime breaks XCTest's runtime injection into the host app.
       ENABLE_HARDENED_RUNTIME: NO
+      # Xcode 15+ mergeable libraries split the host into "Mail Notifier" +
+      # "Mail Notifier.debug.dylib" in Debug, but the test bundle's rpath
+      # doesn't reach the host's MacOS directory so dlopen fails with
+      # "Library not loaded: @rpath/Mail Notifier.debug.dylib". Force a
+      # statically merged Debug binary so xcodebuild test works.
+      MERGED_BINARY_TYPE: manual
+      MERGEABLE_LIBRARY: NO
     Release:
       ENABLE_HARDENED_RUNTIME: YES
 

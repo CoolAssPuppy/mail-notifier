@@ -68,9 +68,12 @@ enum AppTheme: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
+    /// Display label for the theme picker. Only `system` is a real word
+    /// that needs localization; the other ten are sci-fi proper names that
+    /// stay in English across every locale.
     var label: String {
         switch self {
-        case .system:   return "System"
+        case .system:   return NSLocalizedString("System", comment: "Theme that follows OS light/dark setting")
         case .hoth:     return "Hoth"
         case .risa:     return "Risa"
         case .weasley:  return "Weasley"

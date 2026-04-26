@@ -109,7 +109,7 @@ struct WelcomeView: View {
         }
     }
 
-    private func trustItem(icon: String, label: String) -> some View {
+    private func trustItem(icon: String, label: LocalizedStringKey) -> some View {
         HStack(spacing: 6) {
             Image(systemName: icon)
                 .font(.system(size: 10, weight: .medium))

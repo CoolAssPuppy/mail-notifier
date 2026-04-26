@@ -156,7 +156,7 @@
 		EEA9F3DE9853CF06BBDD72BF /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F7DF9E463FD10F104229B4C9 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FB460ED3BAD3CC445B93C9FE /* AppDelegate+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Menu.swift"; sourceTree = "<group>"; };
-		"TEMP_5F406C3C-08DC-45C7-8A58-1D0F588804EB" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		"TEMP_ACECB5C4-BCB5-49D8-8D6B-C092EEFE7AD6" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -334,10 +334,10 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		"TEMP_604938C5-2E5F-463A-9969-BFD5EDE26EC6" /* mail-notifier */ = {
+		"TEMP_571C546D-53D2-41FB-8008-13E830CC69CE" /* mail-notifier */ = {
 			isa = PBXGroup;
 			children = (
-				"TEMP_5F406C3C-08DC-45C7-8A58-1D0F588804EB" /* Secrets.xcconfig */,
+				"TEMP_ACECB5C4-BCB5-49D8-8D6B-C092EEFE7AD6" /* Secrets.xcconfig */,
 			);
 			path = "mail-notifier";
 			sourceTree = "<group>";
@@ -617,7 +617,7 @@
 		};
 		229918186B40865D81363975 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_5F406C3C-08DC-45C7-8A58-1D0F588804EB" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_ACECB5C4-BCB5-49D8-8D6B-C092EEFE7AD6" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -719,7 +719,7 @@
 		};
 		B4A4092827DAC2ECABE337D5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_5F406C3C-08DC-45C7-8A58-1D0F588804EB" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_ACECB5C4-BCB5-49D8-8D6B-C092EEFE7AD6" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -774,6 +774,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MERGEABLE_LIBRARY = NO;
+				MERGED_BINARY_TYPE = manual;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;

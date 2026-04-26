@@ -61,7 +61,9 @@ struct Sidebar: View {
                 Text("Mail Notifier")
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(theme.foreground)
-                Text(accounts.isEmpty ? "Setup required" : "\(accounts.count) configured")
+                Text(accounts.isEmpty
+                     ? LocalizedStringKey("Setup required")
+                     : LocalizedStringKey("\(accounts.count) configured"))
                     .font(.system(size: 10))
                     .foregroundStyle(theme.muted)
             }
@@ -158,7 +160,7 @@ struct Sidebar: View {
             }
             .buttonStyle(.plain)
             .keyboardShortcut(",", modifiers: .command)
-            .help("Settings (⌘,)")
+            .help(LocalizedStringKey("Settings (⌘,)"))
         }
         .padding(12)
         .overlay(
