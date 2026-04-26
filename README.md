@@ -35,77 +35,78 @@ mail-notifier/
 ├── Source/
 │   ├── App/
 │   │   ├── MailNotifierApp.swift       # App entry point
-│   │   ├── AppDelegate.swift           # Menu bar setup and app lifecycle
-│   │   ├── AppDelegate+Menu.swift      # Menu bar menu construction
-│   │   └── AppSettings.swift           # Global app settings
+│   │   ├── AppDelegate.swift           # Menu bar, popover, window, mailto handling
+│   │   ├── AppDelegate+Menu.swift      # Right-click menu construction
+│   │   ├── AppSettings.swift           # Global UserDefaults-backed settings
+│   │   └── URLRouter.swift             # Custom URL scheme dispatcher (OAuth, mailto, prefs)
 │   │
 │   ├── Models/
-│   │   ├── Account.swift               # Account model and keychain storage
-│   │   ├── Browser.swift               # Browser detection and launching
-│   │   ├── Message.swift               # Email message model
-│   │   ├── Sound.swift                 # Notification sound definitions
-│   │   └── VIP.swift                   # VIP sender model
+│   │   ├── Account.swift               # Account model
+│   │   ├── AccountStore.swift          # Accounts collection + UserDefaults persistence
+│   │   ├── Browser.swift               # Installed browser detection
+│   │   ├── FriendlyNameStore.swift     # iCloud KVS-mirrored friendly account names
+│   │   ├── Message.swift               # Email message model + URL construction
+│   │   ├── Sound.swift                 # Notification sound enum (system + custom)
+│   │   ├── ThemeStore.swift            # 10-palette theme system
+│   │   └── VIP.swift                   # VIP sender list + UserDefaults persistence
 │   │
 │   ├── Services/
-│   │   ├── MessageFetcher.swift        # Gmail/Outlook API fetching logic
-│   │   ├── LaunchAtLoginManager.swift  # Login item management
+│   │   ├── AccountAuthorizer.swift     # Keychain-backed OAuth state + signin flow
+│   │   ├── FetcherManager.swift        # Per-account MessageFetcher coordinator
+│   │   ├── LaunchAtLoginManager.swift  # SMAppService login-item management
+│   │   ├── MessageFetcher.swift        # Per-account periodic fetch + state reducer
+│   │   ├── NotificationService.swift   # UNUserNotificationCenter delivery + click handling
+│   │   ├── Telemetry.swift             # Anonymous PostHog facade (opt-in toggle in Settings)
 │   │   ├── UpdaterManager.swift        # Sparkle auto-update wrapper
-│   │   └── OAuth/
-│   │       ├── GoogleOAuthClient.swift     # Google OAuth implementation
-│   │       └── OutlookOAuthClient.swift    # Microsoft OAuth implementation
+│   │   ├── OAuth/
+│   │   │   ├── GoogleOAuthClient.swift     # Google OAuth + redirect-scheme derivation
+│   │   │   └── OutlookOAuthClient.swift    # Microsoft OAuth (PKCE, public client)
+│   │   └── Providers/
+│   │       ├── GmailProvider.swift         # Gmail API fetcher + error classifier
+│   │       ├── MailProvider.swift          # Provider protocol + error taxonomy
+│   │       └── OutlookProvider.swift       # Microsoft Graph fetcher
 │   │
 │   ├── Utilities/
-│   │   ├── Logger.swift                # Logging utilities
-│   │   └── NotificationNames.swift     # Centralized notification names
+│   │   ├── Formatters.swift            # Relative date label helpers
+│   │   ├── Logger.swift                # os.log subsystem + categories
+│   │   ├── NotificationNames.swift     # Centralized Notification.Name constants
+│   │   └── URLEncoding.swift           # urlPathComponentAllowed CharacterSet
 │   │
-│   ├── Views/
-│   │   ├── MainView.swift              # Main window with NavigationSplitView
-│   │   ├── Sidebar.swift               # Account list sidebar
-│   │   ├── AccountView.swift           # Individual account settings
-│   │   ├── SettingsView.swift          # Global settings panel
-│   │   ├── WelcomeView.swift           # First-run welcome screen
-│   │   └── Components/
-│   │       └── SharedComponents.swift  # Reusable UI components
-│   │
-│   └── OAuthSecret.swift               # OAuth client secrets (generated from xcconfig)
+│   └── Views/
+│       ├── AccountView.swift           # Per-account detail (identity, notifications, behavior)
+│       ├── MainView.swift              # Main window: sidebar + content + settings drawer
+│       ├── MenuBarPopover.swift        # SwiftUI menu-bar popover with theme strip
+│       ├── SettingsDrawer.swift        # Slide-down global Settings drawer
+│       ├── SettingsView.swift          # Global settings (general, keyboard, VIP, updates, contact)
+│       ├── Sidebar.swift               # Account list sidebar
+│       ├── Theme.swift                 # AppRadius, AppSpacing constants
+│       ├── WelcomeView.swift           # First-run welcome screen
+│       └── Components/
+│           └── SharedComponents.swift  # AppCard, AppSettingRow, AppIconButton, etc.
+│
+├── Tests/                              # MailNotifierTests target — 80+ unit tests
+│   ├── AccountStoreTests.swift
+│   ├── AccountTests.swift
+│   ├── FormattersTests.swift
+│   ├── GmailProviderErrorMappingTests.swift
+│   ├── MessageFetcherTests.swift
+│   ├── MessageTests.swift
+│   ├── SoundTests.swift
+│   ├── URLEncodingTests.swift
+│   ├── URLRouterTests.swift
+│   └── VIPListTests.swift
 │
 ├── Secrets.xcconfig.example            # Template for OAuth credentials
 ├── Secrets.xcconfig                    # Your OAuth credentials (gitignored)
 │
 ├── Resources/
 │   ├── Sounds/                         # Custom notification sounds (AIFF)
-│   ├── en.lproj/                       # English localization
-│   ├── en-GB.lproj/                    # British English
-│   ├── ja.lproj/                       # Japanese
-│   ├── zh-Hans.lproj/                  # Chinese (Simplified)
-│   ├── zh-Hant.lproj/                  # Chinese (Traditional)
-│   ├── ko.lproj/                       # Korean
-│   ├── fr.lproj/                       # French
-│   ├── de.lproj/                       # German
-│   ├── es.lproj/                       # Spanish
-│   ├── pt-BR.lproj/                    # Portuguese (Brazil)
-│   ├── pt-PT.lproj/                    # Portuguese (Portugal)
-│   ├── it.lproj/                       # Italian
-│   ├── nl.lproj/                       # Dutch
-│   ├── sv.lproj/                       # Swedish
-│   ├── nb.lproj/                       # Norwegian
-│   ├── da.lproj/                       # Danish
-│   ├── pl.lproj/                       # Polish
-│   ├── cs.lproj/                       # Czech
-│   ├── uk.lproj/                       # Ukrainian
-│   ├── tr.lproj/                       # Turkish
-│   ├── hi.lproj/                       # Hindi
-│   └── tlh.lproj/                      # Klingon
+│   └── *.lproj/                        # 22 localizations (en, en-GB, ja, zh-Hans,
+│                                       # zh-Hant, ko, fr, de, es, pt-BR, pt-PT, it,
+│                                       # nl, sv, nb, da, pl, cs, uk, tr, hi, tlh)
 │
-├── Images.xcassets/
-│   ├── AppIcon.appiconset/             # Application icon
-│   ├── Colors/                         # Color assets
-│   └── Menu Icons/                     # Menu bar icons
-│
-├── vendors/
-│   ├── generateSecret.sh               # Build script for OAuth secrets
-│   ├── gyb                             # GYB template processor
-│   └── gyb.py                          # GYB Python implementation
+├── Images.xcassets/                    # AppIcon, color assets, menu-bar icons,
+│                                       # provider brand icons (Gmail, Outlook, GitHub)
 │
 ├── scripts/
 │   ├── debug.sh                        # Build + launch a local Debug copy
@@ -113,17 +114,35 @@ mail-notifier/
 │   ├── build-dmg.sh                    # DMG packaging + notarization + Sparkle signing
 │   └── export-options.plist            # xcodebuild export config (method: developer-id)
 │
-├── dmg-assets/
-│   └── README.md                       # How to generate the DMG background
-│
+├── dmg-assets/                         # DMG background art generation
 ├── dist/
 │   └── appcast.xml                     # Sparkle appcast (uploaded by release.sh)
 │
 ├── project.yml                         # xcodegen config (source of truth)
-├── Info.plist                          # App configuration, URL schemes, Sparkle keys
-├── MailNotifier.entitlements           # Entitlements (empty; app is unsandboxed)
+├── Info.plist                          # App config, URL schemes, Sparkle keys, telemetry keys
+├── MailNotifier.entitlements           # Entitlements (commented-out iCloud KVS hook)
 ├── SPARKLE.md                          # One-time Sparkle + Dub.co setup
+├── TECH_DEBT_AUDIT.md                  # Living tech-debt audit, file:line cited
 └── MailNotifier.xcodeproj/             # Generated by xcodegen (do not hand-edit)
+```
+
+## Running the tests
+
+```bash
+xcodebuild -project MailNotifier.xcodeproj -scheme MailNotifier \
+  -destination 'platform=macOS' test
+```
+
+The first run after pulling other people's release builds may need
+`lsregister -u` cleanup if multiple `Mail Notifier.app` copies are
+registered with LaunchServices (you'll see "Could not launch
+MailNotifierTests"). One-liner:
+
+```bash
+mdfind "kMDItemCFBundleIdentifier == com.strategicnerds.MailNotifierApp" \
+  | while read -r path; do
+      /System/Library/Frameworks/CoreServices.framework/Versions/Current/Frameworks/LaunchServices.framework/Versions/Current/Support/lsregister -u "$path"
+    done
 ```
 
 ## Installing the release build

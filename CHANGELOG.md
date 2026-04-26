@@ -1,3 +1,7 @@
+# Mail Notifier (rewrite, 3.x)
+
+This codebase is a 2026 ground-up SwiftUI rewrite of Gmail Notifr, kept under the same repository and changelog for historical continuity. Entries from version 2.1.1 and earlier describe the original Gmail Notifr by James Chen — see "Gmail Notifr (legacy)" below.
+
 ## 3.2.3 (Apr 23, 2026)
 
 * Cleaner menu bar account rows (no per-account "checked" timestamp)
@@ -23,6 +27,10 @@
 * Per-account settings condensed into three cards (Identity, Notifications, Behavior, Account Management)
 * Settings drawer slides down over the main window with Escape / ✕ dismissal; every original preference preserved
 * VIP list now inline in the drawer with per-sender sound preview
+
+# Gmail Notifr (legacy, 0.x – 2.x)
+
+Versions below ship as Gmail Notifr by James Chen / ashchan.com. They predate the 2026 SwiftUI rewrite and describe a different application; their feature claims (passwords, Compose Mail menu, Growl) do not apply to current Mail Notifier.
 
 ## 2.1.1 (Feb 3, 2022)
 * Fix default browser setting
