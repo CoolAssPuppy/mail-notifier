@@ -156,7 +156,7 @@
 		EEA9F3DE9853CF06BBDD72BF /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F7DF9E463FD10F104229B4C9 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FB460ED3BAD3CC445B93C9FE /* AppDelegate+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Menu.swift"; sourceTree = "<group>"; };
-		"TEMP_98989C87-B09A-4705-9204-780631C7D027" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		"TEMP_5F406C3C-08DC-45C7-8A58-1D0F588804EB" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -334,10 +334,10 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		"TEMP_E3AE15F4-8067-460E-9C1B-E5892F307CC7" /* mail-notifier */ = {
+		"TEMP_604938C5-2E5F-463A-9969-BFD5EDE26EC6" /* mail-notifier */ = {
 			isa = PBXGroup;
 			children = (
-				"TEMP_98989C87-B09A-4705-9204-780631C7D027" /* Secrets.xcconfig */,
+				"TEMP_5F406C3C-08DC-45C7-8A58-1D0F588804EB" /* Secrets.xcconfig */,
 			);
 			path = "mail-notifier";
 			sourceTree = "<group>";
@@ -601,14 +601,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MailNotifier.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 19;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				LS_MINIMUM_SYSTEM_VERSION = 14.0;
-				MARKETING_VERSION = 3.2.8;
+				MARKETING_VERSION = 3.2.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.strategicnerds.MailNotifierApp;
 				PRODUCT_NAME = "Mail Notifier";
 				SDKROOT = macosx;
@@ -617,7 +617,7 @@
 		};
 		229918186B40865D81363975 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_98989C87-B09A-4705-9204-780631C7D027" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_5F406C3C-08DC-45C7-8A58-1D0F588804EB" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -682,14 +682,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MailNotifier.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 19;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				LS_MINIMUM_SYSTEM_VERSION = 14.0;
-				MARKETING_VERSION = 3.2.8;
+				MARKETING_VERSION = 3.2.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.strategicnerds.MailNotifierApp;
 				PRODUCT_NAME = "Mail Notifier";
 				SDKROOT = macosx;
@@ -719,7 +719,7 @@
 		};
 		B4A4092827DAC2ECABE337D5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_98989C87-B09A-4705-9204-780631C7D027" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_5F406C3C-08DC-45C7-8A58-1D0F588804EB" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;

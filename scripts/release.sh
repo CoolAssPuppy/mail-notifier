@@ -107,11 +107,13 @@ xcodebuild -project "$REPO_ROOT/MailNotifier.xcodeproj" \
   -scheme MailNotifier \
   -configuration Release \
   -archivePath "$ARCHIVE" \
+  -allowProvisioningUpdates \
   archive | xcpretty 2>/dev/null || \
 xcodebuild -project "$REPO_ROOT/MailNotifier.xcodeproj" \
   -scheme MailNotifier \
   -configuration Release \
   -archivePath "$ARCHIVE" \
+  -allowProvisioningUpdates \
   archive >/dev/null
 
 #----------------------------------------------------------------------
@@ -120,10 +122,13 @@ xcodebuild -project "$REPO_ROOT/MailNotifier.xcodeproj" \
 EXPORT_DIR="$DIST/export-$VERSION"
 rm -rf "$EXPORT_DIR"
 echo "==> Exporting .app"
+# -allowProvisioningUpdates is required when entitlements (e.g. iCloud KVS)
+# need a Developer ID provisioning profile that Xcode hasn't yet downloaded.
 xcodebuild -exportArchive \
   -archivePath "$ARCHIVE" \
   -exportPath "$EXPORT_DIR" \
-  -exportOptionsPlist "$SCRIPTS/export-options.plist" >/dev/null
+  -exportOptionsPlist "$SCRIPTS/export-options.plist" \
+  -allowProvisioningUpdates >/dev/null
 
 APP_PATH="$EXPORT_DIR/Mail Notifier.app"
 if [ ! -d "$APP_PATH" ]; then
