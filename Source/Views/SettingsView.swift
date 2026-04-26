@@ -277,7 +277,7 @@ struct SettingsView: View {
                             .frame(width: 13, height: 13)
                             .foregroundStyle(theme.muted)
                     ),
-                    title: "coolasspuppy/mail-notifier",
+                    title: "Contribute on GitHub",
                     url: "https://github.com/CoolAssPuppy/mail-notifier"
                 )
                 contactRow(
