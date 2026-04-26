@@ -33,6 +33,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
 
+        verifyURLSchemesRegistered()
+
         Telemetry.setup()
 
         notificationService.delegate = self
@@ -50,6 +52,30 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         if !Accounts.hasAccounts || AppSettings.shared.openSettingsOnStart {
             showPreferences()
+        }
+    }
+
+    /// Sanity-check that the OAuth redirect schemes computed at runtime from
+    /// `Secrets.xcconfig` match what's registered in `Info.plist`. If they
+    /// drift, the OAuth dance silently fails after the redirect — the user
+    /// is bounced through Google/Microsoft, returns to the system, and
+    /// nothing happens. Logging at startup makes the misconfiguration loud.
+    private func verifyURLSchemesRegistered() {
+        let registered: Set<String> = {
+            guard let types = Bundle.main.object(forInfoDictionaryKey: "CFBundleURLTypes") as? [[String: Any]] else { return [] }
+            let schemes = types.flatMap { ($0["CFBundleURLSchemes"] as? [String]) ?? [] }
+            return Set(schemes.map { $0.lowercased() })
+        }()
+
+        let expected: [(name: String, scheme: String)] = [
+            ("Google", GoogleOAuthClient.redirectScheme),
+            ("Outlook", OutlookOAuthClient.redirectScheme)
+        ]
+
+        for entry in expected where !entry.scheme.isEmpty {
+            if !registered.contains(entry.scheme.lowercased()) {
+                Log.app.error("\(entry.name, privacy: .public) OAuth redirect scheme \(entry.scheme, privacy: .public) is not registered in Info.plist CFBundleURLTypes — sign-in callbacks will be dropped")
+            }
         }
     }
 
@@ -186,8 +212,8 @@ private extension AppDelegate {
         NotificationCenter.default
             .publisher(for: .messagesFetched)
             .sink { [weak self] notification in
-                guard let self else { return }
-                let email = notification.object as? String ?? ""
+                guard let self,
+                      let email = notification.object as? String else { return }
                 self.updateMenuBar()
                 notificationService.handleMessagesFetched(email: email, fetcherManager: fetcherManager)
             }

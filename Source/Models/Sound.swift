@@ -50,15 +50,12 @@ enum Sound: String, Identifiable, CaseIterable {
         rawValue
     }
 
+    /// True when the sound is shipped as an AIFF in `Resources/Sounds/`.
+    /// Derived from the actual bundle so adding a new custom sound is a
+    /// one-edit change (drop the file, add the case) instead of also
+    /// having to update a hand-maintained switch.
     private var isCustomSound: Bool {
-        switch self {
-        case .blink, .chimes, .iLoveYou, .megRyan, .minstrel, .ominous, .organ,
-             .pong, .power, .ramius, .robot, .splat, .spring, .vader, .wacky,
-             .wahWah, .whimsy, .whistle:
-            return true
-        default:
-            return false
-        }
+        Bundle.main.url(forResource: rawValue, withExtension: "aiff", subdirectory: "Sounds") != nil
     }
 }
 

@@ -18,6 +18,9 @@ final class MessageFetcher: NSObject {
 
     private(set) var unreadMessagesCount = 0 {
         didSet {
+            // Suppress no-op updates — every assignment otherwise triggers
+            // a full menu-bar refresh even when the count is unchanged.
+            guard oldValue != unreadMessagesCount else { return }
             NotificationCenter.default.post(name: .unreadCountUpdated, object: account.email)
         }
     }
@@ -25,6 +28,12 @@ final class MessageFetcher: NSObject {
 
     private(set) var messages = [Message]() {
         didSet {
+            // Same idea: only post when the message identifiers actually
+            // changed. Comparing by id avoids comparing every message field.
+            let oldIds = oldValue.map(\.id)
+            let newIds = messages.map(\.id)
+            let messagesChanged = oldIds != newIds
+
             if let newestMessage = messages.first {
                 if let newestMessageDate = account.newestMessageDate {
                     hasNewMessages = newestMessage.serverDate > newestMessageDate
@@ -36,7 +45,10 @@ final class MessageFetcher: NSObject {
             } else {
                 hasNewMessages = false
             }
-            NotificationCenter.default.post(name: .messagesFetched, object: account.email)
+
+            if messagesChanged {
+                NotificationCenter.default.post(name: .messagesFetched, object: account.email)
+            }
         }
     }
 
@@ -129,12 +141,14 @@ final class MessageFetcher: NSObject {
             unreadMessagesCount = count
         }
 
-        switch messagesResult {
-        case .success(let msgs):
+        if case .success(let msgs) = messagesResult {
             messages = msgs
-            lastCheckedAt = Date()
-        case .failure:
-            break
         }
+
+        // Always advance lastCheckedAt when at least one path resolved.
+        // Previously this only ran when messages succeeded, so the
+        // "Last checked at hh:mm" footer froze on partial outages even
+        // when unread count was successfully refreshed.
+        lastCheckedAt = Date()
     }
 }

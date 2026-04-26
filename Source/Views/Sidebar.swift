@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct Sidebar: View {
+    // FriendlyNameStore is observed inside SidebarAccountRow where the name
+    // is actually rendered, so it doesn't need to be observed here too.
     @AppStorage(Accounts.storageKey) var accounts = Accounts()
-    @ObservedObject private var friendlyNames = FriendlyNameStore.shared
     @Environment(\.theme) private var theme
     @Binding var selection: String?
     var totalUnread: Int = 0
