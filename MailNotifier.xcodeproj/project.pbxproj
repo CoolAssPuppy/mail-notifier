@@ -31,7 +31,6 @@
 		408FED39F299B062EC152101 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85734040168C129FCDDAE13D /* WelcomeView.swift */; };
 		42E9081BE938811A5683C9A5 /* UpdaterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53C88A02CD4CB9DA9FCDEEE /* UpdaterManager.swift */; };
 		476B55D1C8E2D484625F4FA0 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAA878B780CA7066B721262 /* AppSettings.swift */; };
-		4A630E6B3CAAE8B20B195149 /* OAuthSecret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4D994A8D656FC5C5EA4D49 /* OAuthSecret.swift */; };
 		50122A8EBA78790005ECBBDB /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = 323E4DDFA841EB77D4CE1F2F /* PostHog */; };
 		519533A448D4CD1CD27F1468 /* OutlookOAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B2763164C0B8D569025080 /* OutlookOAuthClient.swift */; };
 		5306B9D922785DF8391BD323 /* AccountStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536F8E922427D6AC37743C33 /* AccountStoreTests.swift */; };
@@ -124,7 +123,6 @@
 		764695FD367A93846CADCEBD /* URLRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRouter.swift; sourceTree = "<group>"; };
 		769411A410DA75B09686F118 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		7BA52CFA8A31B99E0B130518 /* AccountAuthorizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountAuthorizer.swift; sourceTree = "<group>"; };
-		7D4D994A8D656FC5C5EA4D49 /* OAuthSecret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthSecret.swift; sourceTree = "<group>"; };
 		7FE4E8C6BB186B7F2AEAC672 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8077B10821F1A128FC892D32 /* Sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Sounds; path = Resources/Sounds; sourceTree = SOURCE_ROOT; };
 		856D587359B7B016FEE9AAB1 /* GoogleOAuthClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleOAuthClient.swift; sourceTree = "<group>"; };
@@ -158,7 +156,7 @@
 		EEA9F3DE9853CF06BBDD72BF /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F7DF9E463FD10F104229B4C9 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FB460ED3BAD3CC445B93C9FE /* AppDelegate+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Menu.swift"; sourceTree = "<group>"; };
-		"TEMP_BAF1A5EE-95CA-4E5F-AAF6-ABE6E496818B" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		"TEMP_D3310B54-4398-4F54-B02D-4A5D924B342B" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,7 +180,6 @@
 		013498CFE2FBB226176AD1C0 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				7D4D994A8D656FC5C5EA4D49 /* OAuthSecret.swift */,
 				4954710E707E3D1F1B88CCE3 /* App */,
 				532A4E15713977F7ABA55319 /* Models */,
 				DECD75C7C3E91E3F8DC648A2 /* Services */,
@@ -337,10 +334,10 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		"TEMP_49CBADCC-D9A1-4B80-88BE-394861162036" /* mail-notifier */ = {
+		"TEMP_D37387EC-D516-4625-A64D-A6F00815E689" /* mail-notifier */ = {
 			isa = PBXGroup;
 			children = (
-				"TEMP_BAF1A5EE-95CA-4E5F-AAF6-ABE6E496818B" /* Secrets.xcconfig */,
+				"TEMP_D3310B54-4398-4F54-B02D-4A5D924B342B" /* Secrets.xcconfig */,
 			);
 			path = "mail-notifier";
 			sourceTree = "<group>";
@@ -370,7 +367,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9D80319E09941C3C2F4EF8AB /* Build configuration list for PBXNativeTarget "MailNotifier" */;
 			buildPhases = (
-				EF9CAB18418CB1EC38116354 /* Generate OAuth secrets */,
 				6DF8C2E5D3BA060574B76FE0 /* Sources */,
 				6D0DA607F2935B89386E6E18 /* Resources */,
 				BD6B18E9FD90134D5B0F1B68 /* Frameworks */,
@@ -477,28 +473,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		EF9CAB18418CB1EC38116354 /* Generate OAuth secrets */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Generate OAuth secrets";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "set -e\nif [ -e \"${PROJECT_DIR}/.env\" ]; then\n  # shellcheck disable=SC1091\n  source \"${PROJECT_DIR}/.env\"\nfi\nfind \"${PROJECT_DIR}/Source\" -name '*.gyb' | while read -r file; do\n  if [ ! -f \"${file%.gyb}\" ]; then\n    echo \"Generating ${file%.gyb}\"\n    \"${PROJECT_DIR}/vendors/gyb\" --line-directive '' -o \"${file%.gyb}\" \"$file\"\n  fi\ndone\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		223C1A1A00CFE4A4E45E9C8F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -544,7 +518,6 @@
 				11AB8C1107B6B1710DBC6941 /* MessageFetcher.swift in Sources */,
 				38580E8A8BE7FBBE2988F900 /* NotificationNames.swift in Sources */,
 				247E7F167FC88D12CFB97E6E /* NotificationService.swift in Sources */,
-				4A630E6B3CAAE8B20B195149 /* OAuthSecret.swift in Sources */,
 				519533A448D4CD1CD27F1468 /* OutlookOAuthClient.swift in Sources */,
 				AC7B341B09EE8F0209B51C10 /* OutlookProvider.swift in Sources */,
 				935B42CCC66205110E7804A4 /* SettingsDrawer.swift in Sources */,
@@ -644,7 +617,7 @@
 		};
 		229918186B40865D81363975 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_BAF1A5EE-95CA-4E5F-AAF6-ABE6E496818B" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_D3310B54-4398-4F54-B02D-4A5D924B342B" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -746,7 +719,7 @@
 		};
 		B4A4092827DAC2ECABE337D5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_BAF1A5EE-95CA-4E5F-AAF6-ABE6E496818B" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_D3310B54-4398-4F54-B02D-4A5D924B342B" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;

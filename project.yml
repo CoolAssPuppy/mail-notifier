@@ -58,8 +58,6 @@ targets:
       gatherCoverageData: true
     sources:
       - path: Source
-        excludes:
-          - "**/*.gyb"
       - path: Images.xcassets
       - path: Resources
         excludes:
@@ -86,22 +84,6 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         LS_MINIMUM_SYSTEM_VERSION: "14.0"
         COMBINE_HIDPI_IMAGES: YES
-    preBuildScripts:
-      - name: Generate OAuth secrets
-        script: |
-          set -e
-          if [ -e "${PROJECT_DIR}/.env" ]; then
-            # shellcheck disable=SC1091
-            source "${PROJECT_DIR}/.env"
-          fi
-          find "${PROJECT_DIR}/Source" -name '*.gyb' | while read -r file; do
-            if [ ! -f "${file%.gyb}" ]; then
-              echo "Generating ${file%.gyb}"
-              "${PROJECT_DIR}/vendors/gyb" --line-directive '' -o "${file%.gyb}" "$file"
-            fi
-          done
-        basedOnDependencyAnalysis: false
-
   MailNotifierTests:
     type: bundle.unit-test
     platform: macOS
