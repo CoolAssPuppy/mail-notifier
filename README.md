@@ -291,6 +291,8 @@ The app uses Swift Package Manager for dependencies:
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the Mozilla Public License 2.0. See [LICENSE](LICENSE) for details.
 
-Copyright (c) 2026 Strategic Nerds, Inc.
+Copyright © 2026 Strategic Nerds, Inc.
+
+Inspired by [Gmail Notifr](https://github.com/ashchan/mail-notifr) by James Chen. This is a clean-room rewrite; no source code from the original project is incorporated.
