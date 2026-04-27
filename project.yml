@@ -83,8 +83,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.strategicnerds.MailNotifierApp
         PRODUCT_NAME: "Mail Notifier"
-        MARKETING_VERSION: "3.2.9"
-        CURRENT_PROJECT_VERSION: "19"
+        MARKETING_VERSION: "3.3.0"
+        CURRENT_PROJECT_VERSION: "20"
         INFOPLIST_FILE: Info.plist
         CODE_SIGN_ENTITLEMENTS: MailNotifier.entitlements
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
