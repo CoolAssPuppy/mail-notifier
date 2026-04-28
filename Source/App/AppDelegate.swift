@@ -478,38 +478,40 @@ extension AppDelegate {
         Accounts.authorize(type: account.type)
     }
 
+    /// Synchronous so callers (e.g. `reauthorize`) can rely on the window
+    /// being key by the time this returns — `Accounts.authorize` reads
+    /// `NSApp.keyWindow` to decide whether to use ASWebAuthenticationSession
+    /// or fall back to the deprecated browser flow.
     @objc func showPreferences() {
         // Stay .accessory — we never want a dock icon, even while the main
         // window is open. .accessory apps can still own standard windows;
         // makeKeyAndOrderFront + activate is enough to focus them.
-        Task { @MainActor in
-            NSApp.activate(ignoringOtherApps: true)
+        NSApp.activate(ignoringOtherApps: true)
 
-            if let existingWindow = preferencesWindow {
-                existingWindow.makeKeyAndOrderFront(nil)
-                return
-            }
-
-            let window = NSWindow(
-                contentRect: NSRect(x: 0, y: 0, width: 1040, height: 680),
-                styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
-                backing: .buffered,
-                defer: false
-            )
-            window.contentView = NSHostingView(rootView: MainViewWrapper())
-            window.title = "Mail Notifier"
-            window.toolbar = nil
-            window.titlebarAppearsTransparent = true
-            window.titleVisibility = .hidden
-            window.appearance = NSAppearance(named: .darkAqua)
-            window.backgroundColor = NSColor.black
-            window.isReleasedWhenClosed = false
-            window.center()
-            window.makeKeyAndOrderFront(nil)
-            window.delegate = self
-
-            preferencesWindow = window
+        if let existingWindow = preferencesWindow {
+            existingWindow.makeKeyAndOrderFront(nil)
+            return
         }
+
+        let window = NSWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 1040, height: 680),
+            styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
+            backing: .buffered,
+            defer: false
+        )
+        window.contentView = NSHostingView(rootView: MainViewWrapper())
+        window.title = "Mail Notifier"
+        window.toolbar = nil
+        window.titlebarAppearsTransparent = true
+        window.titleVisibility = .hidden
+        window.appearance = NSAppearance(named: .darkAqua)
+        window.backgroundColor = NSColor.black
+        window.isReleasedWhenClosed = false
+        window.center()
+        window.makeKeyAndOrderFront(nil)
+        window.delegate = self
+
+        preferencesWindow = window
     }
 
     @objc func showSettingsDrawer() {
