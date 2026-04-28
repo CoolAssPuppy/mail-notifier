@@ -287,6 +287,7 @@ struct AccountView: View {
                                 .font(.system(size: 10, weight: .semibold))
                                 .foregroundStyle(theme.muted)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
                         .frame(width: 32, height: 28)
@@ -310,6 +311,7 @@ struct AccountView: View {
                                 .font(.system(size: 10, weight: .semibold))
                                 .foregroundStyle(theme.muted)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
                         .frame(width: 32, height: 28)
