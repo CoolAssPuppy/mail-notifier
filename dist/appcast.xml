@@ -6,6 +6,24 @@
     <description>Mail Notifier updates</description>
     <language>en</language>
     <item>
+      <title>Version 3.3.1</title>
+      <pubDate>Wed, 29 Apr 2026 00:01:24 +0000</pubDate>
+      <sparkle:version>21</sparkle:version>
+      <sparkle:shortVersionString>3.3.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[
+        <ul>
+          <li>Bug fixes to Microsoft login</li>
+        </ul>
+      ]]></description>
+      <enclosure
+        url="https://downloads.strategicnerds.com/apps/mail-notifier/MailNotifier-3.3.1.dmg"
+        sparkle:edSignature="hfRPnJaTGYvhy2WrTWeaq05qLTE4Y2OYubW68qo5bKywbOKHhLAGnJmNRbATyEHJbTzucl3bK4xukArUDZibBw=="
+        length="7457037"
+        type="application/x-apple-diskimage" />
+    </item>
+
+    <item>
       <title>Version 3.3.0</title>
       <pubDate>Mon, 27 Apr 2026 04:32:11 +0000</pubDate>
       <sparkle:version>20</sparkle:version>
