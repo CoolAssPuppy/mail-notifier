@@ -49,16 +49,24 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
         completionHandler()
     }
 
-    func deliverNotifications(for messages: [Message]) {
+    func deliverNotifications(for messages: [Message], account: Account) {
         Task {
             let delivered = await UNUserNotificationCenter.current().deliveredNotifications()
             let deliveredIds = Set(delivered.map { $0.request.identifier })
             let vipList = VIPList.default
 
-            for message in messages {
-                let notificationID = notificationIdentifier(for: message)
-                guard !deliveredIds.contains(notificationID) else { continue }
+            // Resolve a single sound for this batch so a fetch makes one sound,
+            // matching the previous NSSound behavior: a VIP sender's sound wins,
+            // otherwise the account's sound. Attaching it to the notification
+            // (instead of calling NSSound.play) lets macOS play it, so Focus /
+            // Do Not Disturb governs the sound the same way it governs the banner.
+            let batchSound = messages.lazy
+                .compactMap { vipList.soundForSender($0.senderEmail) }
+                .first ?? account.sound
 
+            let newMessages = messages.filter { !deliveredIds.contains(notificationIdentifier(for: $0)) }
+
+            for (index, message) in newMessages.enumerated() {
                 let isVIP = vipList.soundForSender(message.senderEmail) != nil
                 let content = UNMutableNotificationContent()
                 content.title = message.sender
@@ -66,8 +74,12 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
                 content.body = message.decodedSnippet
                 content.userInfo = ["messageId": message.id, "email": message.email, "isVIP": isVIP]
                 content.threadIdentifier = message.email
+                // One sound per batch: only the first delivered notification carries it.
+                if index == 0, let batchSound {
+                    content.sound = batchSound.notificationSound
+                }
 
-                let request = UNNotificationRequest(identifier: notificationID, content: content, trigger: nil)
+                let request = UNNotificationRequest(identifier: notificationIdentifier(for: message), content: content, trigger: nil)
                 do {
                     try await UNUserNotificationCenter.current().add(request)
                     Telemetry.capture("notification.shown", properties: ["is_vip": isVIP])
@@ -85,33 +97,18 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
     func handleMessagesFetched(email: String, fetcherManager: FetcherManager) {
         guard let account = Accounts.default.find(email: email), account.enabled,
               let fetcher = fetcherManager.fetcher(for: email),
-              fetcher.hasNewMessages else { return }
-
-        // Check for VIP senders
-        let vipList = VIPList.default
-        var playedVIPSound = false
-
-        for message in fetcher.messages {
-            if let vipSound = vipList.soundForSender(message.senderEmail) {
-                vipSound.nsSound?.play()
-                playedVIPSound = true
-                break
-            }
-        }
-
-        // Fall back to account sound
-        if !playedVIPSound, let sound = account.sound {
-            sound.nsSound?.play()
-        }
-
-        guard account.notificationEnabled else { return }
+              fetcher.hasNewMessages,
+              account.notificationEnabled else { return }
 
         Task {
             let settings = await UNUserNotificationCenter.current().notificationSettings()
             guard settings.authorizationStatus == .authorized || settings.authorizationStatus == .provisional,
                   settings.alertSetting == .enabled else { return }
 
-            deliverNotifications(for: fetcher.messages)
+            // The sound rides on the notification (see deliverNotifications) so
+            // macOS plays it and Focus governs it. We no longer play it directly
+            // with NSSound, which bypassed Focus entirely.
+            deliverNotifications(for: fetcher.messages, account: account)
         }
     }
 }

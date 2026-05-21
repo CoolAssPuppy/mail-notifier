@@ -8,6 +8,7 @@
 
 import Foundation
 import AppKit
+import UserNotifications
 
 enum Sound: String, Identifiable, CaseIterable {
     // System sounds (alphabetized)
@@ -49,14 +50,6 @@ enum Sound: String, Identifiable, CaseIterable {
     var id: String {
         rawValue
     }
-
-    /// True when the sound is shipped as an AIFF in `Resources/Sounds/`.
-    /// Derived from the actual bundle so adding a new custom sound is a
-    /// one-edit change (drop the file, add the case) instead of also
-    /// having to update a hand-maintained switch.
-    private var isCustomSound: Bool {
-        Bundle.main.url(forResource: rawValue, withExtension: "aiff", subdirectory: "Sounds") != nil
-    }
 }
 
 extension Sound {
@@ -69,20 +62,29 @@ extension Sound {
             .joined(separator: " ")
     }
 
-    var soundName: NSSound.Name {
-        NSSound.Name(rawValue.capitalized)
+    /// Every sound, both the macOS classics and the custom clips, ships as
+    /// `<rawValue>.aiff` at the app bundle's resource root. The macOS system
+    /// sounds are bundled as copies because `UNNotificationSound` cannot reach
+    /// `/System/Library/Sounds`, and all files live at the root because
+    /// `UNNotificationSound(named:)` does not recurse into bundle subfolders.
+    private var fileName: String {
+        "\(rawValue).aiff"
     }
 
+    /// Plays immediately through AppKit. Used for in-app previews when the user
+    /// picks a sound. This is direct audio playback, not a notification, so it
+    /// is intentionally not subject to Focus: a preview should always be audible.
     var nsSound: NSSound? {
-        if isCustomSound {
-            // Load from app bundle
-            if let url = Bundle.main.url(forResource: rawValue, withExtension: "aiff", subdirectory: "Sounds") {
-                return NSSound(contentsOf: url, byReference: true)
-            }
+        guard let url = Bundle.main.url(forResource: rawValue, withExtension: "aiff") else {
             return nil
-        } else {
-            // System sound
-            return NSSound(named: soundName)
         }
+        return NSSound(contentsOf: url, byReference: true)
+    }
+
+    /// The sound handed to a delivered notification. macOS plays it as part of
+    /// delivering the notification, so it correctly respects Focus / Do Not
+    /// Disturb, unlike `nsSound` playback.
+    var notificationSound: UNNotificationSound {
+        UNNotificationSound(named: UNNotificationSoundName(fileName))
     }
 }

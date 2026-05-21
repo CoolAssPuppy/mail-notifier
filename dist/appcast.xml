@@ -2,9 +2,27 @@
 <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
   <channel>
     <title>Mail Notifier</title>
-    <link>https://downloads.strategicnerds.com/apps/mail-notifier/appcast.xml</link>
+    <link>https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/appcast.xml</link>
     <description>Mail Notifier updates</description>
     <language>en</language>
+    <item>
+      <title>Version 3.4</title>
+      <pubDate>Thu, 21 May 2026 15:43:25 +0000</pubDate>
+      <sparkle:version>22</sparkle:version>
+      <sparkle:shortVersionString>3.4</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[
+        <ul>
+          <li>Mail Notifier now respects macOS Focus. Sorry for the annoyances.</li>
+        </ul>
+      ]]></description>
+      <enclosure
+        url="https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/MailNotifier-3.4.dmg"
+        sparkle:edSignature="Rr3ZRhMhwD29WACI6sxmTyYE90f6RC+PaZMsJghkolczDVu1L0nKHKrRdvuCDlWXVGjtT71hoJoDL3SIJPvsBA=="
+        length="10599020"
+        type="application/x-apple-diskimage" />
+    </item>
+
     <item>
       <title>Version 3.3.1</title>
       <pubDate>Wed, 29 Apr 2026 00:01:24 +0000</pubDate>
@@ -17,7 +35,7 @@
         </ul>
       ]]></description>
       <enclosure
-        url="https://downloads.strategicnerds.com/apps/mail-notifier/MailNotifier-3.3.1.dmg"
+        url="https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/MailNotifier-3.3.1.dmg"
         sparkle:edSignature="hfRPnJaTGYvhy2WrTWeaq05qLTE4Y2OYubW68qo5bKywbOKHhLAGnJmNRbATyEHJbTzucl3bK4xukArUDZibBw=="
         length="7457037"
         type="application/x-apple-diskimage" />
@@ -35,7 +53,7 @@
         </ul>
       ]]></description>
       <enclosure
-        url="https://downloads.strategicnerds.com/apps/mail-notifier/MailNotifier-3.3.0.dmg"
+        url="https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/MailNotifier-3.3.0.dmg"
         sparkle:edSignature="OT7dbWp8rpVxg6lkvu6X/Tu1rJ4DRlAOSd/h4vM/ag7SwFXyc6SzgsFu5vKWocp+GLBODGkarxCDWLIqHdnACw=="
         length="7451666"
         type="application/x-apple-diskimage" />
@@ -53,7 +71,7 @@
         </ul>
       ]]></description>
       <enclosure
-        url="https://downloads.strategicnerds.com/apps/mail-notifier/MailNotifier-3.2.9.dmg"
+        url="https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/MailNotifier-3.2.9.dmg"
         sparkle:edSignature="i9I+qZLgnSPDB0s/ik5ZZOEJBsRIohRGPammlzIHJ2r6k+HRs2peKcpRyZgGHsD5BTcaEVkdSOWqNFl2MjYeAg=="
         length="7437012"
         type="application/x-apple-diskimage" />
@@ -71,7 +89,7 @@
         </ul>
       ]]></description>
       <enclosure
-        url="https://downloads.strategicnerds.com/apps/mail-notifier/MailNotifier-3.2.8.dmg"
+        url="https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/MailNotifier-3.2.8.dmg"
         sparkle:edSignature="iORAUdYlNs5WlJ/GLtl94JXqF5CdOnWIDQ3kRJ7vJnOzeT3bY4z1tVoyZBOcVLwQM6in79oC0EYDyrpUcuwyAQ=="
         length="7416411"
         type="application/x-apple-diskimage" />
@@ -89,7 +107,7 @@
         </ul>
       ]]></description>
       <enclosure
-        url="https://downloads.strategicnerds.com/apps/mail-notifier/MailNotifier-3.2.7.dmg"
+        url="https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/MailNotifier-3.2.7.dmg"
         sparkle:edSignature="cswbp/8RncW+feCZIe0/rZdNgFHv/N8t4qhwFxAj+8tPKmedqBJCnZR1EMUDQXaCVHu7KMou8GCUw3uQvYSlCw=="
         length="7416401"
         type="application/x-apple-diskimage" />
@@ -107,7 +125,7 @@
         </ul>
       ]]></description>
       <enclosure
-        url="https://downloads.strategicnerds.com/apps/mail-notifier/MailNotifier-3.2.6.dmg"
+        url="https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/MailNotifier-3.2.6.dmg"
         sparkle:edSignature="jCp8GSIbI1/2O8WpklppFUp2SAllsMIFhZawkd3FPawlYmp4KYg3IAHztJUXA7tlC/JyhrMqkjAM0pqZycw4Aw=="
         length="7425182"
         type="application/x-apple-diskimage" />
@@ -125,7 +143,7 @@
         </ul>
       ]]></description>
       <enclosure
-        url="https://downloads.strategicnerds.com/apps/mail-notifier/MailNotifier-3.2.5.dmg"
+        url="https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/MailNotifier-3.2.5.dmg"
         sparkle:edSignature="vVE86u4Ugl8uM9BNOps/Q+DBPGuSRj22UIxkFTnqviEBA9i07qog7udjjnPFujAhbzTQ4JaWUhpvL+Z+KZqRBQ=="
         length="7419087"
         type="application/x-apple-diskimage" />
@@ -143,7 +161,7 @@
         </ul>
       ]]></description>
       <enclosure
-        url="https://downloads.strategicnerds.com/apps/mail-notifier/MailNotifier-3.2.4.dmg"
+        url="https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/MailNotifier-3.2.4.dmg"
         sparkle:edSignature="vlzIXWfFkgWEHd3228zjsD1jtAWU0P3xqcv/hJIEU4Vcngo2PHI3HT4eroiEvByMi+ePyrd2ZshsndRHQG6SDg=="
         length="7419081"
         type="application/x-apple-diskimage" />
@@ -161,7 +179,7 @@
         </ul>
       ]]></description>
       <enclosure
-        url="https://downloads.strategicnerds.com/apps/mail-notifier/MailNotifier-3.2.3.dmg"
+        url="https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/MailNotifier-3.2.3.dmg"
         sparkle:edSignature="KV++EV3yzYVmjNMVe5YImsaHY231Auxy7ojKzvy73S2luewtpmbZCeIwJ7syCzKejcHVvU1HWbw4+vk0Kjo0DQ=="
         length="6481257"
         type="application/x-apple-diskimage" />
@@ -179,7 +197,7 @@
         </ul>
       ]]></description>
       <enclosure
-        url="https://downloads.strategicnerds.com/apps/mail-notifier/MailNotifier-3.2.2.dmg"
+        url="https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/MailNotifier-3.2.2.dmg"
         sparkle:edSignature="66HaWDKZUNsDyT25ED2MzHLBxWFhIGBzoTWI9ICib5YoHqq/u2Tuh4nKXCcTReA8Q1iAB6NknwY9sdno6wphAg=="
         length="6463322"
         type="application/x-apple-diskimage" />
@@ -197,7 +215,7 @@
         </ul>
       ]]></description>
       <enclosure
-        url="https://downloads.strategicnerds.com/apps/mail-notifier/MailNotifier-3.2.1.dmg"
+        url="https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/MailNotifier-3.2.1.dmg"
         sparkle:edSignature="1BrLRogCqXV/+p3lNNkU0FG0127chpc45pwdI405+/hDPunUIUoVinok2eBkqziPllq98DsA0wGhqdC7kHCNAA=="
         length="6463850"
         type="application/x-apple-diskimage" />
@@ -215,7 +233,7 @@
         </ul>
       ]]></description>
       <enclosure
-        url="https://downloads.strategicnerds.com/apps/mail-notifier/MailNotifier-3.2.0.dmg"
+        url="https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/MailNotifier-3.2.0.dmg"
         sparkle:edSignature="ijY3XBoIuCGnY1vf/WHRTnGyDG+EIg/Bq+MRvb1QlX5eOtbJ2dXf/SLvwWbMvNRLO7N27VWi9qFWZrBa3dZACA=="
         length="6463320"
         type="application/x-apple-diskimage" />
@@ -233,7 +251,7 @@
         </ul>
       ]]></description>
       <enclosure
-        url="https://downloads.strategicnerds.com/apps/mail-notifier/MailNotifier-3.1.3.dmg"
+        url="https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/MailNotifier-3.1.3.dmg"
         sparkle:edSignature="ryv9T/x2hGht6QuyqyaxBhvDvUKASMNJtYLZzAfjeBC/KEerg0L2fjaPgGSJyfbGooWfI+g/X0o0eXZRsChkAg=="
         length="6070067"
         type="application/x-apple-diskimage" />
@@ -251,7 +269,7 @@
         </ul>
       ]]></description>
       <enclosure
-        url="https://downloads.strategicnerds.com/apps/mail-notifier/MailNotifier-3.1.2.dmg"
+        url="https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/MailNotifier-3.1.2.dmg"
         sparkle:edSignature="5mck9m3H258Rt0zqzxbQwouuB5nkFogfAdUL8X5UYYlN08Pp3ijB0ypEV0hvmYzd7fOwAVFfh/cgRNBXXZczCQ=="
         length="6070024"
         type="application/x-apple-diskimage" />
@@ -269,7 +287,7 @@
         </ul>
       ]]></description>
       <enclosure
-        url="https://downloads.strategicnerds.com/apps/mail-notifier/MailNotifier-3.1.1.dmg"
+        url="https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/MailNotifier-3.1.1.dmg"
         sparkle:edSignature="7282ZwdZv7g6NQDML+rYdpyrbcEmxilVGi7/mhKaqyr8AsXOZQO57wZGo/Pjy54cJ1SjvkYCwoDSSfTemjrJBQ=="
         length="6073594"
         type="application/x-apple-diskimage" />
@@ -287,7 +305,7 @@
         </ul>
       ]]></description>
       <enclosure
-        url="https://downloads.strategicnerds.com/apps/mail-notifier/MailNotifier-3.1.0.dmg"
+        url="https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/MailNotifier-3.1.0.dmg"
         sparkle:edSignature="3wkgwCp3tVymjOt1QyVnQHrPqHx48W2KiJr712lNdCeK3e9s+un1ImD0axZbCJfTa7JYBIsECsyaVkAe55uKDw=="
         length="5872306"
         type="application/x-apple-diskimage" />

@@ -45,4 +45,24 @@ final class SoundTests: XCTestCase {
         // Snapshot count guards against accidental case removal.
         XCTAssertEqual(Sound.allCases.count, 32)
     }
+
+    func testEverySoundShipsBundledFileAtResourceRoot() {
+        // Notifications respect Focus only because the sound rides on the
+        // notification, and UNNotificationSound(named:) finds the file only at
+        // the bundle resource root. This asserts every sound ships there as
+        // `<rawValue>.aiff` so no sound silently falls back to the default.
+        for sound in Sound.allCases {
+            XCTAssertNotNil(
+                Bundle.main.url(forResource: sound.rawValue, withExtension: "aiff"),
+                "\(sound.rawValue).aiff must ship at the bundle resource root for UNNotificationSound to find it"
+            )
+        }
+    }
+
+    func testPreviewSoundLoadsForEverySound() {
+        // The in-app preview path must resolve a playable NSSound for each case.
+        for sound in Sound.allCases {
+            XCTAssertNotNil(sound.nsSound, "\(sound.rawValue) must resolve a preview NSSound")
+        }
+    }
 }
