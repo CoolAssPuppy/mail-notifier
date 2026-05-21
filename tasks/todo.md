@@ -37,6 +37,19 @@ sound-list clutter, every sound keeps its exact choice).
 - Remaining manual check (cannot automate here): turn on a Focus mode and send yourself an email;
   the banner and sound should both be suppressed.
 
+### Follow-up bug: banner fired but no sound (found during testing)
+Root cause: `NotificationService.setup()` requested only `[.alert]`. The old code played sound via
+`NSSound` (no notification permission needed); now the sound rides on the notification, which requires
+`.sound` authorization. Without it macOS shows the banner and stays silent.
+- [x] Request `[.alert, .sound]` in `setup()`
+
+UPGRADE-PATH CAVEAT: existing 3.x users are already authorized alert-only. macOS does not auto-add the
+sound permission to an already-authorized app just because the code now requests it, so on update to 3.4
+their notification sound stays off until they enable "Play sound for notifications" in System Settings.
+New installs get the combined prompt and work out of the box.
+- [x] DECIDED: no in-app nudge. Cover the manual toggle in the Sparkle release note instead
+      (single-user app; release note is sufficient and keeps the change small).
+
 ### Behavior note
 Previews (selecting a sound in Settings/Account) keep using `NSSound` for instant feedback. That is
 correct: previews are not notifications and should play regardless of Focus.

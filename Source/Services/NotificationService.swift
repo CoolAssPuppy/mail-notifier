@@ -18,7 +18,11 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
     func setup() {
         Task {
             do {
-                let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert])
+                // .sound is required now that the notification carries the sound
+                // (previously the sound was played directly via NSSound, which
+                // needs no notification permission). Without .sound the system
+                // shows the banner but stays silent.
+                let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])
                 if granted {
                     await MainActor.run {
                         UNUserNotificationCenter.current().delegate = self
