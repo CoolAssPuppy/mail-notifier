@@ -2,6 +2,10 @@
 
 This codebase is a 2026 ground-up SwiftUI rewrite of Gmail Notifr, kept under the same repository and changelog for historical continuity. Entries from version 2.1.1 and earlier describe the original Gmail Notifr by James Chen — see "Gmail Notifr (legacy)" below.
 
+## 3.4.1 (May 21, 2026)
+
+* Fixes custom notification sounds that were playing the default macOS sound instead of your chosen sound
+
 ## 3.4 (May 21, 2026)
 
 * Mail Notifier now respects macOS Focus

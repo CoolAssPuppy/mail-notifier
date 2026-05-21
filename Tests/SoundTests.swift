@@ -47,10 +47,10 @@ final class SoundTests: XCTestCase {
     }
 
     func testEverySoundShipsBundledFileAtResourceRoot() {
-        // Notifications respect Focus only because the sound rides on the
-        // notification, and UNNotificationSound(named:) finds the file only at
-        // the bundle resource root. This asserts every sound ships there as
-        // `<rawValue>.aiff` so no sound silently falls back to the default.
+        // The notification sound is staged into ~/Library/Sounds from the bundled
+        // copy at delivery time. This asserts every sound ships as `<rawValue>.aiff`
+        // at the bundle resource root so there is always a source to stage from;
+        // a missing file would make the notification fall back to the default.
         for sound in Sound.allCases {
             XCTAssertNotNil(
                 Bundle.main.url(forResource: sound.rawValue, withExtension: "aiff"),

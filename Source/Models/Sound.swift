@@ -62,29 +62,70 @@ extension Sound {
             .joined(separator: " ")
     }
 
-    /// Every sound, both the macOS classics and the custom clips, ships as
-    /// `<rawValue>.aiff` at the app bundle's resource root. The macOS system
-    /// sounds are bundled as copies because `UNNotificationSound` cannot reach
-    /// `/System/Library/Sounds`, and all files live at the root because
-    /// `UNNotificationSound(named:)` does not recurse into bundle subfolders.
-    private var fileName: String {
-        "\(rawValue).aiff"
-    }
-
     /// Plays immediately through AppKit. Used for in-app previews when the user
     /// picks a sound. This is direct audio playback, not a notification, so it
     /// is intentionally not subject to Focus: a preview should always be audible.
     var nsSound: NSSound? {
-        guard let url = Bundle.main.url(forResource: rawValue, withExtension: "aiff") else {
-            return nil
-        }
+        guard let url = bundledURL else { return nil }
         return NSSound(contentsOf: url, byReference: true)
     }
 
-    /// The sound handed to a delivered notification. macOS plays it as part of
-    /// delivering the notification, so it correctly respects Focus / Do Not
-    /// Disturb, unlike `nsSound` playback.
-    var notificationSound: UNNotificationSound {
-        UNNotificationSound(named: UNNotificationSoundName(fileName))
+    /// The sound for a delivered notification. macOS plays it as part of
+    /// delivering the notification, so it respects Focus / Do Not Disturb.
+    ///
+    /// On macOS `UNNotificationSound(named:)` resolves names from the user
+    /// Library's `Sounds` folder (and the sandbox container's equivalent), not
+    /// from the app bundle's `Resources` directory. So we stage the bundled
+    /// file into `~/Library/Sounds` on first use and reference it by that name.
+    /// Returns nil if the bundled file is missing or staging fails, so the
+    /// caller can fall back to the default notification sound.
+    func notificationSound() -> UNNotificationSound? {
+        guard let stagedName = stagedSoundFileName() else { return nil }
+        return UNNotificationSound(named: UNNotificationSoundName(stagedName))
+    }
+
+    /// Every sound, both the macOS classics and the custom clips, ships as
+    /// `<rawValue>.aiff` at the app bundle's resource root (the system sounds are
+    /// bundled as copies; everything sits at the root in one flat group).
+    private var bundledURL: URL? {
+        Bundle.main.url(forResource: rawValue, withExtension: "aiff")
+    }
+
+    /// Copies the bundled sound into `~/Library/Sounds` (only when missing or a
+    /// different size) and returns the staged file name, or nil on failure. The
+    /// `MailNotifier-` prefix namespaces the files so they are identifiable and
+    /// don't collide with the user's existing sounds.
+    private func stagedSoundFileName() -> String? {
+        guard let source = bundledURL else { return nil }
+        let fileName = "MailNotifier-\(rawValue).aiff"
+        let fileManager = FileManager.default
+
+        guard let library = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first else {
+            return nil
+        }
+        let soundsDirectory = library.appendingPathComponent("Sounds", isDirectory: true)
+        let destination = soundsDirectory.appendingPathComponent(fileName)
+
+        do {
+            if !fileManager.fileExists(atPath: soundsDirectory.path) {
+                try fileManager.createDirectory(at: soundsDirectory, withIntermediateDirectories: true)
+            }
+            if !stagedFileIsCurrent(source: source, destination: destination, fileManager: fileManager) {
+                if fileManager.fileExists(atPath: destination.path) {
+                    try fileManager.removeItem(at: destination)
+                }
+                try fileManager.copyItem(at: source, to: destination)
+            }
+            return fileName
+        } catch {
+            return nil
+        }
+    }
+
+    private func stagedFileIsCurrent(source: URL, destination: URL, fileManager: FileManager) -> Bool {
+        let sourceSize = (try? fileManager.attributesOfItem(atPath: source.path))?[.size] as? Int
+        let destinationSize = (try? fileManager.attributesOfItem(atPath: destination.path))?[.size] as? Int
+        guard let sourceSize, let destinationSize else { return false }
+        return sourceSize == destinationSize
     }
 }

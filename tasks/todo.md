@@ -59,6 +59,18 @@ New installs get the combined prompt and work out of the box.
 - Note: release.sh ran twice, so the appcast has two 3.4 items (build 22 and 23, identical code). Sparkle will
   offer a 22->23 no-op update. Optional cleanup: dedupe appcast to keep only build 23 and re-upload to R2.
 
+### Follow-up bug: custom sound played as the default macOS sound (found during testing)
+Root cause: `UNNotificationSound(named:)` on macOS does NOT resolve names from the app bundle's
+Resources root (despite the files being there in a valid format). Confirmed empirically: configured
+sounds (ramius/whimsy/whistle + VIP vader/i-love-you) all fell back to the default; vader is valid
+16-bit lpcm at the bundle root, so it was a location problem, not a format problem.
+Fix: stage the chosen sound into `~/Library/Sounds` (the documented first search path for a
+non-sandboxed app) on demand, prefixed `MailNotifier-`, and reference it there.
+- [x] Sound.swift: `notificationSound()` stages into ~/Library/Sounds and returns the staged sound
+- [x] NotificationService: fall back to `.default` only if staging fails
+- [x] Verify: real email played the custom sound; MailNotifier-ramius.aiff staged in ~/Library/Sounds
+- [ ] Cut 3.4.1 with this fix (command provided; user runs release.sh)
+
 ### Behavior note
 Previews (selecting a sound in Settings/Account) keep using `NSSound` for instant feedback. That is
 correct: previews are not notifications and should play regardless of Focus.

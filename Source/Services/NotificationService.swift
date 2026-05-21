@@ -79,8 +79,9 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
                 content.userInfo = ["messageId": message.id, "email": message.email, "isVIP": isVIP]
                 content.threadIdentifier = message.email
                 // One sound per batch: only the first delivered notification carries it.
+                // Falls back to the default sound if staging the custom file fails.
                 if index == 0, let batchSound {
-                    content.sound = batchSound.notificationSound
+                    content.sound = batchSound.notificationSound() ?? .default
                 }
 
                 let request = UNNotificationRequest(identifier: notificationIdentifier(for: message), content: content, trigger: nil)
