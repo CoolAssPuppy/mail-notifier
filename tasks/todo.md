@@ -50,6 +50,15 @@ New installs get the combined prompt and work out of the box.
 - [x] DECIDED: no in-app nudge. Cover the manual toggle in the Sparkle release note instead
       (single-user app; release note is sufficient and keeps the change small).
 
+### Post-release housekeeping (done)
+- Backfilled CHANGELOG.md from the appcast: added 3.2.4-3.2.9, 3.3.0, 3.3.1, 3.4 (filled the whole gap, not just 3.3.x).
+- Cleaned gitignored build artifacts: removed build/ (~1GB), dist/debug, dist/export-3.4, dist/*.xcarchive,
+  and old release DMGs/sigs (3.1.x-3.3.x). Kept dist/appcast.xml (tracked) and the current 3.4 DMG.
+- Found the *debug* build was the running + URL-handler copy; quit it, registered + launched the installed
+  /Applications/Mail Notifier.app (3.4, build 22).
+- Note: release.sh ran twice, so the appcast has two 3.4 items (build 22 and 23, identical code). Sparkle will
+  offer a 22->23 no-op update. Optional cleanup: dedupe appcast to keep only build 23 and re-upload to R2.
+
 ### Behavior note
 Previews (selecting a sound in Settings/Account) keep using `NSSound` for instant feedback. That is
 correct: previews are not notifications and should play regardless of Focus.

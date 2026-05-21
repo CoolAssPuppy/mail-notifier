@@ -2,6 +2,43 @@
 
 This codebase is a 2026 ground-up SwiftUI rewrite of Gmail Notifr, kept under the same repository and changelog for historical continuity. Entries from version 2.1.1 and earlier describe the original Gmail Notifr by James Chen — see "Gmail Notifr (legacy)" below.
 
+## 3.4 (May 21, 2026)
+
+* Mail Notifier now respects macOS Focus
+* If you don't hear notification sounds after updating, turn on "Play sound for notifications" for Mail Notifier in System Settings under Notifications
+
+## 3.3.1 (Apr 29, 2026)
+
+* Bug fixes to Microsoft login
+
+## 3.3.0 (Apr 27, 2026)
+
+* Added missing translated languages
+
+## 3.2.9 (Apr 26, 2026)
+
+* Bug fixes
+
+## 3.2.8 (Apr 25, 2026)
+
+* Bug fixes
+
+## 3.2.7 (Apr 25, 2026)
+
+* Bug fixes
+
+## 3.2.6 (Apr 25, 2026)
+
+* Bug fixes
+
+## 3.2.5 (Apr 24, 2026)
+
+* Bug fixes
+
+## 3.2.4 (Apr 24, 2026)
+
+* Bug fixes
+
 ## 3.2.3 (Apr 23, 2026)
 
 * Cleaner menu bar account rows (no per-account "checked" timestamp)
