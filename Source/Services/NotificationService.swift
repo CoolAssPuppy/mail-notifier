@@ -43,7 +43,7 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
 
         let userInfo = response.notification.request.content.userInfo
         let isVIP = (userInfo["isVIP"] as? Bool) ?? false
-        Telemetry.capture("notification.clicked", properties: ["is_vip": isVIP])
+        Telemetry.capture(.notificationClicked, properties: ["is_vip": isVIP])
 
         if let messageId = userInfo["messageId"] as? String,
            let email = userInfo["email"] as? String {
@@ -87,7 +87,7 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
                 let request = UNNotificationRequest(identifier: notificationIdentifier(for: message), content: content, trigger: nil)
                 do {
                     try await UNUserNotificationCenter.current().add(request)
-                    Telemetry.capture("notification.shown", properties: ["is_vip": isVIP])
+                    Telemetry.capture(.notificationShown, properties: ["is_vip": isVIP])
                 } catch {
                     Log.app.error("Failed to deliver notification for message \(message.id): \(error.localizedDescription)")
                 }

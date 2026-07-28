@@ -186,7 +186,7 @@ struct SettingsView: View {
                                onUpdate: { vipList.update(vip: $0) },
                                onDelete: {
                                    vipList.delete(vip: vip)
-                                   Telemetry.capture("vip.removed")
+                                   Telemetry.capture(.vipRemoved)
                                })
                         if vip.id != vipList.last?.id {
                             AppRowDivider()
@@ -206,7 +206,7 @@ struct SettingsView: View {
         let vip = VIP(email: newVIPEmail.trimmingCharacters(in: .whitespaces),
                       notificationSound: newVIPSound)
         vipList.add(vip: vip)
-        Telemetry.capture("vip.added")
+        Telemetry.capture(.vipAdded)
         newVIPEmail = ""
         newVIPSound = ""
     }

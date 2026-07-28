@@ -47,7 +47,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         notificationService.setup()
         setupURLHandler()
 
-        Telemetry.capture("app.launched")
+        Telemetry.capture(.appLaunched)
         reportUpdateInstalledIfNeeded()
 
         if !Accounts.hasAccounts || AppSettings.shared.openSettingsOnStart {
@@ -89,7 +89,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let previous = defaults.string(forKey: key)
         defaults.set(current, forKey: key)
         guard let previous, !previous.isEmpty, previous != current else { return }
-        Telemetry.capture("update.installed", properties: ["from": previous, "to": current])
+        Telemetry.capture(.updateInstalled, properties: ["from": previous, "to": current])
     }
 }
 
@@ -317,7 +317,7 @@ extension AppDelegate: NSPopoverDelegate {
 
         NSApp.activate(ignoringOtherApps: true)
         popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
-        Telemetry.capture("menu.opened")
+        Telemetry.capture(.menuOpened)
 
         // Dismiss when the user clicks outside the popover.
         popoverEventMonitor = NSEvent.addGlobalMonitorForEvents(

@@ -100,13 +100,13 @@ extension Accounts {
                 switch result {
                 case .failure(let error):
                     Log.auth.error("Gmail OAuth failed: \(String(describing: error), privacy: .public)")
-                    Telemetry.capture("account.signin_failed", properties: ["provider": "gmail"])
+                    Telemetry.capture(.accountSigninFailed, properties: ["provider": "gmail"])
                     return
                 case .success(let state):
                     let authorization = GTMAppAuthFetcherAuthorization(authState: state)
                     guard let userEmail = authorization.userEmail else {
                         Log.auth.error("Gmail OAuth succeeded but state contained no userEmail")
-                        Telemetry.capture("account.signin_failed", properties: ["provider": "gmail", "reason": "no_email"])
+                        Telemetry.capture(.accountSigninFailed, properties: ["provider": "gmail", "reason": "no_email"])
                         return
                     }
 
@@ -119,7 +119,7 @@ extension Accounts {
                         var account = Account(email: userEmail, type: .gmail)
                         account.authorization = authorization
                         accounts.add(account: account)
-                        Telemetry.capture("account.added", properties: ["provider": "gmail"])
+                        Telemetry.capture(.accountAdded, properties: ["provider": "gmail"])
                     }
                 }
             }
@@ -129,13 +129,13 @@ extension Accounts {
                 switch result {
                 case .failure(let error):
                     Log.auth.error("Outlook OAuth failed: \(String(describing: error), privacy: .public)")
-                    Telemetry.capture("account.signin_failed", properties: ["provider": "outlook"])
+                    Telemetry.capture(.accountSigninFailed, properties: ["provider": "outlook"])
                     return
                 case .success(let state):
                     Log.auth.info("Outlook OAuth state received (token issued at: \(state.lastTokenResponse?.accessTokenExpirationDate.map { String(describing: $0) } ?? "nil", privacy: .public))")
                     guard let email = outlookEmailFromIDToken(state) else {
                         Log.auth.error("Outlook OAuth succeeded but ID token had no email/preferred_username claim")
-                        Telemetry.capture("account.signin_failed", properties: ["provider": "outlook", "reason": "no_email"])
+                        Telemetry.capture(.accountSigninFailed, properties: ["provider": "outlook", "reason": "no_email"])
                         return
                     }
 
@@ -148,7 +148,7 @@ extension Accounts {
                         var account = Account(email: email, type: .outlook)
                         account.authState = state
                         accounts.add(account: account)
-                        Telemetry.capture("account.added", properties: ["provider": "outlook"])
+                        Telemetry.capture(.accountAdded, properties: ["provider": "outlook"])
                     }
                 }
             }
