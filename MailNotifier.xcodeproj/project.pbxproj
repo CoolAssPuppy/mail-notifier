@@ -18,6 +18,7 @@
 		108FBF2C1043DCE503999E1A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F726C271625BE814AAF2A8 /* SettingsView.swift */; };
 		11AB8C1107B6B1710DBC6941 /* MessageFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7DC03CB3B7DF64E5A4999E /* MessageFetcher.swift */; };
 		1283CE4E93BC4C22590BAD14 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3753916EFC671DA64C799FD0 /* Logger.swift */; };
+		134B442C1BE807DDD78CC7CF /* MenuStyleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89929832B41F5C583FCA1B53 /* MenuStyleStore.swift */; };
 		1898F5AD6EBC918AFDB9D465 /* robot.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 42737EE34D971CD015EAEB0B /* robot.aiff */; };
 		1DD61364F76EF1940A3D5054 /* purr.aiff in Resources */ = {isa = PBXBuildFile; fileRef = E154A571748AD2C9B3986501 /* purr.aiff */; };
 		1E425906A4E9BCE674CEDA8A /* pong.aiff in Resources */ = {isa = PBXBuildFile; fileRef = B5338118353B1DA638B5B671 /* pong.aiff */; };
@@ -53,6 +54,7 @@
 		80C1E959D8CE2FA2E0AAA547 /* blink.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 73AAE4A7C6CDDDE233434EDF /* blink.aiff */; };
 		81A3AE5017A11FE76DDCE696 /* blow.aiff in Resources */ = {isa = PBXBuildFile; fileRef = F6DAF857CA22E98B94C10855 /* blow.aiff */; };
 		829D98671D3D6E6DC2B62C9D /* MessageFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FF22B8637AB803593786448 /* MessageFetcherTests.swift */; };
+		830327500EDC812EFBD5B813 /* MenuStylePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FB3766905EFB7F02226051 /* MenuStylePicker.swift */; };
 		83430705CAA40BA25BC92102 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7154321B3CBE9093B1A9A994 /* MainView.swift */; };
 		85AA17196CE953CB1AF83ADB /* meg-ryan.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 3024450D3A2CDA758B621FBE /* meg-ryan.aiff */; };
 		86D6A9292FFD02C3519DBA0B /* chimes.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 99FF083DF11FC19CB7EC7431 /* chimes.aiff */; };
@@ -70,6 +72,8 @@
 		98F440B3EF737A232EF50667 /* ominous.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 8692B975C864FA7A018A95DB /* ominous.aiff */; };
 		993194480E7EBA266AA82935 /* MessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0E14B81C728D48E26A37B6 /* MessageTests.swift */; };
 		9C44662469001F540F3DBC49 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD05293C4B42F6617F15238 /* Message.swift */; };
+		9CEF1A4816D3F03FD2464D86 /* ClassicMenuFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23771ACC951CAEFB2754306 /* ClassicMenuFooterView.swift */; };
+		9CF163FAA115D3A25E1FEE85 /* ClassicMenuBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631C9C775E782528C36B02C6 /* ClassicMenuBuilder.swift */; };
 		9D1C55BFFBE57E5E906F2150 /* hero.aiff in Resources */ = {isa = PBXBuildFile; fileRef = F97EC5717616078BDE263058 /* hero.aiff */; };
 		A0F0A08A7BC55D3BB180D455 /* VIP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85847722F72E75C126DBDA5E /* VIP.swift */; };
 		A251911196F10ED30B0415CE /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 78BC9BB6E40F761B3D8BF4E4 /* Sparkle */; };
@@ -156,6 +160,7 @@
 		5D39B6647E53A0E3BDEF6641 /* AccountTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountTests.swift; sourceTree = "<group>"; };
 		5E5E9BC2F24238A846536579 /* SettingsDrawer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDrawer.swift; sourceTree = "<group>"; };
 		5FF22B8637AB803593786448 /* MessageFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageFetcherTests.swift; sourceTree = "<group>"; };
+		631C9C775E782528C36B02C6 /* ClassicMenuBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassicMenuBuilder.swift; sourceTree = "<group>"; };
 		6530850D2A751A92684E51DA /* ThemeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeStore.swift; sourceTree = "<group>"; };
 		6598132958428BC352FF659A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6A12BEA0DFD590B5AD637BD8 /* vader.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = vader.aiff; sourceTree = "<group>"; };
@@ -168,6 +173,7 @@
 		73AAE4A7C6CDDDE233434EDF /* blink.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = blink.aiff; sourceTree = "<group>"; };
 		764695FD367A93846CADCEBD /* URLRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRouter.swift; sourceTree = "<group>"; };
 		769411A410DA75B09686F118 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		77FB3766905EFB7F02226051 /* MenuStylePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuStylePicker.swift; sourceTree = "<group>"; };
 		787939AF849DB760232148D4 /* glass.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = glass.aiff; sourceTree = "<group>"; };
 		7BA52CFA8A31B99E0B130518 /* AccountAuthorizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountAuthorizer.swift; sourceTree = "<group>"; };
 		7E6CE94C19113FBBFD9149B7 /* sosumi.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = sosumi.aiff; sourceTree = "<group>"; };
@@ -176,6 +182,7 @@
 		85734040168C129FCDDAE13D /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		85847722F72E75C126DBDA5E /* VIP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VIP.swift; sourceTree = "<group>"; };
 		8692B975C864FA7A018A95DB /* ominous.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = ominous.aiff; sourceTree = "<group>"; };
+		89929832B41F5C583FCA1B53 /* MenuStyleStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuStyleStore.swift; sourceTree = "<group>"; };
 		8B4D2ADB8185E8220A41E4BA /* funk.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = funk.aiff; sourceTree = "<group>"; };
 		9081299B48EE44DA4F06E33D /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		93EC6FDF18E54585650720C2 /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -213,6 +220,7 @@
 		E945FECDCBE6C3ED0CB6C791 /* splat.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = splat.aiff; sourceTree = "<group>"; };
 		EB37884BCB61678E068B3C3D /* MailProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailProvider.swift; sourceTree = "<group>"; };
 		EEA9F3DE9853CF06BBDD72BF /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F23771ACC951CAEFB2754306 /* ClassicMenuFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassicMenuFooterView.swift; sourceTree = "<group>"; };
 		F6645D938E03DA1706BB71A6 /* i-love-you.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "i-love-you.aiff"; sourceTree = "<group>"; };
 		F6DAF857CA22E98B94C10855 /* blow.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = blow.aiff; sourceTree = "<group>"; };
 		F7DF9E463FD10F104229B4C9 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -220,7 +228,7 @@
 		F97EC5717616078BDE263058 /* hero.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = hero.aiff; sourceTree = "<group>"; };
 		FB460ED3BAD3CC445B93C9FE /* AppDelegate+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Menu.swift"; sourceTree = "<group>"; };
 		FEC6D3AB06F5E6F578CB2B26 /* morse.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = morse.aiff; sourceTree = "<group>"; };
-		"TEMP_B3217A78-DB17-4421-838F-A67288E5AC0D" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		"TEMP_49F6784E-E4FE-4340-8A4C-B95DA01BC5EA" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -257,6 +265,8 @@
 			isa = PBXGroup;
 			children = (
 				9BCBA8FC5DECF4BFBACBCD42 /* AccountView.swift */,
+				631C9C775E782528C36B02C6 /* ClassicMenuBuilder.swift */,
+				F23771ACC951CAEFB2754306 /* ClassicMenuFooterView.swift */,
 				7154321B3CBE9093B1A9A994 /* MainView.swift */,
 				1A2468E8CBA3EBBB4B7D0EF7 /* MenuBarPopover.swift */,
 				5E5E9BC2F24238A846536579 /* SettingsDrawer.swift */,
@@ -272,6 +282,7 @@
 		3417756D616C7B640E38C514 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				77FB3766905EFB7F02226051 /* MenuStylePicker.swift */,
 				2EDE02622D66D28B58223F26 /* SharedComponents.swift */,
 			);
 			path = Components;
@@ -344,6 +355,7 @@
 				A9D6147D3EB626B49ACC9960 /* AccountStore.swift */,
 				CE931D6EE91DBF896449D68A /* Browser.swift */,
 				49FC974A840D1A18FD08E426 /* FriendlyNameStore.swift */,
+				89929832B41F5C583FCA1B53 /* MenuStyleStore.swift */,
 				1AD05293C4B42F6617F15238 /* Message.swift */,
 				C46E588E11C2BE3E1F023F9C /* Sound.swift */,
 				6530850D2A751A92684E51DA /* ThemeStore.swift */,
@@ -438,10 +450,10 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		"TEMP_87F1A506-E661-4794-BEC0-8CDE68BEB243" /* mail-notifier */ = {
+		"TEMP_F11B9DAF-C804-4156-A0EB-F28D80EA1A6F" /* mail-notifier */ = {
 			isa = PBXGroup;
 			children = (
-				"TEMP_B3217A78-DB17-4421-838F-A67288E5AC0D" /* Secrets.xcconfig */,
+				"TEMP_49F6784E-E4FE-4340-8A4C-B95DA01BC5EA" /* Secrets.xcconfig */,
 			);
 			path = "mail-notifier";
 			sourceTree = "<group>";
@@ -638,6 +650,8 @@
 				A6B3394F51A2A5835A3198A0 /* AppDelegate.swift in Sources */,
 				476B55D1C8E2D484625F4FA0 /* AppSettings.swift in Sources */,
 				E1C51BF8F44231EC27D9A462 /* Browser.swift in Sources */,
+				9CF163FAA115D3A25E1FEE85 /* ClassicMenuBuilder.swift in Sources */,
+				9CEF1A4816D3F03FD2464D86 /* ClassicMenuFooterView.swift in Sources */,
 				E9E929C760F561CB87CCC298 /* FetcherManager.swift in Sources */,
 				2F0E61F15730320692F222F1 /* Formatters.swift in Sources */,
 				353E0A2021CFE7030D88721B /* FriendlyNameStore.swift in Sources */,
@@ -649,6 +663,8 @@
 				F56EE74B3B07A645CB3EA85F /* MailProvider.swift in Sources */,
 				83430705CAA40BA25BC92102 /* MainView.swift in Sources */,
 				5AD770B9E27FF1225B05E35F /* MenuBarPopover.swift in Sources */,
+				830327500EDC812EFBD5B813 /* MenuStylePicker.swift in Sources */,
+				134B442C1BE807DDD78CC7CF /* MenuStyleStore.swift in Sources */,
 				9C44662469001F540F3DBC49 /* Message.swift in Sources */,
 				11AB8C1107B6B1710DBC6941 /* MessageFetcher.swift in Sources */,
 				38580E8A8BE7FBBE2988F900 /* NotificationNames.swift in Sources */,
@@ -737,14 +753,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MailNotifier.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 26;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				LS_MINIMUM_SYSTEM_VERSION = 14.0;
-				MARKETING_VERSION = 3.4.2;
+				MARKETING_VERSION = 3.5.0;
 				POSTHOG_API_KEY = "$(POSTHOG_API_KEY)";
 				POSTHOG_HOST = "https://us.i.posthog.com";
 				PRODUCT_BUNDLE_IDENTIFIER = com.strategicnerds.MailNotifierApp;
@@ -755,7 +771,7 @@
 		};
 		229918186B40865D81363975 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_B3217A78-DB17-4421-838F-A67288E5AC0D" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_49F6784E-E4FE-4340-8A4C-B95DA01BC5EA" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -820,14 +836,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MailNotifier.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 26;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				LS_MINIMUM_SYSTEM_VERSION = 14.0;
-				MARKETING_VERSION = 3.4.2;
+				MARKETING_VERSION = 3.5.0;
 				POSTHOG_API_KEY = "$(POSTHOG_API_KEY)";
 				POSTHOG_HOST = "https://us.i.posthog.com";
 				PRODUCT_BUNDLE_IDENTIFIER = com.strategicnerds.MailNotifierApp;
@@ -859,7 +875,7 @@
 		};
 		B4A4092827DAC2ECABE337D5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_B3217A78-DB17-4421-838F-A67288E5AC0D" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_49F6784E-E4FE-4340-8A4C-B95DA01BC5EA" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;

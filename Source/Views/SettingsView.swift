@@ -31,6 +31,7 @@ struct SettingsView: View {
                 .frame(maxWidth: .infinity)
 
                 VStack(spacing: 14) {
+                    menuStyleCard
                     updatesCard
                     contactCard
                 }
@@ -209,6 +210,20 @@ struct SettingsView: View {
         Telemetry.capture(.vipAdded)
         newVIPEmail = ""
         newVIPSound = ""
+    }
+
+    // MARK: - Menu Style
+
+    private var menuStyleCard: some View {
+        AppCard("Menu Style") {
+            Text("Choose what the menu bar icon opens. Classic follows your system light or dark appearance and ignores themes.")
+                .font(.system(size: 10))
+                .foregroundStyle(theme.muted)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.bottom, 12)
+
+            MenuStylePicker()
+        }
     }
 
     // MARK: - Updates

@@ -21,6 +21,7 @@ extension KeyboardShortcuts.Name {
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: NSStatusItem?
     private var rightClickMenu: NSMenu?
+    private let menuStyleStore = MenuStyleStore.shared
     private var popover: NSPopover?
     private var popoverEventMonitor: Any?
     private lazy var popoverModel = MenuBarPopoverModel()
@@ -283,6 +284,8 @@ extension AppDelegate {
 
         if isRightClick {
             showRightClickMenu()
+        } else if menuStyleStore.current == .classic {
+            showClassicMenu()
         } else {
             togglePopover()
         }
@@ -290,9 +293,57 @@ extension AppDelegate {
 
     private func showRightClickMenu() {
         guard let statusItem, let menu = rightClickMenu else { return }
+        present(menu: menu)
+    }
+
+    /// Built fresh on every click: unread counts and subjects change between
+    /// openings, and an `NSMenu` is a snapshot, not a live view.
+    private func showClassicMenu() {
+        // A popover left open from a style switch would otherwise sit under
+        // the menu.
+        popover?.performClose(nil)
+
+        present(menu: ClassicMenuBuilder.makeMenu(
+            accounts: Accounts.default,
+            fetcherManager: fetcherManager,
+            actions: classicMenuActions()
+        ))
+        Telemetry.capture(.menuOpened, properties: ["style": MenuStyle.classic.rawValue])
+    }
+
+    private func classicMenuActions() -> ClassicMenuBuilder.Actions {
+        ClassicMenuBuilder.Actions(
+            openInbox: { [weak self] account in
+                self?.openURL(url: account.baseURL, in: account.browser)
+            },
+            openMessage: { [weak self] message in
+                self?.openMessage(messageId: message.id, email: message.email)
+            },
+            reauthorize: { [weak self] account in
+                self?.showPreferences()
+                Accounts.authorize(type: account.type)
+            },
+            checkAll: { [weak self] in
+                self?.checkAllMails()
+            },
+            openWindow: { [weak self] in
+                self?.showPreferences()
+            },
+            openSettings: { [weak self] in
+                self?.showSettingsDrawer()
+            },
+            quit: {
+                NSApp.terminate(nil)
+            }
+        )
+    }
+
+    /// Pops a menu from the status item, then detaches it so the next
+    /// left-click still reaches `statusItemClicked`.
+    private func present(menu: NSMenu) {
+        guard let statusItem else { return }
         statusItem.menu = menu
         statusItem.button?.performClick(nil)
-        // Detach so the next left-click still triggers our action.
         DispatchQueue.main.async { [weak statusItem] in
             statusItem?.menu = nil
         }
@@ -317,7 +368,7 @@ extension AppDelegate: NSPopoverDelegate {
 
         NSApp.activate(ignoringOtherApps: true)
         popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
-        Telemetry.capture(.menuOpened)
+        Telemetry.capture(.menuOpened, properties: ["style": MenuStyle.pretty.rawValue])
 
         // Dismiss when the user clicks outside the popover.
         popoverEventMonitor = NSEvent.addGlobalMonitorForEvents(
