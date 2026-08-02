@@ -85,13 +85,21 @@ enum Telemetry {
     /// Captures a business-meaningful event. `properties` must never carry
     /// PII — no emails, no workspace names, no URLs, no user-entered text.
     /// `source` and `app_version` are attached automatically.
-    static func capture(_ event: TelemetryEvent, properties: [String: Any] = [:]) {
-        capture(event.rawValue, properties: properties)
+    /// `userProperties` are set on the person, not the event. Use them for
+    /// current-state facts you want to segment people by — "which menu style
+    /// is this install on" — because an event breakdown counts events, and a
+    /// person who never touches a setting fires no event at all.
+    static func capture(_ event: TelemetryEvent,
+                        properties: [String: Any] = [:],
+                        userProperties: [String: Any]? = nil) {
+        capture(event.rawValue, properties: properties, userProperties: userProperties)
     }
 
     /// String overload, for the rare call site that builds a name dynamically.
     /// Prefer the `TelemetryEvent` version so names cannot drift.
-    static func capture(_ event: String, properties: [String: Any] = [:]) {
+    static func capture(_ event: String,
+                        properties: [String: Any] = [:],
+                        userProperties: [String: Any]? = nil) {
         guard isOptedIn else { return }
 
         var props = properties
@@ -103,7 +111,7 @@ enum Telemetry {
         }
 
         for backend in backends {
-            backend.capture(event: event, properties: props)
+            backend.capture(event: event, properties: props, userProperties: userProperties)
         }
     }
 
@@ -131,7 +139,7 @@ enum Telemetry {
 /// type and append it to `configured` in `Telemetry.setup`.
 protocol TelemetryBackend {
     func setup()
-    func capture(event: String, properties: [String: Any])
+    func capture(event: String, properties: [String: Any], userProperties: [String: Any]?)
     func optIn()
     func optOut()
 }
@@ -161,8 +169,8 @@ final class PostHogBackend: TelemetryBackend {
         PostHogSDK.shared.identify(distinctId)
     }
 
-    func capture(event: String, properties: [String: Any]) {
-        PostHogSDK.shared.capture(event, properties: properties)
+    func capture(event: String, properties: [String: Any], userProperties: [String: Any]?) {
+        PostHogSDK.shared.capture(event, properties: properties, userProperties: userProperties)
     }
 
     func optIn() {

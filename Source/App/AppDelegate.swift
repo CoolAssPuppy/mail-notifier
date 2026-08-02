@@ -48,7 +48,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         notificationService.setup()
         setupURLHandler()
 
-        Telemetry.capture(.appLaunched)
+        // Stamps the person's current menu style and theme on every launch, so
+        // both splits are measurable across the whole install base rather than
+        // only across the people who went and changed a setting.
+        let menuStyle = menuStyleStore.current.rawValue
+        let theme = ThemeStore.shared.current
+        Telemetry.capture(
+            .appLaunched,
+            properties: ["menu_style": menuStyle,
+                         "theme": theme.rawValue,
+                         "theme_appearance": theme.appearance],
+            userProperties: ["menu_style": menuStyle,
+                             "theme": theme.rawValue,
+                             "theme_appearance": theme.appearance]
+        )
         reportUpdateInstalledIfNeeded()
 
         if !Accounts.hasAccounts || AppSettings.shared.openSettingsOnStart {

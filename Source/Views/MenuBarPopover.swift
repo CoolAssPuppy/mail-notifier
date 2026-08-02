@@ -683,15 +683,16 @@ private struct ThemeStrip: View {
         }
     }
 
-    /// Picks the right fill for a theme dot. System renders as a split
-    /// black/white disc so users recognize it as "auto-adapt".
+    /// Picks the right fill for a theme dot. System renders as a split disc of
+    /// the two default palettes — the light icon's ground against the dark
+    /// icon's — so it reads as "the app's own theme, following the OS".
     @ViewBuilder
     private func dotFill(for option: AppTheme, palette: ThemePalette) -> some View {
         if option == .system {
             ZStack {
-                Circle().fill(Color.white)
+                Circle().fill(ThemePalette.systemLight.primary)
                 Circle()
-                    .fill(Color.black)
+                    .fill(ThemePalette.systemDark.background)
                     .mask(
                         Rectangle()
                             .frame(width: Self.dotSize, height: Self.dotSize)
