@@ -2,6 +2,11 @@
 
 This codebase is a 2026 ground-up SwiftUI rewrite of Gmail Notifr, kept under the same repository and changelog for historical continuity. Entries from version 2.1.1 and earlier describe the original Gmail Notifr by James Chen — see "Gmail Notifr (legacy)" below.
 
+## 3.5.1 (August 2, 2026)
+
+* New default light and dark themes, drawn from the app icon's own colors, following your system appearance
+* Anonymous usage data now records which menu style and theme you use (still off if you opted out)
+
 ## 3.5.0 (August 2, 2026)
 
 * Classic mode is back: the menu bar icon can open a standard macOS menu again, with a submenu of unread subjects per account

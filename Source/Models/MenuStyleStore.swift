@@ -49,7 +49,20 @@ final class MenuStyleStore: ObservableObject {
         didSet {
             guard oldValue != current else { return }
             UserDefaults.standard.set(current.rawValue, forKey: Self.defaultsKey)
-            Telemetry.capture(.menuStyleChanged, properties: ["style": current.rawValue])
+            // `from`/`to` on the event answers "which way are switches going",
+            // the person property answers "where did everyone end up".
+            Telemetry.capture(
+                .menuStyleChanged,
+                // `style` is what 3.5.0 shipped and what the dashboard breaks
+                // down on; keep sending it so the series doesn't split in two
+                // when this build lands. `from`/`to` are the new detail.
+                properties: [
+                    "style": current.rawValue,
+                    "from": oldValue.rawValue,
+                    "to": current.rawValue
+                ],
+                userProperties: ["menu_style": current.rawValue]
+            )
         }
     }
 

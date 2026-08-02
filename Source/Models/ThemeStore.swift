@@ -88,6 +88,11 @@ enum AppTheme: String, CaseIterable, Identifiable {
 
     var isDark: Bool { palette.isDark }
 
+    /// How the palette actually resolves right now, for telemetry. Worth
+    /// recording separately from the theme name because `system` alone says
+    /// nothing about whether that person is looking at light or dark.
+    var appearance: String { isDark ? "dark" : "light" }
+
     var palette: ThemePalette {
         switch self {
         case .system:
@@ -111,58 +116,63 @@ enum AppTheme: String, CaseIterable, Identifiable {
 extension ThemePalette {
     // MARK: System
 
-    /// Neutral light palette used when the user picks "System" and macOS is
-    /// in light mode. Leans on system blue for primary so it feels native.
+    /// The default light palette, pulled straight off the light app icon:
+    /// white paper, sky-blue ground, navy flap, cinnabar seal. `primary` is
+    /// the ground blue and `foreground` is the icon's keyline navy, so text
+    /// and chrome are literally the colors in the icon rather than an
+    /// approximation of them.
     static let systemLight = ThemePalette(
         isDark: false,
-        background:     Color(red: 0xF5/255, green: 0xF5/255, blue: 0xF7/255),
-        surface:        Color(red: 0xEC/255, green: 0xEC/255, blue: 0xEF/255),
+        background:     Color(red: 0xF1/255, green: 0xF6/255, blue: 0xFB/255),
+        surface:        Color(red: 0xE4/255, green: 0xEE/255, blue: 0xF8/255),
         card:           Color(red: 0xFF/255, green: 0xFF/255, blue: 0xFF/255),
-        cardElevated:   Color(red: 0xF4/255, green: 0xF4/255, blue: 0xF7/255),
-        cardInset:      Color(red: 0xF0/255, green: 0xF0/255, blue: 0xF3/255),
-        border:         Color(red: 0xDC/255, green: 0xDC/255, blue: 0xE0/255),
-        borderStrong:   Color(red: 0xC3/255, green: 0xC3/255, blue: 0xC8/255),
-        borderFocus:    Color(red: 0x00/255, green: 0x7A/255, blue: 0xFF/255).opacity(0.45),
-        divider:        Color(red: 0xE3/255, green: 0xE3/255, blue: 0xE7/255),
-        dividerSubtle:  Color(red: 0xEE/255, green: 0xEE/255, blue: 0xF1/255),
-        foreground:     Color(red: 0x0F/255, green: 0x0F/255, blue: 0x14/255),
-        foregroundSoft: Color(red: 0x27/255, green: 0x27/255, blue: 0x30/255),
-        muted:          Color(red: 0x55/255, green: 0x55/255, blue: 0x5F/255),
-        tertiary:       Color(red: 0x78/255, green: 0x78/255, blue: 0x82/255),
-        dim:            Color(red: 0xB3/255, green: 0xB3/255, blue: 0xBA/255),
-        primary:        Color(red: 0x00/255, green: 0x7A/255, blue: 0xFF/255),
-        primaryDeep:    Color(red: 0x00/255, green: 0x55/255, blue: 0xCC/255),
+        cardElevated:   Color(red: 0xF4/255, green: 0xF8/255, blue: 0xFB/255),
+        cardInset:      Color(red: 0xEB/255, green: 0xF2/255, blue: 0xF9/255),
+        border:         Color(red: 0xD5/255, green: 0xE3/255, blue: 0xF0/255),
+        borderStrong:   Color(red: 0xBA/255, green: 0xCF/255, blue: 0xE4/255),
+        borderFocus:    Color(red: 0x2E/255, green: 0x7B/255, blue: 0xC4/255).opacity(0.45),
+        divider:        Color(red: 0xDE/255, green: 0xE9/255, blue: 0xF3/255),
+        dividerSubtle:  Color(red: 0xEA/255, green: 0xF1/255, blue: 0xF8/255),
+        foreground:     Color(red: 0x0C/255, green: 0x2B/255, blue: 0x49/255),
+        foregroundSoft: Color(red: 0x12/255, green: 0x38/255, blue: 0x5E/255),
+        muted:          Color(red: 0x4B/255, green: 0x6C/255, blue: 0x8C/255),
+        tertiary:       Color(red: 0x74/255, green: 0x90/255, blue: 0xAB/255),
+        dim:            Color(red: 0xAE/255, green: 0xC4/255, blue: 0xD8/255),
+        primary:        Color(red: 0x2E/255, green: 0x7B/255, blue: 0xC4/255),
+        primaryDeep:    Color(red: 0x12/255, green: 0x38/255, blue: 0x5E/255),
         primaryForeground: .white,
         success:        Color(red: 0x1E/255, green: 0x82/255, blue: 0x44/255),
-        warning:        Color(red: 0xB4/255, green: 0x5F/255, blue: 0x06/255),
-        destructive:    Color(red: 0xC5/255, green: 0x1F/255, blue: 0x2E/255)
+        // Unread counts wear the seal's cinnabar, darkened enough to read on
+        // white. Amber would be a third hue the icon doesn't contain.
+        warning:        Color(red: 0xC1/255, green: 0x30/255, blue: 0x1A/255),
+        destructive:    Color(red: 0xA3/255, green: 0x20/255, blue: 0x14/255)
     )
 
-    /// System dark — used when the user picks "System" and macOS is in dark
-    /// mode. A restrained neutral dark palette that matches Apple's own apps.
+    /// The default dark palette, pulled off the dark app icon: the same navy
+    /// flap and cinnabar seal, with baby-blue paper on a graphite ground.
     static let systemDark = ThemePalette(
         isDark: true,
-        background:     Color(red: 0x1E/255, green: 0x1E/255, blue: 0x1E/255),
-        surface:        Color(red: 0x26/255, green: 0x26/255, blue: 0x26/255),
-        card:           Color(red: 0x2D/255, green: 0x2D/255, blue: 0x2D/255),
-        cardElevated:   Color(red: 0x36/255, green: 0x36/255, blue: 0x36/255),
-        cardInset:      Color(red: 0x21/255, green: 0x21/255, blue: 0x21/255),
-        border:         Color(red: 0x3A/255, green: 0x3A/255, blue: 0x3A/255),
-        borderStrong:   Color(red: 0x4A/255, green: 0x4A/255, blue: 0x4A/255),
-        borderFocus:    Color(red: 0x0A/255, green: 0x84/255, blue: 0xFF/255).opacity(0.5),
-        divider:        Color(red: 0x30/255, green: 0x30/255, blue: 0x30/255),
-        dividerSubtle:  Color(red: 0x28/255, green: 0x28/255, blue: 0x28/255),
-        foreground:     Color(red: 0xF5/255, green: 0xF5/255, blue: 0xF5/255),
-        foregroundSoft: Color(red: 0xD7/255, green: 0xD7/255, blue: 0xD7/255),
-        muted:          Color(red: 0xA3/255, green: 0xA3/255, blue: 0xA3/255),
-        tertiary:       Color(red: 0x7A/255, green: 0x7A/255, blue: 0x7A/255),
-        dim:            Color(red: 0x55/255, green: 0x55/255, blue: 0x55/255),
-        primary:        Color(red: 0x0A/255, green: 0x84/255, blue: 0xFF/255),
-        primaryDeep:    Color(red: 0x00/255, green: 0x66/255, blue: 0xCC/255),
-        primaryForeground: .white,
+        background:     Color(red: 0x17/255, green: 0x1C/255, blue: 0x21/255),
+        surface:        Color(red: 0x1E/255, green: 0x25/255, blue: 0x2B/255),
+        card:           Color(red: 0x26/255, green: 0x2E/255, blue: 0x35/255),
+        cardElevated:   Color(red: 0x31/255, green: 0x3A/255, blue: 0x42/255),
+        cardInset:      Color(red: 0x13/255, green: 0x19/255, blue: 0x20/255),
+        border:         Color(red: 0x33/255, green: 0x3D/255, blue: 0x45/255),
+        borderStrong:   Color(red: 0x46/255, green: 0x53/255, blue: 0x5D/255),
+        borderFocus:    Color(red: 0x5F/255, green: 0xA8/255, blue: 0xDE/255).opacity(0.5),
+        divider:        Color(red: 0x2A/255, green: 0x33/255, blue: 0x3A/255),
+        dividerSubtle:  Color(red: 0x20/255, green: 0x28/255, blue: 0x30/255),
+        foreground:     Color(red: 0xEF/255, green: 0xF5/255, blue: 0xFA/255),
+        foregroundSoft: Color(red: 0xCD/255, green: 0xDC/255, blue: 0xE8/255),
+        muted:          Color(red: 0x9A/255, green: 0xAE/255, blue: 0xBF/255),
+        tertiary:       Color(red: 0x6E/255, green: 0x83/255, blue: 0x93/255),
+        dim:            Color(red: 0x4A/255, green: 0x5A/255, blue: 0x67/255),
+        primary:        Color(red: 0x5F/255, green: 0xA8/255, blue: 0xDE/255),
+        primaryDeep:    Color(red: 0x2E/255, green: 0x7B/255, blue: 0xC4/255),
+        primaryForeground: Color(red: 0x0C/255, green: 0x2B/255, blue: 0x49/255),
         success:        Color(red: 0x34/255, green: 0xD3/255, blue: 0x99/255),
-        warning:        Color(red: 0xFB/255, green: 0xBF/255, blue: 0x24/255),
-        destructive:    Color(red: 0xF8/255, green: 0x71/255, blue: 0x71/255)
+        warning:        Color(red: 0xF2/255, green: 0x70/255, blue: 0x5A/255),
+        destructive:    Color(red: 0xFF/255, green: 0x8F/255, blue: 0x80/255)
     )
 
     // MARK: Light
@@ -413,15 +423,24 @@ final class ThemeStore: ObservableObject {
 
     @Published var current: AppTheme {
         didSet {
+            guard oldValue != current else { return }
             UserDefaults.standard.set(current.rawValue, forKey: Self.defaultsKey)
+            Telemetry.capture(
+                .themeChanged,
+                properties: ["theme": current.rawValue, "from": oldValue.rawValue, "to": current.rawValue],
+                userProperties: ["theme": current.rawValue, "theme_appearance": current.appearance]
+            )
         }
     }
 
     private var appearanceObserver: NSKeyValueObservation?
 
     private init() {
-        let raw = UserDefaults.standard.string(forKey: Self.defaultsKey) ?? AppTheme.cylon.rawValue
-        self.current = AppTheme(rawValue: raw) ?? .cylon
+        // Defaults to the icon-derived palette following the OS light/dark
+        // setting. Anyone who already picked a theme keeps it — this only
+        // changes what a fresh install starts on.
+        let raw = UserDefaults.standard.string(forKey: Self.defaultsKey) ?? AppTheme.system.rawValue
+        self.current = AppTheme(rawValue: raw) ?? .system
 
         // When the user flips macOS between light and dark mode and the
         // System theme is active, the palette flips too — re-publish.
@@ -439,7 +458,7 @@ final class ThemeStore: ObservableObject {
 // MARK: - SwiftUI environment
 
 private struct CurrentPaletteKey: EnvironmentKey {
-    static let defaultValue: ThemePalette = .cylon
+    static let defaultValue: ThemePalette = .systemLight
 }
 
 extension EnvironmentValues {

@@ -6,6 +6,24 @@
     <description>Mail Notifier updates</description>
     <language>en</language>
     <item>
+      <title>Version 3.5.1</title>
+      <pubDate>Sun, 02 Aug 2026 20:51:58 +0000</pubDate>
+      <sparkle:version>27</sparkle:version>
+      <sparkle:shortVersionString>3.5.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[
+        <ul>
+          <li>Bug fixes</li>
+        </ul>
+      ]]></description>
+      <enclosure
+        url="https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/MailNotifier-3.5.1.dmg"
+        sparkle:edSignature="m59euieOQ7SQlduGb9JXoMqWbMkuQ9ma2xdl7/ByTcxwsRMTrNsbTV4HqnPFixfCJeQQMmFQ9zK5yjAgSjroBQ=="
+        length="10667842"
+        type="application/x-apple-diskimage" />
+    </item>
+
+    <item>
       <title>Version 3.5.0</title>
       <pubDate>Sun, 02 Aug 2026 20:18:17 +0000</pubDate>
       <sparkle:version>26</sparkle:version>
