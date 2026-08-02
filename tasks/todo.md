@@ -1,5 +1,44 @@
 # Todo
 
+## Classic Mode menu bar dropdown (current)
+
+Goal: an alternative menu bar dropdown that is a standard AppKit `NSMenu` —
+account rows with unread counts, a submenu of unread subjects per account, and
+a thin icon strip at the bottom (check all, main window, settings on the left;
+quit on the right). No themes in classic mode; it inherits the system
+light/dark appearance. The main window (configuration panel) does not change.
+
+### Steps
+- [x] `MenuStyle` model + store (`settings.menuStyle`, defaults to `pretty`)
+- [x] `ClassicMenuBuilder` — builds the `NSMenu` from `FetcherManager` state
+- [x] `ClassicMenuFooterView` — AppKit icon strip hosted in a menu item view
+- [x] `AppDelegate` routes left-click to the classic menu or the popover
+- [x] Settings: "Menu Style" card in the right column, above Updates
+- [x] Telemetry event for the style switch
+- [x] `xcodegen generate`, build, tests
+
+### Constraint
+AppKit will not send an `NSMenuItem` action when that item owns a submenu — the
+click opens the submenu instead. So an account with unread mail puts "Open
+Inbox" as the first entry of its own submenu, and an account with no unread
+mail (no submenu) opens the inbox on a direct click.
+
+### Review
+- Debug build succeeds. Tests: 83/84. The single failure
+  (`FormattersTests.testRelativeLabelYesterday`) is the pre-existing,
+  date-dependent one documented below, untouched by this work.
+- Verified live: the classic menu shows three accounts with provider icons,
+  "Nerds Junk (1)" opens a submenu of `Open Inbox` + the unread subject, and
+  the footer strip renders the four icons with quit pinned right. System was
+  in Light appearance and the menu rendered light, as intended.
+- Classic mode reads messages straight from `FetcherManager` (up to the 10 the
+  fetcher stores) rather than the popover model's 3-message preview, and
+  appends a disabled "N more unread" row when the server count runs ahead.
+- The main window is unchanged apart from the new Menu Style card.
+- Testing required quitting the installed 3.4.2 app (LaunchServices refuses to
+  launch the test host while another copy of the bundle id is running); it was
+  relaunched afterwards and the temporary `settings.menuStyle` default removed.
+
 ## Make notification sounds respect Focus / Do Not Disturb
 
 **Problem:** Mail Notifier plays its sound via `NSSound.play()` directly (NotificationService

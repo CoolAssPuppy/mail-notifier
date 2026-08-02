@@ -29,6 +29,7 @@ enum TelemetryEvent: String {
 
     // MARK: Menu bar
     case menuOpened = "menu_opened"
+    case menuStyleChanged = "menu_style_changed"
 
     // MARK: Notifications
     case notificationShown = "notification_shown"
