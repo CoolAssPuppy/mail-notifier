@@ -15,6 +15,7 @@
 		0A2BB03DA910D8FFBCDE0C23 /* VIPListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57671BB60CFC6315F1743EB8 /* VIPListTests.swift */; };
 		0A9553D037C07F259B5EACFB /* LaunchAtLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0F81187CA285BE37EEB61E /* LaunchAtLoginManager.swift */; };
 		0C3B3D0ADE71A09821A6BA31 /* GmailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394F8D0222D9BB93EC80FA04 /* GmailProvider.swift */; };
+		0DB7C69438F866E5C5ABA0F7 /* PaywallCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5612B1ED00E41B5360915E7C /* PaywallCopy.swift */; };
 		108FBF2C1043DCE503999E1A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F726C271625BE814AAF2A8 /* SettingsView.swift */; };
 		11AB8C1107B6B1710DBC6941 /* MessageFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7DC03CB3B7DF64E5A4999E /* MessageFetcher.swift */; };
 		1283CE4E93BC4C22590BAD14 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3753916EFC671DA64C799FD0 /* Logger.swift */; };
@@ -23,6 +24,7 @@
 		1DD61364F76EF1940A3D5054 /* purr.aiff in Resources */ = {isa = PBXBuildFile; fileRef = E154A571748AD2C9B3986501 /* purr.aiff */; };
 		1E425906A4E9BCE674CEDA8A /* pong.aiff in Resources */ = {isa = PBXBuildFile; fileRef = B5338118353B1DA638B5B671 /* pong.aiff */; };
 		247E7F167FC88D12CFB97E6E /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DC26A3E47DDBFAA0FC8DFF /* NotificationService.swift */; };
+		26E8B8A6749FA19533994B3B /* EntitlementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46D829A3B44BCA73170635C0 /* EntitlementManager.swift */; };
 		271E73C4E7F99E2CEE5B37EA /* SharedComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDE02622D66D28B58223F26 /* SharedComponents.swift */; };
 		28968F7DA0D098D0160E7019 /* wah-wah.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 3E5DF9B1AF9207B3AEF04D9B /* wah-wah.aiff */; };
 		2A5FEBF33CD0D43AC3A2E924 /* AccountTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D39B6647E53A0E3BDEF6641 /* AccountTests.swift */; };
@@ -36,6 +38,7 @@
 		38BCDA605D62C148566482E1 /* FormattersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69F230771D7502D3589DF40 /* FormattersTests.swift */; };
 		3B34CC5B1AEFD51B72EDC13D /* ThemeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6530850D2A751A92684E51DA /* ThemeStore.swift */; };
 		3BE9334DE287FBCF9E2770E6 /* AppAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 18804011B7BFAA25376B926C /* AppAuth */; };
+		3C4452F3BCB5170C405CAFB9 /* LicenseProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C7EAF2F165E9A0920CDCD /* LicenseProvider.swift */; };
 		408FED39F299B062EC152101 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85734040168C129FCDDAE13D /* WelcomeView.swift */; };
 		42E9081BE938811A5683C9A5 /* UpdaterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53C88A02CD4CB9DA9FCDEEE /* UpdaterManager.swift */; };
 		476B55D1C8E2D484625F4FA0 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAA878B780CA7066B721262 /* AppSettings.swift */; };
@@ -43,13 +46,17 @@
 		519533A448D4CD1CD27F1468 /* OutlookOAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B2763164C0B8D569025080 /* OutlookOAuthClient.swift */; };
 		5306B9D922785DF8391BD323 /* AccountStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536F8E922427D6AC37743C33 /* AccountStoreTests.swift */; };
 		545AB158AF5447C4E5E4E391 /* AppDelegate+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB460ED3BAD3CC445B93C9FE /* AppDelegate+Menu.swift */; };
+		5695EBBABC45B7699815BFE5 /* PolarLicenseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93D6BF73AA53D914CF4F56A9 /* PolarLicenseClient.swift */; };
 		5AD770B9E27FF1225B05E35F /* MenuBarPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2468E8CBA3EBBB4B7D0EF7 /* MenuBarPopover.swift */; };
 		5E68EEB00FFB062643441849 /* pop.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 18084A121365850A0A98816C /* pop.aiff */; };
+		63012A204163099B1879D8F7 /* PolarConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E865FE465ACEED88251D4F1 /* PolarConfig.swift */; };
 		643D1C318D340F378AFDF6A3 /* TelemetryEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FED052089FF7AB2AFF0FF93 /* TelemetryEvent.swift */; };
+		667B6DBEE949350F025B3E7F /* PolarLicenseClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3607404E0683FDD9B9E33550 /* PolarLicenseClientTests.swift */; };
 		699F11A7F2F8FC1E39DE7CA0 /* URLEncodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADAF9009B57AD4E11AA213D /* URLEncodingTests.swift */; };
 		6DA482CF39CF65382662DAC1 /* i-love-you.aiff in Resources */ = {isa = PBXBuildFile; fileRef = F6645D938E03DA1706BB71A6 /* i-love-you.aiff */; };
 		6F19E5430EB52E328D689CD3 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46E588E11C2BE3E1F023F9C /* Sound.swift */; };
 		76F39F9F8773910330AE6912 /* tink.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 9C8EFDEA092A0EBFB3E5D6D6 /* tink.aiff */; };
+		7DE29D4B3AD2AEBF2C7DBCBD /* EntitlementManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514ECAFB8D90312B1941B8C1 /* EntitlementManagerTests.swift */; };
 		7F602BF6F21F9E50A543133D /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA368017C433781193033E36 /* Sidebar.swift */; };
 		80C1E959D8CE2FA2E0AAA547 /* blink.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 73AAE4A7C6CDDDE233434EDF /* blink.aiff */; };
 		81A3AE5017A11FE76DDCE696 /* blow.aiff in Resources */ = {isa = PBXBuildFile; fileRef = F6DAF857CA22E98B94C10855 /* blow.aiff */; };
@@ -58,6 +65,7 @@
 		83430705CAA40BA25BC92102 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7154321B3CBE9093B1A9A994 /* MainView.swift */; };
 		85AA17196CE953CB1AF83ADB /* meg-ryan.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 3024450D3A2CDA758B621FBE /* meg-ryan.aiff */; };
 		86D6A9292FFD02C3519DBA0B /* chimes.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 99FF083DF11FC19CB7EC7431 /* chimes.aiff */; };
+		877F8EE0A7C440CB413E7318 /* PaywallSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7903E04B247E3B47436D9B /* PaywallSheet.swift */; };
 		886F959827F3FB4A9B4DC135 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CA97F16C12286EDE39552617 /* InfoPlist.strings */; };
 		89A1B20E43FE0CB04B003088 /* basso.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 0E9080EE2C51C9860FD08C96 /* basso.aiff */; };
 		8B5B4FF0B74D99E74566FE22 /* MailNotifierApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12AC87ABBBE01ADBAD56BB1 /* MailNotifierApp.swift */; };
@@ -69,6 +77,7 @@
 		935B42CCC66205110E7804A4 /* SettingsDrawer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E5E9BC2F24238A846536579 /* SettingsDrawer.swift */; };
 		95504D5B3F0F1CA7F81F3AE2 /* AccountStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D6147D3EB626B49ACC9960 /* AccountStore.swift */; };
 		980F2E8EFB7E5D8EE0BEB717 /* bottle.aiff in Resources */ = {isa = PBXBuildFile; fileRef = D1ABB68AADF378733BB99F07 /* bottle.aiff */; };
+		98C957CC8F8FD88836B80555 /* SubscriptionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CCF144D4B126CA44B9CAA2 /* SubscriptionCard.swift */; };
 		98F440B3EF737A232EF50667 /* ominous.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 8692B975C864FA7A018A95DB /* ominous.aiff */; };
 		993194480E7EBA266AA82935 /* MessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0E14B81C728D48E26A37B6 /* MessageTests.swift */; };
 		9C44662469001F540F3DBC49 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD05293C4B42F6617F15238 /* Message.swift */; };
@@ -83,6 +92,7 @@
 		A9E26273228389E34B1301B2 /* URLEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593B0B24623F6B3BBF2C5DEB /* URLEncoding.swift */; };
 		AB04FDB131DB0747824C03A2 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C83F8313F9B9B2D8322268 /* Theme.swift */; };
 		AC7B341B09EE8F0209B51C10 /* OutlookProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F3A9C26F687C1CC69C150A /* OutlookProvider.swift */; };
+		AF049FAF2746CF6F99E7A739 /* AccountEntitlementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F995C1D086BAFB90659C6BC /* AccountEntitlementTests.swift */; };
 		B9FE0C69C743C06C90ACCA9F /* organ.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 4FE55E6FA3CCA325157594D1 /* organ.aiff */; };
 		C37D1FA9636CCF698C5B5AF7 /* URLRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764695FD367A93846CADCEBD /* URLRouter.swift */; };
 		C59DF4782EBCB0E80F0A8550 /* GoogleOAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856D587359B7B016FEE9AAB1 /* GoogleOAuthClient.swift */; };
@@ -138,6 +148,7 @@
 		3024450D3A2CDA758B621FBE /* meg-ryan.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "meg-ryan.aiff"; sourceTree = "<group>"; };
 		303A22F5959AA777D26748F9 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		3084A7C6017933D49623CDBC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		3607404E0683FDD9B9E33550 /* PolarLicenseClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolarLicenseClientTests.swift; sourceTree = "<group>"; };
 		3753916EFC671DA64C799FD0 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		37C68355120E812B94B3B813 /* whistle.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = whistle.aiff; sourceTree = "<group>"; };
 		394F8D0222D9BB93EC80FA04 /* GmailProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GmailProvider.swift; sourceTree = "<group>"; };
@@ -145,11 +156,16 @@
 		3E5DF9B1AF9207B3AEF04D9B /* wah-wah.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "wah-wah.aiff"; sourceTree = "<group>"; };
 		3F7DC03CB3B7DF64E5A4999E /* MessageFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageFetcher.swift; sourceTree = "<group>"; };
 		42737EE34D971CD015EAEB0B /* robot.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = robot.aiff; sourceTree = "<group>"; };
+		44CCF144D4B126CA44B9CAA2 /* SubscriptionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionCard.swift; sourceTree = "<group>"; };
 		44DFA1C69267CEAA0D80314D /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		46D829A3B44BCA73170635C0 /* EntitlementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementManager.swift; sourceTree = "<group>"; };
 		49FC974A840D1A18FD08E426 /* FriendlyNameStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendlyNameStore.swift; sourceTree = "<group>"; };
 		4F02C65B9502185B46945AC7 /* tlh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tlh; path = tlh.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4F995C1D086BAFB90659C6BC /* AccountEntitlementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountEntitlementTests.swift; sourceTree = "<group>"; };
 		4FE55E6FA3CCA325157594D1 /* organ.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = organ.aiff; sourceTree = "<group>"; };
+		514ECAFB8D90312B1941B8C1 /* EntitlementManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementManagerTests.swift; sourceTree = "<group>"; };
 		536F8E922427D6AC37743C33 /* AccountStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountStoreTests.swift; sourceTree = "<group>"; };
+		5612B1ED00E41B5360915E7C /* PaywallCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallCopy.swift; sourceTree = "<group>"; };
 		57671BB60CFC6315F1743EB8 /* VIPListTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VIPListTests.swift; sourceTree = "<group>"; };
 		57BD935C6FAA7BD6C83B61D6 /* SoundTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundTests.swift; sourceTree = "<group>"; };
 		58D68FB4988855EDF84FB661 /* NotificationNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationNames.swift; sourceTree = "<group>"; };
@@ -185,12 +201,14 @@
 		89929832B41F5C583FCA1B53 /* MenuStyleStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuStyleStore.swift; sourceTree = "<group>"; };
 		8B4D2ADB8185E8220A41E4BA /* funk.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = funk.aiff; sourceTree = "<group>"; };
 		9081299B48EE44DA4F06E33D /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		93D6BF73AA53D914CF4F56A9 /* PolarLicenseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolarLicenseClient.swift; sourceTree = "<group>"; };
 		93EC6FDF18E54585650720C2 /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		99FF083DF11FC19CB7EC7431 /* chimes.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = chimes.aiff; sourceTree = "<group>"; };
 		9B0E14B81C728D48E26A37B6 /* MessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTests.swift; sourceTree = "<group>"; };
 		9BCBA8FC5DECF4BFBACBCD42 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		9C8EFDEA092A0EBFB3E5D6D6 /* tink.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = tink.aiff; sourceTree = "<group>"; };
 		9E1A4626EF02182B18036A2F /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		9E865FE465ACEED88251D4F1 /* PolarConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolarConfig.swift; sourceTree = "<group>"; };
 		9FAA878B780CA7066B721262 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		9FB72FE2A76B3B2F6F6E973A /* MailNotifierTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MailNotifierTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A11C5B2D3475610B60804547 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -218,8 +236,10 @@
 		E1B2763164C0B8D569025080 /* OutlookOAuthClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlookOAuthClient.swift; sourceTree = "<group>"; };
 		E53C88A02CD4CB9DA9FCDEEE /* UpdaterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterManager.swift; sourceTree = "<group>"; };
 		E945FECDCBE6C3ED0CB6C791 /* splat.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = splat.aiff; sourceTree = "<group>"; };
+		EB0C7EAF2F165E9A0920CDCD /* LicenseProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseProvider.swift; sourceTree = "<group>"; };
 		EB37884BCB61678E068B3C3D /* MailProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailProvider.swift; sourceTree = "<group>"; };
 		EEA9F3DE9853CF06BBDD72BF /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		EF7903E04B247E3B47436D9B /* PaywallSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallSheet.swift; sourceTree = "<group>"; };
 		F23771ACC951CAEFB2754306 /* ClassicMenuFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassicMenuFooterView.swift; sourceTree = "<group>"; };
 		F6645D938E03DA1706BB71A6 /* i-love-you.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "i-love-you.aiff"; sourceTree = "<group>"; };
 		F6DAF857CA22E98B94C10855 /* blow.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = blow.aiff; sourceTree = "<group>"; };
@@ -228,7 +248,7 @@
 		F97EC5717616078BDE263058 /* hero.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = hero.aiff; sourceTree = "<group>"; };
 		FB460ED3BAD3CC445B93C9FE /* AppDelegate+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Menu.swift"; sourceTree = "<group>"; };
 		FEC6D3AB06F5E6F578CB2B26 /* morse.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = morse.aiff; sourceTree = "<group>"; };
-		"TEMP_700FA8B5-83E9-4503-96AD-90EDA710CBD9" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		"TEMP_8978B0FF-FC8B-4819-8F6C-9E00783ECC11" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -269,6 +289,8 @@
 				F23771ACC951CAEFB2754306 /* ClassicMenuFooterView.swift */,
 				7154321B3CBE9093B1A9A994 /* MainView.swift */,
 				1A2468E8CBA3EBBB4B7D0EF7 /* MenuBarPopover.swift */,
+				5612B1ED00E41B5360915E7C /* PaywallCopy.swift */,
+				EF7903E04B247E3B47436D9B /* PaywallSheet.swift */,
 				5E5E9BC2F24238A846536579 /* SettingsDrawer.swift */,
 				07F726C271625BE814AAF2A8 /* SettingsView.swift */,
 				AA368017C433781193033E36 /* Sidebar.swift */,
@@ -284,6 +306,7 @@
 			children = (
 				77FB3766905EFB7F02226051 /* MenuStylePicker.swift */,
 				2EDE02622D66D28B58223F26 /* SharedComponents.swift */,
+				44CCF144D4B126CA44B9CAA2 /* SubscriptionCard.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -419,12 +442,15 @@
 		C29C15321F480F0CE44A6043 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				4F995C1D086BAFB90659C6BC /* AccountEntitlementTests.swift */,
 				536F8E922427D6AC37743C33 /* AccountStoreTests.swift */,
 				5D39B6647E53A0E3BDEF6641 /* AccountTests.swift */,
+				514ECAFB8D90312B1941B8C1 /* EntitlementManagerTests.swift */,
 				B69F230771D7502D3589DF40 /* FormattersTests.swift */,
 				D99C5D280C4D3AF852A85856 /* GmailProviderErrorMappingTests.swift */,
 				5FF22B8637AB803593786448 /* MessageFetcherTests.swift */,
 				9B0E14B81C728D48E26A37B6 /* MessageTests.swift */,
+				3607404E0683FDD9B9E33550 /* PolarLicenseClientTests.swift */,
 				57BD935C6FAA7BD6C83B61D6 /* SoundTests.swift */,
 				6ADAF9009B57AD4E11AA213D /* URLEncodingTests.swift */,
 				18D5F90D82EDF76FD4E9E758 /* URLRouterTests.swift */,
@@ -437,10 +463,14 @@
 			isa = PBXGroup;
 			children = (
 				7BA52CFA8A31B99E0B130518 /* AccountAuthorizer.swift */,
+				46D829A3B44BCA73170635C0 /* EntitlementManager.swift */,
 				2FDA3D0281F8543127FAE682 /* FetcherManager.swift */,
 				0A0F81187CA285BE37EEB61E /* LaunchAtLoginManager.swift */,
+				EB0C7EAF2F165E9A0920CDCD /* LicenseProvider.swift */,
 				3F7DC03CB3B7DF64E5A4999E /* MessageFetcher.swift */,
 				11DC26A3E47DDBFAA0FC8DFF /* NotificationService.swift */,
+				9E865FE465ACEED88251D4F1 /* PolarConfig.swift */,
+				93D6BF73AA53D914CF4F56A9 /* PolarLicenseClient.swift */,
 				2D907452E84B43ADEF6461E4 /* Telemetry.swift */,
 				6FED052089FF7AB2AFF0FF93 /* TelemetryEvent.swift */,
 				E53C88A02CD4CB9DA9FCDEEE /* UpdaterManager.swift */,
@@ -450,10 +480,10 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		"TEMP_7E651EE7-3F7F-42F2-98CA-338260E1ED62" /* mail-notifier */ = {
+		"TEMP_259C7E61-E72D-4003-A102-BA4F8A05A593" /* mail-notifier */ = {
 			isa = PBXGroup;
 			children = (
-				"TEMP_700FA8B5-83E9-4503-96AD-90EDA710CBD9" /* Secrets.xcconfig */,
+				"TEMP_8978B0FF-FC8B-4819-8F6C-9E00783ECC11" /* Secrets.xcconfig */,
 			);
 			path = "mail-notifier";
 			sourceTree = "<group>";
@@ -625,12 +655,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AF049FAF2746CF6F99E7A739 /* AccountEntitlementTests.swift in Sources */,
 				5306B9D922785DF8391BD323 /* AccountStoreTests.swift in Sources */,
 				2A5FEBF33CD0D43AC3A2E924 /* AccountTests.swift in Sources */,
+				7DE29D4B3AD2AEBF2C7DBCBD /* EntitlementManagerTests.swift in Sources */,
 				38BCDA605D62C148566482E1 /* FormattersTests.swift in Sources */,
 				02D8E79341EAF99F15B5AA1C /* GmailProviderErrorMappingTests.swift in Sources */,
 				829D98671D3D6E6DC2B62C9D /* MessageFetcherTests.swift in Sources */,
 				993194480E7EBA266AA82935 /* MessageTests.swift in Sources */,
+				667B6DBEE949350F025B3E7F /* PolarLicenseClientTests.swift in Sources */,
 				E2D93E47F0BAB217C5E6E818 /* SoundTests.swift in Sources */,
 				699F11A7F2F8FC1E39DE7CA0 /* URLEncodingTests.swift in Sources */,
 				309401A4A677B9D0B4F41325 /* URLRouterTests.swift in Sources */,
@@ -652,12 +685,14 @@
 				E1C51BF8F44231EC27D9A462 /* Browser.swift in Sources */,
 				9CF163FAA115D3A25E1FEE85 /* ClassicMenuBuilder.swift in Sources */,
 				9CEF1A4816D3F03FD2464D86 /* ClassicMenuFooterView.swift in Sources */,
+				26E8B8A6749FA19533994B3B /* EntitlementManager.swift in Sources */,
 				E9E929C760F561CB87CCC298 /* FetcherManager.swift in Sources */,
 				2F0E61F15730320692F222F1 /* Formatters.swift in Sources */,
 				353E0A2021CFE7030D88721B /* FriendlyNameStore.swift in Sources */,
 				0C3B3D0ADE71A09821A6BA31 /* GmailProvider.swift in Sources */,
 				C59DF4782EBCB0E80F0A8550 /* GoogleOAuthClient.swift in Sources */,
 				0A9553D037C07F259B5EACFB /* LaunchAtLoginManager.swift in Sources */,
+				3C4452F3BCB5170C405CAFB9 /* LicenseProvider.swift in Sources */,
 				1283CE4E93BC4C22590BAD14 /* Logger.swift in Sources */,
 				8B5B4FF0B74D99E74566FE22 /* MailNotifierApp.swift in Sources */,
 				F56EE74B3B07A645CB3EA85F /* MailProvider.swift in Sources */,
@@ -671,11 +706,16 @@
 				247E7F167FC88D12CFB97E6E /* NotificationService.swift in Sources */,
 				519533A448D4CD1CD27F1468 /* OutlookOAuthClient.swift in Sources */,
 				AC7B341B09EE8F0209B51C10 /* OutlookProvider.swift in Sources */,
+				0DB7C69438F866E5C5ABA0F7 /* PaywallCopy.swift in Sources */,
+				877F8EE0A7C440CB413E7318 /* PaywallSheet.swift in Sources */,
+				63012A204163099B1879D8F7 /* PolarConfig.swift in Sources */,
+				5695EBBABC45B7699815BFE5 /* PolarLicenseClient.swift in Sources */,
 				935B42CCC66205110E7804A4 /* SettingsDrawer.swift in Sources */,
 				108FBF2C1043DCE503999E1A /* SettingsView.swift in Sources */,
 				271E73C4E7F99E2CEE5B37EA /* SharedComponents.swift in Sources */,
 				7F602BF6F21F9E50A543133D /* Sidebar.swift in Sources */,
 				6F19E5430EB52E328D689CD3 /* Sound.swift in Sources */,
+				98C957CC8F8FD88836B80555 /* SubscriptionCard.swift in Sources */,
 				2B50C905CE1A2C056310736F /* Telemetry.swift in Sources */,
 				643D1C318D340F378AFDF6A3 /* TelemetryEvent.swift in Sources */,
 				AB04FDB131DB0747824C03A2 /* Theme.swift in Sources */,
@@ -753,14 +793,19 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MailNotifier.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 27;
+				CURRENT_PROJECT_VERSION = 28;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				LS_MINIMUM_SYSTEM_VERSION = 14.0;
-				MARKETING_VERSION = 3.5.1;
+				MARKETING_VERSION = 3.6.0;
+				POLAR_API_BASE = "$(POLAR_API_BASE)";
+				POLAR_BENEFIT_ID = "$(POLAR_BENEFIT_ID)";
+				POLAR_CHECKOUT_URL = "$(POLAR_CHECKOUT_URL)";
+				POLAR_ORG_ID = "$(POLAR_ORG_ID)";
+				POLAR_PORTAL_URL = "$(POLAR_PORTAL_URL)";
 				POSTHOG_API_KEY = "$(POSTHOG_API_KEY)";
 				POSTHOG_HOST = "https://us.i.posthog.com";
 				PRODUCT_BUNDLE_IDENTIFIER = com.strategicnerds.MailNotifierApp;
@@ -771,7 +816,7 @@
 		};
 		229918186B40865D81363975 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_700FA8B5-83E9-4503-96AD-90EDA710CBD9" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_8978B0FF-FC8B-4819-8F6C-9E00783ECC11" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -836,14 +881,19 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MailNotifier.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 27;
+				CURRENT_PROJECT_VERSION = 28;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				LS_MINIMUM_SYSTEM_VERSION = 14.0;
-				MARKETING_VERSION = 3.5.1;
+				MARKETING_VERSION = 3.6.0;
+				POLAR_API_BASE = "$(POLAR_API_BASE)";
+				POLAR_BENEFIT_ID = "$(POLAR_BENEFIT_ID)";
+				POLAR_CHECKOUT_URL = "$(POLAR_CHECKOUT_URL)";
+				POLAR_ORG_ID = "$(POLAR_ORG_ID)";
+				POLAR_PORTAL_URL = "$(POLAR_PORTAL_URL)";
 				POSTHOG_API_KEY = "$(POSTHOG_API_KEY)";
 				POSTHOG_HOST = "https://us.i.posthog.com";
 				PRODUCT_BUNDLE_IDENTIFIER = com.strategicnerds.MailNotifierApp;
@@ -875,7 +925,7 @@
 		};
 		B4A4092827DAC2ECABE337D5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_700FA8B5-83E9-4503-96AD-90EDA710CBD9" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_8978B0FF-FC8B-4819-8F6C-9E00783ECC11" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;

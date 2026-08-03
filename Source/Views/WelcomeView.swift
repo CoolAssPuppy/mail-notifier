@@ -37,7 +37,7 @@ struct WelcomeView: View {
                         subtitle: "Personal or Workspace via OAuth",
                         assetName: "Gmail"
                     ) {
-                        Accounts.authorize(type: .gmail)
+                        connect(.gmail)
                     }
 
                     AppProviderChoiceCard(
@@ -45,7 +45,7 @@ struct WelcomeView: View {
                         subtitle: "Hotmail, Office 365 via Microsoft",
                         assetName: "Outlook"
                     ) {
-                        Accounts.authorize(type: .outlook)
+                        connect(.outlook)
                     }
                 }
                 .padding(.top, 4)
@@ -59,6 +59,20 @@ struct WelcomeView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(theme.background)
+    }
+
+    /// Asks for the paywall instead of starting an OAuth flow that would be
+    /// refused at the end of it. `Accounts.authorize` re-checks after the flow
+    /// completes, so this is courtesy rather than the gate itself: nobody should
+    /// sign in to Google only to be told no.
+    private func connect(_ type: AccountType) {
+        guard Accounts.canAddAccount() else {
+            Telemetry.capture(.paywallShown, properties: ["trigger": PaywallTrigger.addAccount.rawValue,
+                                                          "provider": type.rawValue])
+            NotificationCenter.default.post(name: .showPaywall, object: PaywallTrigger.addAccount)
+            return
+        }
+        Accounts.authorize(type: type)
     }
 
     private var heroBadge: some View {

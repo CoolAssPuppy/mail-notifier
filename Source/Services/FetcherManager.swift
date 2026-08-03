@@ -31,9 +31,22 @@ final class FetcherManager {
         fetchers.values.reduce(0) { $0 + $1.unreadMessagesCount }
     }
 
-    /// Rebuilds the fetchers dictionary based on current enabled accounts.
+    /// The subscription gate, read without hopping to the main actor. `rebuild`
+    /// runs from notification handlers on whatever thread posted them, and this
+    /// reads the same persisted record `EntitlementManager` publishes.
+    private var isEntitled: Bool {
+        EntitlementManager.isEntitledNow()
+    }
+
+    /// Rebuilds the fetchers dictionary based on the accounts currently allowed
+    /// to run.
+    ///
+    /// This is the run gate for the paid multi-account plan. Everything a locked
+    /// account would otherwise do goes through a fetcher, so withholding the
+    /// fetcher stops the polling, the unread count, the notifications, and the
+    /// menu rows in one move.
     func rebuild() {
-        let accounts = Accounts.default.enabled
+        let accounts = Accounts.active(isEntitled: isEntitled)
 
         // Remove fetchers for deleted/disabled accounts
         for email in fetchers.keys where !accounts.contains(where: { $0.email == email }) {

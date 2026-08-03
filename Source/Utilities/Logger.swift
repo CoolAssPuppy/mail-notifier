@@ -27,4 +27,7 @@ enum Log {
 
     /// Network requests and responses
     static let network = Logger(subsystem: subsystem, category: "network")
+
+    /// Subscription entitlement and license keys
+    static let license = Logger(subsystem: subsystem, category: "license")
 }

@@ -2,6 +2,13 @@
 
 This codebase is a 2026 ground-up SwiftUI rewrite of Gmail Notifr, kept under the same repository and changelog for historical continuity. Entries from version 2.1.1 and earlier describe the original Gmail Notifr by James Chen — see "Gmail Notifr (legacy)" below.
 
+## 3.6.0 (unreleased)
+
+* One email account is free forever, with every feature. Watching more than one account now needs Mail Notifier Pro, and you pick the price: pay what you want, from $0.99 a year
+* Reading Gmail requires a restricted Google permission, and every app that asks for one has to pass an independent security assessment every year. Your payment covers that assessment, the Apple developer program, and code signing
+* Mail Notifier Pro covers every Mac you own
+* A new Subscription section in Settings shows your status, takes a license key, and links to the customer portal where you can cancel
+
 ## 3.5.1 (August 2, 2026)
 
 * New default light and dark themes, drawn from the app icon's own colors, following your system appearance

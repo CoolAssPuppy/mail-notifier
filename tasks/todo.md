@@ -1,6 +1,71 @@
 # Todo
 
-## Classic Mode menu bar dropdown (current)
+## Mail Notifier Pro: paid multi-account via Polar (current)
+
+Full design in `tasks/paid-accounts-spec.md`. One account free forever, then
+**Mail Notifier Pro**: a yearly pay-what-you-want subscription, $0.99 minimum and
+$5.99 suggested. Polar license keys validated straight from the app, no server of
+ours. Ported from `../sync-bar`. Mail Notifier Pro lives in the shared Strategic
+Nerds Polar organization, which makes `POLAR_BENEFIT_ID` required rather than
+optional.
+
+### Steps
+- [x] 1. `LicenseProvider.swift` + `PolarConfig.swift` + `PolarLicenseClient.swift`,
+      with `Tests/PolarLicenseClientTests.swift` covering fixture parsing, HTTP
+      status mapping, and the `benefit_id` mismatch rejection.
+- [x] 2. `EntitlementManager.swift` (Keychain + UserDefaults + grace + daily
+      00:00 Pacific check) with `Tests/EntitlementManagerTests.swift` over the
+      pure `reduce`, `isEntitled`, and midnight math.
+- [x] 3. Config plumbing: `POLAR_*` in `project.yml`, `Info.plist`,
+      `Secrets.xcconfig.example` (with the `SLASH` variable for URLs), and
+      `scripts/pull-secrets.sh` reading the Doppler `mail-notifier` project.
+- [x] 4. `Accounts.partition` + `freeAccountLimit` with
+      `Tests/AccountEntitlementTests.swift`.
+- [x] 5. Run gate in `FetcherManager.rebuild()`.
+- [x] 6. Add gate in `Accounts.canAddAccount()`, checked inside both OAuth
+      success branches so every add path is covered, plus a courtesy check in
+      `WelcomeView` so nobody signs in to Google only to be refused.
+- [x] 7. `PaywallSheet.swift`, hosted once in `MainView`, driven by `.showPaywall`.
+- [x] 8. Locked-state display: sidebar badge, `AccountView` banner, popover row
+      and Subscribe pill, classic menu row.
+- [x] 9. `SubscriptionCard.swift` in Settings: status, subscribe or manage,
+      paste key, remove license.
+- [x] 10. Telemetry events + the `is_subscriber` and `account_count` person
+      properties at launch.
+- [x] 11. All pricing copy pulled into `PaywallCopy.swift`, one file, so the
+      pitch can be rewritten without touching SwiftUI.
+- [ ] 12. Polar and Doppler setup. Step by step in `tasks/polar-setup.md`.
+- [ ] 13. Build and run the tests in Xcode. Everything so far was verified with
+      the bare Swift compiler; see the note below.
+- [ ] 14. Sandbox end-to-end: the twelve checks in `tasks/polar-setup.md` Part 3.
+      Do not skip 10 (a Sync Bar key must be rejected) or 12 (a $0.99 purchase
+      must renew at $0.99, not at the $5.99 suggestion).
+- [ ] 15. Release 3.6.0 (build 28). Version and CHANGELOG are already bumped.
+
+### Verification so far
+Xcode is not installed on the build Mac, only Command Line Tools, so
+`xcodebuild` cannot run and neither can XCTest. Instead every file under
+`Source/` was compiled as an SPM target against the real package dependencies,
+and the pure logic was exercised by a standalone runner: 50 checks over the
+partition, the entitlement gate, the grace rules, the midnight math, and the
+Polar response parsing. All 50 pass.
+
+That found two real bugs. `max(0, limit)` inside an `Accounts` extension bound to
+`Collection.max()` rather than the global function, and `loadRecord` inherited
+main-actor isolation from the class, which made the nonisolated gate read
+uncompilable. Both fixed.
+
+What that does NOT cover: the Xcode project builds the same sources with
+different settings, so a clean `xcodebuild` run is still step 13. The SwiftUI
+views type-check but have never been rendered.
+
+### Open item
+Confirm in the Polar sandbox whether a yearly renewal extends a license key's
+`expires_at`. If it does not, a TTL on the benefit would lock out paying
+customers at month 12, which is why the setup guide says to leave the expiry off
+and lean on Polar's revocation-on-cancel instead.
+
+## Classic Mode menu bar dropdown (done)
 
 Goal: an alternative menu bar dropdown that is a standard AppKit `NSMenu` —
 account rows with unread counts, a submenu of unread subjects per account, and

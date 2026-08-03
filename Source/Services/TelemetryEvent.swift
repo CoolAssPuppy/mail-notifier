@@ -39,4 +39,16 @@ enum TelemetryEvent: String {
     // MARK: VIPs
     case vipAdded = "vip_added"
     case vipRemoved = "vip_removed"
+
+    // MARK: Subscription
+    ///
+    /// The paid multi-account gate, added in 3.6.0. No billing metering runs
+    /// through here — these are ordinary product analytics and respect the
+    /// opt-out like everything else.
+    case paywallShown = "paywall_shown"
+    case subscribeClicked = "subscribe_clicked"
+    case licenseActivated = "license_activated"
+    case licenseActivationFailed = "license_activation_failed"
+    case licenseRemoved = "license_removed"
+    case entitlementLapsed = "entitlement_lapsed"
 }

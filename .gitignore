@@ -21,6 +21,9 @@ Pods
 
 # Secrets
 Secrets.xcconfig
+# scripts/pull-polar-secrets.sh writes this backup on every run, and it carries
+# the Google and Outlook credentials along with the Polar values.
+Secrets.xcconfig.bak
 .env
 vendors/gyb.pyc
 
@@ -35,3 +38,6 @@ dist/debug/
 .wrangler/
 default.profraw
 *.profraw
+
+# Local sandbox-test state snapshots
+.test-state/
