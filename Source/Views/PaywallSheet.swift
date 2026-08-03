@@ -5,11 +5,13 @@
 //  Copyright (c) 2026 Strategic Nerds. All rights reserved.
 //
 //  The subscription gate, shown when someone tries to connect a second inbox or
-//  clicks an account the subscription has paused. Two paths out: subscribe in
-//  the browser, or paste a key you already have.
+//  clicks an account the subscription has paused.
 //
-//  No copy lives in this file. Every string comes from `PaywallCopy`, so the
-//  pitch can be rewritten without reading any SwiftUI.
+//  Title, two paragraphs, one button. The X in the corner is the only way out,
+//  because a second dismiss button is one more thing to read. The license paste
+//  field stays folded away: it exists for the few people who already paid.
+//
+//  No copy lives in this file. Every string comes from `PaywallCopy`.
 //
 
 import SwiftUI
@@ -30,99 +32,60 @@ struct PaywallSheet: View {
     private var isEntitled: Bool { entitlement.isEntitled }
 
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(alignment: .leading, spacing: 0) {
             header
-            AppRowDivider()
 
             ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    priceCard
-                    whyCard
+                VStack(alignment: .leading, spacing: 20) {
+                    section(PaywallCopy.whyPayTitle, PaywallCopy.whyPayBody)
+                    section(PaywallCopy.namePriceTitle, PaywallCopy.namePriceBody)
+
                     if isEntitled {
                         activeNote
                     } else {
                         subscribeSection
                     }
-                    termsText
                 }
-                .padding(20)
+                .padding(.horizontal, 24)
+                .padding(.bottom, 24)
             }
-
-            AppRowDivider()
-            footer
         }
-        .frame(width: 480, height: 540)
+        .frame(width: 420, height: 440)
         .background(theme.background)
     }
 
     // MARK: Header
 
     private var header: some View {
-        HStack(alignment: .top) {
-            VStack(alignment: .leading, spacing: 3) {
+        HStack(alignment: .top, spacing: 12) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text(PaywallCopy.sheetTitle)
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(.system(size: 20, weight: .semibold))
                     .foregroundStyle(theme.foreground)
-                    .fixedSize(horizontal: false, vertical: true)
-                Text(trigger.subtitle)
-                    .font(.system(size: 11))
-                    .foregroundStyle(theme.muted)
-            }
-            Spacer(minLength: 12)
-            AppIconButton(systemName: "xmark", help: "Close", action: onClose)
-        }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 14)
-    }
-
-    // MARK: Cards
-
-    private var priceCard: some View {
-        HStack(spacing: 12) {
-            Image(systemName: "creditcard.fill")
-                .font(.system(size: 17))
-                .foregroundStyle(theme.primary)
-                .frame(width: 36, height: 36)
-                .background(
-                    RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
-                        .fill(theme.primary.opacity(0.10))
-                )
-            VStack(alignment: .leading, spacing: 2) {
-                Text(PaywallCopy.priceDetail)
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(theme.foreground)
-                    .fixedSize(horizontal: false, vertical: true)
-                Text(PaywallCopy.terms)
-                    .font(.system(size: 10))
+                Text(PaywallCopy.sheetSubtitle)
+                    .font(.system(size: 12))
                     .foregroundStyle(theme.muted)
                     .fixedSize(horizontal: false, vertical: true)
             }
             Spacer(minLength: 0)
+            AppIconButton(systemName: "xmark", help: "Close", action: onClose)
         }
-        .padding(12)
-        .background(
-            RoundedRectangle(cornerRadius: AppRadius.lg, style: .continuous)
-                .fill(theme.card)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: AppRadius.lg, style: .continuous)
-                .strokeBorder(theme.border, lineWidth: 1)
-        )
+        .padding(.horizontal, 24)
+        .padding(.top, 20)
+        .padding(.bottom, 22)
     }
 
-    private var whyCard: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Why this costs money")
-                .font(.system(size: 11, weight: .semibold))
-                .foregroundStyle(theme.foregroundSoft)
-            Text(PaywallCopy.whyItCosts)
-                .font(.system(size: 11))
+    // MARK: Sections
+
+    private func section(_ title: String, _ body: String) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(title)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(theme.foreground)
+            Text(body)
+                .font(.system(size: 12))
                 .foregroundStyle(theme.muted)
                 .fixedSize(horizontal: false, vertical: true)
-
-            // The short explanation is already printed above, so the link only
-            // needs to add the blunt half.
-            WhyChargeDisclosure()
         }
     }
 
@@ -154,8 +117,6 @@ struct PaywallSheet: View {
                     .foregroundStyle(theme.warning)
             }
 
-            // The paste field is for the few people who already paid, so it
-            // stays folded away until asked for.
             Button(action: { withAnimation(.easeInOut(duration: 0.15)) { showingKeyField.toggle() } }) {
                 HStack(spacing: 4) {
                     Text(PaywallCopy.hasKeyPrompt)
@@ -208,33 +169,6 @@ struct PaywallSheet: View {
             }
         }
         .transition(.opacity.combined(with: .move(edge: .top)))
-    }
-
-    private var termsText: some View {
-        Text(PaywallCopy.terms)
-            .font(.system(size: 9.5))
-            .foregroundStyle(theme.tertiary)
-            .fixedSize(horizontal: false, vertical: true)
-    }
-
-    // MARK: Footer
-
-    private var footer: some View {
-        HStack {
-            if let portal = PolarConfig.portalURL, entitlement.hasStoredKey {
-                Link(destination: portal) {
-                    Text(PaywallCopy.manageButton)
-                        .font(.system(size: 11))
-                        .foregroundStyle(theme.primary)
-                }
-                .buttonStyle(.plain)
-            }
-            Spacer()
-            AppSecondaryButton(title: isEntitled ? "Done" : "Not now", action: onClose)
-        }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 12)
-        .background(theme.surface)
     }
 
     // MARK: Actions

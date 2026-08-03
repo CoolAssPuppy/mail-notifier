@@ -58,7 +58,6 @@
 		76F39F9F8773910330AE6912 /* tink.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 9C8EFDEA092A0EBFB3E5D6D6 /* tink.aiff */; };
 		7DE29D4B3AD2AEBF2C7DBCBD /* EntitlementManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514ECAFB8D90312B1941B8C1 /* EntitlementManagerTests.swift */; };
 		7F602BF6F21F9E50A543133D /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA368017C433781193033E36 /* Sidebar.swift */; };
-		80216D3C5DB908BF02028F3C /* WhyChargeDisclosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F3E740D5E25D039DEC3F57 /* WhyChargeDisclosure.swift */; };
 		80C1E959D8CE2FA2E0AAA547 /* blink.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 73AAE4A7C6CDDDE233434EDF /* blink.aiff */; };
 		81A3AE5017A11FE76DDCE696 /* blow.aiff in Resources */ = {isa = PBXBuildFile; fileRef = F6DAF857CA22E98B94C10855 /* blow.aiff */; };
 		829D98671D3D6E6DC2B62C9D /* MessageFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FF22B8637AB803593786448 /* MessageFetcherTests.swift */; };
@@ -227,7 +226,6 @@
 		C9E6D008DD5BAF95CFF8084B /* spring.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = spring.aiff; sourceTree = "<group>"; };
 		CE931D6EE91DBF896449D68A /* Browser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Browser.swift; sourceTree = "<group>"; };
 		CFA5A0D3E956C8348D5CE371 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		D0F3E740D5E25D039DEC3F57 /* WhyChargeDisclosure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhyChargeDisclosure.swift; sourceTree = "<group>"; };
 		D1ABB68AADF378733BB99F07 /* bottle.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = bottle.aiff; sourceTree = "<group>"; };
 		D512FA1103BB22CBF481A3A7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = "en.lproj/.!21433!Localizable.strings"; sourceTree = "<group>"; };
 		D6C83F8313F9B9B2D8322268 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
@@ -250,7 +248,7 @@
 		F97EC5717616078BDE263058 /* hero.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = hero.aiff; sourceTree = "<group>"; };
 		FB460ED3BAD3CC445B93C9FE /* AppDelegate+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Menu.swift"; sourceTree = "<group>"; };
 		FEC6D3AB06F5E6F578CB2B26 /* morse.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = morse.aiff; sourceTree = "<group>"; };
-		"TEMP_A8A7DB23-0690-446F-B20D-44A0F3B4247D" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		"TEMP_8978B0FF-FC8B-4819-8F6C-9E00783ECC11" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -309,7 +307,6 @@
 				77FB3766905EFB7F02226051 /* MenuStylePicker.swift */,
 				2EDE02622D66D28B58223F26 /* SharedComponents.swift */,
 				44CCF144D4B126CA44B9CAA2 /* SubscriptionCard.swift */,
-				D0F3E740D5E25D039DEC3F57 /* WhyChargeDisclosure.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -483,10 +480,10 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		"TEMP_AC7B9370-41A2-4DEC-B9DC-97E3AA94422F" /* mail-notifier */ = {
+		"TEMP_259C7E61-E72D-4003-A102-BA4F8A05A593" /* mail-notifier */ = {
 			isa = PBXGroup;
 			children = (
-				"TEMP_A8A7DB23-0690-446F-B20D-44A0F3B4247D" /* Secrets.xcconfig */,
+				"TEMP_8978B0FF-FC8B-4819-8F6C-9E00783ECC11" /* Secrets.xcconfig */,
 			);
 			path = "mail-notifier";
 			sourceTree = "<group>";
@@ -728,7 +725,6 @@
 				42E9081BE938811A5683C9A5 /* UpdaterManager.swift in Sources */,
 				A0F0A08A7BC55D3BB180D455 /* VIP.swift in Sources */,
 				408FED39F299B062EC152101 /* WelcomeView.swift in Sources */,
-				80216D3C5DB908BF02028F3C /* WhyChargeDisclosure.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -820,7 +816,7 @@
 		};
 		229918186B40865D81363975 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_A8A7DB23-0690-446F-B20D-44A0F3B4247D" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_8978B0FF-FC8B-4819-8F6C-9E00783ECC11" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -929,7 +925,7 @@
 		};
 		B4A4092827DAC2ECABE337D5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_A8A7DB23-0690-446F-B20D-44A0F3B4247D" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_8978B0FF-FC8B-4819-8F6C-9E00783ECC11" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;

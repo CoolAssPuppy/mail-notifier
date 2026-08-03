@@ -44,16 +44,6 @@ struct SubscriptionCard: View {
                     AppRowDivider().padding(.vertical, 10)
                     removeRow
                 }
-
-                if entitlement.state != .unavailable {
-                    AppRowDivider().padding(.vertical, 10)
-                    // Settings has no room for the long explanation up top, so
-                    // the link carries both halves of the answer.
-                    HStack {
-                        WhyChargeDisclosure(includesShortExplanation: true)
-                        Spacer(minLength: 0)
-                    }
-                }
             }
         }
     }
