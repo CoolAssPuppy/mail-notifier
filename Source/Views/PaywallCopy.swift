@@ -59,7 +59,7 @@ enum PaywallCopy {
     static let keyFieldPlaceholder = "Paste your license key"
 
     /// People look for the key in the app first, so say where it went.
-    static let keyLocationHint = "Polar emails your key the moment you subscribe."
+    static let keyLocationHint = "Polar emails your key when you subscribe."
 
     // MARK: Locked accounts
 
@@ -68,10 +68,7 @@ enum PaywallCopy {
 
     static let lockedBannerTitle = "This account is paused"
 
-    static let lockedBannerBody = """
-        The first email is free and this one is past that, so it isn't being \
-        checked. Nothing has been deleted.
-        """
+    static let lockedBannerBody = "You get one account for free. Subscribe to check this one too."
 
     /// The escape hatch for someone who doesn't want to pay but picked the wrong
     /// account to keep. Without this, whichever account was added first wins
@@ -90,19 +87,19 @@ enum PaywallCopy {
 
     static let settingsFreeState = "Free. One account."
 
-    static let settingsFreeDescription = "\(planName) unlocks the rest, for a price you name."
+    static let settingsFreeDescription = "Subscribe to add more, for a price you name."
 
     static let settingsActiveState = planName
 
     static let settingsLapsedState = "\(planName) is inactive"
 
-    static let settingsLapsedDescription = "Accounts past the first are paused. Renew to bring them back."
+    static let settingsLapsedDescription = "Your extra accounts are paused. Renew to turn them back on."
 
     static let manageButton = "Manage subscription"
 
     static let removeLicenseButton = "Remove from this Mac"
 
-    static let removeLicenseDescription = "Frees this Mac's activation. The subscription itself is unaffected."
+    static let removeLicenseDescription = "Frees up this Mac. Your subscription keeps working everywhere else."
 
     // MARK: Unconfigured build
 

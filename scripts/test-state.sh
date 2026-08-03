@@ -8,6 +8,7 @@
 #   ./scripts/test-state.sh accounts N      keep only the first N accounts
 #   ./scripts/test-state.sh clear-license   forget the license and the cache
 #   ./scripts/test-state.sh run             launch the Debug build
+#   ./scripts/test-state.sh quit            stop it, which `xcodebuild test` needs
 #
 # Why this exists: the Debug build carries the same bundle id as the copy in
 # /Applications, so it reads the same UserDefaults and the same Keychain. There
@@ -28,6 +29,20 @@ SNAPSHOT="$STATE_DIR/defaults.plist"
 CMD="${1:-status}"
 
 is_running() { pgrep -qf "Mail Notifier.app/Contents/MacOS/Mail Notifier"; }
+
+# `tell application "Mail Notifier" to quit` does not reliably stop this app, and
+# a leftover process makes `xcodebuild test` fail to launch the test host. Signal
+# the pids directly.
+quit_app() {
+  is_running || return 0
+  pkill -f "Mail Notifier.app/Contents/MacOS/Mail Notifier" || true
+  for _ in 1 2 3 4 5; do
+    is_running || return 0
+    sleep 1
+  done
+  pkill -9 -f "Mail Notifier.app/Contents/MacOS/Mail Notifier" || true
+  sleep 1
+}
 
 require_quit() {
   if is_running; then
@@ -147,15 +162,19 @@ sys.stdout.buffer.write(plistlib.dumps(d))
     [[ -d "$app" ]] || { echo "Error: no Debug build at $app"; exit 1; }
     if is_running; then
       echo "Quitting the running copy first."
-      osascript -e 'tell application "Mail Notifier" to quit' 2>/dev/null || true
-      sleep 2
+      quit_app
     fi
     open "$app"
     echo "==> Launched $app"
     ;;
 
+  quit)
+    quit_app
+    echo "==> Mail Notifier is not running."
+    ;;
+
   *)
-    sed -n '3,12p' "${BASH_SOURCE[0]}" | sed 's|^# \{0,1\}||'
+    sed -n '3,13p' "${BASH_SOURCE[0]}" | sed 's|^# \{0,1\}||'
     exit 1
     ;;
 esac
