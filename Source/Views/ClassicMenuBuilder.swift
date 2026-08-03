@@ -43,6 +43,9 @@ enum ClassicMenuBuilder {
         var checkAll: () -> Void
         var openWindow: () -> Void
         var openSettings: () -> Void
+        /// Opens the main window with the paywall up. An `NSMenu` row has no
+        /// room to make the case, so a locked account hands off.
+        var subscribe: () -> Void
         var quit: () -> Void
     }
 
@@ -51,6 +54,7 @@ enum ClassicMenuBuilder {
 
     static func makeMenu(accounts: Accounts,
                          fetcherManager: FetcherManager,
+                         lockedEmails: Set<String> = [],
                          actions: Actions) -> NSMenu {
         let menu = NSMenu()
         // Items here are enabled explicitly. Automatic enabling walks the
@@ -64,6 +68,7 @@ enum ClassicMenuBuilder {
             for account in accounts {
                 menu.addItem(accountItem(for: account,
                                          fetcher: fetcherManager.fetcher(for: account.email),
+                                         isLocked: lockedEmails.contains(account.email),
                                          actions: actions))
             }
         }
@@ -91,7 +96,20 @@ enum ClassicMenuBuilder {
 
     private static func accountItem(for account: Account,
                                     fetcher: MessageFetcher?,
+                                    isLocked: Bool = false,
                                     actions: Actions) -> NSMenuItem {
+        // A locked account has no fetcher, so there is no unread count and no
+        // submenu to build. The row exists to say why it's quiet and to offer
+        // the way out.
+        if isLocked {
+            let item = ClassicMenuItem(title: lockedTitle(for: account)) {
+                actions.subscribe()
+            }
+            item.image = providerIcon(for: account.type)
+            item.toolTip = account.email
+            return item
+        }
+
         let hasAuthError = fetcher?.hasAuthError ?? false
         let unreadCount = fetcher?.unreadMessagesCount ?? 0
         let messages = fetcher?.messages ?? []
@@ -122,6 +140,10 @@ enum ClassicMenuBuilder {
 
     private static func accountTitle(for account: Account, unreadCount: Int) -> String {
         unreadCount > 0 ? "\(account.displayName) (\(unreadCount))" : account.displayName
+    }
+
+    private static func lockedTitle(for account: Account) -> String {
+        "\(account.displayName) (\(PaywallCopy.lockedBadge))"
     }
 
     private static func authErrorTitle(for account: Account) -> String {

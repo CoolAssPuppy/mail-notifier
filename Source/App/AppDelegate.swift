@@ -39,6 +39,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         Telemetry.setup()
 
         notificationService.delegate = self
+        if PolarConfig.isBenefitPinMissing {
+            Log.license.error("POLAR_BENEFIT_ID is empty while POLAR_ORG_ID is set. Mail Notifier shares its Polar organization with the other Strategic Nerds apps, so any of their license keys will unlock this one. Set the benefit id before shipping.")
+        }
+        // Started before the fetchers are built so the launch validate is
+        // already in flight when the first rebuild reads the entitlement.
+        EntitlementManager.shared.start()
         FriendlyNameStore.shared.start()
         registerShortcuts()
         subscribeToNotifications()
@@ -53,14 +59,22 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // only across the people who went and changed a setting.
         let menuStyle = menuStyleStore.current.rawValue
         let theme = ThemeStore.shared.current
+        // `is_subscriber` and `account_count` ride along as person properties so
+        // the paid split is measurable across the whole install base. An event
+        // breakdown only counts people who fired an event, and someone content
+        // on the free tier fires nothing at all.
+        let isSubscriber = EntitlementManager.isEntitledNow()
         Telemetry.capture(
             .appLaunched,
             properties: ["menu_style": menuStyle,
                          "theme": theme.rawValue,
-                         "theme_appearance": theme.appearance],
+                         "theme_appearance": theme.appearance,
+                         "is_subscriber": isSubscriber],
             userProperties: ["menu_style": menuStyle,
                              "theme": theme.rawValue,
-                             "theme_appearance": theme.appearance]
+                             "theme_appearance": theme.appearance,
+                             "is_subscriber": isSubscriber,
+                             "account_count": Accounts.default.count]
         )
         reportUpdateInstalledIfNeeded()
 
@@ -202,9 +216,13 @@ private extension AppDelegate {
             }
             .store(in: &subscriptions)
 
+        // Order decides which account occupies the free slot, so a reorder can
+        // start one account checking and stop another. Rebuilding is no longer
+        // optional here.
         NotificationCenter.default
             .publisher(for: .accountsReordered)
             .sink { [weak self] _ in
+                self?.fetcherManager.update()
                 self?.updateMenuBar()
             }
             .store(in: &subscriptions)
@@ -252,6 +270,20 @@ private extension AppDelegate {
             .publisher(for: .friendlyNamesChanged)
             .sink { [weak self] _ in
                 self?.updateMenuBar()
+            }
+            .store(in: &subscriptions)
+
+        // Activating or losing a license changes which accounts are allowed to
+        // run, and fetchers are built from that. Without this, a freshly
+        // activated license wouldn't start checking the unlocked inboxes until
+        // something else happened to rebuild.
+        NotificationCenter.default
+            .publisher(for: .entitlementChanged)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                self.fetcherManager.update()
+                self.updateMenuBar()
             }
             .store(in: &subscriptions)
     }
@@ -319,6 +351,7 @@ extension AppDelegate {
         present(menu: ClassicMenuBuilder.makeMenu(
             accounts: Accounts.default,
             fetcherManager: fetcherManager,
+            lockedEmails: Set(Accounts.locked(isEntitled: EntitlementManager.isEntitledNow()).map(\.email)),
             actions: classicMenuActions()
         ))
         Telemetry.capture(.menuOpened, properties: ["style": MenuStyle.classic.rawValue])
@@ -344,6 +377,9 @@ extension AppDelegate {
             },
             openSettings: { [weak self] in
                 self?.showSettingsDrawer()
+            },
+            subscribe: { [weak self] in
+                self?.showPaywall(trigger: .lockedAccount)
             },
             quit: {
                 NSApp.terminate(nil)
@@ -421,6 +457,10 @@ extension AppDelegate: NSPopoverDelegate {
             openSettings: { [weak self] in
                 self?.popover?.performClose(nil)
                 self?.showSettingsDrawer()
+            },
+            subscribe: { [weak self] in
+                self?.popover?.performClose(nil)
+                self?.showPaywall(trigger: .lockedAccount)
             },
             quit: {
                 NSApp.terminate(nil)
@@ -584,6 +624,18 @@ extension AppDelegate {
             // Wait one runloop tick so the window exists and MainView is mounted.
             try? await Task.sleep(nanoseconds: 50_000_000)
             NotificationCenter.default.post(name: .openSettingsDrawer, object: nil)
+        }
+    }
+
+    /// Brings up the main window with the paywall sheet on top. `MainView` hosts
+    /// the sheet, so the window has to exist and be mounted before the
+    /// notification lands. Same one-tick wait as the settings drawer.
+    func showPaywall(trigger: PaywallTrigger) {
+        showPreferences()
+        Telemetry.capture(.paywallShown, properties: ["trigger": trigger.rawValue])
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 50_000_000)
+            NotificationCenter.default.post(name: .showPaywall, object: trigger)
         }
     }
 }

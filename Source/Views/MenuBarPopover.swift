@@ -17,6 +17,9 @@ final class MenuBarPopoverModel: ObservableObject {
         let hasAuthError: Bool
         let recentMessages: [Message]
         let lastCheckedAt: Date?
+        /// The subscription is holding this account back, so it has no fetcher
+        /// and nothing to report. The row stays, saying why.
+        var isLocked: Bool = false
 
         var id: String { account.email }
 
@@ -25,6 +28,7 @@ final class MenuBarPopoverModel: ObservableObject {
             guard lhs.account.enabled == rhs.account.enabled else { return false }
             guard lhs.unreadCount == rhs.unreadCount else { return false }
             guard lhs.hasAuthError == rhs.hasAuthError else { return false }
+            guard lhs.isLocked == rhs.isLocked else { return false }
             guard lhs.lastCheckedAt == rhs.lastCheckedAt else { return false }
             let lhsIds = lhs.recentMessages.map(\.id)
             let rhsIds = rhs.recentMessages.map(\.id)
@@ -48,6 +52,7 @@ final class MenuBarPopoverModel: ObservableObject {
     }
 
     func refresh() {
+        let locked = Set(Accounts.locked(isEntitled: EntitlementManager.isEntitledNow()).map(\.email))
         let next: [AccountState] = Accounts.default.map { account in
             let fetcher = fetcherManager.fetcher(for: account.email)
             let messages = (fetcher?.messages ?? []).prefix(Self.recentMessageLimit)
@@ -56,7 +61,8 @@ final class MenuBarPopoverModel: ObservableObject {
                 unreadCount: fetcher?.unreadMessagesCount ?? 0,
                 hasAuthError: fetcher?.hasAuthError ?? false,
                 recentMessages: Array(messages),
-                lastCheckedAt: fetcher?.lastCheckedAt
+                lastCheckedAt: fetcher?.lastCheckedAt,
+                isLocked: locked.contains(account.email)
             )
         }
 
@@ -104,6 +110,9 @@ struct MenuBarPopoverActions {
     var checkAll: () -> Void
     var openWindow: () -> Void
     var openSettings: () -> Void
+    /// Opens the main window with the paywall up. The popover is too small to
+    /// hold the pitch, so a locked row hands off rather than explaining itself.
+    var subscribe: () -> Void
     var quit: () -> Void
 }
 
@@ -145,7 +154,8 @@ struct MenuBarPopover: View {
                         vipEmails: model.vipEmails,
                         onOpenInbox: { actions.openInbox(state.account) },
                         onOpenMessage: actions.openMessage,
-                        onReauthorize: { actions.reauthorize(state.account) }
+                        onReauthorize: { actions.reauthorize(state.account) },
+                        onSubscribe: actions.subscribe
                     )
                 }
             }
@@ -289,13 +299,14 @@ private struct AccountCard: View {
     let onOpenInbox: () -> Void
     let onOpenMessage: (Message) -> Void
     let onReauthorize: () -> Void
+    var onSubscribe: () -> Void = {}
 
     @Environment(\.theme) private var theme
     @State private var isExpanded = false
     @State private var isHovered = false
 
     private var canExpand: Bool {
-        !state.hasAuthError && !state.recentMessages.isEmpty
+        !state.hasAuthError && !state.isLocked && !state.recentMessages.isEmpty
     }
 
     var body: some View {
@@ -332,9 +343,10 @@ private struct AccountCard: View {
 
     private var headerRow: some View {
         HStack(spacing: 10) {
-            Button(action: openInboxTapped) {
+            Button(action: state.isLocked ? onSubscribe : openInboxTapped) {
                 HStack(spacing: 10) {
-                    ProviderBadge(type: state.account.type, size: 29, dimmed: state.hasAuthError)
+                    ProviderBadge(type: state.account.type, size: 29,
+                                  dimmed: state.hasAuthError || state.isLocked)
 
                     VStack(alignment: .leading, spacing: 1) {
                         Text(state.account.displayName)
@@ -363,7 +375,16 @@ private struct AccountCard: View {
 
     @ViewBuilder
     private var subtitle: some View {
-        if state.hasAuthError {
+        if state.isLocked {
+            HStack(spacing: 5) {
+                Image(systemName: "lock.fill")
+                    .font(.system(size: 9))
+                    .foregroundStyle(theme.warning)
+                Text(LocalizedStringKey(PaywallCopy.lockedMenuItem))
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundStyle(theme.warning)
+            }
+        } else if state.hasAuthError {
             HStack(spacing: 5) {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .font(.system(size: 9))
@@ -383,7 +404,22 @@ private struct AccountCard: View {
 
     @ViewBuilder
     private var trailingAccessory: some View {
-        if state.hasAuthError {
+        if state.isLocked {
+            Button(action: onSubscribe) {
+                Text("Subscribe")
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundStyle(theme.warning)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 4)
+                    .background(
+                        Capsule().fill(theme.warning.opacity(0.12))
+                    )
+                    .overlay(
+                        Capsule().strokeBorder(theme.warning.opacity(0.4), lineWidth: 1)
+                    )
+            }
+            .buttonStyle(.plain)
+        } else if state.hasAuthError {
             Button(action: onReauthorize) {
                 Text("Reauthorize")
                     .font(.system(size: 10, weight: .semibold))

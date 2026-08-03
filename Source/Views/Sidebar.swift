@@ -14,6 +14,9 @@ struct Sidebar: View {
     @Environment(\.theme) private var theme
     @Binding var selection: String?
     var totalUnread: Int = 0
+    /// Accounts the subscription is holding back. They keep their row so the
+    /// person can see nothing was lost, and the row says why it's quiet.
+    var lockedEmails: Set<String> = []
     var onOpenSettings: () -> Void = {}
 
     var body: some View {
@@ -103,7 +106,8 @@ struct Sidebar: View {
                     SidebarAccountRow(
                         account: account,
                         isSelected: selection == account.email,
-                        unreadCount: unreadCount(for: account)
+                        unreadCount: unreadCount(for: account),
+                        isLocked: lockedEmails.contains(account.email)
                     )
                     .onTapGesture {
                         selection = account.email
@@ -178,6 +182,7 @@ private struct SidebarAccountRow: View {
     let account: Account
     let isSelected: Bool
     let unreadCount: Int
+    var isLocked: Bool = false
 
     @ObservedObject private var friendlyNames = FriendlyNameStore.shared
     @Environment(\.theme) private var theme
@@ -185,7 +190,7 @@ private struct SidebarAccountRow: View {
 
     var body: some View {
         HStack(spacing: 10) {
-            ProviderBadge(type: account.type, size: 22, dimmed: !account.enabled)
+            ProviderBadge(type: account.type, size: 22, dimmed: !account.enabled || isLocked)
 
             VStack(alignment: .leading, spacing: 1) {
                 Text(account.displayName)
@@ -215,7 +220,7 @@ private struct SidebarAccountRow: View {
         )
         .contentShape(Rectangle())
         .onHover { isHovered = $0 }
-        .opacity(account.enabled ? 1 : 0.55)
+        .opacity(account.enabled && !isLocked ? 1 : 0.55)
     }
 
     private var subtitle: String {
@@ -241,7 +246,18 @@ private struct SidebarAccountRow: View {
 
     @ViewBuilder
     private var trailingBadge: some View {
-        if !account.enabled {
+        if isLocked {
+            HStack(spacing: 3) {
+                Image(systemName: "lock.fill")
+                    .font(.system(size: 8, weight: .semibold))
+                Text(PaywallCopy.lockedBadge)
+                    .font(.system(size: 9, weight: .semibold))
+            }
+            .foregroundStyle(theme.warning)
+            .padding(.horizontal, 6)
+            .padding(.vertical, 2)
+            .background(Capsule().fill(theme.warning.opacity(0.12)))
+        } else if !account.enabled {
             Text("Off")
                 .font(.system(size: 9, weight: .semibold))
                 .foregroundStyle(theme.tertiary)

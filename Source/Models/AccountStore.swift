@@ -74,6 +74,46 @@ extension Accounts {
     static var hasAccounts: Bool { !Self.default.isEmpty }
 }
 
+// MARK: - Subscription Gate
+
+extension Accounts {
+    /// How many accounts run without a subscription. Everything past this needs
+    /// the paid plan. One number, one place, so changing the free tier is a
+    /// one-line edit rather than a hunt through the gates.
+    static let freeAccountLimit = 1
+
+    /// Enabled accounts split into the ones that may run and the ones the
+    /// subscription gates.
+    ///
+    /// The free slots go to the first enabled accounts in the stored order,
+    /// which is the order the sidebar shows. "Use this one instead" on a locked
+    /// account's banner moves it to the front, and that is how someone chooses
+    /// which inbox stays free. The partition runs over *enabled* accounts on
+    /// purpose: turning an account off shouldn't strand its free slot on
+    /// something that isn't running.
+    ///
+    /// Pure and static so it tests without a store, a network, or a UI.
+    static func partition(enabled accounts: [Account],
+                          isEntitled: Bool,
+                          limit: Int = freeAccountLimit) -> (active: [Account], locked: [Account]) {
+        guard !isEntitled else { return (accounts, []) }
+        // Qualified: `Accounts` is a Collection, so a bare `max` binds to the
+        // instance method rather than the global function.
+        let cut = Swift.max(0, limit)
+        return (Array(accounts.prefix(cut)), Array(accounts.dropFirst(cut)))
+    }
+
+    /// Enabled accounts allowed to run under the current entitlement.
+    static func active(isEntitled: Bool) -> [Account] {
+        partition(enabled: Array(Self.default.enabled), isEntitled: isEntitled).active
+    }
+
+    /// Enabled accounts the subscription is holding back. Empty when entitled.
+    static func locked(isEntitled: Bool) -> [Account] {
+        partition(enabled: Array(Self.default.enabled), isEntitled: isEntitled).locked
+    }
+}
+
 // MARK: - Account Management
 
 extension Accounts {

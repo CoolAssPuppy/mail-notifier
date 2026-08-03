@@ -12,12 +12,17 @@ struct AccountView: View {
     @ObservedObject private var friendlyNames = FriendlyNameStore.shared
     @Environment(\.theme) private var theme
     @State var account: Account
+    /// True when the subscription is holding this account back. The account is
+    /// otherwise untouched: settings still edit, tokens stay put, and it starts
+    /// checking again the moment a license activates.
+    var isLocked: Bool = false
     @State private var friendlyNameDraft: String
     @State private var showingDeleteAlert = false
     @FocusState private var friendlyFieldFocused: Bool
 
-    init(account: Account) {
+    init(account: Account, isLocked: Bool = false) {
         self._account = State(initialValue: account)
+        self.isLocked = isLocked
         self._friendlyNameDraft = State(initialValue: account.friendlyName ?? "")
     }
 
@@ -27,6 +32,8 @@ struct AccountView: View {
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
+                    if isLocked { lockedBanner }
+
                     identityCard
 
                     notificationsCard
@@ -328,6 +335,63 @@ struct AccountView: View {
                 }
             }
         }
+    }
+
+    // MARK: - Locked banner
+
+    private var lockedBanner: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: "lock.fill")
+                .font(.system(size: 15))
+                .foregroundStyle(theme.warning)
+                .frame(width: 34, height: 34)
+                .background(
+                    RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
+                        .fill(theme.warning.opacity(0.12))
+                )
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(PaywallCopy.lockedBannerTitle)
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(theme.foreground)
+                Text(PaywallCopy.lockedBannerBody)
+                    .font(.system(size: 11))
+                    .foregroundStyle(theme.muted)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            Spacer(minLength: 8)
+
+            VStack(alignment: .trailing, spacing: 6) {
+                AppPrimaryButton(title: LocalizedStringKey(PaywallCopy.subscribeButton)) {
+                    Telemetry.capture(.paywallShown,
+                                      properties: ["trigger": PaywallTrigger.lockedAccount.rawValue])
+                    NotificationCenter.default.post(name: .showPaywall,
+                                                    object: PaywallTrigger.lockedAccount)
+                }
+                AppSecondaryButton(title: LocalizedStringKey(PaywallCopy.makeFreeButton)) {
+                    makeThisTheFreeAccount()
+                }
+                .help(LocalizedStringKey(PaywallCopy.makeFreeDescription))
+            }
+        }
+        .padding(14)
+        .background(
+            RoundedRectangle(cornerRadius: AppRadius.lg, style: .continuous)
+                .fill(theme.card)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: AppRadius.lg, style: .continuous)
+                .strokeBorder(theme.warning.opacity(0.35), lineWidth: 1)
+        )
+    }
+
+    /// Moves this account to the front of the stored order, which is what the
+    /// free slot is handed to. The account that held it becomes locked. This is
+    /// the only way to choose, since the sidebar has no drag reordering.
+    private func makeThisTheFreeAccount() {
+        guard let index = accounts.firstIndex(where: { $0.id == account.id }) else { return }
+        accounts.reorder(fromOffsets: IndexSet(integer: index), toOffset: 0)
     }
 
     // MARK: - Management card

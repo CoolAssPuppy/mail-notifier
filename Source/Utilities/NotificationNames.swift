@@ -27,6 +27,15 @@ extension Notification.Name {
     static let mailToReceived = Notification.Name("mailToReceived")
     static let openPreferencesWindow = Notification.Name("openPreferencesWindow")
 
+    // MARK: Subscription Events
+    /// The cached entitlement changed. Fetchers are built from the entitlement,
+    /// so this has to reach `FetcherManager` and the menu bar, not only the
+    /// SwiftUI views bound to `EntitlementManager.record`.
+    static let entitlementChanged = Notification.Name("entitlementChanged")
+    /// Something tried to do a paid thing without a subscription. The object is
+    /// the `PaywallTrigger` that asked, which decides the sheet's wording.
+    static let showPaywall = Notification.Name("showPaywall")
+
     // MARK: UI Events
     static let openSettingsDrawer = Notification.Name("openSettingsDrawer")
     static let friendlyNamesChanged = Notification.Name("friendlyNamesChanged")

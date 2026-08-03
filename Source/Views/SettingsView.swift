@@ -31,6 +31,7 @@ struct SettingsView: View {
                 .frame(maxWidth: .infinity)
 
                 VStack(spacing: 14) {
+                    SubscriptionCard()
                     menuStyleCard
                     updatesCard
                     contactCard

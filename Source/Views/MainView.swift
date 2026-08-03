@@ -11,8 +11,10 @@ import AppKit
 struct MainView: View {
     @AppStorage(Accounts.storageKey) var accounts = Accounts()
     @ObservedObject private var themeStore = ThemeStore.shared
+    @ObservedObject private var entitlement = EntitlementManager.shared
     @Binding var selection: String?
     @State private var isSettingsOpen = false
+    @State private var paywallTrigger: PaywallTrigger?
 
     var body: some View {
         let theme = themeStore.palette
@@ -22,6 +24,7 @@ struct MainView: View {
                     accounts: accounts,
                     selection: $selection,
                     totalUnread: FetcherManager.shared.totalUnreadCount,
+                    lockedEmails: lockedEmails,
                     onOpenSettings: { isSettingsOpen.toggle() }
                 )
                 .frame(width: 260)
@@ -45,6 +48,26 @@ struct MainView: View {
         .onReceive(NotificationCenter.default.publisher(for: .openSettingsDrawer)) { _ in
             isSettingsOpen = true
         }
+        // The paywall is hosted once, here, because both entry points live below
+        // this view: the connect buttons in `WelcomeView` and the locked banner
+        // in `AccountView`. Both post the notification rather than carrying
+        // their own sheet.
+        .onReceive(NotificationCenter.default.publisher(for: .showPaywall)) { notification in
+            paywallTrigger = notification.object as? PaywallTrigger ?? .addAccount
+        }
+        .sheet(item: $paywallTrigger) { trigger in
+            PaywallSheet(trigger: trigger) { paywallTrigger = nil }
+                .environment(\.theme, themeStore.palette)
+                .environment(\.colorScheme, themeStore.palette.isDark ? .dark : .light)
+        }
+    }
+
+    /// Enabled accounts the subscription is currently holding back. Computed
+    /// here and passed down so the sidebar and the account view agree, and so
+    /// both redraw when `entitlement.record` changes.
+    private var lockedEmails: Set<String> {
+        Set(Accounts.partition(enabled: Array(accounts.enabled),
+                               isEntitled: entitlement.isEntitled).locked.map(\.email))
     }
 
     @ViewBuilder
@@ -53,10 +76,10 @@ struct MainView: View {
             WelcomeView()
         } else if let email = selection,
                   let account = accounts.first(where: { $0.email == email }) {
-            AccountView(account: account)
+            AccountView(account: account, isLocked: lockedEmails.contains(account.email))
                 .id(account.email)
         } else if let firstAccount = accounts.first {
-            AccountView(account: firstAccount)
+            AccountView(account: firstAccount, isLocked: lockedEmails.contains(firstAccount.email))
                 .id(firstAccount.email)
                 .onAppear {
                     selection = firstAccount.email

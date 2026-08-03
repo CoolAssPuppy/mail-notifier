@@ -114,6 +114,46 @@ enum AppButtonTint {
     case foreground, primary, destructive
 }
 
+// MARK: - Primary (filled) button
+
+/// The one call to action in a view. Filled with the theme's accent so it reads
+/// as the thing to press, next to bordered secondary buttons.
+struct AppPrimaryButton: View {
+    let title: LocalizedStringKey
+    var systemImage: String? = nil
+    var isDisabled: Bool = false
+    var fillsWidth: Bool = false
+    let action: () -> Void
+
+    @Environment(\.theme) private var theme
+    @State private var isHovered = false
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 6) {
+                if let systemImage {
+                    Image(systemName: systemImage)
+                        .font(.system(size: 11, weight: .semibold))
+                }
+                Text(title)
+                    .font(.system(size: 11, weight: .semibold))
+            }
+            .foregroundStyle(theme.primaryForeground)
+            .frame(maxWidth: fillsWidth ? .infinity : nil)
+            .padding(.horizontal, 13)
+            .padding(.vertical, 7)
+            .background(
+                RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
+                    .fill(isHovered && !isDisabled ? theme.primaryDeep : theme.primary)
+            )
+            .opacity(isDisabled ? 0.4 : 1)
+        }
+        .buttonStyle(.plain)
+        .disabled(isDisabled)
+        .onHover { isHovered = $0 }
+    }
+}
+
 // MARK: - Secondary (bordered) button
 
 struct AppSecondaryButton: View {

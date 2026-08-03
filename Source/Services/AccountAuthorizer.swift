@@ -116,6 +116,10 @@ extension Accounts {
                         account.authorization = authorization
                         accounts.update(account: account)
                     } else {
+                        guard Self.canAddAccount() else {
+                            Self.refuseAdd(provider: "gmail")
+                            return
+                        }
                         var account = Account(email: userEmail, type: .gmail)
                         account.authorization = authorization
                         accounts.add(account: account)
@@ -145,6 +149,10 @@ extension Accounts {
                         account.authState = state
                         accounts.update(account: account)
                     } else {
+                        guard Self.canAddAccount() else {
+                            Self.refuseAdd(provider: "outlook")
+                            return
+                        }
                         var account = Account(email: email, type: .outlook)
                         account.authState = state
                         accounts.add(account: account)
@@ -152,6 +160,33 @@ extension Accounts {
                     }
                 }
             }
+        }
+    }
+
+    // MARK: Subscription gate
+
+    /// Whether another account may be created right now.
+    ///
+    /// This sits inside the OAuth success branch rather than only in front of
+    /// the connect buttons, because this is the single function that turns a
+    /// finished OAuth flow into a stored account. A gate here covers the two
+    /// provider cards, the popover's add button, the classic menu's add item,
+    /// and whatever entry point gets added next. Reauthorizing an account that
+    /// already exists never reaches this check.
+    static func canAddAccount() -> Bool {
+        if EntitlementManager.isEntitledNow() { return true }
+        return Self.default.enabled.count < Accounts.freeAccountLimit
+    }
+
+    /// Drops a completed-but-unpayable authorization and asks for the paywall.
+    /// The OAuth tokens are simply never written, so nothing has to be cleaned
+    /// up; the account was never created.
+    private static func refuseAdd(provider: String) {
+        Log.auth.info("Refusing to add a \(provider, privacy: .public) account: free account limit reached and no active subscription")
+        Telemetry.capture(.paywallShown, properties: ["trigger": PaywallTrigger.addAccount.rawValue,
+                                                      "provider": provider])
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: .showPaywall, object: PaywallTrigger.addAccount)
         }
     }
 
