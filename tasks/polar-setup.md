@@ -116,10 +116,12 @@ This is the part that matters. Without it, people can pay and get nothing.
 2. Type: **License Keys**.
 3. Description: `Mail Notifier Pro license`. Customers see this.
 4. Options:
-   - **Limit activations**: leave it **OFF**. You asked for unlimited devices, and
-     off means a subscriber can run every Mac they own. The app still registers an
-     activation per Mac so each one is named in the customer portal and can be
-     released from Settings, it just never hits a ceiling.
+   - **Limit activations**: **ON, set to 5**. The app registers one activation
+     per Mac, so a subscriber gets five machines. Each is named in the customer
+     portal by its computer name and can be released from Settings, which frees
+     the slot. The one rough edge is a Mac that gets wiped or sold without
+     removing the license first: that activation stays claimed until the person
+     releases it from the portal by hand.
    - **Limit usage**: leave it **OFF**. Nothing here is metered.
    - **Expires after / TTL**: leave it **OFF**. Read the warning below before
      changing this.
@@ -228,6 +230,27 @@ or Outlook credentials.
 
 ## Part 3: Test it end to end
 
+The Debug build carries the same bundle id as the copy in `/Applications`, so
+both read the same UserDefaults and the same Keychain. There is no separate
+profile to test against: the sandbox pass runs against your real accounts, and
+the second and third of them go Locked the moment you launch a build with no
+license. That is the feature working, and it is reversible, but mail stops being
+checked for those accounts until you activate a key or restore.
+
+`scripts/test-state.sh` handles the setup and teardown:
+
+    ./scripts/test-state.sh backup          # do this first, once
+    ./scripts/test-state.sh status          # accounts, entitlement, keychain, baked config
+    ./scripts/test-state.sh accounts 1      # trim to one account for test 1
+    ./scripts/test-state.sh restore         # put every account back
+    ./scripts/test-state.sh clear-license   # forget the key, to re-run activation
+    ./scripts/test-state.sh run             # launch the Debug build
+
+Trimming accounts rewrites UserDefaults only, so OAuth tokens survive and
+`restore` brings an account back intact. **Deleting an account through the app UI
+is different**: it clears the account's Keychain entry, and getting it back costs
+a full re-authorization. Do not use the UI to set up a test.
+
 With the sandbox build running:
 
 1. **Free tier.** With one account configured, everything works and no paywall
@@ -272,6 +295,85 @@ With the sandbox build running:
     created by that $0.99 purchase and confirm its recurring amount is $0.99
     rather than $5.99. Polar should bill the chosen amount on renewal. Worth
     seeing with your own eyes before the first real renewal a year from now.
+13. **The activation ceiling.** The benefit allows five devices. There is only
+    one Mac here, so exhaust the limit from the Polar sandbox dashboard instead:
+    activate the key, then add four more activations by hand until the key is at
+    5 of 5. Remove the license in Mail Notifier's Settings and paste it again.
+    It must be refused with **"This license is already active on the maximum
+    number of devices. Remove it from one first."**
+
+    This one is worth the trouble because the app detects it by *substring
+    match* on Polar's error text (`PolarLicenseClient.checkStatus` looks for
+    "activation" and "limit"), not by status code. If Polar words the message
+    differently than expected, the test fails with the generic "Couldn't reach
+    the subscription service (HTTP 403)" instead, and that tells you the match
+    needs updating.
+
+    Then confirm the release path: remove one activation in the portal and
+    activate again. It should succeed.
+14. **The comp discount.** Create the 100% forever discount from Part 3a in the
+    sandbox and buy Mail Notifier Pro SANDBOX with it. Three things to watch, in
+    order of how likely they are to go wrong:
+
+    - The discount field accepts the code on a **pay-what-you-want** product at
+      all. This is the unknown. If Polar rejects a percentage discount against a
+      customer-chosen amount, stop and use the $0 comp product instead.
+    - Checkout asks for **no card** and completes at $0.
+    - The key that arrives **activates and unlocks**, exactly like a paid one.
+      It carries the same `benefit_id`, so it should.
+
+    Then look at the subscription in the dashboard and confirm the discount
+    reads as applying forever rather than once. A "once" discount looks
+    identical today and bills you in a year.
+
+## Part 3a: A comp license for yourself
+
+You run this app every day and should not pay yourself through Stripe to do it.
+The route is a 100% forever discount, redeemed once against your own checkout.
+It produces a real license key down the real code path, which is worth more than
+a special case in the app would be.
+
+The key never expires: the benefit has no TTL, so `expires_at` is nil and
+`EntitlementManager.isEntitled` skips the date check entirely. Nothing renews
+because nothing lapses. Polar only revokes on a cancelled subscription or a
+failed payment, and a 100% forever subscription has no payment to fail.
+
+No card is involved. Per Polar's discount docs: "Free products and 100% forever
+subscriptions never ask for a card, so those match on ID and email alone."
+
+### Creating it
+
+1. Dashboard, **Discounts**, **New Discount**.
+2. Name: `Owner comp`. The customer sees this at checkout, and the customer is
+   you.
+3. Code: something you will not type by accident. Not `COMP` or `FREE`.
+4. Type: **Percentage**, **100%**.
+5. Duration: **Forever**. "Once" would bill you at renewal a year later, which
+   you would discover as a surprise charge.
+6. **Restrictions: restrict it to Mail Notifier Pro.** Do not skip this. Polar's
+   default is the opposite of what you want here: "By default the discount can
+   be applied to all products, also ones created after the discount was
+   created." In a shared organization that means one leaked code gives away Sync
+   Bar, Mail Notifier, and every app you add later, forever, with no card. Pin it
+   to the one product.
+7. Max redemptions: **1**. Max per customer: **1**.
+
+Then buy your own product with the code, and paste the key into the app like any
+other customer.
+
+### The part to check in sandbox first
+
+Mail Notifier Pro is priced pay-what-you-want, and Polar's docs do not say
+whether a percentage discount applies to a customer-chosen amount. It may work,
+it may be rejected at checkout, or the discount field may not appear at all.
+Find out in sandbox where it costs nothing to be wrong.
+
+If it does not work, the fallback is a second product: `Mail Notifier Pro (Comp)`
+priced at a one-time $0, unlisted, with **the existing License Keys benefit
+attached** rather than a new one. Benefits are organization-level in Polar and
+attach to many products, so the key carries the same `benefit_id` and the app's
+pin accepts it with no code change. That route also has no subscription at all,
+so there is nothing to cancel.
 
 ## Part 4: Production
 
@@ -297,8 +399,24 @@ A running record, so nothing has to be hunted twice. None of these are secret.
 | What | Sandbox | Production |
 | --- | --- | --- |
 | Organization id | `e9c2e741-5aa8-42ad-b2e5-2cb942952273` | `94dde5cb-90d9-47ba-b51c-d453f5e785d1` |
-| Product id | `b31e3864-5297-40f7-8d15-7c21c0b1e3fc` | not created yet |
-| Benefit id | **not collected yet, see below** | not created yet |
+| Product id | `b31e3864-5297-40f7-8d15-7c21c0b1e3fc` | `2497f1b6-36fb-4173-abae-d949845cec77` |
+| Benefit id | `661eadf0-4c31-4d4c-8644-a446a08d4e28` | `e917cb15-3ae5-4518-9c1f-76c78130f11d` |
+
+Production was created 3 August 2026 and is verified: the checkout page reports
+`amount_type: custom`, `minimum_amount: 99`, `preset_amount: 599`,
+`recurring_interval: year`, and a `license_keys` benefit named "Mail Notifier Pro
+License Key" whose id matches the `prd` Doppler value. Both benefits cap
+activations at 5.
+
+Sandbox is verified the same way, against **Mail Notifier Pro SANDBOX**: the same
+`custom` / `99` / `599` / `year` pricing and a `license_keys` benefit named "Mail
+Notifier Pro License SANDBOX" whose id matches Doppler `mail-notifier/dev`.
+
+One trap already sprung once: the sandbox `POLAR_CHECKOUT_URL` in Doppler was
+Sync Bar's checkout link, copied byte for byte from `sync-bar/dev`. The paywall's
+Subscribe button sold the wrong app and nothing in the build complained, because
+a checkout link is just a URL to the app. If a checkout link ever looks wrong,
+fetch it and read the `<title>`: it names the organization and the product.
 
 The organization ids came from Sync Bar, which shares the Strategic Nerds
 organization. `scripts/bootstrap-doppler.sh` already seeds both into Doppler, so

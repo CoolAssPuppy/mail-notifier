@@ -60,12 +60,19 @@ enum Formatters {
 
     /// Relative label for message/timestamp rows: "3:42 PM" today, "Yesterday",
     /// "Mon" within the last week, "Jan 4" older.
+    ///
+    /// Every branch measures against `reference`, which defaults to now. The
+    /// "today" and "yesterday" cases used `isDateInToday`/`isDateInYesterday`,
+    /// which always compare to the system clock and ignored the argument, so
+    /// passing a fixed reference silently did nothing and the tests only passed
+    /// on the day they were written.
     static func relativeLabel(for date: Date, reference: Date = Date()) -> String {
         let calendar = Calendar.current
-        if calendar.isDateInToday(date) {
+        if calendar.isDate(date, inSameDayAs: reference) {
             return shortTime.string(from: date)
         }
-        if calendar.isDateInYesterday(date) {
+        if let yesterday = calendar.date(byAdding: .day, value: -1, to: reference),
+           calendar.isDate(date, inSameDayAs: yesterday) {
             return "Yesterday"
         }
         if let days = calendar.dateComponents([.day], from: date, to: reference).day, days < 7 {

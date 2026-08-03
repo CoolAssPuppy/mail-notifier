@@ -79,9 +79,13 @@ struct PolarLicenseClient: LicenseProvider {
 
     /// Maps an HTTP status to a semantic error, leaving 2xx to the parser. 404
     /// is an unknown key. An activation-limit rejection is called out by name so
-    /// the paywall can say something useful; Mail Notifier's benefit sets no
-    /// limit, but a future change in the Polar dashboard shouldn't produce a
-    /// baffling error here.
+    /// the paywall can say something useful: Mail Notifier's benefit caps
+    /// activations at five devices, so this is a path a real subscriber can hit
+    /// rather than a theoretical guard.
+    ///
+    /// Polar signals it in the error *text*, not the status code, so the match
+    /// below is a substring test. If Polar rewords the message this degrades to
+    /// the generic `requestFailed` copy, which is worse but not wrong.
     static func checkStatus(_ response: URLResponse, data: Data) throws {
         guard let http = response as? HTTPURLResponse else { return }
         switch http.statusCode {

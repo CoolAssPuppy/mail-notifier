@@ -29,9 +29,12 @@ Notifier collects no personal data for billing), one paid capability instead of 
   setup, one dashboard. The cost is that the benefit pin below stops being
   optional. Polar's license endpoint grants on organization membership, so
   without the pin a Sync Bar subscriber's key unlocks Mail Notifier.
-- **No activation limit.** A subscription covers every Mac the person owns.
-  Activation still happens, because it is what names a device in the customer
-  portal and hands back the activation id used on validate and deactivate.
+- **Five activations.** A subscription covers up to five Macs. Activation is
+  also what names a device in the customer portal and hands back the activation
+  id used on validate and deactivate. Removing the license in Settings releases
+  the activation remotely, so a slot is recoverable from the app; a Mac that is
+  wiped or sold without that step leaves an activation stranded until the person
+  releases it from the Polar customer portal.
 - **Config comes from Doppler**, project `mail-notifier`, through a new
   `scripts/pull-secrets.sh` ported from sync-bar.
 - **Lapse behavior:** extra accounts go inactive, config preserved. Nothing is
