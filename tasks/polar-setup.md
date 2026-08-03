@@ -368,6 +368,26 @@ subscriptions never ask for a card, so those match on ID and email alone."
 Then buy your own product with the code, and paste the key into the app like any
 other customer.
 
+### Audit the discounts that already exist
+
+"Also ones created after the discount was created" cuts backwards too. Every
+discount made in this organization before Mail Notifier Pro existed, including
+Sync Bar's, silently began applying to Mail Notifier Pro the moment the product
+was created. That is how the first attempt at this failed: an existing Sync Bar
+code was set to All Products.
+
+So adding a product to a shared Polar organization has a step nobody writes
+down: **go through every existing discount and restrict it.** Do it in both
+sandbox and production. Then do it again the next time an app joins the
+organization, because the same defaulting will pull those codes onto that
+product too.
+
+This is a different hole from the benefit pin, and one does not cover the other.
+The pin decides who is *entitled* once they hold a key. A loose discount decides
+what they *pay* to get one. A code restricted to Sync Bar with the benefit pin
+missing gives Mail Notifier away for free; a code set to All Products with the
+pin correct sells Mail Notifier for nothing and hands over a perfectly valid key.
+
 ### The part to check in sandbox first
 
 Mail Notifier Pro is priced pay-what-you-want, and Polar's docs do not say
