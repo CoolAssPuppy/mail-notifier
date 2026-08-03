@@ -19,6 +19,13 @@
 # UI clears its Keychain entry and costs a re-authorization; trimming the
 # accounts list here only rewrites UserDefaults, so the tokens survive and
 # `restore` brings the account back intact.
+#
+# Expect a Keychain prompt the first time the Debug build reads your tokens, and
+# possibly another from the release build afterwards. The Debug build is signed
+# "Apple Development" and the shipped app is signed "Developer ID", so macOS sees
+# two different programs asking for the same items even though the bundle id and
+# team match. Click Always Allow. Clicking Deny leaves the app unable to read a
+# token, which costs a re-authorization for that account.
 
 set -euo pipefail
 

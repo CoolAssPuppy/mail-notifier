@@ -251,6 +251,13 @@ Trimming accounts rewrites UserDefaults only, so OAuth tokens survive and
 is different**: it clears the account's Keychain entry, and getting it back costs
 a full re-authorization. Do not use the UI to set up a test.
 
+**Expect Keychain prompts.** The Debug build is signed `Apple Development` and
+the shipped app is signed `Developer ID`. Same bundle id, same team, different
+certificate, so macOS treats them as two different programs asking for the same
+stored tokens and asks permission each time the other one has touched them. It
+is not a sign anything is wrong. Click Always Allow; clicking Deny leaves that
+account unable to read its token and costs a re-authorization.
+
 With the sandbox build running:
 
 1. **Free tier.** With one account configured, everything works and no paywall
