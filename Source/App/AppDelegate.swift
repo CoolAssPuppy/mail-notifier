@@ -42,6 +42,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if PolarConfig.isBenefitPinMissing {
             Log.license.error("POLAR_BENEFIT_ID is empty while POLAR_ORG_ID is set. Mail Notifier shares its Polar organization with the other Strategic Nerds apps, so any of their license keys will unlock this one. Set the benefit id before shipping.")
         }
+        // Before anything reads the account list, so a demo session that was
+        // left on comes back up as a demo session.
+        DemoMode.shared.applyAtLaunch()
+
         // Started before the fetchers are built so the launch validate is
         // already in flight when the first rebuild reads the entitlement.
         EntitlementManager.shared.start()

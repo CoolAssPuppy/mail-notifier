@@ -80,9 +80,13 @@ final class MessageFetcher: NSObject {
     }
 
     private static func makeProvider(for account: Account) -> MailProvider {
+        // Demo mode swaps the network for a script. Checked here rather than
+        // inside each provider so no demo account can ever reach a real API.
+        guard !DemoMode.isOnNow else { return DemoProvider(account: account) }
+
         switch account.type {
-        case .gmail: GmailProvider(account: account)
-        case .outlook: OutlookProvider(account: account)
+        case .gmail: return GmailProvider(account: account)
+        case .outlook: return OutlookProvider(account: account)
         }
     }
 

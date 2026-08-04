@@ -200,6 +200,9 @@ final class EntitlementManager: ObservableObject {
     /// paywall nobody can pay through would just break the app.
     nonisolated static func isEntitledNow(defaults: UserDefaults = .standard,
                                           now: Date = Date()) -> Bool {
+        // Demo mode runs every fake account, otherwise the screenshots would be
+        // one inbox and two locked badges.
+        guard !DemoMode.isOnNow else { return true }
         guard PolarConfig.isConfigured else { return true }
         return isEntitled(record: loadRecord(from: defaults), now: now)
     }

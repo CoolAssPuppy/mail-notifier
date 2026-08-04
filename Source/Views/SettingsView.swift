@@ -11,6 +11,7 @@ import KeyboardShortcuts
 struct SettingsView: View {
     @StateObject private var launchAtLogin = LaunchAtLoginManager.shared
     @StateObject private var updater = UpdaterManager.shared
+    @StateObject private var demoMode = DemoMode.shared
     @AppStorage(AppSettings.showUnreadCount) private var showUnreadCount = AppSettings.shared.showUnreadCount
     @AppStorage(AppSettings.openSettingsOnStartKey) private var openSettingsOnStart = false
     @AppStorage(VIPList.storageKey) private var vipList = VIPList()
@@ -242,10 +243,18 @@ struct SettingsView: View {
 
                 AppRowDivider().padding(.vertical, 10)
 
+                // The version row is also the way into demo mode: right-click
+                // it. Hidden on purpose — it is a screenshot tool, not a
+                // feature — but not secret, since the menu says what it does.
                 AppSettingRow("Current version", description: nil) {
                     Text(appVersion)
                         .font(.system(size: 11, design: .monospaced))
-                        .foregroundStyle(theme.foreground)
+                        .foregroundStyle(demoMode.isOn ? theme.warning : theme.foreground)
+                }
+                .contextMenu {
+                    Button(demoMode.isOn ? "Turn Demo Mode off" : "Turn Demo Mode on") {
+                        demoMode.toggle()
+                    }
                 }
 
                 AppRowDivider().padding(.vertical, 10)
