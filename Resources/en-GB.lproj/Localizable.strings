@@ -135,7 +135,6 @@
 
 "Contact" = "Contact";
 "Contribute on GitHub" = "Contribute on GitHub";
-"Buy me coffee" = "Buy me a coffee";
 "Buy my book" = "Buy my book";
 
 
@@ -150,3 +149,36 @@
 
 "Unread Message" = "%d unread message";
 "Unread Messages" = "%d unread messages";
+
+
+// MARK: - Menu bar popover — subscription
+
+"Subscribe" = "Subscribe";
+
+
+// MARK: - Settings — Menu Style card
+
+"Menu Style" = "Menu Style";
+"Choose what the menu bar icon opens. Classic follows your system light or dark appearance and ignores themes." = "Choose what the menu bar icon opens. Classic follows your system light or dark appearance and ignores themes.";
+"Pretty" = "Pretty";
+"Classic" = "Classic";
+"Themed popover with message previews." = "Themed popover with message previews.";
+"Standard macOS menu that follows the system appearance." = "Standard macOS menu that follows the system appearance.";
+
+
+// MARK: - AppKit classic menu (NSLocalizedString)
+
+"Add an account…" = "Add an account…";
+"Open Inbox" = "Open Inbox";
+"%@ — Authorization expired" = "%@ — Authorisation expired";
+"%lld more unread" = "%lld more unread";
+"(No subject)" = "(No subject)";
+
+
+// MARK: - Subscription errors (LicenseError)
+
+"Subscriptions aren't available in this build yet." = "Subscriptions aren't available in this build yet.";
+"That license key wasn't recognized. Check it and try again." = "That licence key wasn't recognised. Check it and try again.";
+"That license key is for a different product." = "That licence key is for a different product.";
+"This license is already active on the maximum number of devices. Remove it from one first." = "This licence is already active on the maximum number of devices. Remove it from one first.";
+"Couldn't reach the subscription service (HTTP %lld): %@" = "Couldn't reach the subscription service (HTTP %lld): %@";

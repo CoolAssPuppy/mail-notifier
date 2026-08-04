@@ -296,19 +296,6 @@ struct SettingsView: View {
                     title: "Contribute on GitHub",
                     url: "https://github.com/CoolAssPuppy/mail-notifier"
                 )
-                // "Buy me coffee" is a plain label; Venmo and Revolut are the
-                // two donation links, so this row needs inline links rather than
-                // the single-destination contactRow helper.
-                HStack(spacing: 8) {
-                    Image(systemName: "cup.and.saucer.fill")
-                        .font(.system(size: 12))
-                        .foregroundStyle(theme.muted)
-                        .frame(width: 16, alignment: .center)
-                    Text("Buy me coffee ([Venmo](https://venmo.com/u/coolasspuppy), [Revolut](https://revolut.me/coolasspuppy))")
-                        .font(.system(size: 12))
-                        .foregroundStyle(theme.foreground)
-                        .tint(theme.primary)
-                }
                 contactRow(
                     iconView: AnyView(
                         Image(systemName: "book.closed.fill")

@@ -135,7 +135,6 @@
 
 "Contact" = "संपर्क";
 "Contribute on GitHub" = "GitHub पर योगदान दें";
-"Buy me coffee" = "मुझे कॉफ़ी पिलाएँ";
 "Buy my book" = "मेरी किताब खरीदें";
 
 
@@ -150,3 +149,36 @@
 
 "Unread Message" = "%d न पढ़ा संदेश";
 "Unread Messages" = "%d न पढ़े संदेश";
+
+
+// MARK: - Menu bar popover — subscription
+
+"Subscribe" = "सदस्यता लें";
+
+
+// MARK: - Settings — Menu Style card
+
+"Menu Style" = "मेन्यू शैली";
+"Choose what the menu bar icon opens. Classic follows your system light or dark appearance and ignores themes." = "चुनें कि मेन्यू बार आइकन क्या खोलता है। क्लासिक सिस्टम के हल्के या गहरे रूप का अनुसरण करता है और थीम को अनदेखा करता है।";
+"Pretty" = "सुंदर";
+"Classic" = "क्लासिक";
+"Themed popover with message previews." = "संदेश पूर्वावलोकन के साथ थीम वाला पॉपओवर।";
+"Standard macOS menu that follows the system appearance." = "मानक macOS मेन्यू जो सिस्टम के रूप का अनुसरण करता है।";
+
+
+// MARK: - AppKit classic menu (NSLocalizedString)
+
+"Add an account…" = "खाता जोड़ें…";
+"Open Inbox" = "इनबॉक्स खोलें";
+"%@ — Authorization expired" = "%@ — प्राधिकरण समाप्त हो गया";
+"%lld more unread" = "%lld और न पढ़े गए";
+"(No subject)" = "(कोई विषय नहीं)";
+
+
+// MARK: - Subscription errors (LicenseError)
+
+"Subscriptions aren't available in this build yet." = "इस बिल्ड में सदस्यता अभी उपलब्ध नहीं है।";
+"That license key wasn't recognized. Check it and try again." = "वह लाइसेंस कुंजी पहचानी नहीं गई। इसे जाँचें और फिर कोशिश करें।";
+"That license key is for a different product." = "वह लाइसेंस कुंजी किसी दूसरे उत्पाद की है।";
+"This license is already active on the maximum number of devices. Remove it from one first." = "यह लाइसेंस पहले से ही अधिकतम डिवाइसों पर सक्रिय है। पहले किसी एक से हटाएँ।";
+"Couldn't reach the subscription service (HTTP %lld): %@" = "सदस्यता सेवा तक नहीं पहुँच सके (HTTP %lld): %@";

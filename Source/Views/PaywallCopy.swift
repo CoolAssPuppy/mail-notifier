@@ -22,7 +22,7 @@ enum PaywallCopy {
     static let planName = "Mail Notifier Pro"
 
     /// The floor Polar enforces at checkout. Nobody can pay less than this.
-    static let priceMinimum = "$0.99"
+    static let priceMinimum = "$1.99"
 
     static let subscribeButton = "Get \(planName)"
 
@@ -31,14 +31,16 @@ enum PaywallCopy {
     static let sheetTitle = planName
 
     static let sheetSubtitle =
-        "The first email is free. After that, unlock \(planName) for a price you get to name."
+        "Your first email account is free. After that, I need to charge to unlock multiple email accounts."
 
-    static let whyPayTitle = "Why do you need to pay?"
+    static let whyPayTitle = "Why?"
 
     static let whyPayBody = """
-        Google sucks. It's that simple. They make app developers who want access \
-        to certain APIs pay to get them certified. Certifying this app costs real \
-        money. So, unfortunately, I need to charge.
+        Because Google sucks and is not a developer-friendly company. They make \
+        individual developers submit for annual bogus certification run by \
+        third-parties. In order to recoup their fee, I have to charge a minimal \
+        amount per year. Don't hate the player, hate the game. In this case, \
+        Google and all of greedy BigTech.
         """
 
     static let namePriceTitle = "Name your price"

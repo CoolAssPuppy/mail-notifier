@@ -135,7 +135,6 @@
 
 "Contact" = "聯絡";
 "Contribute on GitHub" = "在 GitHub 上貢獻";
-"Buy me coffee" = "請我喝咖啡";
 "Buy my book" = "購買我的書";
 
 
@@ -150,3 +149,36 @@
 
 "Unread Message" = "%d 封未讀郵件";
 "Unread Messages" = "%d 封未讀郵件";
+
+
+// MARK: - Menu bar popover — subscription
+
+"Subscribe" = "訂閱";
+
+
+// MARK: - Settings — Menu Style card
+
+"Menu Style" = "選單樣式";
+"Choose what the menu bar icon opens. Classic follows your system light or dark appearance and ignores themes." = "選擇點按選單列圖像時開啟的內容。經典樣式會跟隨系統的淺色或深色外觀，並忽略佈景主題。";
+"Pretty" = "精美";
+"Classic" = "經典";
+"Themed popover with message previews." = "附訊息預覽的主題彈出式視窗。";
+"Standard macOS menu that follows the system appearance." = "跟隨系統外觀的標準 macOS 選單。";
+
+
+// MARK: - AppKit classic menu (NSLocalizedString)
+
+"Add an account…" = "加入帳號…";
+"Open Inbox" = "開啟收件匣";
+"%@ — Authorization expired" = "%@ — 授權已逾期";
+"%lld more unread" = "另有 %lld 封未讀";
+"(No subject)" = "（無主旨）";
+
+
+// MARK: - Subscription errors (LicenseError)
+
+"Subscriptions aren't available in this build yet." = "此版本尚未提供訂閱。";
+"That license key wasn't recognized. Check it and try again." = "無法辨識該授權金鑰。請檢查後再試一次。";
+"That license key is for a different product." = "該授權金鑰屬於其他產品。";
+"This license is already active on the maximum number of devices. Remove it from one first." = "此授權已在最多數量的裝置上啟用。請先從其中一部移除。";
+"Couldn't reach the subscription service (HTTP %lld): %@" = "無法連線至訂閱服務 (HTTP %lld)：%@";

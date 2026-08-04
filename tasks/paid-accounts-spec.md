@@ -6,7 +6,7 @@ Doppler setup is the remaining manual work; see `tasks/polar-setup.md`.
 ## Goal
 
 One email account stays free forever. A second and any further account require
-**Mail Notifier Pro**, a yearly pay-what-you-want subscription with a $0.99
+**Mail Notifier Pro**, a yearly pay-what-you-want subscription with a $1.99
 minimum and $5.99 suggested, sold through Polar (polar.sh) as merchant of record.
 The gate is a Polar license key that the app validates directly against Polar's
 customer-portal endpoints, which need no auth and no server of ours.
@@ -19,7 +19,7 @@ Notifier collects no personal data for billing), one paid capability instead of 
 ## Decisions already made
 
 - **Name and price:** the plan is **Mail Notifier Pro**, a yearly subscription
-  priced **pay what you want**: $0.99 minimum, $5.99 pre-filled at checkout. One
+  priced **pay what you want**: $1.99 minimum, $5.99 pre-filled at checkout. One
   product, one price entry. No trial, no lifetime tier yet. The app never learns
   the amount, so PWYW costs zero code; the entitlement is the license key alone.
 - **No grandfathering.** There is no installed base to protect, so the gate

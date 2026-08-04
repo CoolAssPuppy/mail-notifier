@@ -135,7 +135,6 @@
 
 "Contact" = "連絡先";
 "Contribute on GitHub" = "GitHub で貢献";
-"Buy me coffee" = "コーヒーをおごる";
 "Buy my book" = "本を購入";
 
 
@@ -150,3 +149,36 @@
 
 "Unread Message" = "未読 %d 件";
 "Unread Messages" = "未読 %d 件";
+
+
+// MARK: - Menu bar popover — subscription
+
+"Subscribe" = "登録";
+
+
+// MARK: - Settings — Menu Style card
+
+"Menu Style" = "メニューのスタイル";
+"Choose what the menu bar icon opens. Classic follows your system light or dark appearance and ignores themes." = "メニューバーのアイコンで何を開くかを選びます。クラシックはシステムのライト/ダークの外観に従い、テーマを無視します。";
+"Pretty" = "モダン";
+"Classic" = "クラシック";
+"Themed popover with message previews." = "メッセージのプレビュー付きテーマ対応ポップオーバー。";
+"Standard macOS menu that follows the system appearance." = "システムの外観に従う標準の macOS メニュー。";
+
+
+// MARK: - AppKit classic menu (NSLocalizedString)
+
+"Add an account…" = "アカウントを追加…";
+"Open Inbox" = "受信トレイを開く";
+"%@ — Authorization expired" = "%@ — 認証の有効期限切れ";
+"%lld more unread" = "他に未読 %lld 件";
+"(No subject)" = "(件名なし)";
+
+
+// MARK: - Subscription errors (LicenseError)
+
+"Subscriptions aren't available in this build yet." = "このビルドではまだサブスクリプションを利用できません。";
+"That license key wasn't recognized. Check it and try again." = "そのライセンスキーは認識されませんでした。確認してからもう一度お試しください。";
+"That license key is for a different product." = "そのライセンスキーは別の製品のものです。";
+"This license is already active on the maximum number of devices. Remove it from one first." = "このライセンスはすでに上限の台数で使用中です。まず 1 台から削除してください。";
+"Couldn't reach the subscription service (HTTP %lld): %@" = "サブスクリプションサービスに接続できませんでした (HTTP %lld): %@";

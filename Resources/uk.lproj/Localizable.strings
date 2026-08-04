@@ -135,7 +135,6 @@
 
 "Contact" = "Контакти";
 "Contribute on GitHub" = "Долучитися на GitHub";
-"Buy me coffee" = "Пригостіть кавою";
 "Buy my book" = "Купити мою книгу";
 
 
@@ -150,3 +149,36 @@
 
 "Unread Message" = "%d непрочитаний лист";
 "Unread Messages" = "%d непрочитаних листів";
+
+
+// MARK: - Menu bar popover — subscription
+
+"Subscribe" = "Підписатися";
+
+
+// MARK: - Settings — Menu Style card
+
+"Menu Style" = "Стиль меню";
+"Choose what the menu bar icon opens. Classic follows your system light or dark appearance and ignores themes." = "Виберіть, що відкриває піктограма в рядку меню. Класичне меню відповідає світлому чи темному вигляду системи та ігнорує теми.";
+"Pretty" = "Гарне";
+"Classic" = "Класичне";
+"Themed popover with message previews." = "Вікно з темою та попереднім переглядом повідомлень.";
+"Standard macOS menu that follows the system appearance." = "Звичайне меню macOS, що відповідає вигляду системи.";
+
+
+// MARK: - AppKit classic menu (NSLocalizedString)
+
+"Add an account…" = "Додати обліковий запис…";
+"Open Inbox" = "Відкрити скриньку";
+"%@ — Authorization expired" = "%@ — авторизація прострочена";
+"%lld more unread" = "ще %lld непрочитаних";
+"(No subject)" = "(Без теми)";
+
+
+// MARK: - Subscription errors (LicenseError)
+
+"Subscriptions aren't available in this build yet." = "Підписки ще не доступні в цій збірці.";
+"That license key wasn't recognized. Check it and try again." = "Цей ліцензійний ключ не розпізнано. Перевірте його та спробуйте ще раз.";
+"That license key is for a different product." = "Цей ліцензійний ключ від іншого продукту.";
+"This license is already active on the maximum number of devices. Remove it from one first." = "Ця ліцензія вже активна на максимальній кількості пристроїв. Спершу видаліть її з одного.";
+"Couldn't reach the subscription service (HTTP %lld): %@" = "Не вдалося зв'язатися зі службою підписок (HTTP %lld): %@";

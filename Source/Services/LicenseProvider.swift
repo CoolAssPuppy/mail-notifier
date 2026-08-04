@@ -68,18 +68,22 @@ enum LicenseError: LocalizedError, Equatable, Sendable {
     case requestFailed(status: Int, message: String)
     case invalidResponse(String)
 
+    /// The last case carries text from Polar, which arrives in English no
+    /// matter what the Mac is set to. Everything else is ours to translate.
     var errorDescription: String? {
         switch self {
         case .notConfigured:
-            return "Subscriptions aren't available in this build yet."
+            return NSLocalizedString("Subscriptions aren't available in this build yet.", comment: "")
         case .invalidKey:
-            return "That license key wasn't recognized. Check it and try again."
+            return NSLocalizedString("That license key wasn't recognized. Check it and try again.", comment: "")
         case .wrongProduct:
-            return "That license key is for a different product."
+            return NSLocalizedString("That license key is for a different product.", comment: "")
         case .activationLimitReached:
-            return "This license is already active on the maximum number of devices. Remove it from one first."
+            return NSLocalizedString("This license is already active on the maximum number of devices. Remove it from one first.",
+                                     comment: "")
         case .requestFailed(let status, let message):
-            return "Couldn't reach the subscription service (HTTP \(status)): \(message)"
+            return String(format: NSLocalizedString("Couldn't reach the subscription service (HTTP %lld): %@", comment: ""),
+                          status, message)
         case .invalidResponse(let message):
             return message
         }

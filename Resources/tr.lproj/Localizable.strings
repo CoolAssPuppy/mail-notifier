@@ -135,7 +135,6 @@
 
 "Contact" = "İletişim";
 "Contribute on GitHub" = "GitHub'da katkıda bulun";
-"Buy me coffee" = "Bana bir kahve ısmarla";
 "Buy my book" = "Kitabımı satın al";
 
 
@@ -150,3 +149,36 @@
 
 "Unread Message" = "%d okunmamış ileti";
 "Unread Messages" = "%d okunmamış ileti";
+
+
+// MARK: - Menu bar popover — subscription
+
+"Subscribe" = "Abone ol";
+
+
+// MARK: - Settings — Menu Style card
+
+"Menu Style" = "Menü stili";
+"Choose what the menu bar icon opens. Classic follows your system light or dark appearance and ignores themes." = "Menü çubuğu simgesinin neyi açacağını seçin. Klasik, sistemin açık veya koyu görünümünü izler ve temaları yok sayar.";
+"Pretty" = "Şık";
+"Classic" = "Klasik";
+"Themed popover with message previews." = "Mesaj önizlemeli, temalı pencere.";
+"Standard macOS menu that follows the system appearance." = "Sistem görünümünü izleyen standart macOS menüsü.";
+
+
+// MARK: - AppKit classic menu (NSLocalizedString)
+
+"Add an account…" = "Hesap ekle…";
+"Open Inbox" = "Gelen kutusunu aç";
+"%@ — Authorization expired" = "%@ — yetkinin süresi doldu";
+"%lld more unread" = "%lld okunmamış daha";
+"(No subject)" = "(Konu yok)";
+
+
+// MARK: - Subscription errors (LicenseError)
+
+"Subscriptions aren't available in this build yet." = "Abonelikler bu sürümde henüz kullanılamıyor.";
+"That license key wasn't recognized. Check it and try again." = "Bu lisans anahtarı tanınmadı. Kontrol edip yeniden deneyin.";
+"That license key is for a different product." = "Bu lisans anahtarı başka bir ürüne ait.";
+"This license is already active on the maximum number of devices. Remove it from one first." = "Bu lisans zaten en fazla sayıda cihazda etkin. Önce birinden kaldırın.";
+"Couldn't reach the subscription service (HTTP %lld): %@" = "Abonelik hizmetine ulaşılamadı (HTTP %lld): %@";

@@ -135,7 +135,6 @@
 
 "Contact" = "联系";
 "Contribute on GitHub" = "在 GitHub 贡献";
-"Buy me coffee" = "请我喝杯咖啡";
 "Buy my book" = "购买我的书";
 
 
@@ -150,3 +149,36 @@
 
 "Unread Message" = "%d 封未读邮件";
 "Unread Messages" = "%d 封未读邮件";
+
+
+// MARK: - Menu bar popover — subscription
+
+"Subscribe" = "订阅";
+
+
+// MARK: - Settings — Menu Style card
+
+"Menu Style" = "菜单样式";
+"Choose what the menu bar icon opens. Classic follows your system light or dark appearance and ignores themes." = "选择点按菜单栏图标时打开的内容。经典样式跟随系统的浅色或深色外观，并忽略主题。";
+"Pretty" = "精美";
+"Classic" = "经典";
+"Themed popover with message previews." = "带消息预览的主题弹窗。";
+"Standard macOS menu that follows the system appearance." = "跟随系统外观的标准 macOS 菜单。";
+
+
+// MARK: - AppKit classic menu (NSLocalizedString)
+
+"Add an account…" = "添加帐户…";
+"Open Inbox" = "打开收件箱";
+"%@ — Authorization expired" = "%@ — 授权已过期";
+"%lld more unread" = "另有 %lld 封未读";
+"(No subject)" = "（无主题）";
+
+
+// MARK: - Subscription errors (LicenseError)
+
+"Subscriptions aren't available in this build yet." = "此版本尚不支持订阅。";
+"That license key wasn't recognized. Check it and try again." = "无法识别该许可证密钥。请检查后重试。";
+"That license key is for a different product." = "该许可证密钥属于其他产品。";
+"This license is already active on the maximum number of devices. Remove it from one first." = "此许可证已在最多数量的设备上启用。请先从其中一台移除。";
+"Couldn't reach the subscription service (HTTP %lld): %@" = "无法连接订阅服务 (HTTP %lld)：%@";

@@ -139,7 +139,6 @@
 
 "Contact" = "rIH";
 "Contribute on GitHub" = "GitHub-Daq QaH";
-"Buy me coffee" = "raktajino jIH yI'op";
 "Buy my book" = "paq jIH yI'op";
 
 
@@ -154,3 +153,36 @@
 
 "Unread Message" = "%d laD pagh QIn";
 "Unread Messages" = "%d laD pagh QInmey";
+
+
+// MARK: - Menu bar popover — subscription
+
+"Subscribe" = "yIje'";
+
+
+// MARK: - Settings — Menu Style card
+
+"Menu Style" = "menu Segh";
+"Choose what the menu bar icon opens. Classic follows your system light or dark appearance and ignores themes." = "menu bar Degh poSmoH nuq yIwIv. tIQ: qo' Segh tlha' 'ej Segh buSHa'.";
+"Pretty" = "'IH";
+"Classic" = "tIQ";
+"Themed popover with message previews." = "QIn 'ang popover Segh.";
+"Standard macOS menu that follows the system appearance." = "macOS menu motlh; qo' Segh tlha'.";
+
+
+// MARK: - AppKit classic menu (NSLocalizedString)
+
+"Add an account…" = "ghotIH chel…";
+"Open Inbox" = "QInta' poSmoH";
+"%@ — Authorization expired" = "%@ — OAuth pIw rInpu'";
+"%lld more unread" = "latlh %lld laD pagh";
+"(No subject)" = "(ngoQ Hutlh)";
+
+
+// MARK: - Subscription errors (LicenseError)
+
+"Subscriptions aren't available in this build yet." = "naDev je'meH Duy Hutlh.";
+"That license key wasn't recognized. Check it and try again." = "license key luj. yIlegh 'ej yInID.";
+"That license key is for a different product." = "latlh Doch license key.";
+"This license is already active on the maximum number of devices. Remove it from one first." = "Hoch jonta' license lo'. wa' teq.";
+"Couldn't reach the subscription service (HTTP %lld): %@" = "je'meH Duy Sam pagh (HTTP %lld): %@";

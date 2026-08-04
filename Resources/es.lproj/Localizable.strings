@@ -135,7 +135,6 @@
 
 "Contact" = "Contacto";
 "Contribute on GitHub" = "Contribuir en GitHub";
-"Buy me coffee" = "Invítame a un café";
 "Buy my book" = "Comprar mi libro";
 
 
@@ -150,3 +149,36 @@
 
 "Unread Message" = "%d mensaje sin leer";
 "Unread Messages" = "%d mensajes sin leer";
+
+
+// MARK: - Menu bar popover — subscription
+
+"Subscribe" = "Suscribirse";
+
+
+// MARK: - Settings — Menu Style card
+
+"Menu Style" = "Estilo de menú";
+"Choose what the menu bar icon opens. Classic follows your system light or dark appearance and ignores themes." = "Elige qué abre el icono de la barra de menús. El clásico sigue la apariencia clara u oscura del sistema e ignora los temas.";
+"Pretty" = "Bonito";
+"Classic" = "Clásico";
+"Themed popover with message previews." = "Ventana con tema y vista previa de los mensajes.";
+"Standard macOS menu that follows the system appearance." = "Menú estándar de macOS que sigue la apariencia del sistema.";
+
+
+// MARK: - AppKit classic menu (NSLocalizedString)
+
+"Add an account…" = "Añadir una cuenta…";
+"Open Inbox" = "Abrir la bandeja";
+"%@ — Authorization expired" = "%@ — autorización caducada";
+"%lld more unread" = "%lld más sin leer";
+"(No subject)" = "(Sin asunto)";
+
+
+// MARK: - Subscription errors (LicenseError)
+
+"Subscriptions aren't available in this build yet." = "Las suscripciones aún no están disponibles en esta versión.";
+"That license key wasn't recognized. Check it and try again." = "No se ha reconocido esa clave de licencia. Compruébala e inténtalo de nuevo.";
+"That license key is for a different product." = "Esa clave de licencia es de otro producto.";
+"This license is already active on the maximum number of devices. Remove it from one first." = "Esta licencia ya está activa en el número máximo de dispositivos. Quítala de uno primero.";
+"Couldn't reach the subscription service (HTTP %lld): %@" = "No se ha podido conectar con el servicio de suscripción (HTTP %lld): %@";

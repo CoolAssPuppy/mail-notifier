@@ -135,7 +135,6 @@
 
 "Contact" = "Kontakt";
 "Contribute on GitHub" = "Přispět na GitHubu";
-"Buy me coffee" = "Pozvat na kávu";
 "Buy my book" = "Koupit mou knihu";
 
 
@@ -150,3 +149,36 @@
 
 "Unread Message" = "%d nepřečtená zpráva";
 "Unread Messages" = "%d nepřečtených zpráv";
+
+
+// MARK: - Menu bar popover — subscription
+
+"Subscribe" = "Předplatit";
+
+
+// MARK: - Settings — Menu Style card
+
+"Menu Style" = "Styl nabídky";
+"Choose what the menu bar icon opens. Classic follows your system light or dark appearance and ignores themes." = "Vyberte, co otevře ikona v liště nabídek. Klasická nabídka se řídí světlým nebo tmavým vzhledem systému a ignoruje motivy.";
+"Pretty" = "Moderní";
+"Classic" = "Klasická";
+"Themed popover with message previews." = "Okno s motivem a náhledy zpráv.";
+"Standard macOS menu that follows the system appearance." = "Standardní nabídka macOS, která se řídí vzhledem systému.";
+
+
+// MARK: - AppKit classic menu (NSLocalizedString)
+
+"Add an account…" = "Přidat účet…";
+"Open Inbox" = "Otevřít schránku";
+"%@ — Authorization expired" = "%@ — autorizace vypršela";
+"%lld more unread" = "dalších %lld nepřečtených";
+"(No subject)" = "(Bez předmětu)";
+
+
+// MARK: - Subscription errors (LicenseError)
+
+"Subscriptions aren't available in this build yet." = "Předplatné zatím není v tomto sestavení dostupné.";
+"That license key wasn't recognized. Check it and try again." = "Tento licenční klíč nebyl rozpoznán. Zkontrolujte jej a zkuste to znovu.";
+"That license key is for a different product." = "Tento licenční klíč patří k jinému produktu.";
+"This license is already active on the maximum number of devices. Remove it from one first." = "Tato licence je již aktivní na maximálním počtu zařízení. Nejprve ji z jednoho odeberte.";
+"Couldn't reach the subscription service (HTTP %lld): %@" = "Nepodařilo se spojit se službou předplatného (HTTP %lld): %@";

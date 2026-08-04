@@ -73,7 +73,7 @@ UUID is what the app sends; the slug will not work.
    - Type: **Recurring**
    - Interval: **Yearly**
    - Pricing model: **Pay what you want**
-   - Minimum: **0.99 USD**
+   - Minimum: **1.99 USD**
    - Default / suggested (the number pre-filled at checkout): **5.99 USD**
 5. Save.
 
@@ -81,32 +81,32 @@ Pay what you want works on recurring products in Polar, not only one-time ones,
 so a yearly subscription at a customer-chosen price is a supported setup. The
 amount a customer picks at checkout is the amount their renewal charges. The app
 needs no code for any of this: a license key behaves the same whether someone paid
-99 cents or 20 dollars.
+two dollars or twenty.
 
 Keep it to one price. When you add lifetime pricing later it becomes a second
 product with a one-time price and its own checkout link; the entitlement code
 already handles a key with no expiry, so that is a Polar change plus one more
 button.
 
-### 1.3a Read this before you leave the minimum at 99 cents
+### 1.3a Read this before you lower the minimum
 
 Polar's Starter plan takes **5% + 50 cents per transaction**. The fixed 50 cents
 is what does the damage at a low price:
 
 | Customer pays | Polar fee | You net | Fee share |
 | --- | --- | --- | --- |
-| $0.99 (the minimum) | $0.55 | **$0.44** | 55% |
+| $1.99 (the minimum) | $0.60 | **$1.39** | 30% |
 | $5.99 (suggested) | $0.80 | **$5.19** | 13% |
 
 An international card adds 1.5%. Payouts cost $2 per month of active payouts plus
-0.25% + $0.25 each. A dispute costs $15, which is thirty-four $0.99 subscriptions.
+0.25% + $0.25 each. A dispute costs $15, which is eleven $1.99 subscriptions.
 
 Against a $700 CASA bill that is **135 subscribers at the suggested price, or
-1,591 at the minimum**. The minimum is not wrong, and a low floor is a real
-kindness to someone who genuinely cannot pay. Just set it knowing that a $0.99
-subscriber is close to revenue-neutral after fees, so the suggested price is the
-number actually funding the assessment. That is why $5.99 pre-filled matters more
-than $0.99 being available.
+504 at the minimum**. The minimum is not wrong, and a low floor is a real
+kindness to someone who genuinely cannot pay. Just set it knowing that the fixed
+50 cents eats a third of a minimum-price subscription, so the suggested price is
+the number actually funding the assessment. That is why $5.99 pre-filled matters
+more than the floor being low.
 
 ### 1.4 Add the License Keys benefit
 
@@ -294,12 +294,12 @@ With the sandbox build running:
     benefit id back. Doing it in both directions is the only way to know the pin
     is actually wired up rather than the key just happening to fail.
 11. **Pay what you want.** At the sandbox checkout, confirm the amount field is
-    editable, pre-filled with **$5.99**, and refuses anything under **$0.99**.
-    Then buy at the $0.99 minimum and confirm the license key that arrives
+    editable, pre-filled with **$5.99**, and refuses anything under **$1.99**.
+    Then buy at the $1.99 minimum and confirm the license key that arrives
     unlocks exactly as much as a $5.99 one does. It should: the app never sees
     the amount.
 12. **Renewal amount.** In the sandbox dashboard, look at the subscription
-    created by that $0.99 purchase and confirm its recurring amount is $0.99
+    created by that $1.99 purchase and confirm its recurring amount is $1.99
     rather than $5.99. Polar should bill the chosen amount on renewal. Worth
     seeing with your own eyes before the first real renewal a year from now.
 13. **The activation ceiling.** The benefit allows five devices. There is only

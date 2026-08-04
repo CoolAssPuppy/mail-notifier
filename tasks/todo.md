@@ -3,7 +3,7 @@
 ## Mail Notifier Pro: paid multi-account via Polar (current)
 
 Full design in `tasks/paid-accounts-spec.md`. One account free forever, then
-**Mail Notifier Pro**: a yearly pay-what-you-want subscription, $0.99 minimum and
+**Mail Notifier Pro**: a yearly pay-what-you-want subscription, $1.99 minimum and
 $5.99 suggested. Polar license keys validated straight from the app, no server of
 ours. Ported from `../sync-bar`. Mail Notifier Pro lives in the shared Strategic
 Nerds Polar organization, which makes `POLAR_BENEFIT_ID` required rather than
@@ -38,8 +38,8 @@ optional.
 - [ ] 13. Build and run the tests in Xcode. Everything so far was verified with
       the bare Swift compiler; see the note below.
 - [ ] 14. Sandbox end-to-end: the twelve checks in `tasks/polar-setup.md` Part 3.
-      Do not skip 10 (a Sync Bar key must be rejected) or 12 (a $0.99 purchase
-      must renew at $0.99, not at the $5.99 suggestion).
+      Do not skip 10 (a Sync Bar key must be rejected) or 12 (a $1.99 purchase
+      must renew at $1.99, not at the $5.99 suggestion).
 - [ ] 15. Release 3.6.0 (build 28). Version and CHANGELOG are already bumped.
 
 ### Verification so far

@@ -135,7 +135,6 @@
 
 "Contact" = "Kontakt";
 "Contribute on GitHub" = "Bidrag på GitHub";
-"Buy me coffee" = "Giv en kaffe";
 "Buy my book" = "Køb min bog";
 
 
@@ -150,3 +149,36 @@
 
 "Unread Message" = "%d ulæst besked";
 "Unread Messages" = "%d ulæste beskeder";
+
+
+// MARK: - Menu bar popover — subscription
+
+"Subscribe" = "Abonnér";
+
+
+// MARK: - Settings — Menu Style card
+
+"Menu Style" = "Menustil";
+"Choose what the menu bar icon opens. Classic follows your system light or dark appearance and ignores themes." = "Vælg, hvad ikonet i menulinjen åbner. Klassisk følger systemets lyse eller mørke udseende og ignorerer temaer.";
+"Pretty" = "Pæn";
+"Classic" = "Klassisk";
+"Themed popover with message previews." = "Vindue med tema og forhåndsvisning af beskeder.";
+"Standard macOS menu that follows the system appearance." = "Almindelig macOS-menu, der følger systemets udseende.";
+
+
+// MARK: - AppKit classic menu (NSLocalizedString)
+
+"Add an account…" = "Tilføj en konto…";
+"Open Inbox" = "Åbn indbakken";
+"%@ — Authorization expired" = "%@ — godkendelsen er udløbet";
+"%lld more unread" = "%lld flere ulæste";
+"(No subject)" = "(Intet emne)";
+
+
+// MARK: - Subscription errors (LicenseError)
+
+"Subscriptions aren't available in this build yet." = "Abonnementer er endnu ikke tilgængelige i denne version.";
+"That license key wasn't recognized. Check it and try again." = "Licensnøglen blev ikke genkendt. Tjek den, og prøv igen.";
+"That license key is for a different product." = "Licensnøglen hører til et andet produkt.";
+"This license is already active on the maximum number of devices. Remove it from one first." = "Licensen er allerede aktiv på det maksimale antal enheder. Fjern den fra en af dem først.";
+"Couldn't reach the subscription service (HTTP %lld): %@" = "Kunne ikke få forbindelse til abonnementstjenesten (HTTP %lld): %@";

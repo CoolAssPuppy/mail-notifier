@@ -135,7 +135,6 @@
 
 "Contact" = "Contact";
 "Contribute on GitHub" = "Bijdragen op GitHub";
-"Buy me coffee" = "Trakteer me op een koffie";
 "Buy my book" = "Koop mijn boek";
 
 
@@ -150,3 +149,36 @@
 
 "Unread Message" = "%d ongelezen bericht";
 "Unread Messages" = "%d ongelezen berichten";
+
+
+// MARK: - Menu bar popover — subscription
+
+"Subscribe" = "Abonneren";
+
+
+// MARK: - Settings — Menu Style card
+
+"Menu Style" = "Menustijl";
+"Choose what the menu bar icon opens. Classic follows your system light or dark appearance and ignores themes." = "Kies wat het menubalkpictogram opent. Klassiek volgt de lichte of donkere weergave van het systeem en negeert thema's.";
+"Pretty" = "Mooi";
+"Classic" = "Klassiek";
+"Themed popover with message previews." = "Venster met thema en voorbeelden van berichten.";
+"Standard macOS menu that follows the system appearance." = "Standaard macOS-menu dat de weergave van het systeem volgt.";
+
+
+// MARK: - AppKit classic menu (NSLocalizedString)
+
+"Add an account…" = "Account toevoegen…";
+"Open Inbox" = "Postvak openen";
+"%@ — Authorization expired" = "%@ — autorisatie verlopen";
+"%lld more unread" = "nog %lld ongelezen";
+"(No subject)" = "(Geen onderwerp)";
+
+
+// MARK: - Subscription errors (LicenseError)
+
+"Subscriptions aren't available in this build yet." = "Abonnementen zijn nog niet beschikbaar in deze versie.";
+"That license key wasn't recognized. Check it and try again." = "Deze licentiesleutel is niet herkend. Controleer hem en probeer het opnieuw.";
+"That license key is for a different product." = "Deze licentiesleutel hoort bij een ander product.";
+"This license is already active on the maximum number of devices. Remove it from one first." = "Deze licentie is al actief op het maximale aantal apparaten. Verwijder hem eerst van één apparaat.";
+"Couldn't reach the subscription service (HTTP %lld): %@" = "Kan de abonnementsservice niet bereiken (HTTP %lld): %@";
