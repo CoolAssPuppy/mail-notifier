@@ -2,6 +2,10 @@
 
 This codebase is a 2026 ground-up SwiftUI rewrite of Gmail Notifr, kept under the same repository and changelog for historical continuity. Entries from version 2.1.1 and earlier describe the original Gmail Notifr by James Chen — see "Gmail Notifr (legacy)" below.
 
+## 3.6.1 (August 4, 2026)
+
+* Bug fixes
+
 ## 3.6.0 (August 3, 2026)
 
 * One email account is free forever, with every feature. Watching more than one account now needs Mail Notifier Pro, and you pick the price: pay what you want, from $0.99 a year
