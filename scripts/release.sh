@@ -289,6 +289,25 @@ echo ""
 echo "==> Verifying appcast via Dub shortlink"
 curl -sL "$DUB_SHORTLINK" | grep -E '<(title|sparkle:shortVersionString|enclosure)' | head -6
 
+#----------------------------------------------------------------------
+# 11. Unregister build copies from LaunchServices
+#----------------------------------------------------------------------
+# Every .app under dist/ and DerivedData shares the shipping bundle ID, so
+# LaunchServices registers them alongside /Applications/Mail Notifier.app and
+# may serve their (older) icon to Finder, Spotlight and Notification Center.
+echo ""
+echo "==> Unregistering build copies from LaunchServices"
+LSREGISTER="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
+if [ -x "$LSREGISTER" ]; then
+  "$LSREGISTER" -dump 2>/dev/null \
+    | sed -n 's/^path: *\(.*\/Mail Notifier\.app\)$/\1/p' \
+    | sort -u \
+    | grep -vFx "/Applications/Mail Notifier.app" \
+    | while IFS= read -r stale; do
+        "$LSREGISTER" -u "$stale" 2>/dev/null && echo "    unregistered: $stale"
+      done
+fi
+
 echo ""
 echo "============================================================"
 echo "Released Mail Notifier $VERSION (build $NEW_BUILD)"
