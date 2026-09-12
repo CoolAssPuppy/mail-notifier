@@ -264,7 +264,7 @@
 		F97EC5717616078BDE263058 /* hero.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = hero.aiff; sourceTree = "<group>"; };
 		FB460ED3BAD3CC445B93C9FE /* AppDelegate+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Menu.swift"; sourceTree = "<group>"; };
 		FEC6D3AB06F5E6F578CB2B26 /* morse.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = morse.aiff; sourceTree = "<group>"; };
-		"TEMP_0E938D3C-83EA-485E-BB8F-1DBD37D67EA9" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		"TEMP_9AA7ABA8-C9D5-4BCD-BCA8-FCE384CC661A" /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -504,10 +504,10 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		"TEMP_3FDF1472-11E3-41C8-A72A-49D92722B164" /* mail-notifier */ = {
+		"TEMP_03D38163-C6A2-4DE2-A10D-2312BA858EBD" /* mail-notifier */ = {
 			isa = PBXGroup;
 			children = (
-				"TEMP_0E938D3C-83EA-485E-BB8F-1DBD37D67EA9" /* Secrets.xcconfig */,
+				"TEMP_9AA7ABA8-C9D5-4BCD-BCA8-FCE384CC661A" /* Secrets.xcconfig */,
 			);
 			path = "mail-notifier";
 			sourceTree = "<group>";
@@ -825,14 +825,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MailNotifier.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 32;
+				CURRENT_PROJECT_VERSION = 33;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				LS_MINIMUM_SYSTEM_VERSION = 14.0;
-				MARKETING_VERSION = 3.6.3;
+				MARKETING_VERSION = 3.6.4;
 				POLAR_API_BASE = "$(POLAR_API_BASE)";
 				POLAR_BENEFIT_ID = "$(POLAR_BENEFIT_ID)";
 				POLAR_CHECKOUT_URL = "$(POLAR_CHECKOUT_URL)";
@@ -848,7 +848,7 @@
 		};
 		229918186B40865D81363975 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_0E938D3C-83EA-485E-BB8F-1DBD37D67EA9" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_9AA7ABA8-C9D5-4BCD-BCA8-FCE384CC661A" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -913,14 +913,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MailNotifier.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 32;
+				CURRENT_PROJECT_VERSION = 33;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				LS_MINIMUM_SYSTEM_VERSION = 14.0;
-				MARKETING_VERSION = 3.6.3;
+				MARKETING_VERSION = 3.6.4;
 				POLAR_API_BASE = "$(POLAR_API_BASE)";
 				POLAR_BENEFIT_ID = "$(POLAR_BENEFIT_ID)";
 				POLAR_CHECKOUT_URL = "$(POLAR_CHECKOUT_URL)";
@@ -957,7 +957,7 @@
 		};
 		B4A4092827DAC2ECABE337D5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_0E938D3C-83EA-485E-BB8F-1DBD37D67EA9" /* Secrets.xcconfig */;
+			baseConfigurationReference = "TEMP_9AA7ABA8-C9D5-4BCD-BCA8-FCE384CC661A" /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
