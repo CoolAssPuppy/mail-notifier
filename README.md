@@ -8,6 +8,8 @@ This project was inspired by [Gmail Notifr](https://ashchan.com/projects/gmail-n
 
 Mail Notifier is a ground-up rewrite designed for modern macOS development best practices and built to pass Google's CASA (Cloud Application Security Assessment) review. While it shares the same general purpose as the original project, the codebase has been completely rewritten using contemporary SwiftUI patterns, modern Swift concurrency, and a modular architecture.
 
+[Download and start using](https://www.strategicnerds.com/apps/mailnotifier). It's free for one account, pay whatever you want (including nothing) for more accounts. Or read on for building and running on your own.
+
 ## Features
 
 - Support for multiple Google (Gmail) and Microsoft (Outlook) accounts
@@ -159,7 +161,7 @@ If you previously had the Mac App Store build installed, delete that one from `/
 
 ## Support independent development
 
-Google forces indie developers who want to build email apps to spend roughly $8,000 a year on the mandatory CASA security assessment. This app depends on your generosity to keep going. If Mail Notifier is useful to you, consider tipping via [Venmo to @coolasspuppy](https://venmo.com/coolasspuppy).
+Google forces indie developers who want to build email apps to spend roughly $1000 a year on the mandatory CASA security assessment. This app depends on your generosity to keep going. If Mail Notifier is useful to you, consider paying $5-10 a year in-app. Or if you can't, pay nothing and unlock the Pro features. Up to you. Hopefully enough folks pay to defray the costs of paying Google's extortion fee.
 
 ## Setup for personal use
 
