@@ -43,7 +43,14 @@ struct Accounts: RawRepresentable, Codable, RandomAccessCollection, MutableColle
     }
 
     var rawValue: String {
-        guard let data = try? JSONEncoder().encode(storage),
+        // Sorted keys because Foundation's JSONEncoder orders a struct's keys
+        // by hash, which differs from one call to the next inside a single
+        // process. Without this, encoding the same accounts twice produces two
+        // different strings, every save rewrites bytes that didn't change, and
+        // anything comparing two encodings is a coin flip.
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .sortedKeys
+        guard let data = try? encoder.encode(storage),
               let result = String(data: data, encoding: .utf8) else {
             return "[]"
         }

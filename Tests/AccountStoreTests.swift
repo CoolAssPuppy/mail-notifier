@@ -35,6 +35,17 @@ final class AccountStoreTests: XCTestCase {
         XCTAssertEqual(accounts?.count, 0)
     }
 
+    func testEncodingTheSameAccountsTwiceProducesTheSameString() {
+        // Anything that stores, compares, or backs up the accounts JSON needs
+        // the same accounts to serialize the same way every time.
+        let accounts: Accounts = [
+            Account(email: "a@one.com", type: .gmail),
+            Account(email: "b@two.com", type: .outlook)
+        ]
+
+        XCTAssertEqual(accounts.rawValue, accounts.rawValue)
+    }
+
     func testInvalidRawValueDecodesToNil() {
         XCTAssertNil(Accounts(rawValue: "{not json"))
     }

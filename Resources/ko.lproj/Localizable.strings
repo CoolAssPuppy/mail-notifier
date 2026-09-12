@@ -103,6 +103,7 @@
 "Start Mail Notifier when you log in." = "로그인할 때 Mail Notifier를 시작합니다.";
 "Show unread count in menu bar" = "메뉴 막대에 안 읽음 개수 표시";
 "Display total unread next to the icon." = "아이콘 옆에 안 읽음 개수 합계를 표시합니다.";
+"How many messages to list under each account." = "각 계정 아래에 표시할 메시지 수입니다.";
 "Open main window on launch" = "실행 시 메인 창 열기";
 "Otherwise the app stays in the menu bar." = "꺼두면 앱은 메뉴 막대에 남습니다.";
 "Send anonymous usage data" = "익명 사용 데이터 전송";

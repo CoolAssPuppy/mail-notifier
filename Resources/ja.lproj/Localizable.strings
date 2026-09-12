@@ -103,6 +103,7 @@
 "Start Mail Notifier when you log in." = "ログイン時に Mail Notifier を起動します。";
 "Show unread count in menu bar" = "メニューバーに未読数を表示";
 "Display total unread next to the icon." = "アイコンの横に未読合計を表示します。";
+"How many messages to list under each account." = "各アカウントの下に表示するメッセージの数。";
 "Open main window on launch" = "起動時にメインウインドウを開く";
 "Otherwise the app stays in the menu bar." = "無効の場合、アプリはメニューバーに留まります。";
 "Send anonymous usage data" = "匿名の利用データを送信";

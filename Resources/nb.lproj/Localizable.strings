@@ -103,6 +103,7 @@
 "Start Mail Notifier when you log in." = "Starter Mail Notifier når du logger inn.";
 "Show unread count in menu bar" = "Vis antall uleste i menylinjen";
 "Display total unread next to the icon." = "Viser totalt antall uleste ved siden av symbolet.";
+"How many messages to list under each account." = "Hvor mange meldinger som vises under hver konto.";
 "Open main window on launch" = "Åpne hovedvinduet ved oppstart";
 "Otherwise the app stays in the menu bar." = "Ellers blir appen værende i menylinjen.";
 "Send anonymous usage data" = "Send anonyme bruksdata";

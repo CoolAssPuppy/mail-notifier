@@ -103,6 +103,7 @@
 "Start Mail Notifier when you log in." = "Start Mail Notifier zodra je inlogt.";
 "Show unread count in menu bar" = "Aantal ongelezen tonen in menubalk";
 "Display total unread next to the icon." = "Toont het totaal aan ongelezen naast het symbool.";
+"How many messages to list under each account." = "Hoeveel berichten er onder elk account worden getoond.";
 "Open main window on launch" = "Hoofdvenster openen bij start";
 "Otherwise the app stays in the menu bar." = "Anders blijft de app in de menubalk.";
 "Send anonymous usage data" = "Anonieme gebruiksgegevens versturen";

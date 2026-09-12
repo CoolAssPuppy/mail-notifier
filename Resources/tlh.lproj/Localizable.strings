@@ -107,6 +107,7 @@
 "Start Mail Notifier when you log in." = "SaQ DaQ Mail Notifier tagh.";
 "Show unread count in menu bar" = "menu-Daq laD pagh mI' 'ang";
 "Display total unread next to the icon." = "icon retlhDaq laD pagh mI' 'ang.";
+"How many messages to list under each account." = "Hoch account bIngDaq QIn mI' 'ang.";
 "Open main window on launch" = "tagh DaQ porgh poSmoH";
 "Otherwise the app stays in the menu bar." = "ghobe', menu-Daq Sum.";
 "Send anonymous usage data" = "qech lo' De' ngeH";

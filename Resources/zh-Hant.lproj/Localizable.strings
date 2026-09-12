@@ -103,6 +103,7 @@
 "Start Mail Notifier when you log in." = "登入時啟動 Mail Notifier。";
 "Show unread count in menu bar" = "於選單列顯示未讀數量";
 "Display total unread next to the icon." = "在圖示旁顯示未讀總數。";
+"How many messages to list under each account." = "每個帳號下方顯示多少封郵件。";
 "Open main window on launch" = "啟動時開啟主視窗";
 "Otherwise the app stays in the menu bar." = "否則 App 會留在選單列。";
 "Send anonymous usage data" = "傳送匿名使用資料";

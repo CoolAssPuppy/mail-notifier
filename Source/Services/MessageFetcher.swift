@@ -24,7 +24,10 @@ final class MessageFetcher: NSObject {
             NotificationCenter.default.post(name: .unreadCountUpdated, object: account.email)
         }
     }
-    private let maximumMessagesStored = 10
+    /// The window of recent mail kept per account. The Settings stepper for
+    /// "Show recent messages" tops out below this, so the popover can never
+    /// ask for more than has been fetched.
+    static let maximumMessagesStored = 10
 
     private(set) var messages = [Message]() {
         didSet {
@@ -106,7 +109,7 @@ final class MessageFetcher: NSObject {
         }
 
         group.enter()
-        provider.fetchMessages(limit: maximumMessagesStored) { result in
+        provider.fetchMessages(limit: Self.maximumMessagesStored) { result in
             resultQueue.async {
                 messagesResult = result
                 group.leave()

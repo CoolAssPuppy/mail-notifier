@@ -46,6 +46,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // left on comes back up as a demo session.
         DemoMode.shared.applyAtLaunch()
 
+        // Rewrites the stored account list where an old default has to be
+        // undone. Runs before the fetchers and the UI read the accounts.
+        AccountMigrations.run()
+
         // Started before the fetchers are built so the launch validate is
         // already in flight when the first rebuild reads the entitlement.
         EntitlementManager.shared.start()

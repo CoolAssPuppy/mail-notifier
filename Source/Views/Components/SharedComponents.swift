@@ -334,6 +334,72 @@ struct AppProviderChoiceCard: View {
     }
 }
 
+// MARK: - Stepper
+
+/// Boxed minus / value / plus control used by the settings rows that take a
+/// number. Clamps to `range`, so the buttons simply stop at the ends.
+///
+/// The value label is the caller's, because a bare count and "5 min" want
+/// different words around the same control.
+struct AppStepper: View {
+    @Binding var value: Int
+    let range: ClosedRange<Int>
+    var width: CGFloat = 200
+    var label: (Int) -> LocalizedStringKey = { LocalizedStringKey("\($0)") }
+
+    @Environment(\.theme) private var theme
+
+    private static let height: CGFloat = 28
+
+    var body: some View {
+        HStack(spacing: 0) {
+            button(systemName: "minus", to: value - 1, enabled: value > range.lowerBound)
+
+            separator
+
+            Text(label(value))
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(theme.foreground)
+                .monospacedDigit()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+            separator
+
+            button(systemName: "plus", to: value + 1, enabled: value < range.upperBound)
+        }
+        .frame(width: width, height: Self.height)
+        .background(
+            RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
+                .fill(theme.cardInset)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
+                .strokeBorder(theme.borderStrong, lineWidth: 1)
+        )
+    }
+
+    private func button(systemName: String, to next: Int, enabled: Bool) -> some View {
+        Button {
+            value = min(max(next, range.lowerBound), range.upperBound)
+        } label: {
+            Image(systemName: systemName)
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundStyle(enabled ? theme.muted : theme.dim)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .disabled(!enabled)
+        .frame(width: 32, height: Self.height)
+    }
+
+    private var separator: some View {
+        Rectangle()
+            .fill(theme.borderStrong)
+            .frame(width: 1, height: Self.height)
+    }
+}
+
 // MARK: - Picker style
 
 extension View {

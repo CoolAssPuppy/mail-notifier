@@ -39,7 +39,10 @@ struct Account: Codable {
     }
     var notificationEnabled = true
     var notificationSound = ""
-    var openInBrowser = Browser.safariIdentifier
+    /// Empty means "whatever the system default browser is". It used to
+    /// default to Safari's bundle id, which quietly overrode that choice for
+    /// every account ever created. See `AccountMigrations`.
+    var openInBrowser = Browser.defaultIdentifier
     var newestMessageDate: Date?
 }
 

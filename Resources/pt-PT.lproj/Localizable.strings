@@ -103,6 +103,7 @@
 "Start Mail Notifier when you log in." = "Abre o Mail Notifier quando inicias sessão.";
 "Show unread count in menu bar" = "Mostrar contagem de não lidas na barra de menus";
 "Display total unread next to the icon." = "Mostra o total de não lidas junto ao ícone.";
+"How many messages to list under each account." = "Quantas mensagens listar sob cada conta.";
 "Open main window on launch" = "Abrir janela principal ao iniciar";
 "Otherwise the app stays in the menu bar." = "Caso contrário, a app fica na barra de menus.";
 "Send anonymous usage data" = "Enviar dados de utilização anónimos";

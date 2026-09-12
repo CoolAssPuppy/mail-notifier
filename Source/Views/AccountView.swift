@@ -272,7 +272,7 @@ struct AccountView: View {
                     description: "Which browser to use when you click a message."
                 ) {
                     Picker("", selection: $account.openInBrowser) {
-                        Text("Default Browser").tag("")
+                        Text("Default Browser").tag(Browser.defaultIdentifier)
                         Divider()
                         ForEach(Browser.all) { browser in
                             Text(browser.name).tag(browser.identifier)
@@ -288,49 +288,13 @@ struct AccountView: View {
                     "Check for new mail every",
                     description: "Polling interval in minutes (1 – 900)."
                 ) {
-                    HStack(spacing: 0) {
-                        Button(action: { account.checkInterval = max(1, account.checkInterval - 1) }) {
-                            Image(systemName: "minus")
-                                .font(.system(size: 10, weight: .semibold))
-                                .foregroundStyle(theme.muted)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .contentShape(Rectangle())
-                        }
-                        .buttonStyle(.plain)
-                        .frame(width: 32, height: 28)
-
-                        Rectangle()
-                            .fill(theme.borderStrong)
-                            .frame(width: 1, height: 28)
-
-                        Text(LocalizedStringKey("\(Int(account.checkInterval)) min"))
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundStyle(theme.foreground)
-                            .monospacedDigit()
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-
-                        Rectangle()
-                            .fill(theme.borderStrong)
-                            .frame(width: 1, height: 28)
-
-                        Button(action: { account.checkInterval = min(900, account.checkInterval + 1) }) {
-                            Image(systemName: "plus")
-                                .font(.system(size: 10, weight: .semibold))
-                                .foregroundStyle(theme.muted)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .contentShape(Rectangle())
-                        }
-                        .buttonStyle(.plain)
-                        .frame(width: 32, height: 28)
-                    }
-                    .frame(width: 200, height: 28)
-                    .background(
-                        RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
-                            .fill(theme.cardInset)
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
-                            .strokeBorder(theme.borderStrong, lineWidth: 1)
+                    AppStepper(
+                        value: Binding(
+                            get: { Int(account.checkInterval) },
+                            set: { account.checkInterval = Double($0) }
+                        ),
+                        range: 1...900,
+                        label: { "\($0) min" }
                     )
                 }
             }

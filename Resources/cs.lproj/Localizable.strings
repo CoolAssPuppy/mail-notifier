@@ -103,6 +103,7 @@
 "Start Mail Notifier when you log in." = "Spustí Mail Notifier po přihlášení.";
 "Show unread count in menu bar" = "Zobrazit počet nepřečtených v liště nabídek";
 "Display total unread next to the icon." = "Zobrazí celkový počet nepřečtených u ikony.";
+"How many messages to list under each account." = "Kolik zpráv se zobrazí u každého účtu.";
 "Open main window on launch" = "Otevřít hlavní okno při startu";
 "Otherwise the app stays in the menu bar." = "Jinak aplikace zůstane v liště nabídek.";
 "Send anonymous usage data" = "Odesílat anonymní data o používání";

@@ -111,6 +111,7 @@
 "Start Mail Notifier when you log in." = "Start Mail Notifier when you log in.";
 "Show unread count in menu bar" = "Show unread count in menu bar";
 "Display total unread next to the icon." = "Display total unread next to the icon.";
+"How many messages to list under each account." = "How many messages to list under each account.";
 "Open main window on launch" = "Open main window on launch";
 "Otherwise the app stays in the menu bar." = "Otherwise the app stays in the menu bar.";
 "Send anonymous usage data" = "Send anonymous usage data";

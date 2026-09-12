@@ -14,6 +14,7 @@ struct SettingsView: View {
     @StateObject private var demoMode = DemoMode.shared
     @AppStorage(AppSettings.showUnreadCount) private var showUnreadCount = AppSettings.shared.showUnreadCount
     @AppStorage(AppSettings.openSettingsOnStartKey) private var openSettingsOnStart = false
+    @AppStorage(AppSettings.recentMessageCountKey) private var recentMessageCount = AppSettings.defaultRecentMessageCount
     @AppStorage(VIPList.storageKey) private var vipList = VIPList()
 
     @Environment(\.theme) private var theme
@@ -75,6 +76,17 @@ struct SettingsView: View {
                         .onChange(of: showUnreadCount) { _, _ in
                             AppSettings.shared.showUnreadCountSettingChanged()
                         }
+                }
+
+                AppRowDivider().padding(.vertical, 10)
+
+                AppSettingRow(
+                    "Show recent messages",
+                    description: "How many messages to list under each account."
+                ) {
+                    AppStepper(value: $recentMessageCount,
+                               range: AppSettings.recentMessageRange,
+                               width: 104)
                 }
 
                 AppRowDivider().padding(.vertical, 10)

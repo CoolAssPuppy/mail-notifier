@@ -103,6 +103,7 @@
 "Start Mail Notifier when you log in." = "登录时启动 Mail Notifier。";
 "Show unread count in menu bar" = "在菜单栏显示未读数量";
 "Display total unread next to the icon." = "在图标旁显示未读总数。";
+"How many messages to list under each account." = "每个账户下方显示多少封邮件。";
 "Open main window on launch" = "启动时打开主窗口";
 "Otherwise the app stays in the menu bar." = "否则应用会留在菜单栏。";
 "Send anonymous usage data" = "发送匿名使用数据";

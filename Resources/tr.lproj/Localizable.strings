@@ -103,6 +103,7 @@
 "Start Mail Notifier when you log in." = "Giriş yaptığınızda Mail Notifier'ı başlatır.";
 "Show unread count in menu bar" = "Menü çubuğunda okunmamış sayısını göster";
 "Display total unread next to the icon." = "Toplam okunmamış sayısını simgenin yanında gösterir.";
+"How many messages to list under each account." = "Her hesabın altında kaç ileti listeleneceği.";
 "Open main window on launch" = "Başlangıçta ana pencereyi aç";
 "Otherwise the app stays in the menu bar." = "Aksi takdirde uygulama menü çubuğunda kalır.";
 "Send anonymous usage data" = "Anonim kullanım verisi gönder";

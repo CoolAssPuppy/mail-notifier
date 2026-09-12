@@ -103,6 +103,7 @@
 "Start Mail Notifier when you log in." = "लॉगिन करते ही Mail Notifier शुरू होता है।";
 "Show unread count in menu bar" = "मेन्यू बार में न पढ़े गए की संख्या दिखाएँ";
 "Display total unread next to the icon." = "आइकन के पास कुल न पढ़े गए दिखाता है।";
+"How many messages to list under each account." = "हर खाते के नीचे कितने संदेश दिखाएँ।";
 "Open main window on launch" = "शुरू में मुख्य विंडो खोलें";
 "Otherwise the app stays in the menu bar." = "अन्यथा ऐप मेन्यू बार में ही रहता है।";
 "Send anonymous usage data" = "अनाम उपयोग डेटा भेजें";

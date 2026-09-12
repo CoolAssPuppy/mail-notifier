@@ -103,6 +103,7 @@
 "Start Mail Notifier when you log in." = "Запускає Mail Notifier при вході в систему.";
 "Show unread count in menu bar" = "Показувати кількість нових у рядку меню";
 "Display total unread next to the icon." = "Показує загальну кількість нових поряд із значком.";
+"How many messages to list under each account." = "Скільки листів показувати під кожним обліковим записом.";
 "Open main window on launch" = "Відкривати головне вікно при запуску";
 "Otherwise the app stays in the menu bar." = "Інакше програма залишається у рядку меню.";
 "Send anonymous usage data" = "Надсилати анонімні дані використання";

@@ -43,7 +43,6 @@ final class MenuBarPopoverModel: ObservableObject {
 
     private let fetcherManager = FetcherManager.shared
     private var subscriptions = Set<AnyCancellable>()
-    private static let recentMessageLimit = 3
 
     init() {
         refresh()
@@ -55,7 +54,7 @@ final class MenuBarPopoverModel: ObservableObject {
         let locked = Set(Accounts.locked(isEntitled: EntitlementManager.isEntitledNow()).map(\.email))
         let next: [AccountState] = Accounts.default.map { account in
             let fetcher = fetcherManager.fetcher(for: account.email)
-            let messages = (fetcher?.messages ?? []).prefix(Self.recentMessageLimit)
+            let messages = (fetcher?.messages ?? []).prefix(AppSettings.shared.recentMessageCount)
             return AccountState(
                 account: account,
                 unreadCount: fetcher?.unreadMessagesCount ?? 0,
@@ -302,11 +301,35 @@ private struct AccountCard: View {
     var onSubscribe: () -> Void = {}
 
     @Environment(\.theme) private var theme
-    @State private var isExpanded = false
+    @State private var isExpanded: Bool
     @State private var isHovered = false
+
+    init(state: MenuBarPopoverModel.AccountState,
+         vipEmails: Set<String>,
+         onOpenInbox: @escaping () -> Void,
+         onOpenMessage: @escaping (Message) -> Void,
+         onReauthorize: @escaping () -> Void,
+         onSubscribe: @escaping () -> Void = {}) {
+        self.state = state
+        self.vipEmails = vipEmails
+        self.onOpenInbox = onOpenInbox
+        self.onOpenMessage = onOpenMessage
+        self.onReauthorize = onReauthorize
+        self.onSubscribe = onSubscribe
+        // `ForEach` keys these cards by account email, so this initial value is
+        // read once per account per launch and the toggle owns it from there.
+        _isExpanded = State(initialValue: AccountExpansionStore.isExpanded(email: state.account.email))
+    }
 
     private var canExpand: Bool {
         !state.hasAuthError && !state.isLocked && !state.recentMessages.isEmpty
+    }
+
+    /// Writes through so the card comes back the way it was left, including
+    /// after a quit or a reboot.
+    private func toggleExpanded() {
+        isExpanded.toggle()
+        AccountExpansionStore.setExpanded(isExpanded, email: state.account.email)
     }
 
     var body: some View {
@@ -452,7 +475,7 @@ private struct AccountCard: View {
                 }
 
                 if canExpand {
-                    Button(action: { isExpanded.toggle() }) {
+                    Button(action: toggleExpanded) {
                         Image(systemName: "chevron.right")
                             .font(.system(size: 9, weight: .semibold))
                             .foregroundStyle(theme.tertiary)
