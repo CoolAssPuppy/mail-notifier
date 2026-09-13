@@ -368,7 +368,7 @@ private struct AccountCard: View {
         HStack(spacing: 10) {
             Button(action: state.isLocked ? onSubscribe : openInboxTapped) {
                 HStack(spacing: 10) {
-                    ProviderBadge(type: state.account.type, size: 29,
+                    ProviderBadge(account: state.account, size: 29,
                                   dimmed: state.hasAuthError || state.isLocked)
 
                     VStack(alignment: .leading, spacing: 1) {
@@ -522,31 +522,6 @@ private struct AccountCard: View {
     private func openInboxTapped() {
         if state.hasAuthError { return }
         onOpenInbox()
-    }
-}
-
-// MARK: - Provider Badge
-
-struct ProviderBadge: View {
-    let type: AccountType
-    var size: CGFloat = 24
-    var dimmed: Bool = false
-
-    @Environment(\.theme) private var theme
-
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 5, style: .continuous)
-                .fill(theme.cardElevated)
-            RoundedRectangle(cornerRadius: 5, style: .continuous)
-                .strokeBorder(theme.borderStrong, lineWidth: 1)
-            Image(type.assetName)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: size * 0.6, height: size * 0.6)
-                .opacity(dimmed ? 0.45 : 1)
-        }
-        .frame(width: size, height: size)
     }
 }
 

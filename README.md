@@ -47,6 +47,7 @@ mail-notifier/
 │   │   ├── AccountStore.swift          # Accounts collection + UserDefaults persistence
 │   │   ├── Browser.swift               # Installed browser detection
 │   │   ├── FriendlyNameStore.swift     # iCloud KVS-mirrored friendly account names
+│   │   ├── AccountIconStore.swift      # iCloud KVS-mirrored custom account icons
 │   │   ├── Message.swift               # Email message model + URL construction
 │   │   ├── Sound.swift                 # Notification sound enum (system + custom)
 │   │   ├── ThemeStore.swift            # 10-palette theme system
@@ -69,6 +70,7 @@ mail-notifier/
 │   │       └── OutlookProvider.swift       # Microsoft Graph fetcher
 │   │
 │   ├── Utilities/
+│   │   ├── AccountIconImage.swift      # Crops and shrinks uploaded icons to 128px PNG
 │   │   ├── Formatters.swift            # Relative date label helpers
 │   │   ├── Logger.swift                # os.log subsystem + categories
 │   │   ├── NotificationNames.swift     # Centralized Notification.Name constants

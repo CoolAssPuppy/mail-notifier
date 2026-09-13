@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct AccountView: View {
     @AppStorage(Accounts.storageKey) var accounts = Accounts()
@@ -18,6 +19,8 @@ struct AccountView: View {
     var isLocked: Bool = false
     @State private var friendlyNameDraft: String
     @State private var showingDeleteAlert = false
+    @State private var showingIconError = false
+    @State private var isIconHovered = false
     @FocusState private var friendlyFieldFocused: Bool
 
     init(account: Account, isLocked: Bool = false) {
@@ -76,13 +79,18 @@ struct AccountView: View {
         } message: {
             Text("This removes \(account.displayName) from Mail Notifier along with all stored tokens.")
         }
+        .alert("Couldn't use that image", isPresented: $showingIconError) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("Choose a PNG, JPEG, HEIC, or other image file.")
+        }
     }
 
     // MARK: - Header
 
     private var header: some View {
         HStack(alignment: .center, spacing: 14) {
-            ProviderBadge(type: account.type, size: 38)
+            iconMenu
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(account.displayName)
@@ -104,6 +112,57 @@ struct AccountView: View {
                 .frame(height: 1),
             alignment: .bottom
         )
+    }
+
+    // MARK: - Icon
+
+    private var hasCustomIcon: Bool {
+        AccountIconStore.shared.icon(for: account.email) != nil
+    }
+
+    /// The badge doubles as the control for changing it. Click for the two
+    /// choices; a pencil on hover says it's clickable.
+    private var iconMenu: some View {
+        Menu {
+            Button("Upload Image…", action: chooseIcon)
+            Button("Accept Default") {
+                AccountIconStore.shared.setIcon(nil, for: account.email)
+            }
+            .disabled(!hasCustomIcon)
+        } label: {
+            ProviderBadge(account: account, size: 38)
+                .overlay(alignment: .bottomTrailing) {
+                    if isIconHovered {
+                        Image(systemName: "pencil.circle.fill")
+                            .font(.system(size: 13, weight: .semibold))
+                            .symbolRenderingMode(.palette)
+                            .foregroundStyle(theme.background, theme.primary)
+                            .offset(x: 4, y: 4)
+                    }
+                }
+        }
+        .menuStyle(.button)
+        .buttonStyle(.plain)
+        .menuIndicator(.hidden)
+        .fixedSize()
+        .onHover { isIconHovered = $0 }
+        .help("Change icon")
+    }
+
+    private func chooseIcon() {
+        let panel = NSOpenPanel()
+        panel.allowedContentTypes = [.image]
+        panel.allowsMultipleSelection = false
+        panel.canChooseDirectories = false
+        panel.message = NSLocalizedString("Choose an image for \(account.displayName)", comment: "")
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+
+        guard let bytes = try? Data(contentsOf: url),
+              let png = AccountIconImage.normalizedPNG(from: bytes) else {
+            showingIconError = true
+            return
+        }
+        AccountIconStore.shared.setIcon(png, for: account.email)
     }
 
     private var fetcher: MessageFetcher? {
@@ -351,8 +410,8 @@ struct AccountView: View {
     }
 
     /// Moves this account to the front of the stored order, which is what the
-    /// free slot is handed to. The account that held it becomes locked. This is
-    /// the only way to choose, since the sidebar has no drag reordering.
+    /// free slot is handed to. The account that held it becomes locked. Dragging
+    /// it to the top of the sidebar does the same thing; this is the shortcut.
     private func makeThisTheFreeAccount() {
         guard let index = accounts.firstIndex(where: { $0.id == account.id }) else { return }
         accounts.reorder(fromOffsets: IndexSet(integer: index), toOffset: 0)

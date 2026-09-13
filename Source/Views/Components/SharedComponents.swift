@@ -409,3 +409,45 @@ extension View {
             .frame(width: width, alignment: .trailing)
     }
 }
+
+// MARK: - Provider Badge
+
+/// The account's icon: the person's own image when they've set one, otherwise
+/// the provider's brand mark. Observes the icon store so every copy of the
+/// badge redraws when an icon changes here or arrives from another Mac.
+struct ProviderBadge: View {
+    let account: Account
+    var size: CGFloat = 24
+    var dimmed: Bool = false
+
+    @ObservedObject private var iconStore = AccountIconStore.shared
+    @Environment(\.theme) private var theme
+
+    private var customIcon: NSImage? {
+        iconStore.icon(for: account.email).flatMap { NSImage(data: $0) }
+    }
+
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 5, style: .continuous)
+                .fill(theme.cardElevated)
+            if let customIcon {
+                Image(nsImage: customIcon)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: size, height: size)
+                    .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
+                    .opacity(dimmed ? 0.45 : 1)
+            } else {
+                Image(account.type.assetName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: size * 0.6, height: size * 0.6)
+                    .opacity(dimmed ? 0.45 : 1)
+            }
+            RoundedRectangle(cornerRadius: 5, style: .continuous)
+                .strokeBorder(theme.borderStrong, lineWidth: 1)
+        }
+        .frame(width: size, height: size)
+    }
+}

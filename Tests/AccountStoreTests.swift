@@ -139,4 +139,33 @@ final class AccountStoreTests: XCTestCase {
         Accounts.default = [Account(email: "one@example.com", type: .gmail)]
         XCTAssertTrue(Accounts.hasAccounts)
     }
+
+    // MARK: - Reordering
+
+    func testReorderPersistsTheNewOrder() {
+        var accounts: Accounts = [
+            Account(email: "a@one.com", type: .gmail),
+            Account(email: "b@two.com", type: .outlook),
+            Account(email: "c@three.com", type: .gmail)
+        ]
+        accounts.save()
+
+        // Drag the first row below the last one.
+        accounts.reorder(fromOffsets: IndexSet(integer: 0), toOffset: 3)
+
+        XCTAssertEqual(Accounts.default.map(\.email), ["b@two.com", "c@three.com", "a@one.com"])
+    }
+
+    func testMovingTheLastAccountToTheFrontHandsItTheFreeSlot() {
+        var accounts: Accounts = [
+            Account(email: "a@one.com", type: .gmail),
+            Account(email: "b@two.com", type: .outlook)
+        ]
+        accounts.save()
+
+        accounts.reorder(fromOffsets: IndexSet(integer: 1), toOffset: 0)
+
+        XCTAssertEqual(Accounts.active(isEntitled: false).map(\.email), ["b@two.com"])
+        XCTAssertEqual(Accounts.locked(isEntitled: false).map(\.email), ["a@one.com"])
+    }
 }

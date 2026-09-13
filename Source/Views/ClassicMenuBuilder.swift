@@ -105,7 +105,7 @@ enum ClassicMenuBuilder {
             let item = ClassicMenuItem(title: lockedTitle(for: account)) {
                 actions.subscribe()
             }
-            item.image = providerIcon(for: account.type)
+            item.image = providerIcon(for: account)
             item.toolTip = account.email
             return item
         }
@@ -118,14 +118,14 @@ enum ClassicMenuBuilder {
             let item = ClassicMenuItem(title: authErrorTitle(for: account)) {
                 actions.reauthorize(account)
             }
-            item.image = providerIcon(for: account.type)
+            item.image = providerIcon(for: account)
             return item
         }
 
         let item = ClassicMenuItem(title: accountTitle(for: account, unreadCount: unreadCount)) {
             actions.openInbox(account)
         }
-        item.image = providerIcon(for: account.type)
+        item.image = providerIcon(for: account)
         item.toolTip = account.email
 
         if !messages.isEmpty {
@@ -216,8 +216,13 @@ enum ClassicMenuBuilder {
         return item
     }
 
-    private static func providerIcon(for type: AccountType) -> NSImage? {
-        guard let image = NSImage(named: type.assetName)?.copy() as? NSImage else { return nil }
+    /// The person's own icon when they've set one, otherwise the brand mark.
+    private static func providerIcon(for account: Account) -> NSImage? {
+        if let data = AccountIconStore.shared.icon(for: account.email),
+           let custom = AccountIconImage.nsImage(from: data, size: providerIconSize) {
+            return custom
+        }
+        guard let image = NSImage(named: account.type.assetName)?.copy() as? NSImage else { return nil }
         image.size = providerIconSize
         return image
     }

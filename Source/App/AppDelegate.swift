@@ -54,6 +54,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // already in flight when the first rebuild reads the entitlement.
         EntitlementManager.shared.start()
         FriendlyNameStore.shared.start()
+        AccountIconStore.shared.start()
         registerShortcuts()
         subscribeToNotifications()
         setupStatusItem()
@@ -276,6 +277,16 @@ private extension AppDelegate {
 
         NotificationCenter.default
             .publisher(for: .friendlyNamesChanged)
+            .sink { [weak self] _ in
+                self?.updateMenuBar()
+            }
+            .store(in: &subscriptions)
+
+        // The classic menu bakes the icon into each NSMenuItem when it's
+        // built, so a new icon needs a rebuild. The popover's badges observe
+        // the store themselves.
+        NotificationCenter.default
+            .publisher(for: .accountIconsChanged)
             .sink { [weak self] _ in
                 self?.updateMenuBar()
             }

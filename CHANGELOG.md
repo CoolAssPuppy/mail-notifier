@@ -2,6 +2,11 @@
 
 This codebase is a 2026 ground-up SwiftUI rewrite of Gmail Notifr, kept under the same repository and changelog for historical continuity. Entries from version 2.1.1 and earlier describe the original Gmail Notifr by James Chen — see "Gmail Notifr (legacy)" below.
 
+## 3.7.0 (September 13, 2026)
+
+* Accounts are reorderable
+* Add custom icons to accounts
+
 ## 3.6.4 (September 12, 2026)
 
 * Bug fixes

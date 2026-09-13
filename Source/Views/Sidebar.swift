@@ -99,23 +99,38 @@ struct Sidebar: View {
 
     // MARK: - Accounts list
 
+    /// A `List` rather than a scroll stack so rows can be dragged into a new
+    /// order. `onMove` gives macOS drag reordering with the native insertion
+    /// line and no edit mode.
+    ///
+    /// Selection goes through the list's own binding rather than a tap
+    /// gesture on the row. Any SwiftUI gesture on row content, tap, button,
+    /// or simultaneous, wins the mouse-down and the table never starts a
+    /// drag. The list's selection highlight is hidden under an opaque row
+    /// background, and the row draws its own selected look as before.
     private var accountsList: some View {
-        ScrollView {
-            VStack(spacing: 2) {
-                ForEach(accounts) { account in
-                    SidebarAccountRow(
-                        account: account,
-                        isSelected: selection == account.email,
-                        unreadCount: unreadCount(for: account),
-                        isLocked: lockedEmails.contains(account.email)
-                    )
-                    .onTapGesture {
-                        selection = account.email
-                    }
-                }
+        List(selection: $selection) {
+            ForEach(accounts) { account in
+                SidebarAccountRow(
+                    account: account,
+                    isSelected: selection == account.email,
+                    unreadCount: unreadCount(for: account),
+                    isLocked: lockedEmails.contains(account.email)
+                )
+                .tag(account.email)
+                .listRowInsets(EdgeInsets(top: 1, leading: 8, bottom: 1, trailing: 8))
+                .listRowSeparator(.hidden)
+                .listRowBackground(theme.surface)
             }
-            .padding(.horizontal, 8)
+            .onMove { source, destination in
+                // The stored order is what both dropdown styles draw, and on
+                // the free tier it decides which account holds the free slot.
+                accounts.reorder(fromOffsets: source, toOffset: destination)
+            }
         }
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .environment(\.defaultMinListRowHeight, 1)
     }
 
     private func unreadCount(for account: Account) -> Int {
@@ -190,7 +205,7 @@ private struct SidebarAccountRow: View {
 
     var body: some View {
         HStack(spacing: 10) {
-            ProviderBadge(type: account.type, size: 22, dimmed: !account.enabled || isLocked)
+            ProviderBadge(account: account, size: 22, dimmed: !account.enabled || isLocked)
 
             VStack(alignment: .leading, spacing: 1) {
                 Text(account.displayName)

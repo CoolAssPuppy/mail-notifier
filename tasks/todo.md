@@ -1,6 +1,38 @@
 # Todo
 
-## Mail Notifier Pro: paid multi-account via Polar (current)
+## Drag to reorder accounts, custom account icons that roam (current)
+
+Full design in `~/.claude/plans/radiant-inventing-widget.md`.
+
+### Steps
+- [x] 1. Tests: `Tests/AccountIconStoreTests.swift`, `Tests/AccountIconImageTests.swift`,
+      reorder cases in `Tests/AccountStoreTests.swift`.
+- [x] 2. `Source/Models/AccountIconStore.swift` (KVS + UserDefaults mirror, per-account keys).
+- [x] 3. `Source/Utilities/AccountIconImage.swift` (center crop, 128px PNG).
+- [x] 4. `ProviderBadge` moves to `SharedComponents.swift`, takes an `Account`, draws the custom icon.
+- [x] 5. `AccountView` header: click the badge for Upload Image… / Accept Default.
+- [x] 6. `ClassicMenuBuilder` uses the custom icon; `AppDelegate` starts the store and redraws on change.
+- [x] 7. `Sidebar` becomes a `List` with `onMove` calling `Accounts.reorder`.
+- [x] 8. CHANGELOG 3.7.0 entry, README file tree.
+- [x] 9. `xcodegen generate`, quit installed app, `xcodebuild test`, relaunch.
+- [x] 10. Run the Debug build and check the Pretty dropdown by hand.
+
+### Review
+- 179 tests pass, 21 of them new (icon store, image normalization, reorder).
+  The old date-dependent Formatters failure did not show up this run.
+- Verified live in the Debug build with synthetic mouse events: dragging the
+  third account to the top rewrote the stored order, the Pretty popover
+  listed accounts in that order, the header badge menu offered Upload Image…
+  and Accept Default, an uploaded 400x240 PNG came back as a 4.4 KB
+  center-cropped icon in the sidebar, header, and popover, and Accept Default
+  cleared it everywhere. Order and icon were put back afterwards.
+- Found during testing: any SwiftUI gesture on a List row blocks `onMove`
+  drag on macOS. Selection now goes through `List(selection:)` with `.tag`,
+  and an opaque `listRowBackground` hides the system highlight.
+- Not checked by hand: the Classic menu style (same store, rebuilt on
+  `.accountIconsChanged`), and roaming to a second Mac.
+
+## Mail Notifier Pro: paid multi-account via Polar
 
 Full design in `tasks/paid-accounts-spec.md`. One account free forever, then
 **Mail Notifier Pro**: a yearly pay-what-you-want subscription, $1.99 minimum and
