@@ -305,7 +305,9 @@ if [ -x "$LSREGISTER" ]; then
     | grep -vFx "/Applications/Mail Notifier.app" \
     | while IFS= read -r stale; do
         "$LSREGISTER" -u "$stale" 2>/dev/null && echo "    unregistered: $stale"
-      done
+      done || true
+  # `|| true` because with pipefail a grep that matches nothing (no stale
+  # copies) fails the whole pipeline and the summary below never prints.
 fi
 
 echo ""
