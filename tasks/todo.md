@@ -4,12 +4,15 @@
 
 ### Steps
 - [x] 1. Add the 3.7.1 changelog entry with Phillip's credit.
-- [ ] 2. Run the complete local release checks and commit Compact mode.
-- [ ] 3. Run the signed, notarized, Sparkle-signed shipping pipeline for build 35.
-- [ ] 4. Verify the live DMG and appcast, commit release metadata, and push once.
+- [x] 2. Run the complete local release checks and commit Compact mode.
+- [x] 3. Run the signed, notarized, Sparkle-signed shipping pipeline for build 35.
+- [x] 4. Verify the live DMG and appcast, commit release metadata, and push once.
 
 ### Review
-- Pending.
+- Apple accepted notarization submissions for the app and DMG, and both staple validations passed.
+- The versioned DMG and latest alias are live with the expected 10,673,943-byte size.
+- The live appcast matches the local file and the public shortlink reports version 3.7.1, build 35, with Phillip's credit.
+- Compact mode is committed as `b13af77`. Release metadata is committed separately and both commits are pushed together.
 
 ## Compact mode (current)
 

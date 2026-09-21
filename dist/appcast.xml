@@ -6,6 +6,24 @@
     <description>Mail Notifier updates</description>
     <language>en</language>
     <item>
+      <title>Version 3.7.1</title>
+      <pubDate>Mon, 21 Sep 2026 22:53:43 +0000</pubDate>
+      <sparkle:version>35</sparkle:version>
+      <sparkle:shortVersionString>3.7.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[
+        <ul>
+          <li>New compact mode. Show only accounts with new email.<br><br>Thanks Phillip for the suggestion.</li>
+        </ul>
+      ]]></description>
+      <enclosure
+        url="https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/MailNotifier-3.7.1.dmg"
+        sparkle:edSignature="gspmnFJy18x5uP140Ui7vL6EV2B0O9+vNMOWEHFlbaHeBwsGmKyMIqmJC52QYtgV2eQp1EMYmSGmXHhTALSHBw=="
+        length="10673943"
+        type="application/x-apple-diskimage" />
+    </item>
+
+    <item>
       <title>Version 3.7.0</title>
       <pubDate>Sun, 13 Sep 2026 06:11:04 +0000</pubDate>
       <sparkle:version>34</sparkle:version>
