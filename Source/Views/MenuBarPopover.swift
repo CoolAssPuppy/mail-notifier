@@ -37,6 +37,7 @@ final class MenuBarPopoverModel: ObservableObject {
     }
 
     @Published private(set) var accountStates: [AccountState] = []
+    @Published private(set) var configuredAccountCount = 0
     @Published private(set) var totalUnread: Int = 0
     @Published private(set) var lastCheckedAt: Date?
     @Published private(set) var vipEmails: Set<String> = []
@@ -52,7 +53,7 @@ final class MenuBarPopoverModel: ObservableObject {
 
     func refresh() {
         let locked = Set(Accounts.locked(isEntitled: EntitlementManager.isEntitledNow()).map(\.email))
-        let next: [AccountState] = Accounts.default.map { account in
+        let allStates: [AccountState] = Accounts.default.map { account in
             let fetcher = fetcherManager.fetcher(for: account.email)
             let messages = (fetcher?.messages ?? []).prefix(AppSettings.shared.recentMessageCount)
             return AccountState(
@@ -64,12 +65,30 @@ final class MenuBarPopoverModel: ObservableObject {
                 isLocked: locked.contains(account.email)
             )
         }
+        let next = allStates.filter {
+            AppSettings.shared.shouldShowAccount(unreadCount: $0.unreadCount)
+        }
 
-        guard next != accountStates else { return }
+        if configuredAccountCount != allStates.count {
+            configuredAccountCount = allStates.count
+        }
+        if accountStates != next {
+            accountStates = next
+        }
 
-        accountStates = next
-        totalUnread = next.reduce(0) { $0 + $1.unreadCount }
-        lastCheckedAt = next.compactMap(\.lastCheckedAt).max()
+        let nextTotalUnread = allStates.reduce(0) { $0 + $1.unreadCount }
+        if totalUnread != nextTotalUnread {
+            totalUnread = nextTotalUnread
+        }
+
+        let nextLastCheckedAt = allStates.compactMap(\.lastCheckedAt).max()
+        if lastCheckedAt != nextLastCheckedAt {
+            lastCheckedAt = nextLastCheckedAt
+        }
+    }
+
+    var shouldShowInboxZero: Bool {
+        AppSettings.shared.compactMode && configuredAccountCount > 0 && accountStates.isEmpty
     }
 
     private func refreshVIPs() {
@@ -84,6 +103,10 @@ final class MenuBarPopoverModel: ObservableObject {
 
         Publishers.MergeMany(accountNames.map { NotificationCenter.default.publisher(for: $0) })
             .debounce(for: .milliseconds(50), scheduler: RunLoop.main)
+            .sink { [weak self] _ in self?.refresh() }
+            .store(in: &subscriptions)
+
+        NotificationCenter.default.publisher(for: .compactModeSettingChanged)
             .sink { [weak self] _ in self?.refresh() }
             .store(in: &subscriptions)
 
@@ -122,10 +145,12 @@ struct MenuBarPopover: View {
     @ObservedObject private var themeStore = ThemeStore.shared
     let actions: MenuBarPopoverActions
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     var body: some View {
         let theme = themeStore.palette
         return VStack(spacing: 0) {
-            HeaderBar(totalUnread: model.totalUnread, accountCount: model.accountStates.count)
+            HeaderBar(totalUnread: model.totalUnread, accountCount: model.configuredAccountCount)
             Divider().background(theme.divider)
             content
             Divider().background(theme.divider)
@@ -139,7 +164,9 @@ struct MenuBarPopover: View {
 
     @ViewBuilder
     private var content: some View {
-        if model.accountStates.isEmpty {
+        if model.shouldShowInboxZero {
+            InboxZeroState()
+        } else if model.accountStates.isEmpty {
             EmptyAccountsState(onAddAccount: actions.openWindow)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 28)
@@ -156,12 +183,32 @@ struct MenuBarPopover: View {
                         onReauthorize: { actions.reauthorize(state.account) },
                         onSubscribe: actions.subscribe
                     )
+                    .transition(accountTransition)
                 }
             }
             .padding(.horizontal, 8)
             .padding(.top, 10)
             .padding(.bottom, 10)
+            .animation(accountAnimation, value: model.accountStates.map(\.id))
         }
+    }
+
+    private var accountAnimation: Animation? {
+        reduceMotion
+            ? .easeOut(duration: 0.15)
+            : .spring(response: 0.28, dampingFraction: 0.86)
+    }
+
+    private var accountTransition: AnyTransition {
+        guard !reduceMotion else { return .opacity }
+        return .asymmetric(
+            insertion: .opacity
+                .combined(with: .scale(scale: 0.97, anchor: .top))
+                .combined(with: .offset(y: -6)),
+            removal: .opacity
+                .combined(with: .scale(scale: 0.98, anchor: .top))
+                .combined(with: .offset(y: -4))
+        )
     }
 }
 
@@ -580,6 +627,23 @@ private struct MessageRow: View {
 }
 
 // MARK: - Empty State
+
+private struct InboxZeroState: View {
+    @Environment(\.theme) private var theme
+
+    var body: some View {
+        VStack(spacing: 4) {
+            Text("Congratulations!")
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(theme.foreground)
+            Text("You are at Inbox Zero.")
+                .font(.system(size: 11))
+                .foregroundStyle(theme.muted)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 28)
+    }
+}
 
 private struct EmptyAccountsState: View {
     let onAddAccount: () -> Void

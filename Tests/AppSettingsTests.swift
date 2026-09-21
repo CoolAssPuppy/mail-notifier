@@ -60,4 +60,29 @@ final class AppSettingsTests: XCTestCase {
         XCTAssertLessThanOrEqual(AppSettings.recentMessageRange.upperBound,
                                  MessageFetcher.maximumMessagesStored)
     }
+
+    // MARK: - Compact mode
+
+    func testCompactModeIsOffForAFreshInstall() {
+        XCTAssertFalse(AppSettings.shared.compactMode)
+    }
+
+    func testACompactModeChoiceIsKept() {
+        AppSettings.shared.compactMode = true
+
+        XCTAssertTrue(AppSettings.shared.compactMode)
+    }
+
+    func testStandardModeShowsAccountsWithoutUnreadMail() {
+        AppSettings.shared.compactMode = false
+
+        XCTAssertTrue(AppSettings.shared.shouldShowAccount(unreadCount: 0))
+    }
+
+    func testCompactModeHidesAccountsWithoutUnreadMail() {
+        AppSettings.shared.compactMode = true
+
+        XCTAssertFalse(AppSettings.shared.shouldShowAccount(unreadCount: 0))
+        XCTAssertTrue(AppSettings.shared.shouldShowAccount(unreadCount: 1))
+    }
 }

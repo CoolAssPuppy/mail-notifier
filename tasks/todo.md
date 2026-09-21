@@ -1,5 +1,33 @@
 # Todo
 
+## Release 3.7.1 (current)
+
+### Steps
+- [x] 1. Add the 3.7.1 changelog entry with Phillip's credit.
+- [ ] 2. Run the complete local release checks and commit Compact mode.
+- [ ] 3. Run the signed, notarized, Sparkle-signed shipping pipeline for build 35.
+- [ ] 4. Verify the live DMG and appcast, commit release metadata, and push once.
+
+### Review
+- Pending.
+
+## Compact mode (current)
+
+### Steps
+- [x] 1. Add failing tests for the default, persisted setting, and unread-account filter.
+- [x] 2. Add the Compact mode switch above anonymous usage data in General settings.
+- [x] 3. Apply the unread-account filter to the Pretty and Classic dropdowns.
+- [x] 4. Refresh the Pretty dropdown when the setting changes, show centered Inbox Zero copy there, and show one gray line in Classic mode.
+- [x] 5. Add a subtle spring enter and exit transition to account rows in Pretty mode, with Reduce Motion support.
+- [x] 6. Regenerate the Xcode project and run the complete test and build checks.
+
+### Review
+- Compact mode defaults to off and persists in UserDefaults.
+- Pretty mode filters and animates account rows as unread counts change. Reduce Motion keeps a short opacity change without movement.
+- Classic mode filters the same accounts and uses the requested disabled Inbox Zero row.
+- All 192 tests pass. Every localization file passes `plutil -lint`.
+- The Debug build succeeded, and the user confirmed the feature works as requested.
+
 ## Drag to reorder accounts, custom account icons that roam (current)
 
 Full design in `~/.claude/plans/radiant-inventing-widget.md`.

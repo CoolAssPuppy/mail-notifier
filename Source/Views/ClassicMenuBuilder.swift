@@ -62,10 +62,17 @@ enum ClassicMenuBuilder {
         // .accessory app with no key window.
         menu.autoenablesItems = false
 
+        let visibleAccounts = accounts.filter { account in
+            let unreadCount = fetcherManager.fetcher(for: account.email)?.unreadMessagesCount ?? 0
+            return AppSettings.shared.shouldShowAccount(unreadCount: unreadCount)
+        }
+
         if accounts.isEmpty {
             appendEmptyState(to: menu, actions: actions)
+        } else if visibleAccounts.isEmpty {
+            appendInboxZeroState(to: menu)
         } else {
-            for account in accounts {
+            for account in visibleAccounts {
                 menu.addItem(accountItem(for: account,
                                          fetcher: fetcherManager.fetcher(for: account.email),
                                          isLocked: lockedEmails.contains(account.email),
@@ -90,6 +97,16 @@ enum ClassicMenuBuilder {
 
         menu.addItem(ClassicMenuItem(title: NSLocalizedString("Add an account…", comment: ""),
                                      handler: actions.openWindow))
+    }
+
+    private static func appendInboxZeroState(to menu: NSMenu) {
+        let item = NSMenuItem(
+            title: NSLocalizedString("Congrats! You are at Inbox Zero.", comment: ""),
+            action: nil,
+            keyEquivalent: ""
+        )
+        item.isEnabled = false
+        menu.addItem(item)
     }
 
     // MARK: Account row

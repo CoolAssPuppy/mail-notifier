@@ -15,6 +15,7 @@ struct SettingsView: View {
     @AppStorage(AppSettings.showUnreadCount) private var showUnreadCount = AppSettings.shared.showUnreadCount
     @AppStorage(AppSettings.openSettingsOnStartKey) private var openSettingsOnStart = false
     @AppStorage(AppSettings.recentMessageCountKey) private var recentMessageCount = AppSettings.defaultRecentMessageCount
+    @AppStorage(AppSettings.compactModeKey) private var compactMode = false
     @AppStorage(VIPList.storageKey) private var vipList = VIPList()
 
     @Environment(\.theme) private var theme
@@ -100,6 +101,22 @@ struct SettingsView: View {
                         .toggleStyle(.switch)
                         .controlSize(.small)
                         .tint(theme.primary)
+                }
+
+                AppRowDivider().padding(.vertical, 10)
+
+                AppSettingRow(
+                    "Compact mode",
+                    description: "Only show accounts with new mail"
+                ) {
+                    Toggle("", isOn: $compactMode)
+                        .labelsHidden()
+                        .toggleStyle(.switch)
+                        .controlSize(.small)
+                        .tint(theme.primary)
+                        .onChange(of: compactMode) { _, _ in
+                            AppSettings.shared.compactModeSettingChanged()
+                        }
                 }
 
                 AppRowDivider().padding(.vertical, 10)

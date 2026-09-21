@@ -15,6 +15,7 @@ struct AppSettings {
     static let showUnreadCount = "settings.showUnreadCount"
     static let openSettingsOnStartKey = "settings.openSettingsOnStart"
     static let recentMessageCountKey = "settings.recentMessageCount"
+    static let compactModeKey = "settings.compactMode"
 
     /// How many recent messages each account lists in the menu bar popover
     /// when nobody has chosen. Three was the hardcoded number before this was
@@ -52,6 +53,23 @@ extension AppSettings {
         nonmutating set {
             Self.defaults.set(newValue, forKey: Self.openSettingsOnStartKey)
         }
+    }
+
+    var compactMode: Bool {
+        get {
+            Self.defaults.bool(forKey: Self.compactModeKey)
+        }
+        nonmutating set {
+            Self.defaults.set(newValue, forKey: Self.compactModeKey)
+        }
+    }
+
+    func shouldShowAccount(unreadCount: Int) -> Bool {
+        !compactMode || unreadCount > 0
+    }
+
+    func compactModeSettingChanged() {
+        NotificationCenter.default.post(name: .compactModeSettingChanged, object: nil)
     }
 
     /// How many recent messages each account lists in the menu bar popover.

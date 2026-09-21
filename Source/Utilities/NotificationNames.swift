@@ -22,6 +22,7 @@ extension Notification.Name {
 
     // MARK: Settings Events
     static let showUnreadCountSettingChanged = Notification.Name("showUnreadCountSettingChanged")
+    static let compactModeSettingChanged = Notification.Name("compactModeSettingChanged")
 
     // MARK: URL Events
     static let mailToReceived = Notification.Name("mailToReceived")

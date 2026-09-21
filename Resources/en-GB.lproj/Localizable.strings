@@ -19,6 +19,9 @@
 
 "ACCOUNTS" = "ACCOUNTS";
 "No accounts configured" = "No accounts configured";
+"Congratulations!" = "Congratulations!";
+"You are at Inbox Zero." = "You are at Inbox Zero.";
+"Congrats! You are at Inbox Zero." = "Congrats! You are at Inbox Zero.";
 "1 account configured" = "1 account configured";
 "%lld accounts configured" = "%lld accounts configured";
 "Last checked %@" = "Last checked %@";
@@ -106,6 +109,8 @@
 "How many messages to list under each account." = "How many messages to list under each account.";
 "Open main window on launch" = "Open main window on launch";
 "Otherwise the app stays in the menu bar." = "Otherwise the app stays in the menu bar.";
+"Compact mode" = "Compact mode";
+"Only show accounts with new mail" = "Only show accounts with new mail";
 "Send anonymous usage data" = "Send anonymous usage data";
 "Help improve Mail Notifier." = "Help improve Mail Notifier.";
 
