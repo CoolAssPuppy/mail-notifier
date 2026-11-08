@@ -183,3 +183,16 @@
 "That license key is for a different product." = "Licensnyckeln hör till en annan produkt.";
 "This license is already active on the maximum number of devices. Remove it from one first." = "Licensen är redan aktiv på det högsta antalet enheter. Ta bort den från en först.";
 "Couldn't reach the subscription service (HTTP %lld): %@" = "Kunde inte nå prenumerationstjänsten (HTTP %lld): %@";
+
+// UI cleanup
+"Appearance" = "Utseende";
+"Theme" = "Tema";
+"Close Settings" = "Stäng inställningar";
+"More options" = "Fler alternativ";
+
+// Quiet hours
+"Quiet hours" = "Tysta timmar";
+"Pause alerts and sounds. Mail checks continue." = "Pausar aviseringar och ljud. E-posten kontrolleras fortfarande.";
+"From" = "Från";
+"Until" = "Till";
+"Choose different start and end times." = "Välj olika start- och sluttider.";

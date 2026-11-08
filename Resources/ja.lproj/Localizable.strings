@@ -183,3 +183,16 @@
 "That license key is for a different product." = "そのライセンスキーは別の製品のものです。";
 "This license is already active on the maximum number of devices. Remove it from one first." = "このライセンスはすでに上限の台数で使用中です。まず 1 台から削除してください。";
 "Couldn't reach the subscription service (HTTP %lld): %@" = "サブスクリプションサービスに接続できませんでした (HTTP %lld): %@";
+
+// UI cleanup
+"Appearance" = "外観";
+"Theme" = "テーマ";
+"Close Settings" = "設定を閉じる";
+"More options" = "その他のオプション";
+
+// Quiet hours
+"Quiet hours" = "通知を停止する時間";
+"Pause alerts and sounds. Mail checks continue." = "通知とサウンドを停止します。メールの確認は続きます。";
+"From" = "開始";
+"Until" = "終了";
+"Choose different start and end times." = "開始時刻と終了時刻を別々に選んでください。";

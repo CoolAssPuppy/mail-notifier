@@ -43,8 +43,6 @@ struct AccountView: View {
 
                     behaviorCard
 
-                    managementCard
-
                     Spacer(minLength: 4)
                 }
                 .padding(.horizontal, 28)
@@ -173,12 +171,6 @@ struct AccountView: View {
     private var headerMeta: some View {
         let fetcher = self.fetcher
         HStack(spacing: 10) {
-            Text(account.type.displayLabel)
-                .font(.system(size: 11))
-                .foregroundStyle(theme.muted)
-
-            dot
-
             statusBadge(fetcher: fetcher)
 
             if let timestamp = fetcher?.lastCheckedAt {
@@ -201,6 +193,8 @@ struct AccountView: View {
     private func statusBadge(fetcher: MessageFetcher?) -> some View {
         if !account.enabled {
             statusLabel(color: theme.muted, label: "Disabled")
+        } else if isLocked {
+            statusLabel(color: theme.warning, label: LocalizedStringKey(PaywallCopy.lockedBadge))
         } else if fetcher?.hasAuthError == true {
             statusLabel(color: theme.destructive, label: "Auth expired")
         } else {
@@ -221,17 +215,40 @@ struct AccountView: View {
     }
 
     private var headerActions: some View {
-        HStack(spacing: 4) {
-            AppIconButton(systemName: "arrow.triangle.2.circlepath",
-                          help: "Check this account now",
-                          spinOnTap: true) {
-                fetcher?.fetch()
+        HStack(spacing: 8) {
+            if shouldShowReauthorizeButton {
+                AppSecondaryButton(title: "Reauthorize", systemImage: "key.icloud") {
+                    Accounts.authorize(type: account.type)
+                }
+            } else if account.enabled && !isLocked {
+                AppIconButton(systemName: "arrow.triangle.2.circlepath",
+                              help: "Check this account now",
+                              spinOnTap: true) {
+                    fetcher?.fetch()
+                }
             }
             AppIconButton(systemName: "arrow.up.forward.app",
                           help: "Open inbox in browser") {
                 NSWorkspace.shared.open(account.baseURL)
             }
+            Menu {
+                if !shouldShowReauthorizeButton {
+                    Button("Reauthorize") { Accounts.authorize(type: account.type) }
+                }
+                Button("Remove", role: .destructive) { showingDeleteAlert = true }
+            } label: {
+                Image(systemName: "ellipsis")
+                    .frame(width: 28, height: 28)
+            }
+            .menuStyle(.borderlessButton)
+            .fixedSize()
+            .help(LocalizedStringKey("Account Management"))
+            .accessibilityLabel(Text("Account Management"))
         }
+    }
+
+    private var shouldShowReauthorizeButton: Bool {
+        account.enabled && !isLocked && fetcher?.hasAuthError == true
     }
 
     // MARK: - Identity card
@@ -356,6 +373,20 @@ struct AccountView: View {
                         label: { "\($0) min" }
                     )
                 }
+
+                AppRowDivider().padding(.vertical, 12)
+
+                AppSettingRow(
+                    "Enable this account",
+                    description: "When off, this inbox is skipped during checks."
+                ) {
+                    Toggle("", isOn: $account.enabled)
+                        .labelsHidden()
+                        .toggleStyle(.switch)
+                        .controlSize(.small)
+                        .tint(theme.primary)
+                        .accessibilityLabel(Text("Enable this account"))
+                }
             }
         }
     }
@@ -417,46 +448,6 @@ struct AccountView: View {
         accounts.reorder(fromOffsets: IndexSet(integer: index), toOffset: 0)
     }
 
-    // MARK: - Management card
-
-    private var managementCard: some View {
-        AppCard("Account Management") {
-            VStack(spacing: 0) {
-                AppSettingRow(
-                    "Enable this account",
-                    description: "When off, this inbox is skipped during checks."
-                ) {
-                    Toggle("", isOn: $account.enabled)
-                        .labelsHidden()
-                        .toggleStyle(.switch)
-                        .controlSize(.small)
-                        .tint(theme.primary)
-                }
-
-                AppRowDivider().padding(.vertical, 12)
-
-                AppSettingRow(
-                    "Reauthorize",
-                    description: "Sign in again to refresh OAuth tokens."
-                ) {
-                    AppSecondaryButton(title: "Reauthorize", systemImage: "key.icloud") {
-                        Accounts.authorize(type: account.type)
-                    }
-                }
-
-                AppRowDivider().padding(.vertical, 12)
-
-                AppSettingRow(
-                    "Remove account",
-                    description: "Deletes the account and all stored tokens. This is permanent."
-                ) {
-                    AppSecondaryButton(title: "Remove", systemImage: "trash", tint: .destructive) {
-                        showingDeleteAlert = true
-                    }
-                }
-            }
-        }
-    }
 }
 
 #Preview {

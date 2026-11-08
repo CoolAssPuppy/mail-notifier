@@ -183,3 +183,16 @@
 "That license key is for a different product." = "Цей ліцензійний ключ від іншого продукту.";
 "This license is already active on the maximum number of devices. Remove it from one first." = "Ця ліцензія вже активна на максимальній кількості пристроїв. Спершу видаліть її з одного.";
 "Couldn't reach the subscription service (HTTP %lld): %@" = "Не вдалося зв'язатися зі службою підписок (HTTP %lld): %@";
+
+// UI cleanup
+"Appearance" = "Вигляд";
+"Theme" = "Тема";
+"Close Settings" = "Закрити налаштування";
+"More options" = "Інші параметри";
+
+// Quiet hours
+"Quiet hours" = "Години тиші";
+"Pause alerts and sounds. Mail checks continue." = "Призупиняє сповіщення та звуки. Перевірка пошти триває.";
+"From" = "Від";
+"Until" = "До";
+"Choose different start and end times." = "Виберіть різний час початку й завершення.";

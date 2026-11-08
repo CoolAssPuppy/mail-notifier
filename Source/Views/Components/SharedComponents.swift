@@ -309,14 +309,6 @@ struct AppProviderChoiceCard: View {
                         .foregroundStyle(theme.muted)
                 }
 
-                HStack(spacing: 5) {
-                    Image(systemName: "checkmark")
-                        .font(.system(size: 8, weight: .bold))
-                        .foregroundStyle(theme.success)
-                    Text(LocalizedStringKey("Read-only access"))
-                        .font(.system(size: 10))
-                        .foregroundStyle(theme.muted)
-                }
             }
             .padding(18)
             .frame(width: 220, alignment: .leading)

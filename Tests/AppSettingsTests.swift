@@ -85,4 +85,18 @@ final class AppSettingsTests: XCTestCase {
         XCTAssertFalse(AppSettings.shared.shouldShowAccount(unreadCount: 0))
         XCTAssertTrue(AppSettings.shared.shouldShowAccount(unreadCount: 1))
     }
+
+    func testQuietHoursAreOffByDefaultWithAnOvernightSchedule() {
+        XCTAssertFalse(AppSettings.shared.quietHours.isEnabled)
+        XCTAssertEqual(AppSettings.shared.quietHours.startMinute, 22 * 60)
+        XCTAssertEqual(AppSettings.shared.quietHours.endMinute, 8 * 60)
+    }
+
+    func testQuietHoursChoicePersistsAndClampsStoredMinutes() {
+        AppSettings.shared.quietHours = QuietHours(isEnabled: true, startMinute: -1, endMinute: 1_500)
+
+        XCTAssertTrue(AppSettings.shared.quietHours.isEnabled)
+        XCTAssertEqual(AppSettings.shared.quietHours.startMinute, 0)
+        XCTAssertEqual(AppSettings.shared.quietHours.endMinute, 1_439)
+    }
 }

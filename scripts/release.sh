@@ -15,7 +15,7 @@
 #   - notarytool keychain profile "agent-server" (see SPARKLE.md)
 #   - Sparkle sign_update at ~/bin/sparkle/sign_update
 #   - create-dmg installed (brew install create-dmg)
-#   - doppler CLI logged in with access to the agent-server/prd config
+#   - doppler CLI logged in with access to the mail-notifier/prd config
 #     (provides CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID, R2_BUCKET_NAME, R2_PUBLIC_BASE_URL)
 #   - wrangler available (npm i -g wrangler) or npx on PATH
 #   - python3 on PATH
@@ -43,7 +43,7 @@ SIGN_IDENTITY="Developer ID Application: Prashant Sridharan (955GSY56UT)"
 APP_FOLDER="mail-notifier"
 DUB_SHORTLINK="https://coolasspuppy.com/mail-notifier-updates"
 
-DOPPLER_PROJECT="${DOPPLER_PROJECT:-agent-server}"
+DOPPLER_PROJECT="${DOPPLER_PROJECT:-mail-notifier}"
 DOPPLER_CONFIG="${DOPPLER_CONFIG:-prd}"
 
 if command -v wrangler >/dev/null 2>&1; then
@@ -100,9 +100,7 @@ echo "==> Regenerating Xcode project"
 #----------------------------------------------------------------------
 # PostHog telemetry key
 #----------------------------------------------------------------------
-# Fetched from this app's OWN Doppler project, deliberately not from
-# $DOPPLER_PROJECT — that defaults to agent-server (where the shared Cloudflare
-# R2 credentials live) and its POSTHOG_PUBLIC_KEY belongs to a different app.
+# Fetch the telemetry key from this app's Doppler project.
 #
 # The key used to be hardcoded in Info.plist, pointing at the Strategic Nerds
 # Blog project, which is why months of menu-bar events landed in the blog's

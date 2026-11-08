@@ -183,3 +183,16 @@
 "That license key is for a different product." = "Tento licenční klíč patří k jinému produktu.";
 "This license is already active on the maximum number of devices. Remove it from one first." = "Tato licence je již aktivní na maximálním počtu zařízení. Nejprve ji z jednoho odeberte.";
 "Couldn't reach the subscription service (HTTP %lld): %@" = "Nepodařilo se spojit se službou předplatného (HTTP %lld): %@";
+
+// UI cleanup
+"Appearance" = "Vzhled";
+"Theme" = "Motiv";
+"Close Settings" = "Zavřít nastavení";
+"More options" = "Další možnosti";
+
+// Quiet hours
+"Quiet hours" = "Noční klid";
+"Pause alerts and sounds. Mail checks continue." = "Pozastaví upozornění a zvuky. Kontrola pošty pokračuje.";
+"From" = "Od";
+"Until" = "Do";
+"Choose different start and end times." = "Zvolte různé časy začátku a konce.";

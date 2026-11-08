@@ -14,6 +14,7 @@ protocol NotificationServiceDelegate: AnyObject {
 
 final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
     weak var delegate: NotificationServiceDelegate?
+    private let suppressedNotifications = SuppressedNotificationStore()
 
     func setup() {
         Task {
@@ -55,22 +56,40 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
 
     func deliverNotifications(for messages: [Message], account: Account) {
         Task {
+            if AppSettings.shared.quietHours.contains(Date()) {
+                suppressedNotifications.mark(messages.map(notificationIdentifier(for:)))
+                return
+            }
+
             let delivered = await UNUserNotificationCenter.current().deliveredNotifications()
             let deliveredIds = Set(delivered.map { $0.request.identifier })
             let vipList = VIPList.default
 
-            // Resolve a single sound for this batch so a fetch makes one sound,
-            // matching the previous NSSound behavior: a VIP sender's sound wins,
-            // otherwise the account's sound. Attaching it to the notification
-            // (instead of calling NSSound.play) lets macOS play it, so Focus /
-            // Do Not Disturb governs the sound the same way it governs the banner.
-            let batchSound = messages.lazy
+            let quietHours = AppSettings.shared.quietHours
+            let candidates = messages.filter {
+                let identifier = notificationIdentifier(for: $0)
+                return !deliveredIds.contains(identifier) && !suppressedNotifications.contains(identifier)
+            }
+            let skipped = candidates.filter { message in
+                let receivedAt = message.internalDate > 0 ? message.serverDate : nil
+                return quietHours.shouldSuppress(receivedAt: receivedAt, deliveredAt: Date())
+            }
+            suppressedNotifications.mark(skipped.map(notificationIdentifier(for:)))
+            let newMessages = candidates.filter { message in
+                !suppressedNotifications.contains(notificationIdentifier(for: message))
+            }
+
+            // A VIP sound wins among the messages that will be shown. One sound
+            // per batch lets macOS Focus govern both the banner and its sound.
+            let batchSound = newMessages.lazy
                 .compactMap { vipList.soundForSender($0.senderEmail) }
                 .first ?? account.sound
 
-            let newMessages = messages.filter { !deliveredIds.contains(notificationIdentifier(for: $0)) }
-
             for (index, message) in newMessages.enumerated() {
+                if AppSettings.shared.quietHours.contains(Date()) {
+                    suppressedNotifications.mark(newMessages[index...].map(notificationIdentifier(for:)))
+                    return
+                }
                 let isVIP = vipList.soundForSender(message.senderEmail) != nil
                 let content = UNMutableNotificationContent()
                 content.title = message.sender

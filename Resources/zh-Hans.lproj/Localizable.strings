@@ -183,3 +183,16 @@
 "That license key is for a different product." = "该许可证密钥属于其他产品。";
 "This license is already active on the maximum number of devices. Remove it from one first." = "此许可证已在最多数量的设备上启用。请先从其中一台移除。";
 "Couldn't reach the subscription service (HTTP %lld): %@" = "无法连接订阅服务 (HTTP %lld)：%@";
+
+// UI cleanup
+"Appearance" = "外观";
+"Theme" = "主题";
+"Close Settings" = "关闭设置";
+"More options" = "更多选项";
+
+// Quiet hours
+"Quiet hours" = "免打扰时段";
+"Pause alerts and sounds. Mail checks continue." = "暂停提醒和声音。邮件检查仍会继续。";
+"From" = "开始";
+"Until" = "结束";
+"Choose different start and end times." = "请选择不同的开始和结束时间。";

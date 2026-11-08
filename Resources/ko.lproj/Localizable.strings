@@ -183,3 +183,16 @@
 "That license key is for a different product." = "이 라이선스 키는 다른 제품의 것입니다.";
 "This license is already active on the maximum number of devices. Remove it from one first." = "이 라이선스는 이미 최대 기기 수에서 사용 중입니다. 먼저 한 대에서 제거하세요.";
 "Couldn't reach the subscription service (HTTP %lld): %@" = "구독 서비스에 연결할 수 없습니다 (HTTP %lld): %@";
+
+// UI cleanup
+"Appearance" = "모양";
+"Theme" = "테마";
+"Close Settings" = "설정 닫기";
+"More options" = "추가 옵션";
+
+// Quiet hours
+"Quiet hours" = "방해 금지 시간";
+"Pause alerts and sounds. Mail checks continue." = "알림과 소리를 일시 중지합니다. 메일 확인은 계속됩니다.";
+"From" = "시작";
+"Until" = "종료";
+"Choose different start and end times." = "시작 시간과 종료 시간을 다르게 선택하세요.";

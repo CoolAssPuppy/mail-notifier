@@ -23,7 +23,7 @@ struct WelcomeView: View {
                         .foregroundStyle(theme.foreground)
                         .fixedSize()
 
-                    Text("Connect a Gmail or Outlook inbox and Mail Notifier will quietly watch it from your menu bar. No mail data ever leaves your Mac.")
+                    Text("Add a Gmail or Outlook inbox to start watching your mail.")
                         .font(.system(size: 14))
                         .foregroundStyle(theme.muted)
                         .multilineTextAlignment(.center)
@@ -50,8 +50,13 @@ struct WelcomeView: View {
                 }
                 .padding(.top, 4)
 
-                trustSignals
-                    .padding(.top, 4)
+                DisclosureGroup("Read-only access") {
+                    trustSignals
+                        .padding(.top, 8)
+                }
+                .font(.system(size: 11))
+                .foregroundStyle(theme.muted)
+                .frame(maxWidth: 440)
             }
             .padding(.horizontal, 32)
 

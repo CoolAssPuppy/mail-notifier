@@ -1,5 +1,80 @@
 # Todo
 
+## Release 3.8.0 (cleanup-ui)
+
+### Plan
+- [x] Finish the theme selector and verify its states in the running app.
+- [x] Run the full local test and build checks on the exact source to release.
+- [x] Publish a signed, notarized 3.8.0 release with the note “Some UI cleanup.”
+- [x] Verify the live DMG and appcast.
+- [x] Commit, fast forward main, and push the reviewed branch and main.
+
+### Review
+- The release-file test run passed 204 tests and the standalone Debug build passed. Artifacts: `/tmp/mail-notifier-review/release-3.8.0-final.xcresult` and the matching test/build logs.
+- The public feed shows 3.8.0, build 36, and the exact note “Some UI cleanup.” The signed DMG and its remote enclosure both have 10,707,259 bytes.
+- The original release script stopped after notarization because its old R2 Doppler project no longer exists. The script default was corrected, and its upload steps published the already signed and notarized DMG without changing the build.
+
+## Hover theme selector (cleanup-ui)
+
+### Plan
+- [x] Replace the Settings theme menu with a name and right-anchored color circle; show the other theme circles to its left on hover or click.
+- [x] Make selection update the stored theme, name, and circle color, then collapse with a spring. Disable motion when Reduce Motion is on.
+- [x] Keep the control usable with keyboard and VoiceOver, with a label for each theme and a visible focus state.
+- [x] Run the full Xcode test suite and build, inspect collapsed, expanded, and selected states in the running app, and save screenshots.
+
+### Review
+- The fresh Xcode test run passed 204 tests, and the standalone Debug build passed. Logs and the test result bundle are under `/tmp/mail-notifier-review/theme-selector-*`.
+- The running Settings view showed choices expanding left of the selected circle. Selecting Nerds updated the name and circle, then collapsed the choices. Accessibility listed each theme as a button.
+- Captures: `mail-theme-expanded.png` and `mail-theme-selected.png` in the shared screenshots directory. The saved account settings were restored afterward.
+
+### Cases to check
+- Moving from the current circle into the choices keeps them open; leaving the control closes them.
+- Clicking the current circle opens the choices without hover, and selecting a choice closes them.
+- The current circle stays anchored at the right while the choices appear on its left.
+- The System theme is distinguishable in both system appearances.
+- Keyboard and VoiceOver can open the choices, identify a theme, and select it.
+- Reduce Motion disables the bounce.
+
+## Quiet hours (cleanup-ui)
+
+### Plan
+- [x] Write the failure cases and tests for local-time quiet-hour boundaries, overnight windows, disabled settings, and equal start/end times.
+- [x] Add persisted quiet-hour settings and suppress notification delivery during the selected local-time window while mail checks continue.
+- [x] Add an accessible quiet-hours control and start/end time pickers to Settings, with localized labels.
+- [x] Verify the full test suite, localization files, build, and live UI; save review artifacts.
+- [x] Review behavior and list further feature ideas without implementing them.
+
+### Review
+- A fresh isolated `xcodebuild test` passed 204 tests with zero failures. A final standalone `xcodebuild build` passed with the same source files. The logs are `/tmp/mail-notifier-review/quiet-test-final.log` and `/tmp/mail-notifier-review/quiet-build-final.log`. The installed app was restored and relaunched afterward.
+- The quiet-hours schedule follows local wall time every day, includes its start, excludes its end, and treats equal times as no interval. Mail checks and unread counts continue. Messages received during quiet hours stay suppressed after a later fetch.
+- All 22 locale files passed `plutil -lint`. The new translations need native-speaker review. The Settings toggle and time controls were inspected in the running debug app. Screenshots are in `/Users/prashant/.codex/visualizations/2026/11/08/01a1b9c1-dfc3-7aa1-8a2e-b771e8dc5c85/screenshots`.
+
+### Failure cases to test first
+- The feature is off on a fresh install and remains off after a saved choice.
+- A daytime window includes its start and excludes its end.
+- An overnight window spans midnight and excludes its end.
+- Equal start and end times suppress nothing.
+- Local wall-clock time follows the supplied calendar and time zone, including a repeated hour at the daylight-saving change.
+- Stored minute values outside 0 through 1439 are clamped before use.
+- Messages seen during quiet hours stay suppressed when a later fetch includes them again.
+- Suppressed identifiers persist across app restarts and older entries are removed at the storage limit.
+- Mail that arrived during quiet hours stays silent when the Mac first fetches it after waking.
+- A stored time displays identically on a daylight-saving transition day.
+
+## UI cleanup (cleanup-ui)
+
+### Plan
+- [x] Simplify the Pretty popover hierarchy and move appearance and Quit into Settings or a secondary menu.
+- [x] Reorganize Settings into a clear, single-column layout without removing controls.
+- [x] Simplify account status, account actions, and first-run copy while preserving account behavior.
+- [x] Check source-level keyboard labels, empty and error states, localization, and the Classic menu.
+- [x] Inspect the rendered app and save screenshots.
+- [x] Review the diff and report feature ideas separately from the UI cleanup.
+
+### Review
+- UI changes are implemented. A fresh `xcodebuild test` passed 204 tests after isolating the test host from the installed app. `xcodebuild build-for-testing` and a final standalone `xcodebuild build` passed. All 22 localization files passed `plutil -lint`; `git diff --check` passed.
+- The welcome screen, Settings, quiet-hours controls, and dropdown content were captured from the debug build. The dropdown screenshot shows the actual SwiftUI content in a temporary preview window with demo accounts, so menu bar placement still needs a direct check. The temporary preview code was removed, the normal build passed, and the installed app and saved settings were restored.
+
 ## Release 3.7.1 (current)
 
 ### Steps

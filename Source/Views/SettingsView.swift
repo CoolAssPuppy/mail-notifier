@@ -9,6 +9,7 @@ import SwiftUI
 import KeyboardShortcuts
 
 struct SettingsView: View {
+    @ObservedObject private var themeStore = ThemeStore.shared
     @StateObject private var launchAtLogin = LaunchAtLoginManager.shared
     @StateObject private var updater = UpdaterManager.shared
     @StateObject private var demoMode = DemoMode.shared
@@ -16,6 +17,9 @@ struct SettingsView: View {
     @AppStorage(AppSettings.openSettingsOnStartKey) private var openSettingsOnStart = false
     @AppStorage(AppSettings.recentMessageCountKey) private var recentMessageCount = AppSettings.defaultRecentMessageCount
     @AppStorage(AppSettings.compactModeKey) private var compactMode = false
+    @AppStorage(AppSettings.quietHoursEnabledKey) private var quietHoursEnabled = false
+    @AppStorage(AppSettings.quietHoursStartKey) private var quietStartMinute = AppSettings.defaultQuietHoursStart
+    @AppStorage(AppSettings.quietHoursEndKey) private var quietEndMinute = AppSettings.defaultQuietHoursEnd
     @AppStorage(VIPList.storageKey) private var vipList = VIPList()
 
     @Environment(\.theme) private var theme
@@ -24,27 +28,69 @@ struct SettingsView: View {
     @State private var telemetryOptIn: Bool = Telemetry.isOptedIn
 
     var body: some View {
-        VStack(spacing: 0) {
-            HStack(alignment: .top, spacing: 14) {
-                VStack(spacing: 14) {
-                    generalCard
-                    keyboardCard
-                    vipCard
-                }
-                .frame(maxWidth: .infinity)
-
-                VStack(spacing: 14) {
-                    SubscriptionCard()
-                    menuStyleCard
-                    updatesCard
-                    contactCard
-                }
-                .frame(maxWidth: .infinity)
-            }
-            .padding(.horizontal, 22)
-            .padding(.top, 18)
-            .padding(.bottom, 14)
+        VStack(spacing: 14) {
+            generalCard
+            notificationsCard
+            appearanceCard
+            keyboardCard
+            vipCard
+            SubscriptionCard()
+            updatesCard
+            contactCard
         }
+        .frame(maxWidth: 620)
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 22)
+        .padding(.vertical, 18)
+    }
+
+    private var notificationsCard: some View {
+        AppCard("Notifications") {
+            VStack(alignment: .leading, spacing: 12) {
+                AppSettingRow("Quiet hours", description: "Pause alerts and sounds. Mail checks continue.") {
+                    Toggle("", isOn: $quietHoursEnabled)
+                        .labelsHidden()
+                        .accessibilityLabel("Quiet hours")
+                        .toggleStyle(.switch)
+                        .controlSize(.small)
+                        .tint(theme.primary)
+                }
+
+                if quietHoursEnabled {
+                    HStack(spacing: 16) {
+                        DatePicker("From", selection: quietTimeBinding(isStart: true),
+                                   displayedComponents: .hourAndMinute)
+                        DatePicker("Until", selection: quietTimeBinding(isStart: false),
+                                   displayedComponents: .hourAndMinute)
+                    }
+                    .datePickerStyle(.field)
+
+                    if quietStartMinute == quietEndMinute {
+                        Text("Choose different start and end times.")
+                            .font(.system(size: 11))
+                            .foregroundStyle(theme.warning)
+                    }
+                }
+            }
+        }
+    }
+
+    private func quietTimeBinding(isStart: Bool) -> Binding<Date> {
+        Binding(
+            get: {
+                let minute = isStart ? quietStartMinute : quietEndMinute
+                return QuietHours.pickerDate(for: minute)
+            },
+            set: { date in
+                let components = Calendar.current.dateComponents([.hour, .minute], from: date)
+                let minute = (components.hour ?? 0) * 60 + (components.minute ?? 0)
+                if isStart {
+                    quietStartMinute = minute
+                } else {
+                    quietEndMinute = minute
+                }
+            }
+        )
     }
 
     // MARK: - General
@@ -58,6 +104,7 @@ struct SettingsView: View {
                 ) {
                     Toggle("", isOn: $launchAtLogin.isEnabled)
                         .labelsHidden()
+                        .accessibilityLabel("Launch at login")
                         .toggleStyle(.switch)
                         .controlSize(.small)
                         .tint(theme.primary)
@@ -71,6 +118,7 @@ struct SettingsView: View {
                 ) {
                     Toggle("", isOn: $showUnreadCount)
                         .labelsHidden()
+                        .accessibilityLabel("Show unread count in menu bar")
                         .toggleStyle(.switch)
                         .controlSize(.small)
                         .tint(theme.primary)
@@ -88,6 +136,7 @@ struct SettingsView: View {
                     AppStepper(value: $recentMessageCount,
                                range: AppSettings.recentMessageRange,
                                width: 104)
+                        .accessibilityLabel("Show recent messages")
                 }
 
                 AppRowDivider().padding(.vertical, 10)
@@ -98,6 +147,7 @@ struct SettingsView: View {
                 ) {
                     Toggle("", isOn: $openSettingsOnStart)
                         .labelsHidden()
+                        .accessibilityLabel("Open main window on launch")
                         .toggleStyle(.switch)
                         .controlSize(.small)
                         .tint(theme.primary)
@@ -111,6 +161,7 @@ struct SettingsView: View {
                 ) {
                     Toggle("", isOn: $compactMode)
                         .labelsHidden()
+                        .accessibilityLabel("Compact mode")
                         .toggleStyle(.switch)
                         .controlSize(.small)
                         .tint(theme.primary)
@@ -133,6 +184,7 @@ struct SettingsView: View {
                         }
                     ))
                     .labelsHidden()
+                    .accessibilityLabel("Send anonymous usage data")
                     .toggleStyle(.switch)
                     .controlSize(.small)
                     .tint(theme.primary)
@@ -188,6 +240,7 @@ struct SettingsView: View {
                 }
                 .pickerStyle(.menu)
                 .labelsHidden()
+                .accessibilityLabel("Sound")
                 .frame(width: 130)
                 .onChange(of: newVIPSound) { _, newValue in
                     Sound(rawValue: newValue)?.nsSound?.play()
@@ -209,6 +262,7 @@ struct SettingsView: View {
                 }
                 .buttonStyle(.plain)
                 .disabled(!canAddVIP)
+                .accessibilityLabel("Add")
             }
 
             if !vipList.isEmpty {
@@ -243,18 +297,23 @@ struct SettingsView: View {
         newVIPSound = ""
     }
 
-    // MARK: - Menu Style
+    // MARK: - Appearance
 
-    private var menuStyleCard: some View {
-        AppCard("Menu Style") {
-            Text("Choose what the menu bar icon opens. Classic follows your system light or dark appearance and ignores themes.")
-                .font(.system(size: 10))
-                .foregroundStyle(theme.muted)
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(.bottom, 12)
+    private var appearanceCard: some View {
+        AppCard("Appearance") {
+            AppSettingRow("Theme") {
+                ThemeSelector(selection: $themeStore.current)
+            }
 
+            AppRowDivider().padding(.vertical, 12)
+
+            Text("Menu Style")
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(theme.foreground)
+                .padding(.bottom, 10)
             MenuStylePicker()
         }
+        .clipShape(RoundedRectangle(cornerRadius: AppRadius.xl, style: .continuous))
     }
 
     // MARK: - Updates
@@ -265,6 +324,7 @@ struct SettingsView: View {
                 AppSettingRow("Automatically check for updates", description: nil) {
                     Toggle("", isOn: $updater.automaticallyChecksForUpdates)
                         .labelsHidden()
+                        .accessibilityLabel("Automatically check for updates")
                         .toggleStyle(.switch)
                         .controlSize(.small)
                         .tint(theme.primary)
@@ -395,6 +455,7 @@ private struct VIPRow: View {
             }
             .pickerStyle(.menu)
             .labelsHidden()
+            .accessibilityLabel("Notification sound")
             .frame(width: 110)
             .onChange(of: selectedSound) { _, newValue in
                 Sound(rawValue: newValue)?.nsSound?.play()

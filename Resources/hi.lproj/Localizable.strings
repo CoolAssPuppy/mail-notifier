@@ -183,3 +183,16 @@
 "That license key is for a different product." = "वह लाइसेंस कुंजी किसी दूसरे उत्पाद की है।";
 "This license is already active on the maximum number of devices. Remove it from one first." = "यह लाइसेंस पहले से ही अधिकतम डिवाइसों पर सक्रिय है। पहले किसी एक से हटाएँ।";
 "Couldn't reach the subscription service (HTTP %lld): %@" = "सदस्यता सेवा तक नहीं पहुँच सके (HTTP %lld): %@";
+
+// UI cleanup
+"Appearance" = "दिखावट";
+"Theme" = "थीम";
+"Close Settings" = "सेटिंग बंद करें";
+"More options" = "और विकल्प";
+
+// Quiet hours
+"Quiet hours" = "शांत समय";
+"Pause alerts and sounds. Mail checks continue." = "अलर्ट और ध्वनियाँ रोकें। मेल की जाँच जारी रहेगी।";
+"From" = "से";
+"Until" = "तक";
+"Choose different start and end times." = "शुरू और खत्म होने का समय अलग चुनें।";

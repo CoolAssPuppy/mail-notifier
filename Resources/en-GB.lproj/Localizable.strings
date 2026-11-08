@@ -188,3 +188,16 @@
 "That license key is for a different product." = "That licence key is for a different product.";
 "This license is already active on the maximum number of devices. Remove it from one first." = "This licence is already active on the maximum number of devices. Remove it from one first.";
 "Couldn't reach the subscription service (HTTP %lld): %@" = "Couldn't reach the subscription service (HTTP %lld): %@";
+
+// UI cleanup
+"Appearance" = "Appearance";
+"Theme" = "Theme";
+"Close Settings" = "Close Settings";
+"More options" = "More options";
+
+// Quiet hours
+"Quiet hours" = "Quiet hours";
+"Pause alerts and sounds. Mail checks continue." = "Pause alerts and sounds. Mail checks continue.";
+"From" = "From";
+"Until" = "Until";
+"Choose different start and end times." = "Choose different start and end times.";

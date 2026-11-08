@@ -183,3 +183,16 @@
 "That license key is for a different product." = "Essa chave de licença é de outro produto.";
 "This license is already active on the maximum number of devices. Remove it from one first." = "Esta licença já está ativa no número máximo de dispositivos. Remova-a de um deles primeiro.";
 "Couldn't reach the subscription service (HTTP %lld): %@" = "Não foi possível contactar o serviço de subscrições (HTTP %lld): %@";
+
+// UI cleanup
+"Appearance" = "Aspeto";
+"Theme" = "Tema";
+"Close Settings" = "Fechar definições";
+"More options" = "Mais opções";
+
+// Quiet hours
+"Quiet hours" = "Horas de silêncio";
+"Pause alerts and sounds. Mail checks continue." = "Pausa os alertas e os sons. A verificação do correio continua.";
+"From" = "Das";
+"Until" = "Até";
+"Choose different start and end times." = "Escolha horas de início e fim diferentes.";

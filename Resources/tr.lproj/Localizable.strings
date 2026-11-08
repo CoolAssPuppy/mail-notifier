@@ -183,3 +183,16 @@
 "That license key is for a different product." = "Bu lisans anahtarı başka bir ürüne ait.";
 "This license is already active on the maximum number of devices. Remove it from one first." = "Bu lisans zaten en fazla sayıda cihazda etkin. Önce birinden kaldırın.";
 "Couldn't reach the subscription service (HTTP %lld): %@" = "Abonelik hizmetine ulaşılamadı (HTTP %lld): %@";
+
+// UI cleanup
+"Appearance" = "Görünüm";
+"Theme" = "Tema";
+"Close Settings" = "Ayarları kapat";
+"More options" = "Diğer seçenekler";
+
+// Quiet hours
+"Quiet hours" = "Sessiz saatler";
+"Pause alerts and sounds. Mail checks continue." = "Uyarıları ve sesleri duraklatır. E-posta denetimi sürer.";
+"From" = "Başlangıç";
+"Until" = "Bitiş";
+"Choose different start and end times." = "Farklı başlangıç ve bitiş saatleri seçin.";

@@ -16,6 +16,11 @@ struct AppSettings {
     static let openSettingsOnStartKey = "settings.openSettingsOnStart"
     static let recentMessageCountKey = "settings.recentMessageCount"
     static let compactModeKey = "settings.compactMode"
+    static let quietHoursEnabledKey = "settings.quietHoursEnabled"
+    static let quietHoursStartKey = "settings.quietHoursStart"
+    static let quietHoursEndKey = "settings.quietHoursEnd"
+    static let defaultQuietHoursStart = 22 * 60
+    static let defaultQuietHoursEnd = 8 * 60
 
     /// How many recent messages each account lists in the menu bar popover
     /// when nobody has chosen. Three was the hardcoded number before this was
@@ -61,6 +66,23 @@ extension AppSettings {
         }
         nonmutating set {
             Self.defaults.set(newValue, forKey: Self.compactModeKey)
+        }
+    }
+
+    var quietHours: QuietHours {
+        get {
+            QuietHours(
+                isEnabled: Self.defaults.bool(forKey: Self.quietHoursEnabledKey),
+                startMinute: Self.defaults.object(forKey: Self.quietHoursStartKey) as? Int
+                    ?? Self.defaultQuietHoursStart,
+                endMinute: Self.defaults.object(forKey: Self.quietHoursEndKey) as? Int
+                    ?? Self.defaultQuietHoursEnd
+            )
+        }
+        nonmutating set {
+            Self.defaults.set(newValue.isEnabled, forKey: Self.quietHoursEnabledKey)
+            Self.defaults.set(newValue.startMinute, forKey: Self.quietHoursStartKey)
+            Self.defaults.set(newValue.endMinute, forKey: Self.quietHoursEndKey)
         }
     }
 

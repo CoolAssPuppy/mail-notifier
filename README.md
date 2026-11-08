@@ -15,6 +15,7 @@ Mail Notifier is a ground-up rewrite designed for modern macOS development best 
 - Support for multiple Google (Gmail) and Microsoft (Outlook) accounts
 - OAuth 2.0 authentication for both providers
 - Per-account settings for check interval, notifications, and sounds
+- Quiet hours that pause alerts and sounds while mail checks continue
 - VIP sender list with custom notification sounds
 - Configurable browser for opening mail links
 - Menu bar icon with optional unread count badge
@@ -49,6 +50,8 @@ mail-notifier/
 │   │   ├── FriendlyNameStore.swift     # iCloud KVS-mirrored friendly account names
 │   │   ├── AccountIconStore.swift      # iCloud KVS-mirrored custom account icons
 │   │   ├── Message.swift               # Email message model + URL construction
+│   │   ├── QuietHours.swift            # Local-time notification schedule
+│   │   ├── SuppressedNotificationStore.swift # Messages skipped during quiet hours
 │   │   ├── Sound.swift                 # Notification sound enum (system + custom)
 │   │   ├── ThemeStore.swift            # 10-palette theme system
 │   │   └── VIP.swift                   # VIP sender list + UserDefaults persistence
@@ -79,9 +82,9 @@ mail-notifier/
 │   └── Views/
 │       ├── AccountView.swift           # Per-account detail (identity, notifications, behavior)
 │       ├── MainView.swift              # Main window: sidebar + content + settings drawer
-│       ├── MenuBarPopover.swift        # SwiftUI menu-bar popover with theme strip
+│       ├── MenuBarPopover.swift        # SwiftUI menu-bar popover
 │       ├── SettingsDrawer.swift        # Slide-down global Settings drawer
-│       ├── SettingsView.swift          # Global settings (general, keyboard, VIP, updates, contact)
+│       ├── SettingsView.swift          # Global settings (general, appearance, keyboard, VIP, updates, contact)
 │       ├── Sidebar.swift               # Account list sidebar
 │       ├── Theme.swift                 # AppRadius, AppSpacing constants
 │       ├── WelcomeView.swift           # First-run welcome screen

@@ -187,3 +187,16 @@
 "That license key is for a different product." = "latlh Doch license key.";
 "This license is already active on the maximum number of devices. Remove it from one first." = "Hoch jonta' license lo'. wa' teq.";
 "Couldn't reach the subscription service (HTTP %lld): %@" = "je'meH Duy Sam pagh (HTTP %lld): %@";
+
+// UI cleanup
+"Appearance" = "leghmeH Segh";
+"Theme" = "Segh";
+"Close Settings" = "Settings yISoQ";
+"More options" = "DuH latlh";
+
+// Quiet hours
+"Quiet hours" = "tam poH";
+"Pause alerts and sounds. Mail checks continue." = "QIn ghuHmey wabmey je yImev. QIn nuDtaH.";
+"From" = "tagh";
+"Until" = "van";
+"Choose different start and end times." = "pImbogh tagh poH rIn poH je yIwIv.";

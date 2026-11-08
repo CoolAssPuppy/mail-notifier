@@ -183,3 +183,16 @@
 "That license key is for a different product." = "Deze licentiesleutel hoort bij een ander product.";
 "This license is already active on the maximum number of devices. Remove it from one first." = "Deze licentie is al actief op het maximale aantal apparaten. Verwijder hem eerst van één apparaat.";
 "Couldn't reach the subscription service (HTTP %lld): %@" = "Kan de abonnementsservice niet bereiken (HTTP %lld): %@";
+
+// UI cleanup
+"Appearance" = "Weergave";
+"Theme" = "Thema";
+"Close Settings" = "Instellingen sluiten";
+"More options" = "Meer opties";
+
+// Quiet hours
+"Quiet hours" = "Stille uren";
+"Pause alerts and sounds. Mail checks continue." = "Pauzeert meldingen en geluiden. E-mail wordt nog steeds gecontroleerd.";
+"From" = "Van";
+"Until" = "Tot";
+"Choose different start and end times." = "Kies verschillende begin- en eindtijden.";

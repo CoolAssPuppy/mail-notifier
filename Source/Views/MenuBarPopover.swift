@@ -150,7 +150,7 @@ struct MenuBarPopover: View {
     var body: some View {
         let theme = themeStore.palette
         return VStack(spacing: 0) {
-            HeaderBar(totalUnread: model.totalUnread, accountCount: model.configuredAccountCount)
+            HeaderBar(totalUnread: model.totalUnread, lastCheckedAt: model.lastCheckedAt)
             Divider().background(theme.divider)
             content
             Divider().background(theme.divider)
@@ -165,15 +165,13 @@ struct MenuBarPopover: View {
     @ViewBuilder
     private var content: some View {
         if model.shouldShowInboxZero {
-            InboxZeroState()
+            InboxZeroState(onOpenWindow: actions.openWindow)
         } else if model.accountStates.isEmpty {
             EmptyAccountsState(onAddAccount: actions.openWindow)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 28)
         } else {
             VStack(alignment: .leading, spacing: 6) {
-                AccountsListLabel(lastCheckedAt: model.lastCheckedAt)
-
                 ForEach(model.accountStates) { state in
                     AccountCard(
                         state: state,
@@ -216,26 +214,21 @@ struct MenuBarPopover: View {
 
 private struct HeaderBar: View {
     let totalUnread: Int
-    let accountCount: Int
+    let lastCheckedAt: Date?
 
     @Environment(\.theme) private var theme
 
     var body: some View {
         HStack(spacing: 10) {
-            BrandMark()
-
             VStack(alignment: .leading, spacing: 1) {
                 Text("Mail Notifier")
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(theme.foreground)
-                HStack(spacing: 6) {
-                    Circle()
-                        .fill(theme.success)
-                        .frame(width: 6, height: 6)
-                        .shadow(color: theme.success.opacity(0.5), radius: 4)
-                    Text(statusLine)
+                if let lastCheckedAt {
+                    Text("Last checked \(Formatters.shortTime.string(from: lastCheckedAt))")
                         .font(.system(size: 10))
                         .foregroundStyle(theme.muted)
+                        .monospacedDigit()
                 }
             }
 
@@ -250,37 +243,6 @@ private struct HeaderBar: View {
         .background(theme.surface)
     }
 
-    private var statusLine: String {
-        switch accountCount {
-        case 0:
-            return NSLocalizedString("No accounts configured", comment: "")
-        case 1:
-            return NSLocalizedString("1 account configured", comment: "")
-        default:
-            return String(format: NSLocalizedString("%lld accounts configured", comment: ""), accountCount)
-        }
-    }
-}
-
-private struct BrandMark: View {
-    @Environment(\.theme) private var theme
-
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 6, style: .continuous)
-                .fill(
-                    LinearGradient(
-                        colors: [theme.primary, theme.primaryDeep],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-            Image(systemName: "envelope.fill")
-                .font(.system(size: 11, weight: .semibold))
-                .foregroundStyle(.white)
-        }
-        .frame(width: 22, height: 22)
-    }
 }
 
 private struct UnreadPill: View {
@@ -306,34 +268,6 @@ private struct UnreadPill: View {
         .overlay(
             Capsule().strokeBorder(theme.warning.opacity(0.3), lineWidth: 1)
         )
-    }
-}
-
-// MARK: - Accounts list label
-
-private struct AccountsListLabel: View {
-    let lastCheckedAt: Date?
-
-    @Environment(\.theme) private var theme
-
-    var body: some View {
-        HStack {
-            Text("ACCOUNTS")
-                .font(.system(size: 10, weight: .semibold))
-                .tracking(0.6)
-                .foregroundStyle(theme.tertiary)
-            Spacer()
-            if let timestamp = lastCheckedAt {
-                // SwiftUI auto-localizes interpolated literals as
-                // LocalizedStringKey "Last checked %@".
-                Text("Last checked \(Formatters.shortTime.string(from: timestamp))")
-                    .font(.system(size: 10))
-                    .foregroundStyle(theme.tertiary)
-                    .monospacedDigit()
-            }
-        }
-        .padding(.horizontal, 8)
-        .padding(.bottom, 2)
     }
 }
 
@@ -629,16 +563,19 @@ private struct MessageRow: View {
 // MARK: - Empty State
 
 private struct InboxZeroState: View {
+    let onOpenWindow: () -> Void
     @Environment(\.theme) private var theme
 
     var body: some View {
-        VStack(spacing: 4) {
-            Text("Congratulations!")
+        VStack(spacing: 8) {
+            Text(String(format: NSLocalizedString("%lld unread", comment: ""), 0))
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(theme.foreground)
-            Text("You are at Inbox Zero.")
+            Text("Compact mode")
                 .font(.system(size: 11))
                 .foregroundStyle(theme.muted)
+            Button("Open main window", action: onOpenWindow)
+                .font(.system(size: 11, weight: .medium))
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 28)
@@ -716,96 +653,22 @@ private struct BottomBar: View {
 
             Spacer(minLength: 0)
 
-            ThemeStrip()
-
-            Spacer(minLength: 0)
-
-            AppIconButton(systemName: "power", help: "Quit Mail Notifier", action: actions.quit)
+            Menu {
+                Button("Quit Mail Notifier", action: actions.quit)
+            } label: {
+                Image(systemName: "ellipsis")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(theme.muted)
+                    .frame(width: 28, height: 28)
+                    .contentShape(Rectangle())
+            }
+            .menuStyle(.borderlessButton)
+            .fixedSize()
+            .help("More options")
+            .accessibilityLabel("More options")
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 9)
         .background(theme.surface)
-    }
-}
-
-// MARK: - Theme Strip
-
-private struct ThemeStrip: View {
-    @ObservedObject private var store = ThemeStore.shared
-    @Environment(\.theme) private var theme
-    @State private var isExpanded = false
-
-    private static let bouncy: Animation = .spring(response: 0.35, dampingFraction: 0.6)
-    private static let dotSize: CGFloat = 10
-
-    var body: some View {
-        HStack(spacing: isExpanded ? 6 : 0) {
-            ForEach(AppTheme.allCases) { option in
-                let palette = option.palette
-                let isActive = store.current == option
-                let show = isExpanded || isActive
-
-                Button {
-                    withAnimation(Self.bouncy) {
-                        store.current = option
-                        isExpanded = false
-                    }
-                } label: {
-                    ZStack {
-                        dotFill(for: option, palette: palette)
-                        if isActive {
-                            Circle()
-                                .stroke(theme.foreground.opacity(0.9), lineWidth: 1.5)
-                                .padding(-2.5)
-                        }
-                    }
-                    .frame(width: Self.dotSize, height: Self.dotSize)
-                    .scaleEffect(show ? 1 : 0.01)
-                    .opacity(show ? 1 : 0)
-                }
-                .buttonStyle(.plain)
-                .frame(width: show ? Self.dotSize : 0)
-                .clipped()
-                .help(option.label)
-            }
-        }
-        .padding(.horizontal, isExpanded ? 9 : 6)
-        .padding(.vertical, 5)
-        .background(Capsule().fill(theme.card))
-        .overlay(Capsule().strokeBorder(theme.border, lineWidth: 1))
-        .animation(Self.bouncy, value: isExpanded)
-        .onHover { hovering in
-            withAnimation(Self.bouncy) {
-                isExpanded = hovering
-            }
-        }
-    }
-
-    /// Picks the right fill for a theme dot. System renders as a split disc of
-    /// the two default palettes — the light icon's ground against the dark
-    /// icon's — so it reads as "the app's own theme, following the OS".
-    @ViewBuilder
-    private func dotFill(for option: AppTheme, palette: ThemePalette) -> some View {
-        if option == .system {
-            ZStack {
-                Circle().fill(ThemePalette.systemLight.primary)
-                Circle()
-                    .fill(ThemePalette.systemDark.background)
-                    .mask(
-                        Rectangle()
-                            .frame(width: Self.dotSize, height: Self.dotSize)
-                            .offset(x: Self.dotSize / 2)
-                    )
-            }
-        } else {
-            Circle()
-                .fill(
-                    LinearGradient(
-                        colors: [palette.primary, palette.primaryDeep],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-        }
     }
 }
