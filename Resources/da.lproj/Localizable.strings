@@ -196,3 +196,30 @@
 "From" = "Fra";
 "Until" = "Til";
 "Choose different start and end times." = "Vælg forskellige start- og sluttidspunkter.";
+
+
+// MARK: - Sign-in recovery, connection status, notification permission
+
+"Sign in again" = "Log ind igen";
+"Sign in" = "Log ind";
+"Retry" = "Prøv igen";
+"Copy link for IT" = "Kopiér link til IT";
+"Couldn't sign in" = "Kunne ikke logge ind";
+"Work" = "Arbejde";
+"Personal" = "Personlig";
+"Microsoft work or school account. Opens Outlook on the web for business." = "Microsoft-arbejds- eller skolekonto. Åbner Outlook på nettet til virksomheder.";
+"Personal Microsoft account. Opens Outlook.com." = "Personlig Microsoft-konto. Åbner Outlook.com.";
+"Connected. You'll be notified about new mail." = "Forbundet. Du får besked om ny mail.";
+"Connected: %lld unread" = "Forbundet: %lld ulæste";
+"Checking for mail" = "Søger efter mail";
+"Checked just now" = "Tjekket lige nu";
+"Checked %@" = "Tjekket %@";
+"Notifications are off for Mail Notifier." = "Notifikationer er slået fra for Mail Notifier.";
+"Turn on" = "Slå til";
+"Turn on in System Settings…" = "Slå til i Systemindstillinger…";
+"Open System Settings > Notifications" = "Åbn Systemindstillinger > Notifikationer";
+"Your organization needs to approve Mail Notifier. Ask your IT administrator to approve it, or send them this link." = "Din organisation skal godkende Mail Notifier. Bed din IT-administrator om at godkende den, eller send dette link.";
+"Mail Notifier couldn't reach %@. Check your internet connection, then try again." = "Mail Notifier kunne ikke få forbindelse til %@. Tjek din internetforbindelse, og prøv igen.";
+"Mail Notifier needs permission to read your mail. Try again and allow access." = "Mail Notifier skal have tilladelse til at læse din mail. Prøv igen, og giv adgang.";
+"%@ didn't share the email address for this account. Try again, or use a different account." = "%@ delte ikke e-mailadressen for denne konto. Prøv igen, eller brug en anden konto.";
+"Signing in to %@ didn't finish. Try again." = "Login hos %@ blev ikke fuldført. Prøv igen.";

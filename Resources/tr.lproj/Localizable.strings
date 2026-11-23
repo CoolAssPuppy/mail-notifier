@@ -196,3 +196,30 @@
 "From" = "Başlangıç";
 "Until" = "Bitiş";
 "Choose different start and end times." = "Farklı başlangıç ve bitiş saatleri seçin.";
+
+
+// MARK: - Sign-in recovery, connection status, notification permission
+
+"Sign in again" = "Yeniden giriş yap";
+"Sign in" = "Giriş yap";
+"Retry" = "Yeniden dene";
+"Copy link for IT" = "BT için bağlantıyı kopyala";
+"Couldn't sign in" = "Giriş yapılamadı";
+"Work" = "İş";
+"Personal" = "Kişisel";
+"Microsoft work or school account. Opens Outlook on the web for business." = "Microsoft iş veya okul hesabı. İşletmeler için web üzerinde Outlook’u açar.";
+"Personal Microsoft account. Opens Outlook.com." = "Kişisel Microsoft hesabı. Outlook.com’u açar.";
+"Connected. You'll be notified about new mail." = "Bağlandı. Yeni e-postalardan haberdar edileceksiniz.";
+"Connected: %lld unread" = "Bağlandı: %lld okunmamış";
+"Checking for mail" = "E-postalar denetleniyor";
+"Checked just now" = "Az önce denetlendi";
+"Checked %@" = "%@ denetlendi";
+"Notifications are off for Mail Notifier." = "Mail Notifier için bildirimler kapalı.";
+"Turn on" = "Aç";
+"Turn on in System Settings…" = "Sistem Ayarları’nda aç…";
+"Open System Settings > Notifications" = "Sistem Ayarları > Bildirimler’i aç";
+"Your organization needs to approve Mail Notifier. Ask your IT administrator to approve it, or send them this link." = "Kuruluşunuzun Mail Notifier’ı onaylaması gerekiyor. BT yöneticinizden onaylamasını isteyin veya ona bu bağlantıyı gönderin.";
+"Mail Notifier couldn't reach %@. Check your internet connection, then try again." = "Mail Notifier %@ ile bağlantı kuramadı. İnternet bağlantınızı denetleyip yeniden deneyin.";
+"Mail Notifier needs permission to read your mail. Try again and allow access." = "Mail Notifier’ın e-postalarınızı okumak için izne ihtiyacı var. Yeniden deneyin ve erişime izin verin.";
+"%@ didn't share the email address for this account. Try again, or use a different account." = "%@ bu hesabın e-posta adresini paylaşmadı. Yeniden deneyin veya başka bir hesap kullanın.";
+"Signing in to %@ didn't finish. Try again." = "%@ girişi tamamlanmadı. Yeniden deneyin.";

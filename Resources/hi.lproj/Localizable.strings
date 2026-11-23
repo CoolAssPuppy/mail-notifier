@@ -196,3 +196,30 @@
 "From" = "से";
 "Until" = "तक";
 "Choose different start and end times." = "शुरू और खत्म होने का समय अलग चुनें।";
+
+
+// MARK: - Sign-in recovery, connection status, notification permission
+
+"Sign in again" = "दोबारा साइन इन करें";
+"Sign in" = "साइन इन करें";
+"Retry" = "फिर से कोशिश करें";
+"Copy link for IT" = "IT के लिए लिंक कॉपी करें";
+"Couldn't sign in" = "साइन इन नहीं हो सका";
+"Work" = "कार्य";
+"Personal" = "व्यक्तिगत";
+"Microsoft work or school account. Opens Outlook on the web for business." = "Microsoft कार्य या स्कूल खाता। व्यवसाय के लिए वेब पर Outlook खोलता है।";
+"Personal Microsoft account. Opens Outlook.com." = "व्यक्तिगत Microsoft खाता। Outlook.com खोलता है।";
+"Connected. You'll be notified about new mail." = "कनेक्ट हो गया। नए मेल की सूचना आपको मिलेगी।";
+"Connected: %lld unread" = "कनेक्ट हो गया: %lld अपठित";
+"Checking for mail" = "मेल जाँचा जा रहा है";
+"Checked just now" = "अभी जाँचा गया";
+"Checked %@" = "%@ जाँचा गया";
+"Notifications are off for Mail Notifier." = "Mail Notifier के लिए सूचनाएँ बंद हैं।";
+"Turn on" = "चालू करें";
+"Turn on in System Settings…" = "सिस्टम सेटिंग्स में चालू करें…";
+"Open System Settings > Notifications" = "सिस्टम सेटिंग्स > सूचनाएँ खोलें";
+"Your organization needs to approve Mail Notifier. Ask your IT administrator to approve it, or send them this link." = "आपके संगठन को Mail Notifier को मंज़ूरी देनी होगी। अपने IT एडमिन से मंज़ूरी देने को कहें, या उन्हें यह लिंक भेजें।";
+"Mail Notifier couldn't reach %@. Check your internet connection, then try again." = "Mail Notifier %@ तक नहीं पहुँच सका। अपना इंटरनेट कनेक्शन जाँचें, फिर से कोशिश करें।";
+"Mail Notifier needs permission to read your mail. Try again and allow access." = "Mail Notifier को आपका मेल पढ़ने की अनुमति चाहिए। फिर से कोशिश करें और एक्सेस की अनुमति दें।";
+"%@ didn't share the email address for this account. Try again, or use a different account." = "%@ ने इस खाते का ईमेल पता साझा नहीं किया। फिर से कोशिश करें, या किसी दूसरे खाते का उपयोग करें।";
+"Signing in to %@ didn't finish. Try again." = "%@ में साइन इन पूरा नहीं हुआ। फिर से कोशिश करें।";

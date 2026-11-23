@@ -196,3 +196,30 @@
 "From" = "開始";
 "Until" = "終了";
 "Choose different start and end times." = "開始時刻と終了時刻を別々に選んでください。";
+
+
+// MARK: - Sign-in recovery, connection status, notification permission
+
+"Sign in again" = "再度サインイン";
+"Sign in" = "サインイン";
+"Retry" = "再試行";
+"Copy link for IT" = "IT 担当者用のリンクをコピー";
+"Couldn't sign in" = "サインインできませんでした";
+"Work" = "仕事";
+"Personal" = "個人";
+"Microsoft work or school account. Opens Outlook on the web for business." = "Microsoft の職場または学校アカウント。Outlook on the web（法人向け）を開きます。";
+"Personal Microsoft account. Opens Outlook.com." = "個人用 Microsoft アカウント。Outlook.com を開きます。";
+"Connected. You'll be notified about new mail." = "接続しました。新着メールがあると通知します。";
+"Connected: %lld unread" = "接続しました：未読 %lld 件";
+"Checking for mail" = "メールを確認中";
+"Checked just now" = "たった今確認";
+"Checked %@" = "%@に確認";
+"Notifications are off for Mail Notifier." = "Mail Notifier の通知がオフになっています。";
+"Turn on" = "オンにする";
+"Turn on in System Settings…" = "システム設定でオンにする…";
+"Open System Settings > Notifications" = "システム設定 > 通知 を開く";
+"Your organization needs to approve Mail Notifier. Ask your IT administrator to approve it, or send them this link." = "組織で Mail Notifier の承認が必要です。IT 管理者に承認を依頼するか、このリンクを送ってください。";
+"Mail Notifier couldn't reach %@. Check your internet connection, then try again." = "%@ に接続できませんでした。インターネット接続を確認してから、もう一度お試しください。";
+"Mail Notifier needs permission to read your mail. Try again and allow access." = "Mail Notifier にはメールを読み取る許可が必要です。もう一度お試しのうえ、アクセスを許可してください。";
+"%@ didn't share the email address for this account. Try again, or use a different account." = "%@ からこのアカウントのメールアドレスが共有されませんでした。もう一度試すか、別のアカウントを使ってください。";
+"Signing in to %@ didn't finish. Try again." = "%@ へのサインインが完了しませんでした。もう一度お試しください。";

@@ -196,3 +196,30 @@
 "From" = "開始";
 "Until" = "結束";
 "Choose different start and end times." = "請選擇不同的開始和結束時間。";
+
+
+// MARK: - Sign-in recovery, connection status, notification permission
+
+"Sign in again" = "重新登入";
+"Sign in" = "登入";
+"Retry" = "重試";
+"Copy link for IT" = "拷貝給 IT 的連結";
+"Couldn't sign in" = "無法登入";
+"Work" = "工作";
+"Personal" = "個人";
+"Microsoft work or school account. Opens Outlook on the web for business." = "Microsoft 工作或學校帳號。打開企業版 Outlook 網頁版。";
+"Personal Microsoft account. Opens Outlook.com." = "個人 Microsoft 帳號。打開 Outlook.com。";
+"Connected. You'll be notified about new mail." = "已連線。有新郵件時會通知你。";
+"Connected: %lld unread" = "已連線：%lld 封未讀";
+"Checking for mail" = "正在檢查郵件";
+"Checked just now" = "剛剛檢查";
+"Checked %@" = "%@檢查";
+"Notifications are off for Mail Notifier." = "Mail Notifier 的通知已關閉。";
+"Turn on" = "開啟";
+"Turn on in System Settings…" = "在系統設定中開啟…";
+"Open System Settings > Notifications" = "打開「系統設定」>「通知」";
+"Your organization needs to approve Mail Notifier. Ask your IT administrator to approve it, or send them this link." = "你的組織需要核准 Mail Notifier。請 IT 管理員核准，或把這個連結傳給他們。";
+"Mail Notifier couldn't reach %@. Check your internet connection, then try again." = "Mail Notifier 無法連線至 %@。請檢查網路連線，然後重試。";
+"Mail Notifier needs permission to read your mail. Try again and allow access." = "Mail Notifier 需要讀取你郵件的權限。請重試並允許存取。";
+"%@ didn't share the email address for this account. Try again, or use a different account." = "%@ 未提供此帳號的電子郵件地址。請重試，或使用其他帳號。";
+"Signing in to %@ didn't finish. Try again." = "未完成登入 %@。請重試。";

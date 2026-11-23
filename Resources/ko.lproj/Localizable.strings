@@ -196,3 +196,30 @@
 "From" = "시작";
 "Until" = "종료";
 "Choose different start and end times." = "시작 시간과 종료 시간을 다르게 선택하세요.";
+
+
+// MARK: - Sign-in recovery, connection status, notification permission
+
+"Sign in again" = "다시 로그인";
+"Sign in" = "로그인";
+"Retry" = "다시 시도";
+"Copy link for IT" = "IT 담당자용 링크 복사";
+"Couldn't sign in" = "로그인할 수 없음";
+"Work" = "회사";
+"Personal" = "개인";
+"Microsoft work or school account. Opens Outlook on the web for business." = "Microsoft 회사 또는 학교 계정. 비즈니스용 웹 Outlook을 엽니다.";
+"Personal Microsoft account. Opens Outlook.com." = "개인 Microsoft 계정. Outlook.com을 엽니다.";
+"Connected. You'll be notified about new mail." = "연결되었습니다. 새 메일이 오면 알려 드립니다.";
+"Connected: %lld unread" = "연결됨: 읽지 않음 %lld개";
+"Checking for mail" = "메일 확인 중";
+"Checked just now" = "방금 확인함";
+"Checked %@" = "%@ 확인함";
+"Notifications are off for Mail Notifier." = "Mail Notifier 알림이 꺼져 있습니다.";
+"Turn on" = "켜기";
+"Turn on in System Settings…" = "시스템 설정에서 켜기…";
+"Open System Settings > Notifications" = "시스템 설정 > 알림 열기";
+"Your organization needs to approve Mail Notifier. Ask your IT administrator to approve it, or send them this link." = "조직에서 Mail Notifier를 승인해야 합니다. IT 관리자에게 승인을 요청하거나 이 링크를 보내세요.";
+"Mail Notifier couldn't reach %@. Check your internet connection, then try again." = "Mail Notifier가 %@에 연결할 수 없습니다. 인터넷 연결을 확인한 다음 다시 시도하세요.";
+"Mail Notifier needs permission to read your mail. Try again and allow access." = "Mail Notifier가 메일을 읽으려면 권한이 필요합니다. 다시 시도하고 접근을 허용하세요.";
+"%@ didn't share the email address for this account. Try again, or use a different account." = "%@에서 이 계정의 이메일 주소를 공유하지 않았습니다. 다시 시도하거나 다른 계정을 사용하세요.";
+"Signing in to %@ didn't finish. Try again." = "%@ 로그인을 완료하지 못했습니다. 다시 시도하세요.";

@@ -196,3 +196,30 @@
 "From" = "Від";
 "Until" = "До";
 "Choose different start and end times." = "Виберіть різний час початку й завершення.";
+
+
+// MARK: - Sign-in recovery, connection status, notification permission
+
+"Sign in again" = "Увійти знову";
+"Sign in" = "Увійти";
+"Retry" = "Повторити";
+"Copy link for IT" = "Скопіювати посилання для ІТ";
+"Couldn't sign in" = "Не вдалося увійти";
+"Work" = "Робочий";
+"Personal" = "Особистий";
+"Microsoft work or school account. Opens Outlook on the web for business." = "Робочий або навчальний обліковий запис Microsoft. Відкриває Outlook в Інтернеті для бізнесу.";
+"Personal Microsoft account. Opens Outlook.com." = "Особистий обліковий запис Microsoft. Відкриває Outlook.com.";
+"Connected. You'll be notified about new mail." = "Підключено. Ви отримуватимете сповіщення про нову пошту.";
+"Connected: %lld unread" = "Підключено: непрочитаних %lld";
+"Checking for mail" = "Перевірка пошти";
+"Checked just now" = "Щойно перевірено";
+"Checked %@" = "Перевірено %@";
+"Notifications are off for Mail Notifier." = "Сповіщення для Mail Notifier вимкнено.";
+"Turn on" = "Увімкнути";
+"Turn on in System Settings…" = "Увімкнути в Системних параметрах…";
+"Open System Settings > Notifications" = "Відкрити Системні параметри > Сповіщення";
+"Your organization needs to approve Mail Notifier. Ask your IT administrator to approve it, or send them this link." = "Ваша організація має схвалити Mail Notifier. Попросіть ІТ-адміністратора схвалити його або надішліть йому це посилання.";
+"Mail Notifier couldn't reach %@. Check your internet connection, then try again." = "Mail Notifier не вдалося зв’язатися з %@. Перевірте підключення до інтернету й спробуйте ще раз.";
+"Mail Notifier needs permission to read your mail. Try again and allow access." = "Mail Notifier потрібен дозвіл на читання вашої пошти. Спробуйте ще раз і дозвольте доступ.";
+"%@ didn't share the email address for this account. Try again, or use a different account." = "%@ не надав адресу електронної пошти цього облікового запису. Спробуйте ще раз або скористайтеся іншим обліковим записом.";
+"Signing in to %@ didn't finish. Try again." = "Вхід до %@ не завершено. Спробуйте ще раз.";

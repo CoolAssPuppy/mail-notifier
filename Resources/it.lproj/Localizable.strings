@@ -196,3 +196,30 @@
 "From" = "Dalle";
 "Until" = "Alle";
 "Choose different start and end times." = "Scegli orari di inizio e fine diversi.";
+
+
+// MARK: - Sign-in recovery, connection status, notification permission
+
+"Sign in again" = "Accedi di nuovo";
+"Sign in" = "Accedi";
+"Retry" = "Riprova";
+"Copy link for IT" = "Copia link per l’IT";
+"Couldn't sign in" = "Accesso non riuscito";
+"Work" = "Lavoro";
+"Personal" = "Personale";
+"Microsoft work or school account. Opens Outlook on the web for business." = "Account Microsoft aziendale o dell’istituto di istruzione. Apre Outlook sul web per le aziende.";
+"Personal Microsoft account. Opens Outlook.com." = "Account Microsoft personale. Apre Outlook.com.";
+"Connected. You'll be notified about new mail." = "Connesso. Riceverai una notifica per la nuova posta.";
+"Connected: %lld unread" = "Connesso: %lld non letti";
+"Checking for mail" = "Controllo della posta";
+"Checked just now" = "Controllato ora";
+"Checked %@" = "Controllato %@";
+"Notifications are off for Mail Notifier." = "Le notifiche di Mail Notifier sono disattivate.";
+"Turn on" = "Attiva";
+"Turn on in System Settings…" = "Attiva in Impostazioni di Sistema…";
+"Open System Settings > Notifications" = "Apri Impostazioni di Sistema > Notifiche";
+"Your organization needs to approve Mail Notifier. Ask your IT administrator to approve it, or send them this link." = "La tua organizzazione deve approvare Mail Notifier. Chiedi all’amministratore IT di approvarlo o inviagli questo link.";
+"Mail Notifier couldn't reach %@. Check your internet connection, then try again." = "Mail Notifier non è riuscito a raggiungere %@. Controlla la connessione a Internet, poi riprova.";
+"Mail Notifier needs permission to read your mail. Try again and allow access." = "Mail Notifier ha bisogno del permesso di leggere la tua posta. Riprova e consenti l’accesso.";
+"%@ didn't share the email address for this account. Try again, or use a different account." = "%@ non ha condiviso l’indirizzo email di questo account. Riprova o usa un altro account.";
+"Signing in to %@ didn't finish. Try again." = "L’accesso a %@ non è stato completato. Riprova.";

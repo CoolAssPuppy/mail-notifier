@@ -196,3 +196,30 @@
 "From" = "Fra";
 "Until" = "Til";
 "Choose different start and end times." = "Velg ulike start- og sluttider.";
+
+
+// MARK: - Sign-in recovery, connection status, notification permission
+
+"Sign in again" = "Logg inn på nytt";
+"Sign in" = "Logg inn";
+"Retry" = "Prøv igjen";
+"Copy link for IT" = "Kopier lenke til IT";
+"Couldn't sign in" = "Kunne ikke logge inn";
+"Work" = "Jobb";
+"Personal" = "Personlig";
+"Microsoft work or school account. Opens Outlook on the web for business." = "Microsoft-konto for jobb eller skole. Åpner Outlook på nettet for bedrifter.";
+"Personal Microsoft account. Opens Outlook.com." = "Personlig Microsoft-konto. Åpner Outlook.com.";
+"Connected. You'll be notified about new mail." = "Tilkoblet. Du får varsel om ny e-post.";
+"Connected: %lld unread" = "Tilkoblet: %lld uleste";
+"Checking for mail" = "Ser etter e-post";
+"Checked just now" = "Sjekket akkurat nå";
+"Checked %@" = "Sjekket %@";
+"Notifications are off for Mail Notifier." = "Varslinger er slått av for Mail Notifier.";
+"Turn on" = "Slå på";
+"Turn on in System Settings…" = "Slå på i Systeminnstillinger…";
+"Open System Settings > Notifications" = "Åpne Systeminnstillinger > Varslinger";
+"Your organization needs to approve Mail Notifier. Ask your IT administrator to approve it, or send them this link." = "Organisasjonen din må godkjenne Mail Notifier. Be IT-administratoren om å godkjenne den, eller send denne lenken.";
+"Mail Notifier couldn't reach %@. Check your internet connection, then try again." = "Mail Notifier fikk ikke kontakt med %@. Sjekk internettforbindelsen og prøv igjen.";
+"Mail Notifier needs permission to read your mail. Try again and allow access." = "Mail Notifier trenger tillatelse til å lese e-posten din. Prøv igjen og gi tilgang.";
+"%@ didn't share the email address for this account. Try again, or use a different account." = "%@ delte ikke e-postadressen for denne kontoen. Prøv igjen, eller bruk en annen konto.";
+"Signing in to %@ didn't finish. Try again." = "Innloggingen hos %@ ble ikke fullført. Prøv igjen.";

@@ -196,3 +196,30 @@
 "From" = "Od";
 "Until" = "Do";
 "Choose different start and end times." = "Zvolte různé časy začátku a konce.";
+
+
+// MARK: - Sign-in recovery, connection status, notification permission
+
+"Sign in again" = "Přihlásit se znovu";
+"Sign in" = "Přihlásit se";
+"Retry" = "Zkusit znovu";
+"Copy link for IT" = "Kopírovat odkaz pro IT";
+"Couldn't sign in" = "Přihlášení se nezdařilo";
+"Work" = "Pracovní";
+"Personal" = "Osobní";
+"Microsoft work or school account. Opens Outlook on the web for business." = "Pracovní nebo školní účet Microsoft. Otevře Outlook na webu pro firmy.";
+"Personal Microsoft account. Opens Outlook.com." = "Osobní účet Microsoft. Otevře Outlook.com.";
+"Connected. You'll be notified about new mail." = "Připojeno. O nové poště vám dáme vědět.";
+"Connected: %lld unread" = "Připojeno: nepřečtených %lld";
+"Checking for mail" = "Kontrola pošty";
+"Checked just now" = "Zkontrolováno právě teď";
+"Checked %@" = "Zkontrolováno %@";
+"Notifications are off for Mail Notifier." = "Oznámení pro Mail Notifier jsou vypnutá.";
+"Turn on" = "Zapnout";
+"Turn on in System Settings…" = "Zapnout v Nastavení systému…";
+"Open System Settings > Notifications" = "Otevřít Nastavení systému > Oznámení";
+"Your organization needs to approve Mail Notifier. Ask your IT administrator to approve it, or send them this link." = "Vaše organizace musí Mail Notifier schválit. Požádejte správce IT o schválení, nebo mu pošlete tento odkaz.";
+"Mail Notifier couldn't reach %@. Check your internet connection, then try again." = "Mail Notifier se nemohl spojit s %@. Zkontrolujte připojení k internetu a zkuste to znovu.";
+"Mail Notifier needs permission to read your mail. Try again and allow access." = "Mail Notifier potřebuje oprávnění ke čtení vaší pošty. Zkuste to znovu a povolte přístup.";
+"%@ didn't share the email address for this account. Try again, or use a different account." = "%@ nesdílel e-mailovou adresu tohoto účtu. Zkuste to znovu, nebo použijte jiný účet.";
+"Signing in to %@ didn't finish. Try again." = "Přihlášení k %@ nebylo dokončeno. Zkuste to znovu.";

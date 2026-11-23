@@ -196,3 +196,30 @@
 "From" = "De";
 "Until" = "À";
 "Choose different start and end times." = "Choisissez des heures de début et de fin différentes.";
+
+
+// MARK: - Sign-in recovery, connection status, notification permission
+
+"Sign in again" = "Se reconnecter";
+"Sign in" = "Se connecter";
+"Retry" = "Réessayer";
+"Copy link for IT" = "Copier le lien pour le service informatique";
+"Couldn't sign in" = "Connexion impossible";
+"Work" = "Professionnel";
+"Personal" = "Personnel";
+"Microsoft work or school account. Opens Outlook on the web for business." = "Compte Microsoft professionnel ou scolaire. Ouvre Outlook sur le web pour les entreprises.";
+"Personal Microsoft account. Opens Outlook.com." = "Compte Microsoft personnel. Ouvre Outlook.com.";
+"Connected. You'll be notified about new mail." = "Connecté. Tu seras averti des nouveaux e-mails.";
+"Connected: %lld unread" = "Connecté : %lld non lus";
+"Checking for mail" = "Recherche de nouveaux e-mails";
+"Checked just now" = "Vérifié à l’instant";
+"Checked %@" = "Vérifié %@";
+"Notifications are off for Mail Notifier." = "Les notifications sont désactivées pour Mail Notifier.";
+"Turn on" = "Activer";
+"Turn on in System Settings…" = "Activer dans Réglages Système…";
+"Open System Settings > Notifications" = "Ouvrir Réglages Système > Notifications";
+"Your organization needs to approve Mail Notifier. Ask your IT administrator to approve it, or send them this link." = "Ton organisation doit approuver Mail Notifier. Demande à ton administrateur informatique de l’approuver, ou envoie-lui ce lien.";
+"Mail Notifier couldn't reach %@. Check your internet connection, then try again." = "Mail Notifier n’a pas pu joindre %@. Vérifie ta connexion Internet, puis réessaie.";
+"Mail Notifier needs permission to read your mail. Try again and allow access." = "Mail Notifier a besoin de l’autorisation de lire tes e-mails. Réessaie et autorise l’accès.";
+"%@ didn't share the email address for this account. Try again, or use a different account." = "%@ n’a pas partagé l’adresse e-mail de ce compte. Réessaie ou utilise un autre compte.";
+"Signing in to %@ didn't finish. Try again." = "La connexion à %@ n’a pas abouti. Réessaie.";

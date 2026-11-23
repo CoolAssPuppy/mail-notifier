@@ -196,3 +196,30 @@
 "From" = "Desde";
 "Until" = "Hasta";
 "Choose different start and end times." = "Elige horas de inicio y fin distintas.";
+
+
+// MARK: - Sign-in recovery, connection status, notification permission
+
+"Sign in again" = "Volver a iniciar sesión";
+"Sign in" = "Iniciar sesión";
+"Retry" = "Reintentar";
+"Copy link for IT" = "Copiar enlace para TI";
+"Couldn't sign in" = "No se pudo iniciar sesión";
+"Work" = "Trabajo";
+"Personal" = "Personal";
+"Microsoft work or school account. Opens Outlook on the web for business." = "Cuenta profesional o educativa de Microsoft. Abre Outlook en la web para empresas.";
+"Personal Microsoft account. Opens Outlook.com." = "Cuenta personal de Microsoft. Abre Outlook.com.";
+"Connected. You'll be notified about new mail." = "Conectado. Te avisaremos cuando llegue correo nuevo.";
+"Connected: %lld unread" = "Conectado: %lld sin leer";
+"Checking for mail" = "Buscando correo";
+"Checked just now" = "Comprobado ahora mismo";
+"Checked %@" = "Comprobado %@";
+"Notifications are off for Mail Notifier." = "Las notificaciones de Mail Notifier están desactivadas.";
+"Turn on" = "Activar";
+"Turn on in System Settings…" = "Activar en Ajustes del Sistema…";
+"Open System Settings > Notifications" = "Abrir Ajustes del Sistema > Notificaciones";
+"Your organization needs to approve Mail Notifier. Ask your IT administrator to approve it, or send them this link." = "Tu organización tiene que aprobar Mail Notifier. Pide a tu administrador de TI que lo apruebe o envíale este enlace.";
+"Mail Notifier couldn't reach %@. Check your internet connection, then try again." = "Mail Notifier no pudo conectar con %@. Comprueba tu conexión a internet y vuelve a intentarlo.";
+"Mail Notifier needs permission to read your mail. Try again and allow access." = "Mail Notifier necesita permiso para leer tu correo. Vuelve a intentarlo y permite el acceso.";
+"%@ didn't share the email address for this account. Try again, or use a different account." = "%@ no compartió la dirección de correo de esta cuenta. Vuelve a intentarlo o usa otra cuenta.";
+"Signing in to %@ didn't finish. Try again." = "No se completó el inicio de sesión en %@. Vuelve a intentarlo.";

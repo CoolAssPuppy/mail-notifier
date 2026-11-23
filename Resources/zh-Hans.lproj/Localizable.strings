@@ -196,3 +196,30 @@
 "From" = "开始";
 "Until" = "结束";
 "Choose different start and end times." = "请选择不同的开始和结束时间。";
+
+
+// MARK: - Sign-in recovery, connection status, notification permission
+
+"Sign in again" = "重新登录";
+"Sign in" = "登录";
+"Retry" = "重试";
+"Copy link for IT" = "复制给 IT 的链接";
+"Couldn't sign in" = "无法登录";
+"Work" = "工作";
+"Personal" = "个人";
+"Microsoft work or school account. Opens Outlook on the web for business." = "Microsoft 工作或学校帐户。打开企业版 Outlook 网页版。";
+"Personal Microsoft account. Opens Outlook.com." = "个人 Microsoft 帐户。打开 Outlook.com。";
+"Connected. You'll be notified about new mail." = "已连接。有新邮件时会通知你。";
+"Connected: %lld unread" = "已连接：%lld 封未读";
+"Checking for mail" = "正在检查邮件";
+"Checked just now" = "刚刚检查";
+"Checked %@" = "%@检查";
+"Notifications are off for Mail Notifier." = "Mail Notifier 的通知已关闭。";
+"Turn on" = "打开";
+"Turn on in System Settings…" = "在系统设置中打开…";
+"Open System Settings > Notifications" = "打开“系统设置”>“通知”";
+"Your organization needs to approve Mail Notifier. Ask your IT administrator to approve it, or send them this link." = "你的组织需要批准 Mail Notifier。请让 IT 管理员批准，或把这个链接发给他们。";
+"Mail Notifier couldn't reach %@. Check your internet connection, then try again." = "Mail Notifier 无法连接 %@。请检查网络连接，然后重试。";
+"Mail Notifier needs permission to read your mail. Try again and allow access." = "Mail Notifier 需要读取你邮件的权限。请重试并允许访问。";
+"%@ didn't share the email address for this account. Try again, or use a different account." = "%@ 未提供此帐户的电子邮件地址。请重试，或使用其他帐户。";
+"Signing in to %@ didn't finish. Try again." = "未完成登录 %@。请重试。";

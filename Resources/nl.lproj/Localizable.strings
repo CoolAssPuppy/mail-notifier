@@ -196,3 +196,30 @@
 "From" = "Van";
 "Until" = "Tot";
 "Choose different start and end times." = "Kies verschillende begin- en eindtijden.";
+
+
+// MARK: - Sign-in recovery, connection status, notification permission
+
+"Sign in again" = "Opnieuw inloggen";
+"Sign in" = "Inloggen";
+"Retry" = "Opnieuw proberen";
+"Copy link for IT" = "Link voor IT kopiëren";
+"Couldn't sign in" = "Inloggen mislukt";
+"Work" = "Werk";
+"Personal" = "Persoonlijk";
+"Microsoft work or school account. Opens Outlook on the web for business." = "Microsoft-werk- of schoolaccount. Opent Outlook op het web voor bedrijven.";
+"Personal Microsoft account. Opens Outlook.com." = "Persoonlijk Microsoft-account. Opent Outlook.com.";
+"Connected. You'll be notified about new mail." = "Verbonden. Je krijgt een melding bij nieuwe mail.";
+"Connected: %lld unread" = "Verbonden: %lld ongelezen";
+"Checking for mail" = "Mail wordt opgehaald";
+"Checked just now" = "Zojuist gecontroleerd";
+"Checked %@" = "Gecontroleerd %@";
+"Notifications are off for Mail Notifier." = "Berichtgeving staat uit voor Mail Notifier.";
+"Turn on" = "Inschakelen";
+"Turn on in System Settings…" = "Inschakelen in Systeeminstellingen…";
+"Open System Settings > Notifications" = "Systeeminstellingen > Berichtgeving openen";
+"Your organization needs to approve Mail Notifier. Ask your IT administrator to approve it, or send them this link." = "Je organisatie moet Mail Notifier goedkeuren. Vraag je IT-beheerder om goedkeuring of stuur deze link.";
+"Mail Notifier couldn't reach %@. Check your internet connection, then try again." = "Mail Notifier kon %@ niet bereiken. Controleer je internetverbinding en probeer het opnieuw.";
+"Mail Notifier needs permission to read your mail. Try again and allow access." = "Mail Notifier heeft toestemming nodig om je mail te lezen. Probeer het opnieuw en sta toegang toe.";
+"%@ didn't share the email address for this account. Try again, or use a different account." = "%@ heeft het e-mailadres van dit account niet gedeeld. Probeer het opnieuw of gebruik een ander account.";
+"Signing in to %@ didn't finish. Try again." = "Inloggen bij %@ is niet voltooid. Probeer het opnieuw.";

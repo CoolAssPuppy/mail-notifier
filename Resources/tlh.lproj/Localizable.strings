@@ -200,3 +200,30 @@
 "From" = "tagh";
 "Until" = "van";
 "Choose different start and end times." = "pImbogh tagh poH rIn poH je yIwIv.";
+
+
+// MARK: - Sign-in recovery, connection status, notification permission
+
+"Sign in again" = "Sign in again";
+"Sign in" = "Sign in";
+"Retry" = "Retry";
+"Copy link for IT" = "Copy link for IT";
+"Couldn't sign in" = "Couldn't sign in";
+"Work" = "Work";
+"Personal" = "Personal";
+"Microsoft work or school account. Opens Outlook on the web for business." = "Microsoft work or school account. Opens Outlook on the web for business.";
+"Personal Microsoft account. Opens Outlook.com." = "Personal Microsoft account. Opens Outlook.com.";
+"Connected. You'll be notified about new mail." = "Connected. You'll be notified about new mail.";
+"Connected: %lld unread" = "Connected: %lld unread";
+"Checking for mail" = "Checking for mail";
+"Checked just now" = "Checked just now";
+"Checked %@" = "Checked %@";
+"Notifications are off for Mail Notifier." = "Notifications are off for Mail Notifier.";
+"Turn on" = "Turn on";
+"Turn on in System Settings…" = "Turn on in System Settings…";
+"Open System Settings > Notifications" = "Open System Settings > Notifications";
+"Your organization needs to approve Mail Notifier. Ask your IT administrator to approve it, or send them this link." = "Your organization needs to approve Mail Notifier. Ask your IT administrator to approve it, or send them this link.";
+"Mail Notifier couldn't reach %@. Check your internet connection, then try again." = "Mail Notifier couldn't reach %@. Check your internet connection, then try again.";
+"Mail Notifier needs permission to read your mail. Try again and allow access." = "Mail Notifier needs permission to read your mail. Try again and allow access.";
+"%@ didn't share the email address for this account. Try again, or use a different account." = "%@ didn't share the email address for this account. Try again, or use a different account.";
+"Signing in to %@ didn't finish. Try again." = "Signing in to %@ didn't finish. Try again.";
