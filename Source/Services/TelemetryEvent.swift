@@ -51,4 +51,10 @@ enum TelemetryEvent: String {
     case licenseActivationFailed = "license_activation_failed"
     case licenseRemoved = "license_removed"
     case entitlementLapsed = "entitlement_lapsed"
+
+    // MARK: Sharing
+    /// The "Help us grow" link was copied. Property `source`: menu or settings.
+    case shareLinkCopied = "share_link_copied"
+    /// The share drawer under the popover was closed without copying.
+    case sharePromptDismissed = "share_prompt_dismissed"
 }

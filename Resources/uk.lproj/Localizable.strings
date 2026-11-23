@@ -223,3 +223,12 @@
 "Mail Notifier needs permission to read your mail. Try again and allow access." = "Mail Notifier потрібен дозвіл на читання вашої пошти. Спробуйте ще раз і дозвольте доступ.";
 "%@ didn't share the email address for this account. Try again, or use a different account." = "%@ не надав адресу електронної пошти цього облікового запису. Спробуйте ще раз або скористайтеся іншим обліковим записом.";
 "Signing in to %@ didn't finish. Try again." = "Вхід до %@ не завершено. Спробуйте ще раз.";
+
+// MARK: - Share prompt
+
+"Help us grow." = "Допоможіть нам зростати.";
+"Share Mail Notifier." = "Поділіться Mail Notifier.";
+"Share link copied!" = "Посилання скопійовано!";
+"Copy link" = "Копіювати посилання";
+"Copied" = "Скопійовано";
+"Close" = "Закрити";

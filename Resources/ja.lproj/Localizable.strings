@@ -223,3 +223,12 @@
 "Mail Notifier needs permission to read your mail. Try again and allow access." = "Mail Notifier にはメールを読み取る許可が必要です。もう一度お試しのうえ、アクセスを許可してください。";
 "%@ didn't share the email address for this account. Try again, or use a different account." = "%@ からこのアカウントのメールアドレスが共有されませんでした。もう一度試すか、別のアカウントを使ってください。";
 "Signing in to %@ didn't finish. Try again." = "%@ へのサインインが完了しませんでした。もう一度お試しください。";
+
+// MARK: - Share prompt
+
+"Help us grow." = "応援をお願いします。";
+"Share Mail Notifier." = "Mail Notifier を共有してください。";
+"Share link copied!" = "共有リンクをコピーしました";
+"Copy link" = "リンクをコピー";
+"Copied" = "コピー済み";
+"Close" = "閉じる";

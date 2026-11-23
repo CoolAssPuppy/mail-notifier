@@ -44,11 +44,16 @@ final class MenuBarPopoverModel: ObservableObject {
     /// macOS has notifications turned off for the app. New mail would arrive
     /// silently, so the popover says so and offers the way back.
     @Published private(set) var notificationsBlocked = false
+    /// The "Help us grow" drawer under the bottom bar. It shows on each open
+    /// until the person copies the link or closes it.
+    @Published private(set) var showsShareDrawer = false
 
     private let fetcherManager = FetcherManager.shared
+    private let shareStore: SharePromptStore
     private var subscriptions = Set<AnyCancellable>()
 
-    init() {
+    init(shareStore: SharePromptStore = SharePromptStore()) {
+        self.shareStore = shareStore
         refresh()
         refreshVIPs()
         subscribe()
@@ -72,6 +77,11 @@ final class MenuBarPopoverModel: ObservableObject {
             AppSettings.shared.shouldShowAccount(unreadCount: $0.unreadCount)
         }
 
+        let nextShowsShareDrawer = shareStore.shouldShowDrawer(hasAccounts: !allStates.isEmpty)
+        if showsShareDrawer != nextShowsShareDrawer {
+            showsShareDrawer = nextShowsShareDrawer
+        }
+
         if configuredAccountCount != allStates.count {
             configuredAccountCount = allStates.count
         }
@@ -88,6 +98,10 @@ final class MenuBarPopoverModel: ObservableObject {
         if lastCheckedAt != nextLastCheckedAt {
             lastCheckedAt = nextLastCheckedAt
         }
+    }
+
+    func retireShareDrawer() {
+        showsShareDrawer = false
     }
 
     func setNotificationPermission(_ permission: NotificationPermission) {
@@ -170,6 +184,12 @@ struct MenuBarPopover: View {
             content
             Divider().background(theme.divider)
             BottomBar(actions: actions)
+            if model.showsShareDrawer {
+                SharePromptDrawer {
+                    withAnimation(accountAnimation) { model.retireShareDrawer() }
+                }
+                .transition(.opacity)
+            }
         }
         .frame(width: 380)
         .background(theme.background)

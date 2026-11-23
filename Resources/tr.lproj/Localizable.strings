@@ -223,3 +223,12 @@
 "Mail Notifier needs permission to read your mail. Try again and allow access." = "Mail Notifier’ın e-postalarınızı okumak için izne ihtiyacı var. Yeniden deneyin ve erişime izin verin.";
 "%@ didn't share the email address for this account. Try again, or use a different account." = "%@ bu hesabın e-posta adresini paylaşmadı. Yeniden deneyin veya başka bir hesap kullanın.";
 "Signing in to %@ didn't finish. Try again." = "%@ girişi tamamlanmadı. Yeniden deneyin.";
+
+// MARK: - Share prompt
+
+"Help us grow." = "Büyümemize yardım edin.";
+"Share Mail Notifier." = "Mail Notifier’ı paylaşın.";
+"Share link copied!" = "Paylaşım bağlantısı kopyalandı!";
+"Copy link" = "Bağlantıyı kopyala";
+"Copied" = "Kopyalandı";
+"Close" = "Kapat";

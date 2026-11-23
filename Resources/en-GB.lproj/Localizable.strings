@@ -228,3 +228,12 @@
 "Mail Notifier needs permission to read your mail. Try again and allow access." = "Mail Notifier needs permission to read your mail. Try again and allow access.";
 "%@ didn't share the email address for this account. Try again, or use a different account." = "%@ didn't share the email address for this account. Try again, or use a different account.";
 "Signing in to %@ didn't finish. Try again." = "Signing in to %@ didn't finish. Try again.";
+
+// MARK: - Share prompt
+
+"Help us grow." = "Help us grow.";
+"Share Mail Notifier." = "Share Mail Notifier.";
+"Share link copied!" = "Share link copied!";
+"Copy link" = "Copy link";
+"Copied" = "Copied";
+"Close" = "Close";

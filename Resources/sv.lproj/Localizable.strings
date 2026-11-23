@@ -223,3 +223,12 @@
 "Mail Notifier needs permission to read your mail. Try again and allow access." = "Mail Notifier behöver tillstånd att läsa din e-post. Försök igen och tillåt åtkomst.";
 "%@ didn't share the email address for this account. Try again, or use a different account." = "%@ delade inte e-postadressen för det här kontot. Försök igen eller använd ett annat konto.";
 "Signing in to %@ didn't finish. Try again." = "Inloggningen hos %@ slutfördes inte. Försök igen.";
+
+// MARK: - Share prompt
+
+"Help us grow." = "Hjälp oss att växa.";
+"Share Mail Notifier." = "Dela Mail Notifier.";
+"Share link copied!" = "Länken har kopierats!";
+"Copy link" = "Kopiera länk";
+"Copied" = "Kopierad";
+"Close" = "Stäng";

@@ -223,3 +223,12 @@
 "Mail Notifier needs permission to read your mail. Try again and allow access." = "Mail Notifier 需要读取你邮件的权限。请重试并允许访问。";
 "%@ didn't share the email address for this account. Try again, or use a different account." = "%@ 未提供此帐户的电子邮件地址。请重试，或使用其他帐户。";
 "Signing in to %@ didn't finish. Try again." = "未完成登录 %@。请重试。";
+
+// MARK: - Share prompt
+
+"Help us grow." = "帮助我们成长。";
+"Share Mail Notifier." = "分享 Mail Notifier。";
+"Share link copied!" = "已拷贝分享链接！";
+"Copy link" = "拷贝链接";
+"Copied" = "已拷贝";
+"Close" = "关闭";

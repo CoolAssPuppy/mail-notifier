@@ -223,3 +223,12 @@
 "Mail Notifier needs permission to read your mail. Try again and allow access." = "Mail Notifier가 메일을 읽으려면 권한이 필요합니다. 다시 시도하고 접근을 허용하세요.";
 "%@ didn't share the email address for this account. Try again, or use a different account." = "%@에서 이 계정의 이메일 주소를 공유하지 않았습니다. 다시 시도하거나 다른 계정을 사용하세요.";
 "Signing in to %@ didn't finish. Try again." = "%@ 로그인을 완료하지 못했습니다. 다시 시도하세요.";
+
+// MARK: - Share prompt
+
+"Help us grow." = "성장을 도와주세요.";
+"Share Mail Notifier." = "Mail Notifier를 공유해 주세요.";
+"Share link copied!" = "공유 링크를 복사했습니다!";
+"Copy link" = "링크 복사";
+"Copied" = "복사됨";
+"Close" = "닫기";

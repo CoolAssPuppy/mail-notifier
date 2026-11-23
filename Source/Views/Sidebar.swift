@@ -27,6 +27,11 @@ struct Sidebar: View {
 
             accountsList
 
+            SharePromptBox()
+                .padding(.horizontal, 12)
+                .padding(.top, 6)
+                .padding(.bottom, 12)
+
             Spacer(minLength: 0)
 
             footer

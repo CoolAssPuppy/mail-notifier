@@ -223,3 +223,12 @@
 "Mail Notifier needs permission to read your mail. Try again and allow access." = "Mail Notifier potřebuje oprávnění ke čtení vaší pošty. Zkuste to znovu a povolte přístup.";
 "%@ didn't share the email address for this account. Try again, or use a different account." = "%@ nesdílel e-mailovou adresu tohoto účtu. Zkuste to znovu, nebo použijte jiný účet.";
 "Signing in to %@ didn't finish. Try again." = "Přihlášení k %@ nebylo dokončeno. Zkuste to znovu.";
+
+// MARK: - Share prompt
+
+"Help us grow." = "Pomozte nám růst.";
+"Share Mail Notifier." = "Doporučte Mail Notifier.";
+"Share link copied!" = "Odkaz zkopírován!";
+"Copy link" = "Kopírovat odkaz";
+"Copied" = "Zkopírováno";
+"Close" = "Zavřít";
