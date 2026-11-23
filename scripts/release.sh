@@ -12,7 +12,8 @@
 #   7. Verifies everything is live
 #
 # Prerequisites:
-#   - notarytool keychain profile "agent-server" (see SPARKLE.md)
+#   - App Store Connect team API key in Doppler mobile-release/prd (ASC_KEY_ID,
+#     ASC_ISSUER_ID, ASC_PRIVATE_KEY), used to notarize. See scripts/notary-auth.sh
 #   - Sparkle sign_update at ~/bin/sparkle/sign_update
 #   - create-dmg installed (brew install create-dmg)
 #   - doppler CLI logged in with access to the mail-notifier/prd config
@@ -38,7 +39,6 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DIST="$REPO_ROOT/dist"
 SCRIPTS="$REPO_ROOT/scripts"
 
-NOTARY_PROFILE="${NOTARY_PROFILE:-agent-server}"
 SPARKLE_SIGN_UPDATE="${SPARKLE_SIGN_UPDATE:-$HOME/bin/sparkle/sign_update}"
 SIGN_IDENTITY="Developer ID Application: Prashant Sridharan (955GSY56UT)"
 
@@ -69,9 +69,10 @@ if ! "${WRANGLER[@]}" --version >/dev/null 2>&1; then
   exit 1
 fi
 
-if ! xcrun notarytool history --keychain-profile "$NOTARY_PROFILE" >/dev/null 2>&1; then
-  echo "Error: notarytool profile '$NOTARY_PROFILE' not found or invalid."
-  echo "Run: xcrun notarytool store-credentials \"$NOTARY_PROFILE\" --apple-id ... --team-id ... --password ..."
+source "$SCRIPTS/notary-auth.sh"
+notary_auth_setup || exit 1
+if ! xcrun notarytool history "${NOTARY_ARGS[@]}" >/dev/null 2>&1; then
+  echo "Error: Apple refused the notarization credentials (check the API key's role in App Store Connect)."
   exit 1
 fi
 
@@ -200,7 +201,7 @@ fi
 echo "==> Notarizing .app (takes a few minutes)"
 APP_ZIP="$EXPORT_DIR/MailNotifier.app.zip"
 ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" "$APP_ZIP"
-xcrun notarytool submit "$APP_ZIP" --keychain-profile "$NOTARY_PROFILE" --wait
+xcrun notarytool submit "$APP_ZIP" "${NOTARY_ARGS[@]}" --wait
 rm -f "$APP_ZIP"
 
 echo "==> Stapling .app"
@@ -211,7 +212,7 @@ xcrun stapler validate "$APP_PATH"
 # 6. DMG + notarize + staple + Sparkle sign
 #----------------------------------------------------------------------
 echo "==> Building DMG"
-"$SCRIPTS/build-dmg.sh" "$APP_PATH" "$VERSION" "$NOTARY_PROFILE"
+"$SCRIPTS/build-dmg.sh" "$APP_PATH" "$VERSION"
 
 DMG="$DIST/MailNotifier-$VERSION.dmg"
 SPARKLE_TXT="$DIST/MailNotifier-$VERSION.sparkle.txt"

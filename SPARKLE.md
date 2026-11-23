@@ -47,7 +47,7 @@ It will:
   -x ~/mail-notifier-sparkle-private.pem
 ```
 
-The contents of `~/mail-notifier-sparkle-private.pem` are stored in **Doppler** under `agent-server/prd` as `SPARKLE_PRIVATE_KEY`.
+The contents of `~/mail-notifier-sparkle-private.pem` are stored in **Doppler** under `mail-notifier/prd` as `SPARKLE_PRIVATE_KEY`.
 
 After confirming the secret is in Doppler, wipe the local file:
 
@@ -61,7 +61,7 @@ If you ever need to rebuild Mail Notifier releases on a new machine (or a clean 
 
 ```bash
 doppler secrets get SPARKLE_PRIVATE_KEY \
-  --project agent-server --config prd --plain \
+  --project mail-notifier --config prd --plain \
   > /tmp/mail-notifier-sparkle-private.pem
 
 ~/Library/Developer/Xcode/DerivedData/MailNotifier-*/SourcePackages/artifacts/sparkle/Sparkle/bin/generate_keys \
@@ -132,16 +132,11 @@ Replace the placeholder with the base64 public key from step 1:
 
 Commit that change.
 
-## 5. Register the notarytool keychain profile
+## 5. Notarization credentials
 
-```bash
-xcrun notarytool store-credentials "mail-notifier" \
-  --apple-id "you@example.com" \
-  --team-id "955GSY56UT" \
-  --password "app-specific-password"
-```
+Nothing to set up on the Mac. The release scripts notarize with the App Store Connect team API key in Doppler `mobile-release/prd` (`ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_PRIVATE_KEY`), which every app's release shares. `scripts/notary-auth.sh` writes the key to a private temporary file for the run and removes it afterwards. The key needs at least the Developer role in App Store Connect.
 
-This lets the release script notarize without prompting. Use an [app-specific password](https://support.apple.com/en-us/HT204397) from appleid.apple.com, not your Apple ID password.
+To use a notarytool keychain profile instead, set `NOTARY_PROFILE=<profile-name>` when running `release.sh`.
 
 ## 6. Release flow (every release)
 
@@ -155,7 +150,7 @@ The script:
 3. Archives + exports a Developer ID-signed `.app`.
 4. Notarizes + staples the `.app`.
 5. Builds a signed + notarized + stapled DMG and Sparkle-signs it.
-6. Pulls Cloudflare R2 credentials from Doppler (`agent-server/prd`: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `R2_BUCKET_NAME`, `R2_PUBLIC_BASE_URL`).
+6. Pulls Cloudflare R2 credentials from Doppler (`mail-notifier/prd`: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `R2_BUCKET_NAME`, `R2_PUBLIC_BASE_URL`).
 7. Uploads the DMG to `apps/mail-notifier/MailNotifier-<version>.dmg` AND `apps/mail-notifier/MailNotifier-latest.dmg`, plus the updated `dist/appcast.xml` to `apps/mail-notifier/appcast.xml` (all via `wrangler r2 object put`).
 8. Verifies the feed via the Dub shortlink.
 

@@ -7,12 +7,13 @@
 #      must already be signed with Developer ID and notarized+stapled).
 #   2. `brew install create-dmg`
 #   3. Background TIFF at dmg-assets/background.tiff (see dmg-assets/README.md).
-#   4. A `notarytool` keychain profile stored via:
-#        xcrun notarytool store-credentials <profile-name> --apple-id ... --team-id ... --password ...
+#   4. Notarization credentials: the App Store Connect team API key in Doppler
+#      mobile-release/prd (see scripts/notary-auth.sh), or a notarytool
+#      keychain profile passed as the third argument.
 #   5. Sparkle `sign_update` tool at ~/bin/sparkle/sign_update (see SPARKLE.md).
 #
 # Usage:
-#   ./scripts/build-dmg.sh <path-to-Mail-Notifier.app> <version> <notarytool-profile>
+#   ./scripts/build-dmg.sh <path-to-Mail-Notifier.app> <version> [notarytool-profile]
 #
 # Output:
 #   dist/MailNotifier-<version>.dmg               (signed, notarized, stapled)
@@ -21,9 +22,11 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-APP_PATH="${1:?Usage: $0 <path-to-Mail-Notifier.app> <version> <notarytool-profile>}"
-VERSION="${2:?Usage: $0 <path-to-Mail-Notifier.app> <version> <notarytool-profile>}"
-NOTARY_PROFILE="${3:?Usage: $0 <path-to-Mail-Notifier.app> <version> <notarytool-profile>}"
+APP_PATH="${1:?Usage: $0 <path-to-Mail-Notifier.app> <version> [notarytool-profile]}"
+VERSION="${2:?Usage: $0 <path-to-Mail-Notifier.app> <version> [notarytool-profile]}"
+NOTARY_PROFILE="${3:-${NOTARY_PROFILE:-}}"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/notary-auth.sh"
+notary_auth_setup || exit 1
 
 SIGN_UPDATE="${SPARKLE_SIGN_UPDATE:-$HOME/bin/sparkle/sign_update}"
 SPARKLE_KEY_ACCOUNT="${SPARKLE_KEY_ACCOUNT:-com.strategicnerds.MailNotifierApp}"
@@ -89,7 +92,7 @@ echo "Codesigning DMG with: $SIGN_IDENTITY"
 codesign --force --sign "$SIGN_IDENTITY" --timestamp "$DMG_OUT"
 
 echo "Notarizing DMG (this can take several minutes)..."
-xcrun notarytool submit "$DMG_OUT" --keychain-profile "$NOTARY_PROFILE" --wait
+xcrun notarytool submit "$DMG_OUT" "${NOTARY_ARGS[@]}" --wait
 
 echo ""
 echo "Stapling notarization ticket..."
