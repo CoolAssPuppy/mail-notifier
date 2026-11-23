@@ -17,9 +17,19 @@ final class AccountTests: XCTestCase {
         XCTAssertEqual(account.id, "user@example.com")
     }
 
-    func testCheckIntervalDefaultsTo30() {
+    func testCheckIntervalDefaultsToFiveMinutesForNewAccounts() {
         let account = Account(email: "u@e.com", type: .gmail)
-        XCTAssertEqual(account.checkInterval, 30)
+        XCTAssertEqual(account.checkInterval, 5)
+    }
+
+    func testStoredIntervalSurvivesTheNewDefault() throws {
+        // An account saved before the default changed carries its interval in
+        // the JSON. Decoding must keep it rather than fall back to 5.
+        let json = #"{"email":"old@e.com","type":"gmail","enabled":true,"checkInterval":30,"notificationEnabled":true,"notificationSound":"","openInBrowser":""}"#
+        let decoded = try JSONDecoder().decode(Account.self, from: Data(json.utf8))
+        XCTAssertEqual(decoded.checkInterval, 30)
+        XCTAssertNil(decoded.tenantID)
+        XCTAssertNil(decoded.awaitingFirstCheck)
     }
 
     // MARK: - checkInterval clamping
@@ -62,9 +72,45 @@ final class AccountTests: XCTestCase {
         XCTAssertTrue(account.baseURL.absoluteString.contains("%2F"))
     }
 
-    func testOutlookBaseURLConstant() {
+    func testOutlookAccountWithUnknownTenantOpensOutlookLive() {
         let account = Account(email: "user@hotmail.com", type: .outlook)
-        XCTAssertEqual(account.baseURL.absoluteString, "https://outlook.live.com/mail/0/inbox")
+        XCTAssertEqual(account.baseURL.absoluteString, "https://outlook.live.com/mail/")
+    }
+
+    func testPersonalMicrosoftAccountOpensOutlookLive() {
+        var account = Account(email: "user@outlook.com", type: .outlook)
+        account.tenantID = MicrosoftTenant.consumerTenantID
+        XCTAssertFalse(account.isWorkAccount)
+        XCTAssertEqual(account.baseURL.absoluteString, "https://outlook.live.com/mail/")
+    }
+
+    func testWorkMicrosoftAccountOpensOutlookOffice() {
+        var account = Account(email: "user@contoso.com", type: .outlook)
+        account.tenantID = "72f988bf-86f1-41af-91ab-2d7cd011db47"
+        XCTAssertTrue(account.isWorkAccount)
+        XCTAssertEqual(account.baseURL.absoluteString, "https://outlook.office.com/mail/")
+    }
+
+    func testTenantIDComparisonIgnoresCase() {
+        var account = Account(email: "user@outlook.com", type: .outlook)
+        account.tenantID = MicrosoftTenant.consumerTenantID.uppercased()
+        XCTAssertFalse(account.isWorkAccount)
+    }
+
+    func testMicrosoftAccountKindLabel() {
+        var work = Account(email: "a@contoso.com", type: .outlook)
+        work.tenantID = "72f988bf-86f1-41af-91ab-2d7cd011db47"
+        var personal = Account(email: "b@outlook.com", type: .outlook)
+        personal.tenantID = MicrosoftTenant.consumerTenantID
+        let unknown = Account(email: "c@outlook.com", type: .outlook)
+        var gmail = Account(email: "d@gmail.com", type: .gmail)
+        gmail.tenantID = "72f988bf-86f1-41af-91ab-2d7cd011db47"
+
+        XCTAssertEqual(work.microsoftAccountKindLabel, "Work")
+        XCTAssertEqual(personal.microsoftAccountKindLabel, "Personal")
+        XCTAssertNil(unknown.microsoftAccountKindLabel)
+        XCTAssertNil(gmail.microsoftAccountKindLabel)
+        XCTAssertFalse(gmail.isWorkAccount)
     }
 
     // MARK: - Codable round-trip
@@ -77,6 +123,8 @@ final class AccountTests: XCTestCase {
         original.notificationSound = "blow"
         original.openInBrowser = "com.apple.Safari"
         original.newestMessageDate = Date(timeIntervalSince1970: 1_700_000_000)
+        original.tenantID = "72f988bf-86f1-41af-91ab-2d7cd011db47"
+        original.awaitingFirstCheck = true
 
         let encoded = try JSONEncoder().encode(original)
         let decoded = try JSONDecoder().decode(Account.self, from: encoded)
@@ -89,6 +137,8 @@ final class AccountTests: XCTestCase {
         XCTAssertEqual(decoded.notificationSound, original.notificationSound)
         XCTAssertEqual(decoded.openInBrowser, original.openInBrowser)
         XCTAssertEqual(decoded.newestMessageDate, original.newestMessageDate)
+        XCTAssertEqual(decoded.tenantID, original.tenantID)
+        XCTAssertEqual(decoded.awaitingFirstCheck, true)
     }
 
     // MARK: - AccountType

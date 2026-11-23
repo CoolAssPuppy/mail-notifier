@@ -151,4 +151,71 @@ final class MessageFetcherTests: XCTestCase {
         )
         XCTAssertFalse(fetcher.hasNewMessages)
     }
+
+    // MARK: - Last checked
+
+    func testLastCheckedIsUnsetBeforeTheFirstCheck() {
+        XCTAssertNil(makeFetcher().lastCheckedAt)
+    }
+
+    // MARK: - First check of a new account
+
+    private func makeNewAccountFetcher(email: String = "fresh@test.com") -> MessageFetcher {
+        var account = Account(email: email, type: .gmail)
+        account.awaitingFirstCheck = true
+        Accounts.default = [account]
+        return MessageFetcher(account: account)
+    }
+
+    func testFirstCheckOfANewAccountAnnouncesTheUnreadCountOnce() {
+        let fetcher = makeNewAccountFetcher()
+        var announced: Int?
+        // NotificationCenter matches `object` by identity, and a bridged String
+        // literal is a different NSString from the account's email, so filter
+        // on the value in the handler instead.
+        let exp = expectation(forNotification: .accountFirstCheckCompleted, object: nil) { note in
+            guard note.object as? String == "fresh@test.com" else { return false }
+            announced = note.userInfo?["unreadCount"] as? Int
+            return true
+        }
+
+        fetcher.applyFetchResults(unreadResult: .success(3), messagesResult: .success(makeMessages(3)))
+
+        wait(for: [exp], timeout: 1)
+        XCTAssertEqual(announced, 3)
+        XCTAssertFalse(fetcher.hasNewMessages, "Mail already in the inbox must not arrive as a burst of notifications")
+        XCTAssertNil(Accounts.default.find(email: "fresh@test.com")?.awaitingFirstCheck)
+        XCTAssertNil(fetcher.account.awaitingFirstCheck)
+    }
+
+    func testOnlyTheFirstCheckIsAnnounced() {
+        let fetcher = makeNewAccountFetcher()
+        fetcher.applyFetchResults(unreadResult: .success(0), messagesResult: .success([]))
+
+        let exp = expectation(forNotification: .accountFirstCheckCompleted, object: nil)
+        exp.isInverted = true
+        fetcher.applyFetchResults(unreadResult: .success(1), messagesResult: .success(makeMessages(1)))
+        wait(for: [exp], timeout: 0.3)
+        XCTAssertTrue(fetcher.hasNewMessages, "Mail arriving after the first check notifies as usual")
+    }
+
+    func testAFailedFirstCheckWaitsForTheNextOne() {
+        let fetcher = makeNewAccountFetcher()
+        let exp = expectation(forNotification: .accountFirstCheckCompleted, object: nil)
+        exp.isInverted = true
+
+        fetcher.applyFetchResults(unreadResult: .success(2),
+                                  messagesResult: .failure(.networkError(URLError(.timedOut))))
+        wait(for: [exp], timeout: 0.3)
+        XCTAssertEqual(Accounts.default.find(email: "fresh@test.com")?.awaitingFirstCheck, true)
+    }
+
+    func testAnExistingAccountIsNeverAnnounced() {
+        let fetcher = makeFetcher()
+        let exp = expectation(forNotification: .accountFirstCheckCompleted, object: nil)
+        exp.isInverted = true
+        fetcher.applyFetchResults(unreadResult: .success(1), messagesResult: .success(makeMessages(1)))
+        wait(for: [exp], timeout: 0.3)
+        XCTAssertTrue(fetcher.hasNewMessages)
+    }
 }

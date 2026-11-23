@@ -46,6 +46,8 @@ enum ClassicMenuBuilder {
         /// Opens the main window with the paywall up. An `NSMenu` row has no
         /// room to make the case, so a locked account hands off.
         var subscribe: () -> Void
+        /// System Settings > Notifications for this app.
+        var openNotificationSettings: () -> Void = {}
         var quit: () -> Void
     }
 
@@ -55,6 +57,7 @@ enum ClassicMenuBuilder {
     static func makeMenu(accounts: Accounts,
                          fetcherManager: FetcherManager,
                          lockedEmails: Set<String> = [],
+                         notificationsBlocked: Bool = false,
                          actions: Actions) -> NSMenu {
         let menu = NSMenu()
         // Items here are enabled explicitly. Automatic enabling walks the
@@ -65,6 +68,13 @@ enum ClassicMenuBuilder {
         let visibleAccounts = accounts.filter { account in
             let unreadCount = fetcherManager.fetcher(for: account.email)?.unreadMessagesCount ?? 0
             return AppSettings.shared.shouldShowAccount(unreadCount: unreadCount)
+        }
+
+        if notificationsBlocked && !accounts.isEmpty {
+            let title = NotificationPermission.blockedMessage + " "
+                + NSLocalizedString("Turn on in System Settings…", comment: "")
+            menu.addItem(ClassicMenuItem(title: title, handler: actions.openNotificationSettings))
+            menu.addItem(.separator())
         }
 
         if accounts.isEmpty {
@@ -136,19 +146,22 @@ enum ClassicMenuBuilder {
                 actions.reauthorize(account)
             }
             item.image = providerIcon(for: account)
+            item.toolTip = AccountStatusLine.text(hasAuthError: true, lastCheckedAt: nil)
             return item
         }
 
+        let status = AccountStatusLine.text(hasAuthError: false, lastCheckedAt: fetcher?.lastCheckedAt)
         let item = ClassicMenuItem(title: accountTitle(for: account, unreadCount: unreadCount)) {
             actions.openInbox(account)
         }
         item.image = providerIcon(for: account)
-        item.toolTip = account.email
+        item.toolTip = "\(account.email)\n\(status)"
 
         if !messages.isEmpty {
             item.submenu = messagesSubmenu(for: account,
                                            messages: messages,
                                            unreadCount: unreadCount,
+                                           lastCheckedAt: fetcher?.lastCheckedAt,
                                            actions: actions)
         }
 
@@ -176,10 +189,15 @@ enum ClassicMenuBuilder {
     private static func messagesSubmenu(for account: Account,
                                         messages: [Message],
                                         unreadCount: Int,
+                                        lastCheckedAt: Date?,
                                         actions: Actions) -> NSMenu {
         let submenu = NSMenu()
         submenu.autoenablesItems = false
 
+        let status = NSMenuItem(title: AccountStatusLine.text(hasAuthError: false, lastCheckedAt: lastCheckedAt),
+                                action: nil, keyEquivalent: "")
+        status.isEnabled = false
+        submenu.addItem(status)
         submenu.addItem(ClassicMenuItem(title: NSLocalizedString("Open Inbox", comment: "")) {
             actions.openInbox(account)
         })

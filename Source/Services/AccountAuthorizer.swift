@@ -100,31 +100,18 @@ extension Accounts {
                 switch result {
                 case .failure(let error):
                     Log.auth.error("Gmail OAuth failed: \(String(describing: error), privacy: .public)")
-                    Telemetry.capture(.accountSigninFailed, properties: ["provider": "gmail"])
-                    return
+                    reportSigninFailure(SigninFailure(provider: .gmail, error: error))
                 case .success(let state):
                     let authorization = GTMAppAuthFetcherAuthorization(authState: state)
                     guard let userEmail = authorization.userEmail else {
                         Log.auth.error("Gmail OAuth succeeded but state contained no userEmail")
-                        Telemetry.capture(.accountSigninFailed, properties: ["provider": "gmail", "reason": "no_email"])
+                        reportSigninFailure(.missingEmail(provider: .gmail))
                         return
                     }
-
                     Log.auth.info("Gmail OAuth completed for \(userEmail, privacy: .private)")
-                    var accounts = Self.default
-                    if var account = accounts.find(email: userEmail) {
+                    finish(storeAuthorized(email: userEmail, type: .gmail) { account in
                         account.authorization = authorization
-                        accounts.update(account: account)
-                    } else {
-                        guard Self.canAddAccount() else {
-                            Self.refuseAdd(provider: "gmail")
-                            return
-                        }
-                        var account = Account(email: userEmail, type: .gmail)
-                        account.authorization = authorization
-                        accounts.add(account: account)
-                        Telemetry.capture(.accountAdded, properties: ["provider": "gmail"])
-                    }
+                    }, provider: "gmail")
                 }
             }
 
@@ -133,33 +120,41 @@ extension Accounts {
                 switch result {
                 case .failure(let error):
                     Log.auth.error("Outlook OAuth failed: \(String(describing: error), privacy: .public)")
-                    Telemetry.capture(.accountSigninFailed, properties: ["provider": "outlook"])
-                    return
+                    reportSigninFailure(SigninFailure(provider: .outlook, error: error))
                 case .success(let state):
                     Log.auth.info("Outlook OAuth state received (token issued at: \(state.lastTokenResponse?.accessTokenExpirationDate.map { String(describing: $0) } ?? "nil", privacy: .public))")
-                    guard let email = outlookEmailFromIDToken(state) else {
+                    guard let token = outlookIDToken(state), let email = token.email else {
                         Log.auth.error("Outlook OAuth succeeded but ID token had no email/preferred_username claim")
-                        Telemetry.capture(.accountSigninFailed, properties: ["provider": "outlook", "reason": "no_email"])
+                        reportSigninFailure(.missingEmail(provider: .outlook))
                         return
                     }
-
-                    Log.auth.info("Outlook OAuth completed for \(email, privacy: .private)")
-                    var accounts = Self.default
-                    if var account = accounts.find(email: email) {
+                    Log.auth.info("Outlook OAuth completed for \(email, privacy: .private). Work or school account: \(token.isWorkOrSchool.map { String($0) } ?? "unknown", privacy: .public)")
+                    finish(storeAuthorized(email: email, type: .outlook, tenantID: token.tenantID) { account in
                         account.authState = state
-                        accounts.update(account: account)
-                    } else {
-                        guard Self.canAddAccount() else {
-                            Self.refuseAdd(provider: "outlook")
-                            return
-                        }
-                        var account = Account(email: email, type: .outlook)
-                        account.authState = state
-                        accounts.add(account: account)
-                        Telemetry.capture(.accountAdded, properties: ["provider": "outlook"])
-                    }
+                    }, provider: "outlook")
                 }
             }
+        }
+    }
+
+    private static func finish(_ outcome: AuthorizedAccountOutcome, provider: String) {
+        switch outcome {
+        case .added:
+            Telemetry.capture(.accountAdded, properties: ["provider": provider])
+        case .reauthorized:
+            break
+        case .refused:
+            refuseAdd(provider: provider)
+        }
+    }
+
+    /// Records the failure with its domain, code and OAuth error string, and
+    /// asks the main window to explain it unless the person cancelled.
+    private static func reportSigninFailure(_ failure: SigninFailure) {
+        Telemetry.capture(.accountSigninFailed, properties: failure.telemetryProperties)
+        guard failure.shouldExplain else { return }
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: .signinFailed, object: failure)
         }
     }
 
@@ -190,54 +185,18 @@ extension Accounts {
         }
     }
 
-    /// Reads the user's email from the OIDC ID token claims instead of
-    /// calling Microsoft Graph `/me`. Graph requires `User.Read` scope which
-    /// we don't request — Microsoft tightened this and now returns 403 when
-    /// the token only carries `openid + profile + email + Mail.Read`. The
-    /// ID token already has the email we need (granted by the `email`
-    /// scope), so this avoids the Graph call entirely and works for both
-    /// personal Microsoft accounts (Hotmail/Outlook.com) and work/school.
-    private static func outlookEmailFromIDToken(_ state: OIDAuthState) -> String? {
+    /// Reads the email and tenant from the OIDC ID token instead of calling
+    /// Microsoft Graph `/me`, which needs `User.Read`. The `email` scope puts
+    /// the address in the token for both personal and work or school accounts.
+    private static func outlookIDToken(_ state: OIDAuthState) -> MicrosoftIDToken? {
         guard let idToken = state.lastTokenResponse?.idToken else {
-            Log.auth.error("Outlook auth state has no ID token — was the openid scope granted?")
+            Log.auth.error("Outlook auth state has no ID token. Was the openid scope granted?")
             return nil
         }
-        guard let claims = decodeJWTClaims(idToken) else {
+        guard let token = MicrosoftIDToken(jwt: idToken) else {
             Log.auth.error("Failed to decode Outlook ID token payload")
             return nil
         }
-
-        let email = (claims["email"] as? String)?.nonEmpty
-            ?? (claims["preferred_username"] as? String)?.nonEmpty
-            ?? (claims["upn"] as? String)?.nonEmpty
-        if email == nil {
-            let presentClaims = claims.keys.sorted().joined(separator: ",")
-            Log.auth.error("Outlook ID token had no email/preferred_username/upn claim. Claims present: \(presentClaims, privacy: .public)")
-        }
-        return email?.lowercased()
-    }
-
-    private static func decodeJWTClaims(_ jwt: String) -> [String: Any]? {
-        let segments = jwt.components(separatedBy: ".")
-        guard segments.count >= 2 else { return nil }
-        let payload = segments[1]
-        // base64url -> base64 (swap chars and pad to multiple of 4)
-        var b64 = payload
-            .replacingOccurrences(of: "-", with: "+")
-            .replacingOccurrences(of: "_", with: "/")
-        let pad = (4 - b64.count % 4) % 4
-        b64.append(String(repeating: "=", count: pad))
-
-        guard let data = Data(base64Encoded: b64),
-              let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-            return nil
-        }
-        return json
-    }
-}
-
-private extension String {
-    var nonEmpty: String? {
-        isEmpty ? nil : self
+        return token
     }
 }

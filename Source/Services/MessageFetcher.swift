@@ -13,8 +13,14 @@ final class MessageFetcher: NSObject {
     private var timer: Timer?
     private(set) var hasAuthError = false
 
-    private(set) var lastCheckedAt = Date()
+    /// Nil until the first check resolves, so the menu never says "Checked
+    /// just now" about an account that has not been checked.
+    private(set) var lastCheckedAt: Date?
     private(set) var hasNewMessages = false
+    /// Set while the first check of a new account writes its messages. The
+    /// mail already sitting in the inbox becomes the baseline rather than a
+    /// burst of notifications; one "Connected" notification covers it.
+    private var isApplyingFirstCheck = false
 
     private(set) var unreadMessagesCount = 0 {
         didSet {
@@ -38,7 +44,9 @@ final class MessageFetcher: NSObject {
             let messagesChanged = oldIds != newIds
 
             if let newestMessage = messages.first {
-                if let newestMessageDate = account.newestMessageDate {
+                if isApplyingFirstCheck {
+                    hasNewMessages = false
+                } else if let newestMessageDate = account.newestMessageDate {
                     hasNewMessages = newestMessage.serverDate > newestMessageDate
                 } else {
                     hasNewMessages = true
@@ -148,8 +156,23 @@ final class MessageFetcher: NSObject {
             unreadMessagesCount = count
         }
 
+        // The first check of a new account counts only when both paths
+        // succeed; otherwise the next check gets another try.
+        var firstCheckUnreadCount: Int?
+        if account.awaitingFirstCheck == true,
+           case .success(let count) = unreadResult,
+           case .success = messagesResult {
+            firstCheckUnreadCount = count
+            isApplyingFirstCheck = true
+        }
+
         if case .success(let msgs) = messagesResult {
             messages = msgs
+        }
+        isApplyingFirstCheck = false
+
+        if let firstCheckUnreadCount {
+            completeFirstCheck(unreadCount: firstCheckUnreadCount)
         }
 
         // Always advance lastCheckedAt when at least one path resolved.
@@ -157,5 +180,18 @@ final class MessageFetcher: NSObject {
         // "Last checked at hh:mm" footer froze on partial outages even
         // when unread count was successfully refreshed.
         lastCheckedAt = Date()
+    }
+
+    private func completeFirstCheck(unreadCount: Int) {
+        account.awaitingFirstCheck = nil
+        if var stored = Accounts.default.find(email: account.email) {
+            stored.awaitingFirstCheck = nil
+            stored.newestMessageDate = account.newestMessageDate
+            var accounts = Accounts.default
+            accounts.update(account: stored)
+        }
+        NotificationCenter.default.post(name: .accountFirstCheckCompleted,
+                                        object: account.email,
+                                        userInfo: ["unreadCount": unreadCount])
     }
 }

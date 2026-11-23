@@ -16,21 +16,81 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
     weak var delegate: NotificationServiceDelegate?
     private let suppressedNotifications = SuppressedNotificationStore()
 
+    /// The last permission state read from macOS. The classic menu is built
+    /// synchronously and reads this; it is refreshed at launch, whenever a
+    /// menu opens, and after a request.
+    private(set) var lastKnownPermission: NotificationPermission = .notDetermined
+    private var authorizationRequest: Task<NotificationPermission, Never>?
+
+    /// Takes over notification clicks. Does not ask for permission: that
+    /// waits until an account exists, so the prompt arrives when the person
+    /// can see why the app wants it.
+    @MainActor
     func setup() {
-        Task {
+        UNUserNotificationCenter.current().delegate = self
+        // Installs that already have accounts but never answered the prompt.
+        if Accounts.hasAccounts {
+            Task { _ = await requestAuthorizationIfNeeded() }
+        }
+    }
+
+    /// Reads the current permission and remembers it.
+    @MainActor
+    @discardableResult
+    func refreshPermission() async -> NotificationPermission {
+        let permission = await NotificationPermission.current()
+        lastKnownPermission = permission
+        return permission
+    }
+
+    /// Asks macOS for permission once, if the person has not answered yet.
+    /// Concurrent callers share the one request, so the prompt never stacks.
+    @MainActor
+    func requestAuthorizationIfNeeded() async -> NotificationPermission {
+        if let authorizationRequest { return await authorizationRequest.value }
+        let request = Task { @MainActor () -> NotificationPermission in
+            let current = await refreshPermission()
+            guard current == .notDetermined else { return current }
             do {
-                // .sound is required now that the notification carries the sound
-                // (previously the sound was played directly via NSSound, which
-                // needs no notification permission). Without .sound the system
-                // shows the banner but stays silent.
-                let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])
-                if granted {
-                    await MainActor.run {
-                        UNUserNotificationCenter.current().delegate = self
-                    }
-                }
+                // .sound is required now that the notification carries the
+                // sound. Without it the system shows the banner but stays silent.
+                _ = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])
             } catch {
-                Log.app.error("Failed to request notification authorization: \(error.localizedDescription)")
+                Log.app.error("Failed to request notification authorization: \(error.localizedDescription, privacy: .public)")
+            }
+            let answered = await refreshPermission()
+            if answered.isBlocked {
+                Log.app.info("Notifications were declined; the menu will say so")
+            }
+            NotificationCenter.default.post(name: .notificationPermissionChanged, object: nil)
+            return answered
+        }
+        authorizationRequest = request
+        let result = await request.value
+        authorizationRequest = nil
+        return result
+    }
+
+    /// The one notification after a new account's first check, so the person
+    /// knows the connection works even when the inbox is empty.
+    func deliverConnectedNotice(for account: Account, unreadCount: Int) {
+        guard account.notificationEnabled else { return }
+        Task { @MainActor in
+            let permission = await requestAuthorizationIfNeeded()
+            guard permission == .granted || permission == .provisional else {
+                Log.app.info("Skipped the connected notification: notifications are not allowed")
+                return
+            }
+            let content = UNMutableNotificationContent()
+            content.title = ConnectedNotice.title(unreadCount: unreadCount)
+            content.body = account.displayName
+            content.threadIdentifier = account.email
+            let request = UNNotificationRequest(identifier: "connected:\(account.type.rawValue):\(account.email.lowercased())",
+                                                content: content, trigger: nil)
+            do {
+                try await UNUserNotificationCenter.current().add(request)
+            } catch {
+                Log.app.error("Failed to deliver the connected notification: \(error.localizedDescription, privacy: .public)")
             }
         }
     }
@@ -127,7 +187,12 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
         Task {
             let settings = await UNUserNotificationCenter.current().notificationSettings()
             guard settings.authorizationStatus == .authorized || settings.authorizationStatus == .provisional,
-                  settings.alertSetting == .enabled else { return }
+                  settings.alertSetting == .enabled else {
+                // Not silent any more: the menu shows a line with a way to
+                // turn notifications back on.
+                Log.app.info("New mail not shown: notifications are not allowed (status \(settings.authorizationStatus.rawValue, privacy: .public))")
+                return
+            }
 
             // The sound rides on the notification (see deliverNotifications) so
             // macOS plays it and Focus governs it. We no longer play it directly

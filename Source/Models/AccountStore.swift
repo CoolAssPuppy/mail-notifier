@@ -160,10 +160,12 @@ extension Accounts {
         NotificationCenter.default.post(name: .accountDeleted, object: account)
     }
 
-    mutating func update(account: Account) {
+    /// `fetchNow` asks for a check straight away, as after signing in again.
+    mutating func update(account: Account, fetchNow: Bool = false) {
         guard let index = firstIndex(where: { $0.id == account.id }) else { return }
         let needsRescheduling = Self.needsRescheduling(oldValue: self[index], newValue: account)
-        let needsImmediateFetching = Self.needsImmediateFetching(oldValue: self[index], newValue: account)
+        let needsImmediateFetching = fetchNow
+            || Self.needsImmediateFetching(oldValue: self[index], newValue: account)
         self[index] = account
         save()
         NotificationCenter.default.post(
@@ -177,5 +179,45 @@ extension Accounts {
         move(fromOffsets: source, toOffset: destination)
         save()
         NotificationCenter.default.post(name: .accountsReordered, object: nil)
+    }
+}
+
+// MARK: - Storing a Finished Sign-in
+
+enum AuthorizedAccountOutcome: Equatable {
+    case added
+    case reauthorized
+    /// The free account limit is reached. Nothing was stored.
+    case refused
+}
+
+extension Accounts {
+    /// Turns a finished sign-in into a stored account.
+    ///
+    /// An account that already exists gets its new credentials and is checked
+    /// at once, so "Sign in again" clears without waiting for the timer. A new
+    /// account passes the subscription gate, starts waiting for its first
+    /// check, and is added. `applyCredentials` writes the tokens; it runs
+    /// before the account is saved.
+    @discardableResult
+    static func storeAuthorized(email: String,
+                                type: AccountType,
+                                tenantID: String? = nil,
+                                applyCredentials: (inout Account) -> Void) -> AuthorizedAccountOutcome {
+        var accounts = Self.default
+        if var account = accounts.find(email: email) {
+            applyCredentials(&account)
+            if let tenantID { account.tenantID = tenantID }
+            accounts.update(account: account, fetchNow: true)
+            return .reauthorized
+        }
+
+        guard canAddAccount() else { return .refused }
+        var account = Account(email: email, type: type)
+        account.tenantID = tenantID
+        account.awaitingFirstCheck = true
+        applyCredentials(&account)
+        accounts.add(account: account)
+        return .added
     }
 }

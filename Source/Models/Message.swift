@@ -43,7 +43,9 @@ struct Message {
         Self.url(type: type, email: email, id: id)
     }
 
-    static func url(type: AccountType, email: String, id: String) -> URL {
+    /// `isWorkAccount` sends a Microsoft work or school message to Outlook on
+    /// the web for business; a personal one goes to outlook.live.com.
+    static func url(type: AccountType, email: String, id: String, isWorkAccount: Bool = false) -> URL {
         switch type {
         case .gmail:
             var components = URLComponents()
@@ -61,9 +63,14 @@ struct Message {
         case .outlook:
             var components = URLComponents()
             components.scheme = "https"
-            components.host = "outlook.live.com"
             let encodedMessageID = id.addingPercentEncoding(withAllowedCharacters: .urlPathComponentAllowed) ?? id
-            components.percentEncodedPath = "/mail/0/inbox/id/\(encodedMessageID)"
+            if isWorkAccount {
+                components.host = "outlook.office.com"
+                components.percentEncodedPath = "/mail/inbox/id/\(encodedMessageID)"
+            } else {
+                components.host = "outlook.live.com"
+                components.percentEncodedPath = "/mail/0/inbox/id/\(encodedMessageID)"
+            }
             return components.url ?? URL(string: "https://outlook.live.com/mail/0/inbox")!
         }
     }

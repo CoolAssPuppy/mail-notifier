@@ -111,6 +111,11 @@ extension GmailProvider {
     /// "Auth expired" in the UI.
     static func mapGmailError(_ error: Error) -> MailProviderError {
         let nsError = error as NSError
+        // A refresh token Google revoked or expired comes back from the
+        // authorizer as an AppAuth token error, sometimes wrapped.
+        if MailProviderError.requiresSignIn(error) {
+            return .authenticationRequired
+        }
         if nsError.domain == NSURLErrorDomain {
             return .networkError(error)
         }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AppAuth
 
 /// One-shot rewrites of the stored account list, run at launch.
 ///
@@ -41,6 +42,22 @@ enum AccountMigrations {
         }
     }
 
+    /// Outlook accounts signed in before the tenant was stored. The tenant
+    /// decides whether the inbox opens on outlook.office.com or
+    /// outlook.live.com, so it is read from the stored ID token. Accounts
+    /// with a known tenant are skipped, so `tenantFor` runs at most once per
+    /// account that still needs it on each launch.
+    static func fillingMicrosoftTenants(in accounts: [Account],
+                                        tenantFor: (Account) -> String?) -> [Account] {
+        accounts.map { account in
+            guard account.type == .outlook, account.tenantID == nil,
+                  let tenant = tenantFor(account) else { return account }
+            var updated = account
+            updated.tenantID = tenant
+            return updated
+        }
+    }
+
     /// Runs every pending migration against the stored account list.
     ///
     /// Call before anything reads the accounts.
@@ -51,6 +68,8 @@ enum AccountMigrations {
         // forever. Leave the flag unset and catch them on the next ordinary
         // launch.
         guard !DemoMode.isOnNow else { return }
+
+        fillMicrosoftTenants()
 
         let defaults = Accounts.defaults
         guard !defaults.bool(forKey: safariBrowserChoiceKey) else { return }
@@ -64,5 +83,16 @@ enum AccountMigrations {
         }
 
         defaults.set(true, forKey: safariBrowserChoiceKey)
+    }
+
+    private static func fillMicrosoftTenants() {
+        let stored = Array(Accounts.default)
+        let filled = fillingMicrosoftTenants(in: stored) { account in
+            account.authState?.lastTokenResponse?.idToken
+                .flatMap(MicrosoftIDToken.init(jwt:))?.tenantID
+        }
+        guard filled.map(\.tenantID) != stored.map(\.tenantID) else { return }
+        Accounts.default = Accounts(filled)
+        Log.app.info("Recorded the Microsoft tenant for existing Outlook accounts")
     }
 }

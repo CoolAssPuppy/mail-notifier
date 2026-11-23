@@ -110,4 +110,30 @@ final class AccountMigrationsTests: XCTestCase {
 
         XCTAssertFalse(defaults.bool(forKey: AccountMigrations.safariBrowserChoiceKey))
     }
+
+    // MARK: - Microsoft tenant backfill
+
+    func testOutlookAccountsSignedInBeforeTenantsWereStoredGetTheirTenant() {
+        let filled = AccountMigrations.fillingMicrosoftTenants(in: [
+            Account(email: "work@contoso.com", type: .outlook),
+            Account(email: "me@gmail.com", type: .gmail)
+        ]) { account in
+            account.email == "work@contoso.com" ? "72f988bf-86f1-41af-91ab-2d7cd011db47" : "should-not-be-read"
+        }
+
+        XCTAssertEqual(filled[0].tenantID, "72f988bf-86f1-41af-91ab-2d7cd011db47")
+        XCTAssertNil(filled[1].tenantID)
+    }
+
+    func testAKnownTenantIsNotReadAgain() {
+        var known = Account(email: "me@outlook.com", type: .outlook)
+        known.tenantID = MicrosoftTenant.consumerTenantID
+        var reads = 0
+        let filled = AccountMigrations.fillingMicrosoftTenants(in: [known]) { _ in
+            reads += 1
+            return "other"
+        }
+        XCTAssertEqual(reads, 0)
+        XCTAssertEqual(filled[0].tenantID, MicrosoftTenant.consumerTenantID)
+    }
 }

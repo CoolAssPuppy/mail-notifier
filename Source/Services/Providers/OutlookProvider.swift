@@ -126,8 +126,11 @@ private extension OutlookProvider {
 
         authState.performAction { accessToken, _, error in
             if let error {
+                // A revoked or expired refresh token lands here. Report it as
+                // a sign-in problem so the account shows "Sign in again".
+                let mapped = OutlookProvider.mapAuthorizationError(error)
                 DispatchQueue.main.async {
-                    completion(.failure(.networkError(error)))
+                    completion(.failure(mapped))
                 }
                 return
             }

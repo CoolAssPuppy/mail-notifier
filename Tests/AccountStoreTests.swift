@@ -108,6 +108,65 @@ final class AccountStoreTests: XCTestCase {
         XCTAssertFalse(Accounts.needsImmediateFetching(oldValue: old, newValue: new))
     }
 
+    // MARK: - Storing a finished sign-in
+
+    private func expectAccountUpdated(email: String) -> (XCTestExpectation, () -> [AnyHashable: Any]?) {
+        var captured: [AnyHashable: Any]?
+        let exp = expectation(forNotification: .accountUpdated, object: nil) { note in
+            guard (note.object as? Account)?.email == email else { return false }
+            captured = note.userInfo
+            return true
+        }
+        return (exp, { captured })
+    }
+
+    func testUpdateWithFetchNowAsksForAnImmediateFetch() {
+        Accounts.default = [Account(email: "u@e.com", type: .gmail)]
+        let (exp, info) = expectAccountUpdated(email: "u@e.com")
+
+        var accounts = Accounts.default
+        accounts.update(account: Account(email: "u@e.com", type: .gmail), fetchNow: true)
+
+        wait(for: [exp], timeout: 1)
+        XCTAssertEqual(info()?["needsImmediateFetching"] as? Bool, true)
+    }
+
+    func testSigningInAgainToAnExistingAccountFetchesImmediately() {
+        Accounts.default = [Account(email: "back@e.com", type: .outlook)]
+        let (exp, info) = expectAccountUpdated(email: "back@e.com")
+
+        let outcome = Accounts.storeAuthorized(email: "back@e.com", type: .outlook,
+                                               tenantID: "72f988bf-86f1-41af-91ab-2d7cd011db47") { _ in }
+
+        wait(for: [exp], timeout: 1)
+        XCTAssertEqual(outcome, .reauthorized)
+        XCTAssertEqual(info()?["needsImmediateFetching"] as? Bool, true)
+        XCTAssertEqual(Accounts.default.find(email: "back@e.com")?.tenantID,
+                       "72f988bf-86f1-41af-91ab-2d7cd011db47")
+    }
+
+    func testANewAccountWaitsForItsFirstCheck() {
+        let exp = expectation(forNotification: .accountAdded, object: nil)
+
+        let outcome = Accounts.storeAuthorized(email: "new@outlook.com", type: .outlook,
+                                               tenantID: MicrosoftTenant.consumerTenantID) { _ in }
+
+        wait(for: [exp], timeout: 1)
+        XCTAssertEqual(outcome, .added)
+        let stored = Accounts.default.find(email: "new@outlook.com")
+        XCTAssertEqual(stored?.awaitingFirstCheck, true)
+        XCTAssertEqual(stored?.tenantID, MicrosoftTenant.consumerTenantID)
+        XCTAssertEqual(stored?.checkInterval, 5)
+    }
+
+    func testCredentialsAreAppliedBeforeTheAccountIsSaved() {
+        var applied: [String] = []
+        _ = Accounts.storeAuthorized(email: "cred@e.com", type: .gmail) { account in
+            applied.append(account.email)
+        }
+        XCTAssertEqual(applied, ["cred@e.com"])
+    }
+
     // MARK: - Filtering
 
     func testEnabledFiltersOutDisabled() {

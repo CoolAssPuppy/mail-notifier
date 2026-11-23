@@ -72,6 +72,11 @@ final class MessageTests: XCTestCase {
         XCTAssertTrue(url.contains("%2F"))
     }
 
+    func testWorkOutlookUrlOpensOutlookOffice() {
+        let url = Message.url(type: .outlook, email: "u@contoso.com", id: "abc", isWorkAccount: true).absoluteString
+        XCTAssertEqual(url, "https://outlook.office.com/mail/inbox/id/abc")
+    }
+
     // MARK: - Date
 
     func testServerDateConvertsFromMillis() {

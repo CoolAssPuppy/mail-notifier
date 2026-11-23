@@ -93,6 +93,8 @@
 	<string>$(POSTHOG_API_KEY)</string>
 	<key>POSTHOG_HOST</key>
 	<string>https://us.i.posthog.com</string>
+	<key>SENTRY_DSN</key>
+	<string>$(SENTRY_DSN)</string>
 	<key>TELEMETRY_SOURCE</key>
 	<string>mail_notifier_macos</string>
 </dict>

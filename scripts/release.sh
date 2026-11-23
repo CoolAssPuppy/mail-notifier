@@ -16,7 +16,9 @@
 #   - Sparkle sign_update at ~/bin/sparkle/sign_update
 #   - create-dmg installed (brew install create-dmg)
 #   - doppler CLI logged in with access to the mail-notifier/prd config
-#     (provides CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID, R2_BUCKET_NAME, R2_PUBLIC_BASE_URL)
+#     (provides CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID, R2_BUCKET_NAME, R2_PUBLIC_BASE_URL,
+#     POSTHOG_PUBLIC_KEY, and optionally SENTRY_DSN, SENTRY_AUTH_TOKEN, SENTRY_ORG, SENTRY_PROJECT)
+#   - sentry-cli on PATH (brew install getsentry/tools/sentry-cli) to upload dSYMs
 #   - wrangler available (npm i -g wrangler) or npx on PATH
 #   - python3 on PATH
 #   - xcodegen on PATH
@@ -118,6 +120,17 @@ if [ -z "$POSTHOG_PUBLIC_KEY" ]; then
 fi
 
 #----------------------------------------------------------------------
+# Sentry crash reporting
+#----------------------------------------------------------------------
+# The DSN is baked into Info.plist like the PostHog key. It is optional: an
+# empty DSN ships a build with crash reporting off, so warn instead of failing.
+SENTRY_DSN=$(doppler secrets get SENTRY_DSN \
+  --project "$TELEMETRY_DOPPLER_PROJECT" --config "$TELEMETRY_DOPPLER_CONFIG" --plain 2>/dev/null || true)
+if [ -z "$SENTRY_DSN" ]; then
+  echo "Warning: no SENTRY_DSN in Doppler $TELEMETRY_DOPPLER_PROJECT/$TELEMETRY_DOPPLER_CONFIG; crash reporting will be off in this build"
+fi
+
+#----------------------------------------------------------------------
 # 3. Archive
 #----------------------------------------------------------------------
 ARCHIVE="$DIST/MailNotifier-$VERSION.xcarchive"
@@ -129,6 +142,7 @@ xcodebuild -project "$REPO_ROOT/MailNotifier.xcodeproj" \
   -archivePath "$ARCHIVE" \
   -allowProvisioningUpdates \
   POSTHOG_API_KEY="$POSTHOG_PUBLIC_KEY" \
+  SENTRY_DSN="$SENTRY_DSN" \
   archive | xcpretty 2>/dev/null || \
 xcodebuild -project "$REPO_ROOT/MailNotifier.xcodeproj" \
   -scheme MailNotifier \
@@ -136,7 +150,29 @@ xcodebuild -project "$REPO_ROOT/MailNotifier.xcodeproj" \
   -archivePath "$ARCHIVE" \
   -allowProvisioningUpdates \
   POSTHOG_API_KEY="$POSTHOG_PUBLIC_KEY" \
+  SENTRY_DSN="$SENTRY_DSN" \
   archive >/dev/null
+
+#----------------------------------------------------------------------
+# Upload dSYMs to Sentry
+#----------------------------------------------------------------------
+# Without the dSYMs, Sentry shows crashes as raw addresses. Skipped (with a
+# warning) when the auth token or sentry-cli is missing, so a release never
+# stops over crash symbolication.
+SENTRY_AUTH_TOKEN=$(doppler secrets get SENTRY_AUTH_TOKEN \
+  --project "$TELEMETRY_DOPPLER_PROJECT" --config "$TELEMETRY_DOPPLER_CONFIG" --plain 2>/dev/null || true)
+if [ -n "$SENTRY_AUTH_TOKEN" ] && command -v sentry-cli >/dev/null 2>&1; then
+  SENTRY_ORG=$(doppler secrets get SENTRY_ORG \
+    --project "$TELEMETRY_DOPPLER_PROJECT" --config "$TELEMETRY_DOPPLER_CONFIG" --plain 2>/dev/null || true)
+  SENTRY_PROJECT=$(doppler secrets get SENTRY_PROJECT \
+    --project "$TELEMETRY_DOPPLER_PROJECT" --config "$TELEMETRY_DOPPLER_CONFIG" --plain 2>/dev/null || echo "mail-notifier")
+  echo "==> Uploading dSYMs to Sentry ($SENTRY_ORG/$SENTRY_PROJECT)"
+  SENTRY_AUTH_TOKEN="$SENTRY_AUTH_TOKEN" sentry-cli debug-files upload \
+    --org "$SENTRY_ORG" --project "$SENTRY_PROJECT" "$ARCHIVE/dSYMs" \
+    || echo "Warning: dSYM upload to Sentry failed; crashes from $VERSION will not be symbolicated"
+else
+  echo "Warning: SENTRY_AUTH_TOKEN or sentry-cli missing; skipping the dSYM upload"
+fi
 
 #----------------------------------------------------------------------
 # 4. Export Developer ID .app

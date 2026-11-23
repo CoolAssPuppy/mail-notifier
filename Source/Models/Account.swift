@@ -32,7 +32,10 @@ struct Account: Codable {
     var email: String
     var type: AccountType = .gmail
     var enabled = true
-    var checkInterval: Double = 30 {
+    /// Minutes between checks. New accounts check every 5 minutes. Accounts
+    /// saved earlier keep the interval stored in their JSON, because
+    /// synthesized decoding reads the stored value and never this default.
+    var checkInterval: Double = 5 {
         didSet {
             checkInterval = max(min(Double(Int(checkInterval)), 900), 1)
         }
@@ -44,6 +47,13 @@ struct Account: Codable {
     /// every account ever created. See `AccountMigrations`.
     var openInBrowser = Browser.defaultIdentifier
     var newestMessageDate: Date?
+    /// Microsoft Entra tenant from the ID token's `tid` claim. Nil for Gmail
+    /// and for Outlook accounts whose token has not been read yet.
+    var tenantID: String?
+    /// True from the moment a new account is added until its first complete
+    /// check, which posts the one "Connected" notification. Nil afterwards and
+    /// for every account added before this existed.
+    var awaitingFirstCheck: Bool?
 }
 
 extension Account: Identifiable, Hashable {
@@ -59,8 +69,25 @@ extension Account: Identifiable, Hashable {
             components.percentEncodedPath = "/mail/b/\(encodedEmail)"
             return components.url ?? URL(string: "https://mail.google.com")!
         case .outlook:
-            return URL(string: "https://outlook.live.com/mail/0/inbox")!
+            return isWorkAccount
+                ? URL(string: "https://outlook.office.com/mail/")!
+                : URL(string: "https://outlook.live.com/mail/")!
         }
+    }
+
+    /// A Microsoft work or school account: its tenant is known and is not the
+    /// consumer tenant that every personal Microsoft account shares.
+    var isWorkAccount: Bool {
+        guard type == .outlook, let tenantID else { return false }
+        return MicrosoftTenant.isWorkOrSchool(tenantID: tenantID)
+    }
+
+    /// "Work" or "Personal" for a Microsoft account whose tenant is known.
+    var microsoftAccountKindLabel: String? {
+        guard type == .outlook, tenantID != nil else { return nil }
+        return isWorkAccount
+            ? NSLocalizedString("Work", comment: "Microsoft work or school account")
+            : NSLocalizedString("Personal", comment: "Personal Microsoft account")
     }
 
     var browser: Browser {

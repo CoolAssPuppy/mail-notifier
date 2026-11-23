@@ -173,6 +173,16 @@ struct AccountView: View {
         HStack(spacing: 10) {
             statusBadge(fetcher: fetcher)
 
+            if let kind = account.microsoftAccountKindLabel {
+                dot
+                Text(kind)
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(theme.muted)
+                    .help(account.isWorkAccount
+                          ? NSLocalizedString("Microsoft work or school account. Opens Outlook on the web for business.", comment: "")
+                          : NSLocalizedString("Personal Microsoft account. Opens Outlook.com.", comment: ""))
+            }
+
             if let timestamp = fetcher?.lastCheckedAt {
                 dot
                 Text("Checked \(Formatters.shortTime.string(from: timestamp)) · \(fetcher?.unreadMessagesCount ?? 0) unread")
@@ -196,7 +206,7 @@ struct AccountView: View {
         } else if isLocked {
             statusLabel(color: theme.warning, label: LocalizedStringKey(PaywallCopy.lockedBadge))
         } else if fetcher?.hasAuthError == true {
-            statusLabel(color: theme.destructive, label: "Auth expired")
+            statusLabel(color: theme.destructive, label: "Sign in again")
         } else {
             statusLabel(color: theme.success, label: "Active")
         }
@@ -217,7 +227,7 @@ struct AccountView: View {
     private var headerActions: some View {
         HStack(spacing: 8) {
             if shouldShowReauthorizeButton {
-                AppSecondaryButton(title: "Reauthorize", systemImage: "key.icloud") {
+                AppSecondaryButton(title: "Sign in again", systemImage: "key.icloud") {
                     Accounts.authorize(type: account.type)
                 }
             } else if account.enabled && !isLocked {

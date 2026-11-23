@@ -15,6 +15,7 @@ struct MainView: View {
     @Binding var selection: String?
     @State private var isSettingsOpen = false
     @State private var paywallTrigger: PaywallTrigger?
+    @State private var signinFailure: SigninFailure?
 
     var body: some View {
         let theme = themeStore.palette
@@ -55,11 +56,34 @@ struct MainView: View {
         .onReceive(NotificationCenter.default.publisher(for: .showPaywall)) { notification in
             paywallTrigger = notification.object as? PaywallTrigger ?? .addAccount
         }
+        // Every sign-in starts from this window (the menus open it first), so
+        // a failed one is explained here, with a way to try again.
+        .onReceive(NotificationCenter.default.publisher(for: .signinFailed)) { notification in
+            signinFailure = notification.object as? SigninFailure
+        }
+        .alert(SigninFailure.title,
+               isPresented: Binding(get: { signinFailure != nil },
+                                    set: { if !$0 { signinFailure = nil } }),
+               presenting: signinFailure) { failure in
+            Button("Retry") { Accounts.authorize(type: failure.provider) }
+            if failure.kind == .adminConsentRequired {
+                Button("Copy link for IT") { copyAdminConsentLink() }
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: { failure in
+            Text(failure.message)
+        }
         .sheet(item: $paywallTrigger) { trigger in
             PaywallSheet(trigger: trigger) { paywallTrigger = nil }
                 .environment(\.theme, themeStore.palette)
                 .environment(\.colorScheme, themeStore.palette.isDark ? .dark : .light)
         }
+    }
+
+    private func copyAdminConsentLink() {
+        let url = SigninFailure.adminConsentURL(clientID: OutlookOAuthClient.clientID)
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(url.absoluteString, forType: .string)
     }
 
     /// Enabled accounts the subscription is currently holding back. Computed

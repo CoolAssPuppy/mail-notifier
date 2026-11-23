@@ -19,6 +19,13 @@ extension Notification.Name {
     // MARK: Message Events
     static let unreadCountUpdated = Notification.Name("unreadCountUpdated")
     static let messagesFetched = Notification.Name("messagesFetched")
+    /// A new account finished its first complete check. Object: the email.
+    /// userInfo["unreadCount"]: Int.
+    static let accountFirstCheckCompleted = Notification.Name("accountFirstCheckCompleted")
+    /// A sign-in did not produce an account. Object: the `SigninFailure`.
+    static let signinFailed = Notification.Name("signinFailed")
+    /// macOS notification permission may have changed.
+    static let notificationPermissionChanged = Notification.Name("notificationPermissionChanged")
 
     // MARK: Settings Events
     static let showUnreadCountSettingChanged = Notification.Name("showUnreadCountSettingChanged")

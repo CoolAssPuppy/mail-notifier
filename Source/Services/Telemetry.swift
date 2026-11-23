@@ -55,6 +55,7 @@ enum Telemetry {
         for backend in backends {
             value ? backend.optIn() : backend.optOut()
         }
+        value ? CrashReporting.start() : CrashReporting.stop()
     }
 
     /// Boots the configured backends. Called once from AppDelegate.

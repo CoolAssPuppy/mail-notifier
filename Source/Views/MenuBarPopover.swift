@@ -41,6 +41,9 @@ final class MenuBarPopoverModel: ObservableObject {
     @Published private(set) var totalUnread: Int = 0
     @Published private(set) var lastCheckedAt: Date?
     @Published private(set) var vipEmails: Set<String> = []
+    /// macOS has notifications turned off for the app. New mail would arrive
+    /// silently, so the popover says so and offers the way back.
+    @Published private(set) var notificationsBlocked = false
 
     private let fetcherManager = FetcherManager.shared
     private var subscriptions = Set<AnyCancellable>()
@@ -84,6 +87,12 @@ final class MenuBarPopoverModel: ObservableObject {
         let nextLastCheckedAt = allStates.compactMap(\.lastCheckedAt).max()
         if lastCheckedAt != nextLastCheckedAt {
             lastCheckedAt = nextLastCheckedAt
+        }
+    }
+
+    func setNotificationPermission(_ permission: NotificationPermission) {
+        if notificationsBlocked != permission.isBlocked {
+            notificationsBlocked = permission.isBlocked
         }
     }
 
@@ -135,6 +144,8 @@ struct MenuBarPopoverActions {
     /// Opens the main window with the paywall up. The popover is too small to
     /// hold the pitch, so a locked row hands off rather than explaining itself.
     var subscribe: () -> Void
+    /// System Settings > Notifications for this app.
+    var openNotificationSettings: () -> Void
     var quit: () -> Void
 }
 
@@ -152,6 +163,10 @@ struct MenuBarPopover: View {
         return VStack(spacing: 0) {
             HeaderBar(totalUnread: model.totalUnread, lastCheckedAt: model.lastCheckedAt)
             Divider().background(theme.divider)
+            if model.notificationsBlocked && model.configuredAccountCount > 0 {
+                NotificationsBlockedBar(onOpenSettings: actions.openNotificationSettings)
+                Divider().background(theme.divider)
+            }
             content
             Divider().background(theme.divider)
             BottomBar(actions: actions)
@@ -393,17 +408,27 @@ private struct AccountCard: View {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .font(.system(size: 9))
                     .foregroundStyle(theme.destructive)
-                Text("Authorization expired")
+                Text(statusLine)
                     .font(.system(size: 10, weight: .medium))
                     .foregroundStyle(theme.destructive)
             }
-        } else if state.account.friendlyName != nil {
-            Text(state.account.email)
+        } else {
+            if state.account.friendlyName != nil {
+                Text(state.account.email)
+                    .font(.system(size: 10))
+                    .foregroundStyle(theme.muted)
+                    .lineLimit(1)
+                    .truncationMode(.middle)
+            }
+            Text(statusLine)
                 .font(.system(size: 10))
-                .foregroundStyle(theme.muted)
+                .foregroundStyle(theme.tertiary)
                 .lineLimit(1)
-                .truncationMode(.middle)
         }
+    }
+
+    private var statusLine: String {
+        AccountStatusLine.text(hasAuthError: state.hasAuthError, lastCheckedAt: state.lastCheckedAt)
     }
 
     @ViewBuilder
@@ -425,7 +450,7 @@ private struct AccountCard: View {
             .buttonStyle(.plain)
         } else if state.hasAuthError {
             Button(action: onReauthorize) {
-                Text("Reauthorize")
+                Text("Sign in")
                     .font(.system(size: 10, weight: .semibold))
                     .foregroundStyle(theme.destructive)
                     .padding(.horizontal, 10)
@@ -503,6 +528,40 @@ private struct AccountCard: View {
     private func openInboxTapped() {
         if state.hasAuthError { return }
         onOpenInbox()
+    }
+}
+
+// MARK: - Notifications Blocked
+
+private struct NotificationsBlockedBar: View {
+    let onOpenSettings: () -> Void
+    @Environment(\.theme) private var theme
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "bell.slash.fill")
+                .font(.system(size: 10))
+                .foregroundStyle(theme.warning)
+            Text(NotificationPermission.blockedMessage)
+                .font(.system(size: 11))
+                .foregroundStyle(theme.foreground)
+                .lineLimit(2)
+            Spacer(minLength: 6)
+            Button(action: onOpenSettings) {
+                Text(NotificationPermission.openSettingsTitle)
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundStyle(theme.warning)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 4)
+                    .background(Capsule().fill(theme.warning.opacity(0.12)))
+                    .overlay(Capsule().strokeBorder(theme.warning.opacity(0.4), lineWidth: 1))
+            }
+            .buttonStyle(.plain)
+            .help(NSLocalizedString("Open System Settings > Notifications", comment: ""))
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 8)
+        .background(theme.warning.opacity(0.06))
     }
 }
 

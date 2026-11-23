@@ -32,6 +32,9 @@ packages:
   PostHog:
     url: https://github.com/PostHog/posthog-ios
     from: "3.0.0"
+  Sentry:
+    url: https://github.com/getsentry/sentry-cocoa
+    from: "8.0.0"
 
 settings:
   base:
@@ -79,6 +82,22 @@ targets:
       - package: KeychainAccess
       - package: Sparkle
       - package: PostHog
+      - package: Sentry
+        product: Sentry
+    postBuildScripts:
+      # Info.plist sets LSMultipleInstancesProhibited so the shipped app runs
+      # once. The Debug build is also the test host and has the same bundle id,
+      # so while /Applications/Mail Notifier.app is running LaunchServices
+      # refused to launch it and `xcodebuild test` failed with "Could not
+      # launch MailNotifierTests". Debug drops the key; Release keeps it.
+      - name: Allow a second instance in Debug
+        basedOnDependencyAnalysis: false
+        inputFiles:
+          - "$(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)"
+        script: |
+          if [ "$CONFIGURATION" = "Debug" ]; then
+            /usr/libexec/PlistBuddy -c "Delete :LSMultipleInstancesProhibited" "$TARGET_BUILD_DIR/$INFOPLIST_PATH" 2>/dev/null || true
+          fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.strategicnerds.MailNotifierApp
@@ -99,6 +118,11 @@ targets:
         # analytics instead of this app's.
         POSTHOG_API_KEY: "$(POSTHOG_API_KEY)"
         POSTHOG_HOST: "https://us.i.posthog.com"
+        # Sentry crash reporting. Same pattern as the PostHog key: release.sh
+        # passes SENTRY_DSN from Doppler on the xcodebuild command line, and
+        # CrashReporting.start() refuses the unsubstituted placeholder, so dev
+        # builds and forks send nothing.
+        SENTRY_DSN: "$(SENTRY_DSN)"
         # Polar, for the paid multi-account plan. Public values, not secrets:
         # the ids are UUIDs and the URLs are meant to be shared. They come from
         # Secrets.xcconfig (scripts/pull-secrets.sh writes it from Doppler) and

@@ -30,12 +30,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let notificationService = NotificationService()
     private let updaterManager = UpdaterManager.shared
     private var preferencesWindow: NSWindow?
+    private var wakeThrottle = WakeCheckThrottle()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
 
         verifyURLSchemesRegistered()
 
+        // First, so a crash anywhere later in launch is reported.
+        CrashReporting.start()
         Telemetry.setup()
 
         notificationService.delegate = self
@@ -73,18 +76,29 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // breakdown only counts people who fired an event, and someone content
         // on the free tier fires nothing at all.
         let isSubscriber = EntitlementManager.isEntitledNow()
-        Telemetry.capture(
-            .appLaunched,
-            properties: ["menu_style": menuStyle,
-                         "theme": theme.rawValue,
-                         "theme_appearance": theme.appearance,
-                         "is_subscriber": isSubscriber],
-            userProperties: ["menu_style": menuStyle,
+        let accountCount = Accounts.default.count
+        // `notification_permission` rides along so a denial is visible in
+        // analytics: an install that never shows a notification looks the
+        // same as an idle one otherwise. Reading it is async, so the launch
+        // event waits for it.
+        Task { @MainActor [notificationService] in
+            let permission = await notificationService.refreshPermission().analyticsValue
+            Telemetry.capture(
+                .appLaunched,
+                properties: ["menu_style": menuStyle,
                              "theme": theme.rawValue,
                              "theme_appearance": theme.appearance,
                              "is_subscriber": isSubscriber,
-                             "account_count": Accounts.default.count]
-        )
+                             "notification_permission": permission],
+                userProperties: ["menu_style": menuStyle,
+                                 "theme": theme.rawValue,
+                                 "theme_appearance": theme.appearance,
+                                 "is_subscriber": isSubscriber,
+                                 "account_count": accountCount,
+                                 "notification_permission": permission]
+            )
+            self.popoverModel.setNotificationPermission(notificationService.lastKnownPermission)
+        }
         reportUpdateInstalledIfNeeded()
 
         if !Accounts.hasAccounts || AppSettings.shared.openSettingsOnStart {
@@ -191,10 +205,39 @@ private extension AppDelegate {
         NotificationCenter.default
             .publisher(for: .accountAdded)
             .sink { [weak self] notification in
-                self?.fetcherManager.update(fetchingAccount: notification.object as? Account)
-                self?.updateMenuBar()
+                guard let self else { return }
+                self.fetcherManager.update(fetchingAccount: notification.object as? Account)
+                self.updateMenuBar()
+                // The permission prompt waits for the first account, when the
+                // person can see why the app asks.
+                Task { @MainActor in
+                    _ = await self.notificationService.requestAuthorizationIfNeeded()
+                }
             }
             .store(in: &subscriptions)
+
+        NotificationCenter.default
+            .publisher(for: .accountFirstCheckCompleted)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] notification in
+                guard let self,
+                      let email = notification.object as? String,
+                      let account = Accounts.default.find(email: email) else { return }
+                let unreadCount = notification.userInfo?["unreadCount"] as? Int ?? 0
+                self.notificationService.deliverConnectedNotice(for: account, unreadCount: unreadCount)
+            }
+            .store(in: &subscriptions)
+
+        NotificationCenter.default
+            .publisher(for: .notificationPermissionChanged)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                self.popoverModel.setNotificationPermission(self.notificationService.lastKnownPermission)
+            }
+            .store(in: &subscriptions)
+
+        subscribeToWake()
 
         NotificationCenter.default
             .publisher(for: .accountDeleted)
@@ -308,6 +351,36 @@ private extension AppDelegate {
     }
 }
 
+// MARK: - Wake
+
+private extension AppDelegate {
+    /// Timers do not fire while the Mac sleeps, so mail that arrived overnight
+    /// would otherwise wait for the next interval. Wake and screen unlock both
+    /// ask for a check; the throttle keeps it to one.
+    func subscribeToWake() {
+        NSWorkspace.shared.notificationCenter
+            .publisher(for: NSWorkspace.didWakeNotification)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in self?.checkAfterWake(reason: "wake") }
+            .store(in: &subscriptions)
+
+        DistributedNotificationCenter.default()
+            .publisher(for: Notification.Name("com.apple.screenIsUnlocked"))
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in self?.checkAfterWake(reason: "unlock") }
+            .store(in: &subscriptions)
+    }
+
+    func checkAfterWake(reason: String) {
+        guard wakeThrottle.shouldCheck(at: Date()) else { return }
+        Log.app.info("Checking all accounts after \(reason, privacy: .public)")
+        // Wi-Fi usually needs a few seconds to rejoin after a wake.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
+            self?.fetcherManager.checkAll()
+        }
+    }
+}
+
 // MARK: - Menu Bar Updates
 
 private extension AppDelegate {
@@ -371,8 +444,10 @@ extension AppDelegate {
             accounts: Accounts.default,
             fetcherManager: fetcherManager,
             lockedEmails: Set(Accounts.locked(isEntitled: EntitlementManager.isEntitledNow()).map(\.email)),
+            notificationsBlocked: notificationService.lastKnownPermission.isBlocked,
             actions: classicMenuActions()
         ))
+        refreshNotificationPermission()
         Telemetry.capture(.menuOpened, properties: ["style": MenuStyle.classic.rawValue])
     }
 
@@ -400,10 +475,26 @@ extension AppDelegate {
             subscribe: { [weak self] in
                 self?.showPaywall(trigger: .lockedAccount)
             },
+            openNotificationSettings: { [weak self] in
+                self?.openNotificationSettings()
+            },
             quit: {
                 NSApp.terminate(nil)
             }
         )
+    }
+
+    func openNotificationSettings() {
+        NSWorkspace.shared.open(NotificationPermission.settingsURL())
+    }
+
+    /// Re-reads the permission so the next menu reflects a change the person
+    /// made in System Settings.
+    func refreshNotificationPermission() {
+        Task { @MainActor in
+            let permission = await notificationService.refreshPermission()
+            popoverModel.setNotificationPermission(permission)
+        }
     }
 
     /// Pops a menu from the status item, then detaches it so the next
@@ -433,6 +524,7 @@ extension AppDelegate: NSPopoverDelegate {
         self.popover = popover
 
         popoverModel.refresh()
+        refreshNotificationPermission()
 
         NSApp.activate(ignoringOtherApps: true)
         popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
@@ -481,6 +573,10 @@ extension AppDelegate: NSPopoverDelegate {
                 self?.popover?.performClose(nil)
                 self?.showPaywall(trigger: .lockedAccount)
             },
+            openNotificationSettings: { [weak self] in
+                self?.popover?.performClose(nil)
+                self?.openNotificationSettings()
+            },
             quit: {
                 NSApp.terminate(nil)
             }
@@ -517,7 +613,9 @@ extension AppDelegate {
 
     private func openMessage(messageId: String, email: String) {
         guard let account = account(from: email) else { return }
-        openURL(url: Message.url(type: account.type, email: email, id: messageId), in: account.browser)
+        openURL(url: Message.url(type: account.type, email: email, id: messageId,
+                                 isWorkAccount: account.isWorkAccount),
+                in: account.browser)
     }
 
     func openURL(url: URL, in browser: Browser?) {
