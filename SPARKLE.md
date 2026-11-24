@@ -2,14 +2,14 @@
 
 Mail Notifier ships with [Sparkle 2](https://sparkle-project.org). Users get "Check for Updates…" in the status-bar menu and in Settings > Updates, plus daily automatic checks.
 
-Appcast and release DMGs live in the **Cloudflare R2 `strategic-nerds-downloads` bucket** (shared with Agent Server and Meeting Notifier — each app has its own folder under `apps/`). The bucket is exposed publicly at `https://downloads.strategicnerds.com`. The appcast URL is fronted by a Dub.co shortlink so the feed location can be moved later without re-shipping the app.
+Appcast and release DMGs live in the **Cloudflare R2 `strategic-nerds-downloads` bucket** (shared with Agent Server and Meeting Notifier — each app has its own folder under `apps/`). The bucket is exposed publicly at `https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev`. The appcast URL is fronted by a Dub.co shortlink so the feed location can be moved later without re-shipping the app.
 
 URLs:
 
 - **Feed (baked into the app)**: `https://coolasspuppy.com/mail-notifier-updates` (Dub shortlink)
-- **Appcast destination**: `https://downloads.strategicnerds.com/apps/mail-notifier/appcast.xml`
-- **DMG pattern**: `https://downloads.strategicnerds.com/apps/mail-notifier/MailNotifier-<version>.dmg`
-- **Latest DMG (stable URL)**: `https://downloads.strategicnerds.com/apps/mail-notifier/MailNotifier-latest.dmg` (overwritten on every release)
+- **Appcast destination**: `https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/appcast.xml`
+- **DMG pattern**: `https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/MailNotifier-<version>.dmg`
+- **Latest DMG (stable URL)**: `https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/MailNotifier-latest.dmg` (overwritten on every release)
 
 Do steps 1 through 5 once. Then step 6 on every release.
 
@@ -77,7 +77,7 @@ Copy the public key that `generate_keys` printed. You'll paste it in step 4.
 
 ## 2. Confirm the R2 bucket
 
-The `strategic-nerds-downloads` R2 bucket already hosts Agent Server and Meeting Notifier artifacts and is public via `downloads.strategicnerds.com`. Each app lives under `apps/<app-name>/`. No new bucket needed.
+The `strategic-nerds-downloads` R2 bucket already hosts Agent Server and Meeting Notifier artifacts and is public via `pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev`. Each app lives under `apps/<app-name>/`. No new bucket needed.
 
 The release script automatically uploads `dist/appcast.xml` to `apps/mail-notifier/appcast.xml` on every release. The bootstrap appcast (an empty channel) is checked into `dist/appcast.xml` and looks like:
 
@@ -86,21 +86,21 @@ The release script automatically uploads `dist/appcast.xml` to `apps/mail-notifi
 <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
   <channel>
     <title>Mail Notifier</title>
-    <link>https://downloads.strategicnerds.com/apps/mail-notifier/appcast.xml</link>
+    <link>https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/appcast.xml</link>
     <description>Mail Notifier updates</description>
     <language>en</language>
   </channel>
 </rss>
 ```
 
-After the first release, verify by opening `https://downloads.strategicnerds.com/apps/mail-notifier/appcast.xml` in a browser — you should see the XML with at least one `<item>`.
+After the first release, verify by opening `https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/appcast.xml` in a browser — you should see the XML with at least one `<item>`.
 
 ## 3. Create the Dub.co shortlink
 
 Create it once in the Dub dashboard:
 
 - **Short URL**: `https://coolasspuppy.com/mail-notifier-updates`
-- **Destination URL**: `https://downloads.strategicnerds.com/apps/mail-notifier/appcast.xml`
+- **Destination URL**: `https://pub-9c8d72fe664b4ce18aac0d718b4e0346.r2.dev/apps/mail-notifier/appcast.xml`
 
 Settings:
 - Cloaking/frame: **OFF** (Sparkle needs a plain HTTP redirect, not an iframe wrapper).

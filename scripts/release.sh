@@ -235,10 +235,10 @@ CLOUDFLARE_ACCOUNT_ID=$(doppler secrets get CLOUDFLARE_ACCOUNT_ID \
 R2_BUCKET=$(doppler secrets get R2_BUCKET_NAME \
   --project "$DOPPLER_PROJECT" --config "$DOPPLER_CONFIG" --plain 2>/dev/null || echo "strategic-nerds-downloads")
 R2_PUBLIC_BASE=$(doppler secrets get R2_PUBLIC_BASE_URL \
-  --project "$DOPPLER_PROJECT" --config "$DOPPLER_CONFIG" --plain 2>/dev/null || echo "https://downloads.strategicnerds.com")
+  --project "$DOPPLER_PROJECT" --config "$DOPPLER_CONFIG" --plain 2>/dev/null || true)
 
-if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
-  echo "Error: missing CLOUDFLARE_API_TOKEN or CLOUDFLARE_ACCOUNT_ID in Doppler $DOPPLER_PROJECT/$DOPPLER_CONFIG"
+if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ] || [ -z "$R2_PUBLIC_BASE" ]; then
+  echo "Error: missing CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID, or R2_PUBLIC_BASE_URL in Doppler $DOPPLER_PROJECT/$DOPPLER_CONFIG"
   exit 1
 fi
 
