@@ -1,5 +1,16 @@
 # Todo
 
+## Mac App Store launch handoff
+
+### Plan
+- [x] Identify the owner-approved media and distinguish it from genuine captures, review-only media, and rejected drafts.
+- [x] Preserve the exact final assets and recover the saved public listing and Tip Jar copy across all 24 locales.
+- [x] Write launch guidance for future UI polish and store media. Verify asset provenance, visible data, and localization completeness without changing the submission.
+
+### Review
+- All 14 assets match the migration source bytes. Both videos decode, and the approved package matches the source ZIP digest.
+- All 24 locale blocks preserve the saved three-paragraph description and repeat-tip correction. The snapshot uses the migration's verified write and readback; a fresh localization export was unavailable. No submission changes were made.
+
 ## Release 3.8.0 (cleanup-ui)
 
 ### Plan
