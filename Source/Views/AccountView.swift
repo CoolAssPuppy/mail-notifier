@@ -207,8 +207,10 @@ struct AccountView: View {
             statusLabel(color: theme.warning, label: LocalizedStringKey(PaywallCopy.lockedBadge))
         } else if fetcher?.hasAuthError == true {
             statusLabel(color: theme.destructive, label: "Sign in again")
-        } else {
+        } else if fetcher?.authorizationStatus == .active {
             statusLabel(color: theme.success, label: "Active")
+        } else {
+            statusLabel(color: theme.muted, label: "Not verified")
         }
     }
 
@@ -433,10 +435,12 @@ struct AccountView: View {
                     NotificationCenter.default.post(name: .showPaywall,
                                                     object: PaywallTrigger.lockedAccount)
                 }
+                #if !MAC_APP_STORE
                 AppSecondaryButton(title: LocalizedStringKey(PaywallCopy.makeFreeButton)) {
                     makeThisTheFreeAccount()
                 }
                 .help(LocalizedStringKey(PaywallCopy.makeFreeDescription))
+                #endif
             }
         }
         .padding(14)
@@ -450,6 +454,7 @@ struct AccountView: View {
         )
     }
 
+    #if !MAC_APP_STORE
     /// Moves this account to the front of the stored order, which is what the
     /// free slot is handed to. The account that held it becomes locked. Dragging
     /// it to the top of the sidebar does the same thing; this is the shortcut.
@@ -457,6 +462,7 @@ struct AccountView: View {
         guard let index = accounts.firstIndex(where: { $0.id == account.id }) else { return }
         accounts.reorder(fromOffsets: IndexSet(integer: index), toOffset: 0)
     }
+    #endif
 
 }
 

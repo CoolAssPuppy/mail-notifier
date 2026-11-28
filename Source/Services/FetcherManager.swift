@@ -6,8 +6,10 @@
 //
 
 import Foundation
+import Observation
 
 /// Manages MessageFetcher instances for all enabled accounts.
+@Observable
 final class FetcherManager {
     static let shared = FetcherManager()
 
@@ -31,13 +33,6 @@ final class FetcherManager {
         fetchers.values.reduce(0) { $0 + $1.unreadMessagesCount }
     }
 
-    /// The subscription gate, read without hopping to the main actor. `rebuild`
-    /// runs from notification handlers on whatever thread posted them, and this
-    /// reads the same persisted record `EntitlementManager` publishes.
-    private var isEntitled: Bool {
-        EntitlementManager.isEntitledNow()
-    }
-
     /// Rebuilds the fetchers dictionary based on the accounts currently allowed
     /// to run.
     ///
@@ -46,12 +41,16 @@ final class FetcherManager {
     /// fetcher stops the polling, the unread count, the notifications, and the
     /// menu rows in one move.
     func rebuild() {
-        let accounts = Accounts.active(isEntitled: isEntitled)
+        #if MAC_APP_STORE
+        let accounts = Array(Accounts.default.enabled)
+        #else
+        let accounts = Accounts.active(isEntitled: EntitlementManager.isEntitledNow())
+        #endif
+        let isDemo = DemoMode.isOnNow
 
-        // Remove fetchers for deleted/disabled accounts
-        for email in fetchers.keys where !accounts.contains(where: { $0.email == email }) {
-            fetchers[email]?.cleanUp()
-            fetchers[email] = nil
+        // A real inbox and a demo inbox can have the same email address.
+        for (email, fetcher) in fetchers where fetcher.isDemo != isDemo || !accounts.contains(where: { $0.email == email }) {
+            fetchers.removeValue(forKey: email)?.cleanUp()
         }
 
         // Add or update fetchers for enabled accounts

@@ -11,22 +11,29 @@ import AppKit
 struct MainView: View {
     @AppStorage(Accounts.storageKey) var accounts = Accounts()
     @ObservedObject private var themeStore = ThemeStore.shared
+    #if !MAC_APP_STORE
     @ObservedObject private var entitlement = EntitlementManager.shared
+    @State private var paywallTrigger: PaywallTrigger?
+    #endif
+    @ObservedObject private var demoMode = DemoMode.shared
     @Binding var selection: String?
     @State private var isSettingsOpen = false
-    @State private var paywallTrigger: PaywallTrigger?
+    #if MAC_APP_STORE
+    @State private var isTipJarOpen = false
+    #endif
     @State private var signinFailure: SigninFailure?
 
     var body: some View {
         let theme = themeStore.palette
-        return ZStack(alignment: .top) {
+        let view = ZStack(alignment: .top) {
             HStack(spacing: 0) {
                 Sidebar(
                     accounts: accounts,
                     selection: $selection,
                     totalUnread: FetcherManager.shared.totalUnreadCount,
                     lockedEmails: lockedEmails,
-                    onOpenSettings: { isSettingsOpen.toggle() }
+                    onOpenSettings: { isSettingsOpen.toggle() },
+                    onOpenTipJar: openTipJar
                 )
                 .frame(width: 260)
 
@@ -49,13 +56,6 @@ struct MainView: View {
         .onReceive(NotificationCenter.default.publisher(for: .openSettingsDrawer)) { _ in
             isSettingsOpen = true
         }
-        // The paywall is hosted once, here, because both entry points live below
-        // this view: the connect buttons in `WelcomeView` and the locked banner
-        // in `AccountView`. Both post the notification rather than carrying
-        // their own sheet.
-        .onReceive(NotificationCenter.default.publisher(for: .showPaywall)) { notification in
-            paywallTrigger = notification.object as? PaywallTrigger ?? .addAccount
-        }
         // Every sign-in starts from this window (the menus open it first), so
         // a failed one is explained here, with a way to try again.
         .onReceive(NotificationCenter.default.publisher(for: .signinFailed)) { notification in
@@ -73,11 +73,38 @@ struct MainView: View {
         } message: { failure in
             Text(failure.message)
         }
-        .sheet(item: $paywallTrigger) { trigger in
-            PaywallSheet(trigger: trigger) { paywallTrigger = nil }
-                .environment(\.theme, themeStore.palette)
-                .environment(\.colorScheme, themeStore.palette.isDark ? .dark : .light)
-        }
+        #if MAC_APP_STORE
+        return view
+            .onReceive(NotificationCenter.default.publisher(for: .openTipJar)) { _ in openTipJar() }
+            .sheet(isPresented: $isTipJarOpen) {
+                VStack(alignment: .trailing, spacing: 12) {
+                    TipCard()
+                    Button("Done") { isTipJarOpen = false }
+                        .keyboardShortcut(.cancelAction)
+                }
+                .padding(20)
+                .frame(width: 400)
+                .background(theme.background)
+                .environment(\.theme, theme)
+                .environment(\.colorScheme, theme.isDark ? .dark : .light)
+            }
+        #else
+        return view
+            .onReceive(NotificationCenter.default.publisher(for: .showPaywall)) { notification in
+                paywallTrigger = notification.object as? PaywallTrigger ?? .addAccount
+            }
+            .sheet(item: $paywallTrigger) { trigger in
+                PaywallSheet(trigger: trigger) { paywallTrigger = nil }
+                    .environment(\.theme, themeStore.palette)
+                    .environment(\.colorScheme, themeStore.palette.isDark ? .dark : .light)
+            }
+        #endif
+    }
+
+    private func openTipJar() {
+        #if MAC_APP_STORE
+        isTipJarOpen = true
+        #endif
     }
 
     private func copyAdminConsentLink() {
@@ -90,8 +117,12 @@ struct MainView: View {
     /// here and passed down so the sidebar and the account view agree, and so
     /// both redraw when `entitlement.record` changes.
     private var lockedEmails: Set<String> {
+        #if MAC_APP_STORE
+        []
+        #else
         Set(Accounts.partition(enabled: Array(accounts.enabled),
-                               isEntitled: entitlement.isEntitled).locked.map(\.email))
+                               isEntitled: entitlement.isEntitled || demoMode.isOn).locked.map(\.email))
+        #endif
     }
 
     @ViewBuilder

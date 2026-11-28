@@ -20,8 +20,17 @@ enum ConnectedNotice {
     }
 }
 
-/// The status line under each account in the menu.
+/// Account check status in the menu bar.
 enum AccountStatusLine {
+    static let inlineAgeThreshold: TimeInterval = 3 * 60
+
+    static func inlineAge(checkedAt: Date, now: Date, locale: Locale = .current) -> String? {
+        let age = now.timeIntervalSince(checkedAt)
+        guard age > inlineAgeThreshold else { return nil }
+        return String(format: NSLocalizedString("(%lldm ago)", comment: "Inline account age in whole minutes"),
+                      locale: locale, Int64(age / 60))
+    }
+
     static func text(hasAuthError: Bool,
                      lastCheckedAt: Date?,
                      now: Date = Date(),

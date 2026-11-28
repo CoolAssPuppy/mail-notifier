@@ -114,7 +114,7 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
         completionHandler()
     }
 
-    func deliverNotifications(for messages: [Message], account: Account) {
+    func deliverNotifications(for messages: [Message], account: Account, isDemo: Bool) {
         Task {
             if AppSettings.shared.quietHours.contains(Date()) {
                 suppressedNotifications.mark(messages.map(notificationIdentifier(for:)))
@@ -146,6 +146,7 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
                 .first ?? account.sound
 
             for (index, message) in newMessages.enumerated() {
+                guard isDemo == DemoMode.isOnNow else { return }
                 if AppSettings.shared.quietHours.contains(Date()) {
                     suppressedNotifications.mark(newMessages[index...].map(notificationIdentifier(for:)))
                     return
@@ -197,7 +198,7 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
             // The sound rides on the notification (see deliverNotifications) so
             // macOS plays it and Focus governs it. We no longer play it directly
             // with NSSound, which bypassed Focus entirely.
-            deliverNotifications(for: fetcher.messages, account: account)
+            deliverNotifications(for: fetcher.messages, account: account, isDemo: fetcher.isDemo)
         }
     }
 }

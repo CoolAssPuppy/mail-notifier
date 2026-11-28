@@ -46,6 +46,7 @@ extension Notification.Name {
 
     // MARK: UI Events
     static let openSettingsDrawer = Notification.Name("openSettingsDrawer")
+    static let openTipJar = Notification.Name("openTipJar")
     static let friendlyNamesChanged = Notification.Name("friendlyNamesChanged")
     static let accountIconsChanged = Notification.Name("accountIconsChanged")
 }

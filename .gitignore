@@ -41,3 +41,6 @@ default.profraw
 
 # Local sandbox-test state snapshots
 .test-state/
+
+# Generated Mac App Store project
+Store/MailNotifierStore.xcodeproj/

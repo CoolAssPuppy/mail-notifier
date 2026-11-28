@@ -12,6 +12,8 @@ struct SettingsDrawer: View {
     var contentHeight: CGFloat = 600
 
     @Environment(\.theme) private var theme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var privacyExpanded = false
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -23,7 +25,7 @@ struct SettingsDrawer: View {
 
                 drawer
                     .transition(.move(edge: .top).combined(with: .opacity))
-                    .background(EscapeKeyMonitor(isActive: isPresented, onEscape: close))
+                    .background(EscapeKeyMonitor(isActive: isPresented, onEscape: dismissOnEscape))
             }
         }
         .animation(.easeOut(duration: 0.26), value: isPresented)
@@ -37,8 +39,19 @@ struct SettingsDrawer: View {
                 .fill(theme.divider)
                 .frame(height: 1)
 
-            ScrollView { SettingsView() }
-                .frame(maxHeight: contentHeight)
+            ScrollViewReader { scroll in
+                ScrollView { SettingsView(privacyExpanded: $privacyExpanded) }
+                    .frame(maxHeight: contentHeight)
+                    .task(id: privacyExpanded) {
+                        guard privacyExpanded else { return }
+                        // The target grows when the panel opens. Scroll after layout.
+                        try? await Task.sleep(for: .milliseconds(50))
+                        guard !Task.isCancelled else { return }
+                        withAnimation(reduceMotion ? nil : .smooth(duration: 0.28)) {
+                            scroll.scrollTo("security-and-privacy", anchor: .bottom)
+                        }
+                    }
+            }
         }
         .background(theme.surface)
         .overlay(drawerShape.strokeBorder(theme.border, lineWidth: 1))
@@ -71,7 +84,7 @@ struct SettingsDrawer: View {
                     .overlay(Circle().strokeBorder(theme.borderStrong, lineWidth: 1))
             }
             .buttonStyle(.plain)
-            .keyboardShortcut(.cancelAction)
+            .keyboardShortcut(privacyExpanded ? nil : .cancelAction)
             .accessibilityLabel("Close Settings")
         }
         .padding(.horizontal, 24)
@@ -79,7 +92,16 @@ struct SettingsDrawer: View {
     }
 
     private func close() {
+        privacyExpanded = false
         isPresented = false
+    }
+
+    private func dismissOnEscape() {
+        if privacyExpanded {
+            withAnimation(reduceMotion ? nil : .smooth(duration: 0.28)) { privacyExpanded = false }
+        } else {
+            close()
+        }
     }
 }
 

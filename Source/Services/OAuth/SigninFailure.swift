@@ -26,6 +26,7 @@ struct SigninFailure: Identifiable {
         case denied
         /// The provider signed the person in but did not share an address.
         case missingEmail = "missing_email"
+        case credentialStorage = "credential_storage"
         case other
     }
 
@@ -66,6 +67,10 @@ struct SigninFailure: Identifiable {
         SigninFailure(provider: provider, kind: .missingEmail)
     }
 
+    static func credentialStorage(provider: AccountType) -> SigninFailure {
+        SigninFailure(provider: provider, kind: .credentialStorage)
+    }
+
     /// Whether the person should see an explanation at all.
     var shouldExplain: Bool { kind != .cancelled }
 
@@ -92,6 +97,10 @@ struct SigninFailure: Identifiable {
             return String(format: NSLocalizedString(
                 "%@ didn't share the email address for this account. Try again, or use a different account.",
                 comment: "Sign-in failure: no email. %@ is Microsoft or Google"), company)
+        case .credentialStorage:
+            return NSLocalizedString(
+                "Mail Notifier couldn't save your sign-in in the macOS Keychain. Try signing in again.",
+                comment: "Sign-in failure: credentials could not be saved")
         case .cancelled, .other:
             return String(format: NSLocalizedString(
                 "Signing in to %@ didn't finish. Try again.",

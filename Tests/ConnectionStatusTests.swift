@@ -54,4 +54,14 @@ final class ConnectionStatusTests: XCTestCase {
     func testCheckedHoursAgo() {
         XCTAssertEqual(line(checked: now.addingTimeInterval(-3 * 3600)), "Checked 3 hours ago")
     }
+
+    func testInlineAgeOnlyAppearsAfterThreeMinutes() {
+        func age(_ seconds: TimeInterval) -> String? {
+            AccountStatusLine.inlineAge(checkedAt: now.addingTimeInterval(-seconds), now: now, locale: english)
+        }
+        XCTAssertNil(age(179.9))
+        XCTAssertNil(age(180))
+        XCTAssertEqual(age(180.1), "(3m ago)")
+        XCTAssertEqual(age(240), "(4m ago)")
+    }
 }

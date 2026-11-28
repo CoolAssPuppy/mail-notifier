@@ -253,6 +253,25 @@ See [SPARKLE.md](SPARKLE.md) for the one-time Sparkle signing-key and Dub.co sho
 
 This bumps `project.yml`, archives, exports a Developer ID-signed `.app`, notarizes and staples it, builds a signed + notarized + Sparkle-signed DMG, and uploads the DMG plus the updated appcast to the `downloads` Supabase bucket. Commit `project.yml` and `dist/appcast.xml` after the script finishes.
 
+### Mac App Store build
+
+The Store build is separate from the Developer ID and Sparkle release. It uses the same bundle ID and provider configuration, with App Sandbox and StoreKit instead of Sparkle and Polar. The Store download, unlimited connected accounts, and live mail checks are free. Settings offers optional, repeatable tips that unlock nothing and never renew automatically.
+
+From the repo root, generate the Store project and build locally (no signing or upload):
+
+```bash
+xcodegen generate --spec Store/project.yml --project Store
+store_spm=Store/MailNotifierStore.xcodeproj/project.xcworkspace/xcshareddata/swiftpm
+mkdir -p "$store_spm"
+cp MailNotifier.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved "$store_spm/"
+xcodebuild -project Store/MailNotifierStore.xcodeproj -scheme MailNotifierStore \
+  -configuration Release -derivedDataPath build/store CODE_SIGNING_ALLOWED=NO build
+```
+
+The Store project reads the same local `Secrets.xcconfig` for mail provider credentials. Use supported production OAuth clients whose callback schemes match `Store/Info.plist` when signing a distribution candidate.
+
+The optional tip is a consumable, `com.strategicnerds.MailNotifierApp.tip`, with a US$4.99 base price. The app displays the storefront price supplied by StoreKit. Before release, finish the tip’s availability and review metadata. Test purchase, repeat purchase, and cancellation in the sandbox, and verify access before and after each result. Validate both a clean install and a Developer ID handoff, including OAuth, Keychain and preferences, and native alerts. Submit the first in-app purchase with the app version. Keep the independent Sparkle and Polar release available.
+
 ### Sparkle private key backup
 
 The Ed25519 private key that signs every Mail Notifier update lives in the login keychain under account `com.strategicnerds.MailNotifierApp`. A PEM copy is stored in **Doppler** (`agent-server/prd`, secret `SPARKLE_PRIVATE_KEY`) so releases can still be cut from a fresh machine if this laptop dies.

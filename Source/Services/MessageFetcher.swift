@@ -6,12 +6,22 @@
 //
 
 import Foundation
+import Observation
 
+@Observable
 final class MessageFetcher: NSObject {
+    enum AuthorizationStatus {
+        case unverified, active, signInRequired
+    }
+
     var account: Account
     private var provider: MailProvider
     private var timer: Timer?
-    private(set) var hasAuthError = false
+    private var stopped = false
+    private var fetchGeneration = 0
+    var isDemo: Bool { provider is DemoProvider }
+    private(set) var authorizationStatus: AuthorizationStatus = .unverified
+    var hasAuthError: Bool { authorizationStatus == .signInRequired }
 
     /// Nil until the first check resolves, so the menu never says "Checked
     /// just now" about an account that has not been checked.
@@ -69,6 +79,7 @@ final class MessageFetcher: NSObject {
     }
 
     @objc func fetch() {
+        guard !stopped, isDemo == DemoMode.isOnNow else { return }
         reschedule()
         provider.updateCredentials(from: account)
         performFetch()
@@ -86,6 +97,7 @@ final class MessageFetcher: NSObject {
     }
 
     func cleanUp() {
+        stopped = true
         timer?.invalidate()
         provider.cleanUp()
     }
@@ -102,6 +114,8 @@ final class MessageFetcher: NSObject {
     }
 
     private func performFetch() {
+        fetchGeneration += 1
+        let generation = fetchGeneration
         let group = DispatchGroup()
         let resultQueue = DispatchQueue(label: "com.strategicnerds.mailnotifier.fetchresult")
 
@@ -125,7 +139,8 @@ final class MessageFetcher: NSObject {
         }
 
         group.notify(queue: .main) { [weak self] in
-            guard let self else { return }
+            guard let self, !self.stopped, self.fetchGeneration == generation,
+                  self.isDemo == DemoMode.isOnNow else { return }
             self.applyFetchResults(
                 unreadResult: unreadResult ?? .failure(.parsingError("Missing unread count result")),
                 messagesResult: messagesResult ?? .failure(.parsingError("Missing message list result"))
@@ -145,11 +160,18 @@ final class MessageFetcher: NSObject {
             return false
         }()
 
-        hasAuthError = isAuthFailure
         if isAuthFailure {
+            authorizationStatus = .signInRequired
             unreadMessagesCount = 0
             messages = []
             return
+        }
+
+        // A network failure alone cannot prove that a reconnect worked.
+        if case .success = unreadResult {
+            authorizationStatus = .active
+        } else if case .success = messagesResult {
+            authorizationStatus = .active
         }
 
         if case .success(let count) = unreadResult {

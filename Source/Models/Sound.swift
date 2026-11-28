@@ -80,8 +80,13 @@ extension Sound {
     /// Returns nil if the bundled file is missing or staging fails, so the
     /// caller can fall back to the default notification sound.
     func notificationSound() -> UNNotificationSound? {
+        #if MAC_APP_STORE
+        guard let url = bundledURL else { return nil }
+        return UNNotificationSound(named: UNNotificationSoundName(url.lastPathComponent))
+        #else
         guard let stagedName = stagedSoundFileName() else { return nil }
         return UNNotificationSound(named: UNNotificationSoundName(stagedName))
+        #endif
     }
 
     /// Every sound, both the macOS classics and the custom clips, ships as
@@ -91,6 +96,7 @@ extension Sound {
         Bundle.main.url(forResource: rawValue, withExtension: "aiff")
     }
 
+    #if !MAC_APP_STORE
     /// Copies the bundled sound into `~/Library/Sounds` (only when missing or a
     /// different size) and returns the staged file name, or nil on failure. The
     /// `MailNotifier-` prefix namespaces the files so they are identifiable and
@@ -128,4 +134,5 @@ extension Sound {
         guard let sourceSize, let destinationSize else { return false }
         return sourceSize == destinationSize
     }
+    #endif
 }

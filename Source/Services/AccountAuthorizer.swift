@@ -8,68 +8,65 @@
 import Foundation
 import AppKit
 import GTMAppAuth
+#if !MAC_APP_STORE
 import KeychainAccess
+#endif
 import AppAuth
 
 // MARK: - Keychain Credential Storage
 
 extension Account {
-    var keychain: Keychain {
+    #if !MAC_APP_STORE
+    private var keychain: Keychain {
         Keychain(service: "com.strategicnerds.MailNotifierApp")
             .accessibility(.whenUnlockedThisDeviceOnly)
     }
+    #endif
 
     var authorization: GTMAppAuthFetcherAuthorization? {
-        get {
-            guard let data = keychain[data: id] else { return nil }
-            do {
-                return try NSKeyedUnarchiver.unarchivedObject(ofClass: GTMAppAuthFetcherAuthorization.self, from: data)
-            } catch {
-                Log.keychain.error("Failed to unarchive authorization for account \(self.maskedAccountID, privacy: .public): \(error.localizedDescription, privacy: .public)")
-                return nil
-            }
-        }
-        set {
-            let accountId = id
-            guard let newValue, newValue.canAuthorize() else {
-                keychain[accountId] = nil
-                return
-            }
-            do {
-                let data = try NSKeyedArchiver.archivedData(withRootObject: newValue, requiringSecureCoding: true)
-                keychain[data: accountId] = data
-            } catch {
-                let masked = maskedAccountID
-                Log.keychain.error("Failed to archive authorization for account \(masked, privacy: .public): \(error.localizedDescription, privacy: .public)")
-            }
-        }
+        get { credential(GTMAppAuthFetcherAuthorization.self, key: id) }
+        set { try? writeCredential(newValue?.canAuthorize() == true ? newValue : nil, key: id) }
     }
 
     var authState: OIDAuthState? {
-        get {
-            let keychainKey = "\(id)-oid"
-            guard let data = keychain[data: keychainKey] else { return nil }
-            do {
-                return try NSKeyedUnarchiver.unarchivedObject(ofClass: OIDAuthState.self, from: data)
-            } catch {
-                Log.keychain.error("Failed to unarchive auth state for account \(self.maskedAccountID, privacy: .public): \(error.localizedDescription, privacy: .public)")
-                return nil
+        get { credential(OIDAuthState.self, key: "\(id)-oid") }
+        set { try? writeCredential(newValue, key: "\(id)-oid") }
+    }
+
+    fileprivate func writeCredential(_ value: NSSecureCoding?, key: String) throws {
+        do {
+            if let value {
+                let data = try NSKeyedArchiver.archivedData(withRootObject: value, requiringSecureCoding: true)
+                #if MAC_APP_STORE
+                try StoreCredentialKeychain.set(data, for: key)
+                #else
+                try keychain.set(data, key: key)
+                #endif
+            } else {
+                #if MAC_APP_STORE
+                try StoreCredentialKeychain.remove(key)
+                #else
+                try keychain.remove(key)
+                #endif
             }
+        } catch {
+            Log.keychain.error("Failed to write credentials for \(self.maskedAccountID, privacy: .public): \((error as NSError).code, privacy: .public)")
+            throw error
         }
-        set {
-            let accountId = id
-            let keychainKey = "\(accountId)-oid"
-            guard let newValue else {
-                keychain[keychainKey] = nil
-                return
-            }
-            do {
-                let data = try NSKeyedArchiver.archivedData(withRootObject: newValue, requiringSecureCoding: true)
-                keychain[data: keychainKey] = data
-            } catch {
-                let masked = maskedAccountID
-                Log.keychain.error("Failed to archive auth state for account \(masked, privacy: .public): \(error.localizedDescription, privacy: .public)")
-            }
+    }
+
+    private func credential<T: NSObject & NSSecureCoding>(_ type: T.Type, key: String) -> T? {
+        do {
+            #if MAC_APP_STORE
+            let data = try StoreCredentialKeychain.data(for: key)
+            #else
+            let data = try keychain.getData(key)
+            #endif
+            guard let data else { return nil }
+            return try NSKeyedUnarchiver.unarchivedObject(ofClass: type, from: data)
+        } catch {
+            Log.keychain.error("Failed to read credentials for \(self.maskedAccountID, privacy: .public): \((error as NSError).code, privacy: .public)")
+            return nil
         }
     }
 
@@ -92,6 +89,7 @@ extension Accounts {
     /// Falls back to the browser flow when no window is key (very early
     /// app launch, no UI on screen yet).
     static func authorize(type: AccountType) {
+        guard !DemoMode.isOnNow else { return }
         let window = NSApp.keyWindow
         Log.auth.info("Starting OAuth flow for \(type.rawValue, privacy: .public). presentingWindow=\(window == nil ? "nil (browser fallback)" : "set (ASWebAuthenticationSession)", privacy: .public)")
         switch type {
@@ -103,15 +101,15 @@ extension Accounts {
                     reportSigninFailure(SigninFailure(provider: .gmail, error: error))
                 case .success(let state):
                     let authorization = GTMAppAuthFetcherAuthorization(authState: state)
-                    guard let userEmail = authorization.userEmail else {
-                        Log.auth.error("Gmail OAuth succeeded but state contained no userEmail")
+                    guard let userEmail = authorization.userEmail, authorization.canAuthorize() else {
+                        Log.auth.error("Gmail OAuth state did not contain an authorized account")
                         reportSigninFailure(.missingEmail(provider: .gmail))
                         return
                     }
                     Log.auth.info("Gmail OAuth completed for \(userEmail, privacy: .private)")
-                    finish(storeAuthorized(email: userEmail, type: .gmail) { account in
-                        account.authorization = authorization
-                    }, provider: "gmail")
+                    finishSignIn(email: userEmail, type: .gmail) { account in
+                        try account.writeCredential(authorization, key: account.id)
+                    }
                 }
             }
 
@@ -129,22 +127,35 @@ extension Accounts {
                         return
                     }
                     Log.auth.info("Outlook OAuth completed for \(email, privacy: .private). Work or school account: \(token.isWorkOrSchool.map { String($0) } ?? "unknown", privacy: .public)")
-                    finish(storeAuthorized(email: email, type: .outlook, tenantID: token.tenantID) { account in
-                        account.authState = state
-                    }, provider: "outlook")
+                    finishSignIn(email: email, type: .outlook, tenantID: token.tenantID) { account in
+                        try account.writeCredential(state, key: "\(account.id)-oid")
+                    }
                 }
             }
         }
     }
 
-    private static func finish(_ outcome: AuthorizedAccountOutcome, provider: String) {
+    private static func finishSignIn(email: String, type: AccountType, tenantID: String? = nil,
+                                     save: (inout Account) throws -> Void) {
+        let outcome: AuthorizedAccountOutcome
+        do {
+            outcome = try storeAuthorized(email: email, type: type, tenantID: tenantID, applyCredentials: save)
+        } catch {
+            reportSigninFailure(.credentialStorage(provider: type))
+            return
+        }
+        let provider = type.rawValue
         switch outcome {
         case .added:
             Telemetry.capture(.accountAdded, properties: ["provider": provider])
         case .reauthorized:
             break
         case .refused:
+            #if !MAC_APP_STORE
             refuseAdd(provider: provider)
+            #else
+            break // Demo Mode was enabled while authorization was in flight.
+            #endif
         }
     }
 
@@ -169,21 +180,27 @@ extension Accounts {
     /// and whatever entry point gets added next. Reauthorizing an account that
     /// already exists never reaches this check.
     static func canAddAccount() -> Bool {
+        #if MAC_APP_STORE
+        return true
+        #else
         if EntitlementManager.isEntitledNow() { return true }
         return Self.default.enabled.count < Accounts.freeAccountLimit
+        #endif
     }
 
     /// Drops a completed-but-unpayable authorization and asks for the paywall.
     /// The OAuth tokens are simply never written, so nothing has to be cleaned
     /// up; the account was never created.
+    #if !MAC_APP_STORE
     private static func refuseAdd(provider: String) {
-        Log.auth.info("Refusing to add a \(provider, privacy: .public) account: free account limit reached and no active subscription")
+        Log.auth.info("Refusing to connect a \(provider, privacy: .public) account: no available account slot")
         Telemetry.capture(.paywallShown, properties: ["trigger": PaywallTrigger.addAccount.rawValue,
                                                       "provider": provider])
         DispatchQueue.main.async {
             NotificationCenter.default.post(name: .showPaywall, object: PaywallTrigger.addAccount)
         }
     }
+    #endif
 
     /// Reads the email and tenant from the OIDC ID token instead of calling
     /// Microsoft Graph `/me`, which needs `User.Read`. The `email` scope puts

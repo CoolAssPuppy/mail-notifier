@@ -159,12 +159,18 @@ final class AccountStoreTests: XCTestCase {
         XCTAssertEqual(stored?.checkInterval, 5)
     }
 
-    func testCredentialsAreAppliedBeforeTheAccountIsSaved() {
-        var applied: [String] = []
-        _ = Accounts.storeAuthorized(email: "cred@e.com", type: .gmail) { account in
-            applied.append(account.email)
+    func testCredentialWriteFailureLeavesNewAndExistingAccountsUnchanged() {
+        enum WriteFailure: Error { case unavailable }
+        Accounts.default = [Account(email: "existing@e.com", type: .outlook)]
+        let before = Accounts.default.rawValue
+
+        for email in ["new@e.com", "existing@e.com"] {
+            XCTAssertThrowsError(try Accounts.storeAuthorized(email: email, type: .outlook,
+                                                               tenantID: MicrosoftTenant.consumerTenantID) { _ in
+                throw WriteFailure.unavailable
+            })
+            XCTAssertEqual(Accounts.default.rawValue, before)
         }
-        XCTAssertEqual(applied, ["cred@e.com"])
     }
 
     // MARK: - Filtering

@@ -25,9 +25,11 @@ extension AppDelegate {
         menu.addItem(withTitle: NSLocalizedString("Settings…", comment: ""),
                      action: #selector(showSettingsDrawer),
                      keyEquivalent: ",")
+        #if !MAC_APP_STORE
         menu.addItem(withTitle: NSLocalizedString("Check for Updates…", comment: ""),
                      action: #selector(checkForUpdates),
                      keyEquivalent: "")
+        #endif
 
         menu.addItem(NSMenuItem.separator())
 

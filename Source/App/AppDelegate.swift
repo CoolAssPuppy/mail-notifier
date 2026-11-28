@@ -28,7 +28,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var subscriptions = Set<AnyCancellable>()
     let fetcherManager = FetcherManager.shared
     private let notificationService = NotificationService()
+    #if !MAC_APP_STORE
     private let updaterManager = UpdaterManager.shared
+    #endif
     private var preferencesWindow: NSWindow?
     private var wakeThrottle = WakeCheckThrottle()
 
@@ -42,9 +44,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         Telemetry.setup()
 
         notificationService.delegate = self
+        #if !MAC_APP_STORE
         if PolarConfig.isBenefitPinMissing {
             Log.license.error("POLAR_BENEFIT_ID is empty while POLAR_ORG_ID is set. Mail Notifier shares its Polar organization with the other Strategic Nerds apps, so any of their license keys will unlock this one. Set the benefit id before shipping.")
         }
+        #endif
         // Before anything reads the account list, so a demo session that was
         // left on comes back up as a demo session.
         DemoMode.shared.applyAtLaunch()
@@ -55,7 +59,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Started before the fetchers are built so the launch validate is
         // already in flight when the first rebuild reads the entitlement.
+        #if MAC_APP_STORE
+        Task { @MainActor in TipJar.shared.start() }
+        #else
         EntitlementManager.shared.start()
+        #endif
         FriendlyNameStore.shared.start()
         AccountIconStore.shared.start()
         registerShortcuts()
@@ -75,7 +83,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // the paid split is measurable across the whole install base. An event
         // breakdown only counts people who fired an event, and someone content
         // on the free tier fires nothing at all.
+        #if !MAC_APP_STORE
         let isSubscriber = EntitlementManager.isEntitledNow()
+        #endif
         let accountCount = Accounts.default.count
         // `notification_permission` rides along so a denial is visible in
         // analytics: an install that never shows a notification looks the
@@ -83,19 +93,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // event waits for it.
         Task { @MainActor [notificationService] in
             let permission = await notificationService.refreshPermission().analyticsValue
+            var properties: [String: Any] = ["menu_style": menuStyle,
+                                             "theme": theme.rawValue,
+                                             "theme_appearance": theme.appearance,
+                                             "notification_permission": permission]
+            #if !MAC_APP_STORE
+            properties["is_subscriber"] = isSubscriber
+            #endif
+            var userProperties = properties
+            userProperties["account_count"] = accountCount
             Telemetry.capture(
                 .appLaunched,
-                properties: ["menu_style": menuStyle,
-                             "theme": theme.rawValue,
-                             "theme_appearance": theme.appearance,
-                             "is_subscriber": isSubscriber,
-                             "notification_permission": permission],
-                userProperties: ["menu_style": menuStyle,
-                                 "theme": theme.rawValue,
-                                 "theme_appearance": theme.appearance,
-                                 "is_subscriber": isSubscriber,
-                                 "account_count": accountCount,
-                                 "notification_permission": permission]
+                properties: properties,
+                userProperties: userProperties
             )
             self.popoverModel.setNotificationPermission(notificationService.lastKnownPermission)
         }
@@ -339,6 +349,7 @@ private extension AppDelegate {
         // run, and fetchers are built from that. Without this, a freshly
         // activated license wouldn't start checking the unlocked inboxes until
         // something else happened to rebuild.
+        #if !MAC_APP_STORE
         NotificationCenter.default
             .publisher(for: .entitlementChanged)
             .receive(on: RunLoop.main)
@@ -348,6 +359,7 @@ private extension AppDelegate {
                 self.updateMenuBar()
             }
             .store(in: &subscriptions)
+        #endif
     }
 }
 
@@ -440,10 +452,15 @@ extension AppDelegate {
         // the menu.
         popover?.performClose(nil)
 
+        #if MAC_APP_STORE
+        let lockedEmails = Set<String>()
+        #else
+        let lockedEmails = Set(Accounts.locked(isEntitled: EntitlementManager.isEntitledNow()).map(\.email))
+        #endif
         present(menu: ClassicMenuBuilder.makeMenu(
             accounts: Accounts.default,
             fetcherManager: fetcherManager,
-            lockedEmails: Set(Accounts.locked(isEntitled: EntitlementManager.isEntitledNow()).map(\.email)),
+            lockedEmails: lockedEmails,
             notificationsBlocked: notificationService.lastKnownPermission.isBlocked,
             actions: classicMenuActions()
         ))
@@ -524,6 +541,7 @@ extension AppDelegate: NSPopoverDelegate {
         self.popover = popover
 
         popoverModel.refresh()
+        popoverModel.advancePromoForOpening()
         refreshNotificationPermission()
 
         NSApp.activate(ignoringOtherApps: true)
@@ -568,6 +586,15 @@ extension AppDelegate: NSPopoverDelegate {
             openSettings: { [weak self] in
                 self?.popover?.performClose(nil)
                 self?.showSettingsDrawer()
+            },
+            openTipJar: { [weak self] in
+                self?.popover?.performClose(nil)
+                self?.showPreferences()
+                Task { @MainActor in
+                    // The main window must mount before it can receive the request.
+                    try? await Task.sleep(for: .milliseconds(50))
+                    NotificationCenter.default.post(name: .openTipJar, object: nil)
+                }
             },
             subscribe: { [weak self] in
                 self?.popover?.performClose(nil)
@@ -631,11 +658,13 @@ extension AppDelegate {
         fetcherManager.checkAll()
     }
 
+    #if !MAC_APP_STORE
     @objc func checkForUpdates() {
         Task { @MainActor in
             UpdaterManager.shared.checkForUpdates()
         }
     }
+    #endif
 
     @objc func composeMail() {
         composeMail(to: nil, subject: nil)
@@ -748,12 +777,14 @@ extension AppDelegate {
     /// the sheet, so the window has to exist and be mounted before the
     /// notification lands. Same one-tick wait as the settings drawer.
     func showPaywall(trigger: PaywallTrigger) {
+        #if !MAC_APP_STORE
         showPreferences()
         Telemetry.capture(.paywallShown, properties: ["trigger": trigger.rawValue])
         Task { @MainActor in
             try? await Task.sleep(nanoseconds: 50_000_000)
             NotificationCenter.default.post(name: .showPaywall, object: trigger)
         }
+        #endif
     }
 }
 

@@ -31,32 +31,7 @@ struct WelcomeView: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
 
-                HStack(spacing: 12) {
-                    AppProviderChoiceCard(
-                        title: "Gmail",
-                        subtitle: "Personal or Workspace via OAuth",
-                        assetName: "Gmail"
-                    ) {
-                        connect(.gmail)
-                    }
-
-                    AppProviderChoiceCard(
-                        title: "Outlook",
-                        subtitle: "Hotmail, Office 365 via Microsoft",
-                        assetName: "Outlook"
-                    ) {
-                        connect(.outlook)
-                    }
-                }
-                .padding(.top, 4)
-
-                DisclosureGroup("Read-only access") {
-                    trustSignals
-                        .padding(.top, 8)
-                }
-                .font(.system(size: 11))
-                .foregroundStyle(theme.muted)
-                .frame(maxWidth: 440)
+                connectOptions
             }
             .padding(.horizontal, 32)
 
@@ -64,6 +39,27 @@ struct WelcomeView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(theme.background)
+    }
+
+    @ViewBuilder
+    private var connectOptions: some View {
+        HStack(spacing: 12) {
+            AppProviderChoiceCard(title: "Gmail", subtitle: "Personal or Workspace via OAuth", assetName: "Gmail") {
+                connect(.gmail)
+            }
+            AppProviderChoiceCard(title: "Outlook", subtitle: "Hotmail, Office 365 via Microsoft", assetName: "Outlook") {
+                connect(.outlook)
+            }
+        }
+        .padding(.top, 4)
+
+        DisclosureGroup("Read-only access") {
+            trustSignals
+                .padding(.top, 8)
+        }
+        .font(.system(size: 11))
+        .foregroundStyle(theme.muted)
+        .frame(maxWidth: 440)
     }
 
     /// Asks for the paywall instead of starting an OAuth flow that would be

@@ -86,6 +86,22 @@ final class MessageFetcherTests: XCTestCase {
 
     // MARK: - Both succeed
 
+    func testOnlyVerifiedAccessClearsSignInRequired() {
+        let fetcher = makeFetcher()
+        XCTAssertEqual(fetcher.authorizationStatus, .unverified)
+
+        fetcher.applyFetchResults(unreadResult: .failure(.authenticationRequired),
+                                  messagesResult: .success([]))
+        XCTAssertEqual(fetcher.authorizationStatus, .signInRequired)
+
+        let timeout = MailProviderError.networkError(URLError(.timedOut))
+        fetcher.applyFetchResults(unreadResult: .failure(timeout), messagesResult: .failure(timeout))
+        XCTAssertEqual(fetcher.authorizationStatus, .signInRequired)
+
+        fetcher.applyFetchResults(unreadResult: .success(0), messagesResult: .success([]))
+        XCTAssertEqual(fetcher.authorizationStatus, .active)
+    }
+
     func testBothSuccessUpdatesUnreadAndMessages() {
         let fetcher = makeFetcher()
         let messages = makeMessages(2)

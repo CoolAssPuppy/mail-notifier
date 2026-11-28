@@ -64,6 +64,21 @@ final class DemoModeTests: XCTestCase {
         XCTAssertEqual(suite.string(forKey: "accountsBeforeDemoMode"), realAccounts().rawValue)
     }
 
+    func testDemoRunsSampleInboxesWithoutSubscriptionButCannotStoreRealCredentials() {
+        Accounts.default = realAccounts()
+        let demo = DemoMode()
+        demo.setOn(true)
+
+        XCTAssertEqual(Accounts.active(isEntitled: false).map(\.email), DemoInbox.accounts.map(\.email))
+        let outcome = Accounts.storeAuthorized(email: DemoInbox.accounts[0].email, type: .gmail) { _ in
+            XCTFail("Demo sessions must not write credentials, even for an address that is already listed")
+        }
+        XCTAssertEqual(outcome, .refused)
+
+        demo.setOn(false)
+        XCTAssertEqual(Accounts.active(isEntitled: false).map(\.email), ["me@work.example"])
+    }
+
     // MARK: Turning it off
 
     func testTurningOffPutsTheRealAccountsBack() {

@@ -112,12 +112,12 @@ extension Accounts {
 
     /// Enabled accounts allowed to run under the current entitlement.
     static func active(isEntitled: Bool) -> [Account] {
-        partition(enabled: Array(Self.default.enabled), isEntitled: isEntitled).active
+        partition(enabled: Array(Self.default.enabled), isEntitled: isEntitled || DemoMode.isOnNow).active
     }
 
     /// Enabled accounts the subscription is holding back. Empty when entitled.
     static func locked(isEntitled: Bool) -> [Account] {
-        partition(enabled: Array(Self.default.enabled), isEntitled: isEntitled).locked
+        partition(enabled: Array(Self.default.enabled), isEntitled: isEntitled || DemoMode.isOnNow).locked
     }
 }
 
@@ -153,8 +153,10 @@ extension Accounts {
 
     mutating func delete(account: Account) {
         guard let index = firstIndex(where: { $0.id == account.id }) else { return }
-        self[index].authorization = nil
-        self[index].authState = nil
+        if !DemoMode.isOnNow {
+            self[index].authorization = nil
+            self[index].authState = nil
+        }
         remove(at: index)
         save()
         NotificationCenter.default.post(name: .accountDeleted, object: account)
@@ -203,20 +205,23 @@ extension Accounts {
     static func storeAuthorized(email: String,
                                 type: AccountType,
                                 tenantID: String? = nil,
-                                applyCredentials: (inout Account) -> Void) -> AuthorizedAccountOutcome {
+                                applyCredentials: (inout Account) throws -> Void) rethrows -> AuthorizedAccountOutcome {
+        guard !DemoMode.isOnNow else { return .refused }
         var accounts = Self.default
         if var account = accounts.find(email: email) {
-            applyCredentials(&account)
+            try applyCredentials(&account)
             if let tenantID { account.tenantID = tenantID }
             accounts.update(account: account, fetchNow: true)
             return .reauthorized
         }
 
+        #if !MAC_APP_STORE
         guard canAddAccount() else { return .refused }
+        #endif
         var account = Account(email: email, type: type)
         account.tenantID = tenantID
         account.awaitingFirstCheck = true
-        applyCredentials(&account)
+        try applyCredentials(&account)
         accounts.add(account: account)
         return .added
     }

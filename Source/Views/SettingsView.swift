@@ -11,8 +11,10 @@ import KeyboardShortcuts
 struct SettingsView: View {
     @ObservedObject private var themeStore = ThemeStore.shared
     @StateObject private var launchAtLogin = LaunchAtLoginManager.shared
-    @StateObject private var updater = UpdaterManager.shared
     @StateObject private var demoMode = DemoMode.shared
+    #if !MAC_APP_STORE
+    @StateObject private var updater = UpdaterManager.shared
+    #endif
     @AppStorage(AppSettings.showUnreadCount) private var showUnreadCount = AppSettings.shared.showUnreadCount
     @AppStorage(AppSettings.openSettingsOnStartKey) private var openSettingsOnStart = false
     @AppStorage(AppSettings.recentMessageCountKey) private var recentMessageCount = AppSettings.defaultRecentMessageCount
@@ -23,9 +25,13 @@ struct SettingsView: View {
     @AppStorage(VIPList.storageKey) private var vipList = VIPList()
 
     @Environment(\.theme) private var theme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Binding var privacyExpanded: Bool
+    @State private var privacyCopied = false
     @State private var newVIPEmail = ""
     @State private var newVIPSound = ""
     @State private var telemetryOptIn: Bool = Telemetry.isOptedIn
+    @State private var shareLinkCopied = false
 
     var body: some View {
         VStack(spacing: 14) {
@@ -34,7 +40,11 @@ struct SettingsView: View {
             appearanceCard
             keyboardCard
             vipCard
+            #if MAC_APP_STORE
+            TipCard()
+            #else
             SubscriptionCard()
+            #endif
             updatesCard
             contactCard
         }
@@ -197,10 +207,7 @@ struct SettingsView: View {
 
     private var keyboardCard: some View {
         AppCard("Keyboard Shortcuts") {
-            AppSettingRow(
-                "Check all mail",
-                description: "Global shortcut, works in any app."
-            ) {
+            AppSettingRow("Check all mail", description: nil) {
                 KeyboardShortcuts.Recorder(for: .checkAllMails)
             }
         }
@@ -210,7 +217,7 @@ struct SettingsView: View {
 
     private var vipCard: some View {
         AppCard("VIP List") {
-            Text("Custom notification sounds for important senders. Plays in any account.")
+            Text("Custom notification sounds for important senders.")
                 .font(.system(size: 10))
                 .foregroundStyle(theme.muted)
                 .padding(.bottom, 10)
@@ -319,6 +326,11 @@ struct SettingsView: View {
     // MARK: - Updates
 
     private var updatesCard: some View {
+        #if MAC_APP_STORE
+        AppCard("Updates") {
+            versionRow()
+        }
+        #else
         AppCard("Updates") {
             VStack(spacing: 0) {
                 AppSettingRow("Automatically check for updates", description: nil) {
@@ -332,19 +344,7 @@ struct SettingsView: View {
 
                 AppRowDivider().padding(.vertical, 10)
 
-                // The version row is also the way into demo mode: right-click
-                // it. Hidden on purpose — it is a screenshot tool, not a
-                // feature — but not secret, since the menu says what it does.
-                AppSettingRow("Current version", description: nil) {
-                    Text(appVersion)
-                        .font(.system(size: 11, design: .monospaced))
-                        .foregroundStyle(demoMode.isOn ? theme.warning : theme.foreground)
-                }
-                .contextMenu {
-                    Button(demoMode.isOn ? "Turn Demo Mode off" : "Turn Demo Mode on") {
-                        demoMode.toggle()
-                    }
-                }
+                versionRow()
 
                 AppRowDivider().padding(.vertical, 10)
 
@@ -362,6 +362,20 @@ struct SettingsView: View {
                 .buttonStyle(.plain)
             }
         }
+        #endif
+    }
+
+    private func versionRow() -> some View {
+        AppSettingRow("Current version", description: nil) {
+            Text(appVersion)
+                .font(.system(size: 11, design: .monospaced))
+                .foregroundStyle(demoMode.isOn ? theme.warning : theme.foreground)
+        }
+        .contextMenu {
+            Button(demoMode.isOn ? "Turn Demo Mode off" : "Turn Demo Mode on") {
+                demoMode.toggle()
+            }
+        }
     }
 
     private var appVersion: String {
@@ -373,6 +387,16 @@ struct SettingsView: View {
     private var contactCard: some View {
         AppCard("Contact") {
             VStack(alignment: .leading, spacing: 10) {
+                AppSecondaryButton(title: shareLinkCopied ? "Copied" : "Share Mail Notifier with friends",
+                                   systemImage: shareLinkCopied ? "checkmark" : "square.and.arrow.up") {
+                    SharePromptStore().copyLink(from: .settings)
+                    shareLinkCopied = true
+                }
+                .task(id: shareLinkCopied) {
+                    guard shareLinkCopied else { return }
+                    try? await Task.sleep(for: .seconds(1.8))
+                    if !Task.isCancelled { shareLinkCopied = false }
+                }
                 contactRow(
                     iconView: AnyView(
                         Image(systemName: "ladybug.fill")
@@ -394,6 +418,7 @@ struct SettingsView: View {
                     title: "Contribute on GitHub",
                     url: "https://github.com/CoolAssPuppy/mail-notifier"
                 )
+                privacyInformation
                 contactRow(
                     iconView: AnyView(
                         Image(systemName: "book.closed.fill")
@@ -404,6 +429,66 @@ struct SettingsView: View {
                     url: "https://www.strategicnerds.com/picksandshovels"
                 )
             }
+        }
+    }
+
+    private static let privacyStatement = NSLocalizedString("""
+        Mail Notifier connects directly to Google and Microsoft to check your inbox. It does not route your mail through a Mail Notifier server. Mail account sign-in tokens are stored in your macOS Keychain.
+
+        You can turn off usage analytics and crash reporting in Settings under “Send anonymous usage data.” When enabled and configured, analytics report app usage and sign-in error codes. Crash reports may include technical details about the app and your Mac.
+
+        If iCloud is available, your custom account names and icons can sync across your Macs through Apple’s iCloud. The sync uses email addresses to match these settings to accounts. This sync does not send mail or sign-in tokens.
+
+        If you see behavior that differs from this statement, please report it to bugs@strategicnerds.com.
+        """, comment: "Copyable text in the Security and privacy information panel")
+
+    private var privacyInformation: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            if privacyExpanded {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text(Self.privacyStatement)
+                        .font(.callout)
+                        .foregroundStyle(theme.foreground)
+                        .fixedSize(horizontal: false, vertical: true)
+
+                    HStack {
+                        AppSecondaryButton(title: privacyCopied ? "Copied" : "Copy",
+                                           systemImage: privacyCopied ? "checkmark" : "doc.on.doc") {
+                            NSPasteboard.general.clearContents()
+                            privacyCopied = NSPasteboard.general.setString(Self.privacyStatement, forType: .string)
+                        }
+                        Button("Dismiss") { setPrivacyExpanded(false) }
+                            .keyboardShortcut(.cancelAction)
+                    }
+                }
+                .padding(12)
+                .frame(maxWidth: 490, alignment: .leading)
+                .background(theme.cardElevated, in: RoundedRectangle(cornerRadius: AppRadius.md))
+                .overlay { RoundedRectangle(cornerRadius: AppRadius.md).strokeBorder(theme.border) }
+                .transition(reduceMotion ? .identity : .scale(scale: 0.08, anchor: .bottomLeading).combined(with: .opacity))
+            }
+
+            Button { setPrivacyExpanded(!privacyExpanded) } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "lock.shield")
+                        .foregroundStyle(theme.muted)
+                        .frame(width: 16)
+                        .accessibilityHidden(true)
+                    Text("Security and privacy information")
+                        .foregroundStyle(theme.primary)
+                }
+                .font(.system(size: 12))
+            }
+            .buttonStyle(.plain)
+            .accessibilityValue(privacyExpanded ? Text("Expanded") : Text("Collapsed"))
+        }
+        .id("security-and-privacy")
+    }
+
+    private func setPrivacyExpanded(_ expanded: Bool) {
+        privacyCopied = false
+        withAnimation(reduceMotion ? nil : .smooth(duration: 0.28)) {
+            privacyExpanded = expanded
         }
     }
 
@@ -470,6 +555,6 @@ private struct VIPRow: View {
 }
 
 #Preview {
-    SettingsView()
+    SettingsView(privacyExpanded: .constant(false))
         .frame(width: 980, height: 560)
 }

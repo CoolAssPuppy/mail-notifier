@@ -18,6 +18,8 @@ struct Sidebar: View {
     /// person can see nothing was lost, and the row says why it's quiet.
     var lockedEmails: Set<String> = []
     var onOpenSettings: () -> Void = {}
+    var onOpenTipJar: () -> Void = {}
+    @FocusState private var settingsFocused: Bool
 
     var body: some View {
         VStack(spacing: 0) {
@@ -27,10 +29,7 @@ struct Sidebar: View {
 
             accountsList
 
-            SharePromptBox()
-                .padding(.horizontal, 12)
-                .padding(.top, 6)
-                .padding(.bottom, 12)
+            PromoRow(source: .settings, onOpenTipJar: onOpenTipJar)
 
             Spacer(minLength: 0)
 
@@ -50,30 +49,20 @@ struct Sidebar: View {
 
     private var brandHeader: some View {
         HStack(spacing: 10) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .fill(
-                        LinearGradient(
-                            colors: [theme.primary, theme.primaryDeep],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                Image(systemName: "envelope.fill")
-                    .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(.white)
-            }
-            .frame(width: 24, height: 24)
+            Image(nsImage: NSApp.applicationIconImage)
+                .resizable()
+                .frame(width: 24, height: 24)
+                .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 1) {
                 Text("Mail Notifier")
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(theme.foreground)
-                Text(accounts.isEmpty
-                     ? LocalizedStringKey("Setup required")
-                     : LocalizedStringKey("\(accounts.count) configured"))
-                    .font(.system(size: 10))
-                    .foregroundStyle(theme.muted)
+                if accounts.isEmpty {
+                    Text("Setup required")
+                        .font(.system(size: 10))
+                        .foregroundStyle(theme.muted)
+                }
             }
 
             Spacer()
@@ -146,44 +135,28 @@ struct Sidebar: View {
 
     private var footer: some View {
         HStack(spacing: 8) {
-            Button(action: { selection = "welcome" }) {
-                HStack(spacing: 6) {
-                    Image(systemName: "plus")
-                        .font(.system(size: 10, weight: .bold))
-                    Text("Add")
-                        .font(.system(size: 11, weight: .medium))
-                }
-                .foregroundStyle(theme.foreground)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 8)
-                .background(
-                    RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
-                        .fill(theme.card)
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
-                        .strokeBorder(style: StrokeStyle(lineWidth: 1, dash: [3, 3]))
-                        .foregroundStyle(theme.borderStrong)
-                )
+            AppIconButton(systemName: "plus", help: "Add account") {
+                selection = "welcome"
             }
-            .buttonStyle(.plain)
+            .accessibilityLabel(Text("Add account"))
+
+            Spacer(minLength: 0)
 
             Button(action: onOpenSettings) {
                 Image(systemName: "gearshape")
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(theme.muted)
                     .frame(width: 34, height: 32)
-                    .background(
-                        RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
-                            .fill(theme.card)
-                    )
                     .overlay(
                         RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
-                            .strokeBorder(theme.borderStrong, lineWidth: 1)
+                            .strokeBorder(settingsFocused ? theme.borderFocus : .clear, lineWidth: 2)
                     )
+                    .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
+            .focused($settingsFocused)
             .keyboardShortcut(",", modifiers: .command)
+            .accessibilityLabel(Text("Settings"))
             .help(LocalizedStringKey("Settings (⌘,)"))
         }
         .padding(12)

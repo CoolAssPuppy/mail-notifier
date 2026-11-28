@@ -42,52 +42,27 @@ final class SharePromptSnapshotTests: XCTestCase {
         super.tearDown()
     }
 
-    func testRenderShareDrawerAndBox() throws {
+    func testRenderSharePromoInBothPlacements() throws {
         let theme = ThemeStore.shared.palette
-        let model = MenuBarPopoverModel(shareStore: SharePromptStore(defaults: defaults))
-        XCTAssertTrue(model.showsShareDrawer)
+        let model = MenuBarPopoverModel()
+        model.advancePromoForOpening()
 
-        try render(MenuBarPopover(model: model, actions: .preview), named: "1-popover-drawer", settle: 1.0)
-        try render(
-            SharePromptDrawer(isShowingCopied: true, startsOpen: true, onRetire: {})
-                .frame(width: 380)
-                .background(theme.background)
-                .environment(\.theme, theme),
-            named: "2-popover-drawer-copied"
-        )
+        try render(MenuBarPopover(model: model, actions: .preview), named: "1-popover-share")
         try render(
             Sidebar(selection: .constant("maya.chen@gmail.com"), totalUnread: 3)
                 .frame(width: 260, height: 520)
                 .defaultAppStorage(defaults)
                 .environment(\.theme, theme),
-            named: "3-main-window-account-list"
-        )
-        try render(
-            SharePromptBox(isShowingCopied: true)
-                .padding(12)
-                .frame(width: 260)
-                .background(theme.surface)
-                .environment(\.theme, theme),
-            named: "4-main-window-box-copied"
+            named: "2-sidebar-share"
         )
 
         let light = ThemePalette.systemLight
-        try render(
-            VStack(spacing: 0) {
-                SharePromptDrawer(startsOpen: true, onRetire: {})
-                SharePromptDrawer(isShowingCopied: true, startsOpen: true, onRetire: {})
-            }
-            .frame(width: 380)
-            .background(light.background)
-            .environment(\.theme, light),
-            named: "5-light-drawer-both-states", appearance: light.nsAppearance
-        )
         try render(
             Sidebar(selection: .constant("maya.chen@gmail.com"), totalUnread: 3)
                 .frame(width: 260, height: 520)
                 .defaultAppStorage(defaults)
                 .environment(\.theme, light),
-            named: "6-light-main-window-account-list", appearance: light.nsAppearance
+            named: "3-light-sidebar-share", appearance: light.nsAppearance
         )
     }
 

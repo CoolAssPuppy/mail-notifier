@@ -44,23 +44,23 @@ final class MenuBarPopoverModel: ObservableObject {
     /// macOS has notifications turned off for the app. New mail would arrive
     /// silently, so the popover says so and offers the way back.
     @Published private(set) var notificationsBlocked = false
-    /// The "Help us grow" drawer under the bottom bar. It shows on each open
-    /// until the person copies the link or closes it.
-    @Published private(set) var showsShareDrawer = false
+    @Published private(set) var promoIndex: Int?
 
     private let fetcherManager = FetcherManager.shared
-    private let shareStore: SharePromptStore
     private var subscriptions = Set<AnyCancellable>()
 
-    init(shareStore: SharePromptStore = SharePromptStore()) {
-        self.shareStore = shareStore
+    init() {
         refresh()
         refreshVIPs()
         subscribe()
     }
 
     func refresh() {
+        #if MAC_APP_STORE
+        let locked = Set<String>()
+        #else
         let locked = Set(Accounts.locked(isEntitled: EntitlementManager.isEntitledNow()).map(\.email))
+        #endif
         let allStates: [AccountState] = Accounts.default.map { account in
             let fetcher = fetcherManager.fetcher(for: account.email)
             let messages = (fetcher?.messages ?? []).prefix(AppSettings.shared.recentMessageCount)
@@ -75,11 +75,6 @@ final class MenuBarPopoverModel: ObservableObject {
         }
         let next = allStates.filter {
             AppSettings.shared.shouldShowAccount(unreadCount: $0.unreadCount)
-        }
-
-        let nextShowsShareDrawer = shareStore.shouldShowDrawer(hasAccounts: !allStates.isEmpty)
-        if showsShareDrawer != nextShowsShareDrawer {
-            showsShareDrawer = nextShowsShareDrawer
         }
 
         if configuredAccountCount != allStates.count {
@@ -100,8 +95,9 @@ final class MenuBarPopoverModel: ObservableObject {
         }
     }
 
-    func retireShareDrawer() {
-        showsShareDrawer = false
+    func advancePromoForOpening() {
+        guard configuredAccountCount > 0 else { return }
+        promoIndex = PromoMessage.nextIndex(after: promoIndex ?? -1)
     }
 
     func setNotificationPermission(_ permission: NotificationPermission) {
@@ -155,6 +151,7 @@ struct MenuBarPopoverActions {
     var checkAll: () -> Void
     var openWindow: () -> Void
     var openSettings: () -> Void
+    var openTipJar: () -> Void = {}
     /// Opens the main window with the paywall up. The popover is too small to
     /// hold the pitch, so a locked row hands off rather than explaining itself.
     var subscribe: () -> Void
@@ -184,11 +181,8 @@ struct MenuBarPopover: View {
             content
             Divider().background(theme.divider)
             BottomBar(actions: actions)
-            if model.showsShareDrawer {
-                SharePromptDrawer {
-                    withAnimation(accountAnimation) { model.retireShareDrawer() }
-                }
-                .transition(.opacity)
+            if model.configuredAccountCount > 0, let index = model.promoIndex {
+                PromoRow(source: .menu, menuIndex: index, onOpenTipJar: actions.openTipJar)
             }
         }
         .frame(width: 380)
@@ -255,6 +249,11 @@ private struct HeaderBar: View {
 
     var body: some View {
         HStack(spacing: 10) {
+            Image(nsImage: NSApp.applicationIconImage)
+                .resizable()
+                .frame(width: 24, height: 24)
+                .accessibilityHidden(true)
+
             VStack(alignment: .leading, spacing: 1) {
                 Text("Mail Notifier")
                     .font(.system(size: 13, weight: .semibold))
@@ -388,13 +387,17 @@ private struct AccountCard: View {
                                   dimmed: state.hasAuthError || state.isLocked)
 
                     VStack(alignment: .leading, spacing: 1) {
-                        Text(state.account.displayName)
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundStyle(theme.foreground)
-                            .lineLimit(1)
-                            .truncationMode(.middle)
+                        if state.account.friendlyName == nil && !state.isLocked && !state.hasAuthError {
+                            emailRow(isTitle: true)
+                        } else {
+                            Text(state.account.displayName)
+                                .font(.system(size: 12, weight: .semibold))
+                                .foregroundStyle(theme.foreground)
+                                .lineLimit(1)
+                                .truncationMode(.middle)
 
-                        subtitle
+                            subtitle
+                        }
                     }
 
                     Spacer(minLength: 8)
@@ -433,17 +436,28 @@ private struct AccountCard: View {
                     .foregroundStyle(theme.destructive)
             }
         } else {
-            if state.account.friendlyName != nil {
-                Text(state.account.email)
-                    .font(.system(size: 10))
-                    .foregroundStyle(theme.muted)
-                    .lineLimit(1)
-                    .truncationMode(.middle)
-            }
-            Text(statusLine)
-                .font(.system(size: 10))
-                .foregroundStyle(theme.tertiary)
+            emailRow(isTitle: false)
+        }
+    }
+
+    private func emailRow(isTitle: Bool) -> some View {
+        HStack(spacing: 4) {
+            Text(state.account.email)
+                .font(.system(size: isTitle ? 12 : 10, weight: isTitle ? .semibold : .regular))
+                .foregroundStyle(isTitle ? theme.foreground : theme.muted)
                 .lineLimit(1)
+                .truncationMode(.middle)
+            if let checkedAt = state.lastCheckedAt {
+                let firstVisible = checkedAt.addingTimeInterval(AccountStatusLine.inlineAgeThreshold + 0.001)
+                TimelineView(.periodic(from: firstVisible, by: 60)) { timeline in
+                    if let age = AccountStatusLine.inlineAge(checkedAt: checkedAt, now: timeline.date) {
+                        Text(age)
+                            .font(.system(size: 10))
+                            .foregroundStyle(theme.tertiary)
+                            .fixedSize()
+                    }
+                }
+            }
         }
     }
 

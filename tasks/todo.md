@@ -11,6 +11,48 @@
 - All 14 assets match the migration source bytes. Both videos decode, and the approved package matches the source ZIP digest.
 - All 24 locale blocks preserve the saved three-paragraph description and repeat-tip correction. The snapshot uses the migration's verified write and readback; a fresh localization export was unavailable. No submission changes were made.
 
+## TestFlight account status
+
+- [x] Trace saved sign-in through the account update, fetch, and visible badge.
+- [x] Observe the live fetcher and guard against marking unverified access active.
+- [x] Verify the mounted account screen with fetch fixtures, cancellation classification, and the Store build without uploading.
+- [x] Verify the dropdown threshold, sidebar and Settings polish, and privacy panel Copy and Escape behavior.
+- [x] Correct both sets of 24 draft tip descriptions and rename the same manual-release draft to 4.0.0.
+- [ ] Confirm repeat transactions in a working StoreKit test environment and retest live OAuth in the next approved internal build.
+
+## TestFlight Keychain prompt
+
+- [x] Trace the account sign-in, credential writes, and distribution signing.
+- [x] Confirm a restricted legacy item denies a noninteractive read, then isolate Store credentials without moving or deleting legacy items.
+- [x] Build the Store Release and signed archive; run the standalone suite with snapshots.
+- [ ] Run the signed candidate on a registered Mac: fresh account, same address already in Sparkle, and reconnect an account saved by build 40. Confirm relaunch needs no second reconnect and the independent edition can still read its credentials.
+
+The dialog identifies an ACL-protected login Keychain operation but not which account or binary created the item. The Mac satellite is not in the development profile, so it cannot run the signed candidate. No upload or release was attempted.
+
+## Mac App Store free launch
+
+- [ ] Remove Store-only payment gates and preserve the independent license path.
+- [ ] Add an optional verified consumable tip and update the local Store copy.
+- [ ] Build both targets, verify the Store's welcome and Settings states, and document release gates.
+
+## Mac App Store build
+
+- [x] Add an isolated Store build with App Sandbox and no Sparkle or Polar code.
+- [x] Use verified StoreKit access for every live account and update the purchase and restore screens.
+- [x] Compile the local Store build without uploading it, and document remaining release gates.
+- [x] Archive with the connected Apple key and check Store export and app record visibility.
+- [x] Draft the US$2.99/year listing, localized copy, and media production brief.
+- [x] Use the restored Apple record for local Store export, draft U.S. subscription pricing, and U.S. English copy.
+- [x] Confirm the Paid Apps Agreement with the owner and rename the draft to Mail Notifier App.
+- [x] Restore fixture-only Demo Mode; verify unsubscribed entry, sample inboxes, and exit back to the Store gate.
+- [ ] Provide the OAuth build inputs and test mailboxes, and choose additional storefronts.
+
+### Review
+
+- Xcode 27.2 built the unsigned Release target for Apple silicon and Intel. The built bundle had no Sparkle or Polar configuration. The locked welcome screen and unavailable-price subscription sheet were inspected on the Mac.
+- After the owner restored Apple ID `6756112934`, local Store export succeeded and the packaged app passed strict signature verification with the expected team, bundle ID and sandbox entitlements. The package lacks the provider OAuth build inputs. App Store Connect confirms the free U.S. download and one draft annual subscription at US$2.99 paid upfront. The product still needs metadata, including the review screenshot. Nothing was uploaded or submitted.
+- Before release, confirm the live product and price, signing and SDK privacy requirements, StoreKit transactions, provider OAuth and native alerts under sandbox, and Developer ID preferences and Keychain continuity. Keep the Sparkle distribution and any existing paid access intact.
+
 ## Release 3.8.0 (cleanup-ui)
 
 ### Plan
