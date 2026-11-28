@@ -160,7 +160,9 @@ final class PostHogBackend: TelemetryBackend {
         // dominate the event stream.
         config.captureApplicationLifecycleEvents = false
         config.captureScreenViews = false
+        #if MAC_APP_STORE
         config.disableGeoIp = true
+        #endif
         config.urlSessionConfiguration = TelemetryConsentProtocol.sessionConfiguration()
         PostHogSDK.shared.setup(config)
         PostHogSDK.shared.optIn()

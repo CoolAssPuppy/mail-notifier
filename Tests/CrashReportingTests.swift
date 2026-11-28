@@ -9,9 +9,33 @@
 //
 
 import XCTest
+import Sentry
 @testable import Mail_Notifier
 
 final class CrashReportingTests: XCTestCase {
+
+    func testTelemetryTransportsBlockRequestsWhenConsentIsOff() async throws {
+        let defaults = UserDefaults.standard
+        let previous = defaults.object(forKey: Telemetry.optInKey)
+        defer { defaults.set(previous, forKey: Telemetry.optInKey) }
+        let request = URLRequest(url: try XCTUnwrap(URL(string: "https://telemetry.example.invalid/")))
+        let options = Options()
+        CrashReporting.configure(options, dsn: "http://test@localhost/1")
+        let sentry = try XCTUnwrap(options.urlSession)
+        let analytics = URLSession(configuration: TelemetryConsentProtocol.sessionConfiguration())
+
+        defaults.set(false, forKey: Telemetry.optInKey)
+        for session in [sentry, analytics] {
+            do {
+                _ = try await session.data(for: request)
+                XCTFail("Telemetry request was allowed while off")
+            } catch let error as URLError {
+                XCTAssertEqual(error.code, .cancelled)
+            }
+        }
+        defaults.set(true, forKey: Telemetry.optInKey)
+        XCTAssertFalse(TelemetryConsentProtocol.canInit(with: request))
+    }
 
     func testMissingOrEmptyDSNIsUnusable() {
         XCTAssertNil(CrashReporting.usableDSN(nil))
