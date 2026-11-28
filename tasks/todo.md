@@ -11,6 +11,12 @@
 - All 14 assets match the migration source bytes. Both videos decode, and the approved package matches the source ZIP digest.
 - All 24 locale blocks preserve the saved three-paragraph description and repeat-tip correction. The snapshot uses the migration's verified write and readback; a fresh localization export was unavailable. No submission changes were made.
 
+## Store telemetry rebuild
+
+- [ ] Apply the saved preference before SDK startup and at both transports.
+- [ ] Verify the transport gate and both SDK credentials in the signed Store package.
+- [ ] Correct the in-app text and the App Store Connect privacy answers.
+
 ## TestFlight account status
 
 - [x] Trace saved sign-in through the account update, fetch, and visible badge.

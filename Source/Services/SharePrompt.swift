@@ -17,10 +17,11 @@ enum ShareSource: String {
 
 struct SharePromptStore {
     static let shareURL = URL(string: "https://www.strategicnerds.com/apps/mailnotifier")!
+    static let appStoreURL = URL(string: "https://apps.apple.com/app/id6756112934")!
 
-    func copyLink(from source: ShareSource, to pasteboard: NSPasteboard = .general) {
+    func copyLink(from source: ShareSource, url: URL = Self.shareURL, to pasteboard: NSPasteboard = .general) {
         pasteboard.clearContents()
-        pasteboard.setString(Self.shareURL.absoluteString, forType: .string)
+        pasteboard.setString(url.absoluteString, forType: .string)
         Telemetry.capture(.shareLinkCopied, properties: ["source": source.rawValue])
     }
 }

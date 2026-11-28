@@ -1,5 +1,8 @@
 # Lessons
 
+## Verify telemetry configuration in the signed package
+2026-11-28: Store builds 42 and 43 linked both SDKs but omitted their Doppler values. Preserve PostHog and Sentry unless removal is requested, verify both values in the final signed package without printing them, and match the privacy disclosure to the resulting behavior.
+
 ## Keep optional support separate from access
 The Mac App Store build is free, with a consumable tip in Settings. Keep StoreKit out of onboarding, mail checks, and notifications. Preserve the independent license path and leave the old App Store Connect draft alone until the owner decides what to do with it.
 

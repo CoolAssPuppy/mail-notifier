@@ -184,7 +184,7 @@ struct SettingsView: View {
 
                 AppSettingRow(
                     "Send anonymous usage data",
-                    description: "Help improve Mail Notifier."
+                    description: "Share app usage and crash reports."
                 ) {
                     Toggle("", isOn: Binding(
                         get: { telemetryOptIn },
@@ -387,11 +387,18 @@ struct SettingsView: View {
     private var contactCard: some View {
         AppCard("Contact") {
             VStack(alignment: .leading, spacing: 10) {
-                AppSecondaryButton(title: shareLinkCopied ? "Copied" : "Share Mail Notifier with friends",
-                                   systemImage: shareLinkCopied ? "checkmark" : "square.and.arrow.up") {
-                    SharePromptStore().copyLink(from: .settings)
+                Button {
+                    SharePromptStore().copyLink(from: .settings, url: SharePromptStore.appStoreURL)
                     shareLinkCopied = true
+                } label: {
+                    contactLabel(
+                        Image(systemName: "square.and.arrow.up")
+                            .font(.system(size: 12))
+                            .foregroundStyle(theme.muted),
+                        title: Text(shareLinkCopied ? "App Store link copied!" : "Share Mail Notifier with friends")
+                    )
                 }
+                .buttonStyle(.plain)
                 .task(id: shareLinkCopied) {
                     guard shareLinkCopied else { return }
                     try? await Task.sleep(for: .seconds(1.8))
@@ -435,7 +442,7 @@ struct SettingsView: View {
     private static let privacyStatement = NSLocalizedString("""
         Mail Notifier connects directly to Google and Microsoft to check your inbox. It does not route your mail through a Mail Notifier server. Mail account sign-in tokens are stored in your macOS Keychain.
 
-        You can turn off usage analytics and crash reporting in Settings under “Send anonymous usage data.” When enabled and configured, analytics report app usage and sign-in error codes. Crash reports may include technical details about the app and your Mac.
+        Usage analytics and crash reporting are on by default. You can turn both off in Settings under “Send anonymous usage data.” PostHog receives app usage, sign-in error codes, and a random ID for this installation. Sentry receives crash reports and app health data, which can include technical details about the app and your Mac.
 
         If iCloud is available, your custom account names and icons can sync across your Macs through Apple’s iCloud. The sync uses email addresses to match these settings to accounts. This sync does not send mail or sign-in tokens.
 
@@ -494,15 +501,18 @@ struct SettingsView: View {
 
     private func contactRow(iconView: AnyView, title: String, url: String) -> some View {
         Link(destination: URL(string: url)!) {
-            HStack(spacing: 8) {
-                iconView
-                    .frame(width: 16, alignment: .center)
-                Text(title)
-                    .font(.system(size: 12))
-                    .foregroundStyle(theme.primary)
-            }
+            contactLabel(iconView, title: Text(title))
         }
         .buttonStyle(.plain)
+    }
+
+    private func contactLabel(_ icon: some View, title: Text) -> some View {
+        HStack(spacing: 8) {
+            icon.frame(width: 16)
+                .accessibilityHidden(true)
+            title.font(.system(size: 12))
+                .foregroundStyle(theme.primary)
+        }
     }
 }
 

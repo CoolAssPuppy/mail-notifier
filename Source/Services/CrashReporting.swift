@@ -52,6 +52,8 @@ enum CrashReporting {
                           bundle: Bundle = .main) {
         options.dsn = dsn
         options.sendDefaultPii = false
+        options.enableNetworkBreadcrumbs = false
+        options.urlSession = URLSession(configuration: TelemetryConsentProtocol.sessionConfiguration())
         options.enableAutoSessionTracking = true
         options.tracesSampleRate = 0.0
         options.environment = environment

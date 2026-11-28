@@ -23,6 +23,13 @@ final class SharePromptTests: XCTestCase {
         }
     }
 
+    func testCopyAppStoreLinkReplacesExistingPasteboardContents() {
+        let pasteboard = makePasteboard()
+        pasteboard.setString("previous contents", forType: .string)
+        SharePromptStore().copyLink(from: .settings, url: SharePromptStore.appStoreURL, to: pasteboard)
+        XCTAssertEqual(pasteboard.string(forType: .string), "https://apps.apple.com/app/id6756112934")
+    }
+
     @MainActor
     func testOnlyDismissalForInstalledVersionHidesBothPlacements() throws {
         let version = try XCTUnwrap(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String)

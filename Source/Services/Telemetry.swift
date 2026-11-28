@@ -8,12 +8,10 @@ import PostHog
 ///
 /// Identity: per-install UUID stored in UserDefaults. Same user across
 /// reinstalls or multiple Macs appears as multiple distinctIds. No PII,
-/// no email, no device fingerprint. The same UUID is used as PostHog's
-/// distinctId and GA4's client_id so the two agree on who a person is.
+/// no email, no device fingerprint. The UUID is used as PostHog's distinct ID.
 ///
 /// Opt-in: defaults ON, respected from UserDefaults. User can flip the
-/// switch in Settings → General. On opt-out we call `optOut` so any
-/// buffered events are dropped and capture stops immediately.
+/// switch in Settings → General. While off, neither SDK starts or sends new requests.
 ///
 /// Config, all from Info.plist. A missing `POSTHOG_API_KEY` silently disables
 /// PostHog, so dev builds without the key baked in don't spam the prod project.
@@ -60,8 +58,7 @@ enum Telemetry {
 
     /// Boots the configured backends. Called once from AppDelegate.
     ///
-    /// Each provider is independent: PostHog missing its key does not stop GA4,
-    /// and vice versa. Add a provider by appending to `backends` here.
+    /// Each provider is independent: a missing PostHog key does not stop Sentry.
     static func setup() {
         var configured: [TelemetryBackend] = []
         let id = distinctId()
@@ -75,12 +72,10 @@ enum Telemetry {
         }
 
 
-        for backend in configured {
-            backend.setup()
-            isOptedIn ? backend.optIn() : backend.optOut()
-        }
-
         backends = configured
+        if isOptedIn {
+            for backend in backends { backend.optIn() }
+        }
     }
 
     /// Captures a business-meaningful event. `properties` must never carry
@@ -139,7 +134,6 @@ enum Telemetry {
 /// Abstract contract for a telemetry backend. To add a provider, conform a new
 /// type and append it to `configured` in `Telemetry.setup`.
 protocol TelemetryBackend {
-    func setup()
     func capture(event: String, properties: [String: Any], userProperties: [String: Any]?)
     func optIn()
     func optOut()
@@ -158,7 +152,7 @@ final class PostHogBackend: TelemetryBackend {
         self.distinctId = distinctId
     }
 
-    func setup() {
+    func optIn() {
         let config = PostHogConfig(apiKey: apiKey, host: host)
         // Disable PostHog's built-in auto-captures — we only want the
         // explicit business events we fire ourselves. Lifecycle and screen
@@ -166,7 +160,10 @@ final class PostHogBackend: TelemetryBackend {
         // dominate the event stream.
         config.captureApplicationLifecycleEvents = false
         config.captureScreenViews = false
+        config.disableGeoIp = true
+        config.urlSessionConfiguration = TelemetryConsentProtocol.sessionConfiguration()
         PostHogSDK.shared.setup(config)
+        PostHogSDK.shared.optIn()
         PostHogSDK.shared.identify(distinctId)
     }
 
@@ -174,11 +171,26 @@ final class PostHogBackend: TelemetryBackend {
         PostHogSDK.shared.capture(event, properties: properties, userProperties: userProperties)
     }
 
-    func optIn() {
-        PostHogSDK.shared.optIn()
+    func optOut() {
+        PostHogSDK.shared.close()
+    }
+}
+
+/// SDK shutdown can flush buffered data. Reject new requests at the transport
+/// boundary as well as at capture, without affecting the app's mail requests.
+final class TelemetryConsentProtocol: URLProtocol {
+    static func sessionConfiguration() -> URLSessionConfiguration {
+        let config = URLSessionConfiguration.ephemeral
+        config.protocolClasses = [TelemetryConsentProtocol.self] + (config.protocolClasses ?? [])
+        return config
     }
 
-    func optOut() {
-        PostHogSDK.shared.optOut()
+    override class func canInit(with request: URLRequest) -> Bool { !Telemetry.isOptedIn }
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+
+    override func startLoading() {
+        client?.urlProtocol(self, didFailWithError: URLError(.cancelled))
     }
+
+    override func stopLoading() {}
 }
